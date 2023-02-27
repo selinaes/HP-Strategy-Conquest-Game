@@ -3,14 +3,16 @@
 # Table of Contents
 
 - [Review](#Review)
-  - [Requirments](#Requirments)
+  - [Requirements](#Requirements)
 - [Design Overview](#Design-Overview)
   - [UML Diagram](#UML-Diagram)
 - [Implementation](#Implementation)
 
 ## Review
 
-### Requirments
+### Requirements
+
+See requirements in [proj1.pdf](/proj1.pdf)
 
 ## Design Overview
 
