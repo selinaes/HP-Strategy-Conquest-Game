@@ -12,7 +12,7 @@
 
 ### Requirements
 
-See requirements in [proj1.pdf](/proj1.pdf)
+See requirements in [proj1.pdf](proj1.pdf)
 
 ## Design Overview
 
