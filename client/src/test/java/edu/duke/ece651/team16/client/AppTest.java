@@ -1,4 +1,4 @@
-package edu.duke.ece651.team32374.client;
+package edu.duke.ece651.team16.client;
 
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +8,6 @@ class AppTest {
     @Test
     void test_GetMessage() {
       App a = new App();
-      assertEquals("Hello from the client for team32374", a.getMessage());
+      assertEquals("Hello from the client for team16", a.getMessage());
     }
 }
