@@ -1,18 +1,25 @@
 package edu.duke.ece651.team16.shared;
 
-import java.net.Socket;
+import java.net.*;
 import java.io.*;
 
 public class Connection {
   private Socket socket;
   private BufferedReader in;
   private PrintWriter out;
+  private ServerSocket serverSocket;
 
-  public Connection(String IP, int PORT) {
+  public Connection(String IP, int PORT, boolean isServer) {
     try {
-      this.socket = new Socket(IP, PORT);
+      if(isServer){
+        this.serverSocket = new ServerSocket(PORT);
+        this.socket = serverSocket.accept();
+      }
+      else{
+        this.socket = new Socket(IP, PORT);
+      }
       this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-      this.out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
+      this.out = new PrintWriter(socket.getOutputStream(), true);
     } catch (IOException e) {
       System.out.println("Failed to initialize Connection.");
     }
@@ -39,6 +46,9 @@ public class Connection {
   public void close() throws IOException {
     try{
       socket.close();
+      if(serverSocket != null){
+        serverSocket.close();
+      }
     }catch (IOException e){
       System.out.println("Failed to close socket..");
     }
