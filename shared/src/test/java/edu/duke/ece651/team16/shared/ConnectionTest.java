@@ -12,19 +12,18 @@ public class ConnectionTest {
   public void test_connection() throws IOException {
     int port = 1234;
     String ip = "127.0.0.1";
-    //Connection server = new Connection(ip, port, true);
-    //Connection client = new Connection(ip, port, false);
+    Connection server = new Connection(ip, port, true);
+    Connection client = new Connection(ip, port, false);
 
-    //String msg = "Hello";
+    String msg = "Hello";
 
-    //client.send(msg);
+    client.send(msg);
 
-    // String response = server.recv();
-    //assertEquals(msg, response);
+    String response = server.recv();
+    assertEquals(msg, response);
 
-    //client.close();
-    //server.close();
-    
+    client.close();
+    server.close();
   }
 
 }

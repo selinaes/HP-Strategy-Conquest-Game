@@ -1,8 +1,10 @@
-package edu.duke.ece651.team16.shared;
+package edu.duke.ece651.team16.server;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+
+import edu.duke.ece651.team16.server.Territory;
 
 public class TerritoryTest {
   @Test
