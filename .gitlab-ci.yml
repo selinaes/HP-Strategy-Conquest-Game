@@ -25,6 +25,7 @@ test:
   artifacts:
     paths:
       - coverage
+  coverage: '/TOTAL COVERAGE: \d+\%/'
       
 pages:
  stage: coverage
