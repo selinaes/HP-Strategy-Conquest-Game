@@ -9,17 +9,18 @@ stages:
    - build
    - test
    - coverage
+   - deploy
 
    
 build:
   tags:
-     - Kate
+     - ece651
   stage: build
   script: docker build --build-arg LOCAL_USER_ID=`id -u`  --tag citest .
 
 test:
   tags:
-     - Kate
+     - ece651
   stage: test
   script: scripts/run-tests-in-docker.sh
   artifacts:
@@ -30,7 +31,7 @@ test:
 pages:
  stage: coverage
  tags:
-     - Kate
+     - ece651
  dependencies:
    - test
  script:
@@ -38,3 +39,9 @@ pages:
  artifacts:
    paths:
      - public
+
+deploy:
+  tags:
+    - ece651
+  stage: deploy
+  script: ./scripts/redeploy.sh
