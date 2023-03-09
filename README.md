@@ -1,7 +1,13 @@
 # Risk_Game
 
-# Table of Contents
+![pipeline](https://gitlab.oit.duke.edu/zf70/Risk_Game/badges/master/pipeline.svg)
 
+![coverage](https://gitlab.oit.duke.edu/zf70/Risk_Game/badges/master/coverage.svg?job=test)
+
+## Coverage
+[Detailed coverage](https://zf70.pages.oit.duke.edu/Risk_Game/dashboard.html)
+
+# Table of Contents
 - [Schedule](#Schedule)
 - [Review](#Review)
   - [Requirements](#Requirements)
