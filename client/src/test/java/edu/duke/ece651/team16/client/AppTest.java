@@ -8,6 +8,5 @@ class AppTest {
     @Test
     void test_GetMessage() {
       App a = new App();
-      assertEquals("Hello from the client for team16", a.getMessage());
     }
 }

@@ -9,9 +9,11 @@ import org.junit.jupiter.api.Test;
 public class ConnectionTest {
 
   @Test
-  public void test_connection() throws IOException {
+  public void test_connection_server() throws IOException {
     // int port = 1234;
     // String ip = "127.0.0.1";
+
+  
     // Connection server = new Connection(ip, port, true);
     // Connection client = new Connection(ip, port, false);
 

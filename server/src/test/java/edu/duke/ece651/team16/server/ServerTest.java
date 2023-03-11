@@ -8,7 +8,8 @@ import org.junit.jupiter.api.Test;
 public class ServerTest {
   @Test
   public void test_formMap() {
-    Server s = new Server();
+    int port = 1234;
+    Server s = new Server(port);
     Player p1 = new Player("p1", "blue");
     Territory t = new Territory("Gondor");
     s.addPlayer(p1);
