@@ -1,9 +1,11 @@
 package edu.duke.ece651.team16.server;
 import edu.duke.ece651.team16.shared.*;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+// import com.worklight.server.util.JSONUtils;
 
 public class Server {
     private List<Player> players;
@@ -15,7 +17,7 @@ public class Server {
         this.connection = new Connection(null, port, true);
     }
 
-
+    
     /* 
     * Add a player to the server
     */
@@ -42,18 +44,28 @@ public class Server {
     * Send a hashmap to client
     * @param HashMap<String, ArrayList<String>> to_send
     */
-    public void sendMap(HashMap<String, ArrayList<String>> to_send) {
-        // convert hashmap to string
-        String map = "";
-        for (String key : to_send.keySet()) {
-            map += key + ":";
-            for (String value : to_send.get(key)) {
-                map += value + ",";
-            }
-            map += ";";
+    public void sendMap(HashMap<String, ArrayList<String>> to_send) throws JsonProcessingException {
+        try{
+            ObjectMapper objectMapper = new ObjectMapper();
+            // convert the HashMap to a JSON object
+            String jsonString = objectMapper.writeValueAsString(to_send);
+            connection.send(jsonString);
+        
+        } catch (JsonProcessingException e) {
+            System.out.println("JsonProcessingException");
         }
-        connection.send(map);
-    }
+        
+
+        // String map = "";
+        // for (String key : to_send.keySet()) {
+        //     map += key + ":";
+        //     for (String value : to_send.get(key)) {
+        //         map += value + ",";
+        //     }
+        //     map += ";";
+        // }
+    }   
+
 
     /* 
     * Close the connection
@@ -62,4 +74,20 @@ public class Server {
         connection.close();
     }
 
+    /*
+    * Assign color to players
+    * @param List<String> Colors
+    */
+    public void assignColor(List<String> Colors) {
+        for (Player p : players) {
+            // add random seed
+            Random rand = new Random(42);
+            int index = rand.nextInt(Colors.size());
+            p.setColor(Colors.get(index));
+            Colors.remove(index);
+        }
+    }
+
+    // initialize players arraylist
+    
 }

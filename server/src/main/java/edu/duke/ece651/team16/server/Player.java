@@ -10,7 +10,7 @@ public class Player {
     private List<Territory> Territories;
     private String name;
     private String color;
-    private Connection conection;
+    private Connection connection;
 
     /**
      * Constructor of the player
@@ -50,5 +50,19 @@ public class Player {
         return this.name;
     }
 
+    /**
+     * get the color of the player
+     * @return color
+     */
+    public void setColor(String color) {
+        this.color = color;
+    }
 
+    /**
+     * get the color of the player
+     * @return color
+     */
+    public String getColor() {
+        return this.color;
+    }
 }

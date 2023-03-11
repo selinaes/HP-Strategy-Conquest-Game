@@ -23,4 +23,11 @@ public class PlayerTest {
     assertEquals(p.getName(), "testPlayer");
   }
 
+  @Test
+  public void setColor() {
+    Player p = new Player("testPlayer", "blue");
+    p.setColor("red");
+    assertEquals(p.getColor(), "red");
+  }
+
 }

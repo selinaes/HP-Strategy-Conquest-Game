@@ -15,3 +15,14 @@ application {
     // Define the main class for the application.
     mainClassName = 'edu.duke.ece651.team16.server.App'
 }
+
+dependencies {
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
+}
+
+
+// subprojects{
+//     dependencies {
+//         implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
+//     }
+// }
