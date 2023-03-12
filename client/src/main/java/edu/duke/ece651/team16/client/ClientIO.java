@@ -9,34 +9,36 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class ClientIO {
-    private BufferedReader in;
-    private PrintWriter out;
-    private Socket serverSocket;
-
+    private BufferedReader out;
+    private PrintWriter in;
+    private Socket clientSocket;
 
     public ClientIO(String IP, int PORT) {
         try {
-          this.serverSocket = new Socket(IP, PORT);
-          this.in = new BufferedReader(new InputStreamReader(serverSocket.getInputStream()));
-          this.out = new PrintWriter(serverSocket.getOutputStream(), true);
-          
+          this.clientSocket = new Socket(IP, PORT);
+          this.out = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+          this.in = new PrintWriter(clientSocket.getOutputStream(), true);
         } catch (IOException e) {
           System.out.println("Failed to initialize Connection.");
         }
     }
 
-    public void send(String msg) {
-        if (out != null) {
-            out.println(msg);
-        } else {
-            System.err.println("Failed to send message: out is null.");
-        }
-    }
+    // write to client's input stream
+    // public void send(String msg) {
+    //     // write msg to input stream
+        
+    //     if (out != null) {
+    //         out.println(msg);
+    //     } else {
+    //         System.err.println("Failed to send message: out is null.");
+    //     }
+    // }
 
+    // read from client's output stream
     public String recv() throws IOException {
         String ans = "";
         try {
-            ans = in.readLine();
+            ans = out.readLine();
         } catch (IOException e) {
             System.out.println("Failed to receive message.");
         }
@@ -45,7 +47,7 @@ public class ClientIO {
 
     public void close() throws IOException {
         try{
-            serverSocket.close();
+            clientSocket.close();
         }catch (IOException e){
             System.out.println("Failed to close socket..");
         }

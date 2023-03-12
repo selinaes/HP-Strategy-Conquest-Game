@@ -15,40 +15,40 @@ import java.net.SocketException;
 
 
 public class Connection {
-  private Socket socket;
+  private Socket clientsocket;
   private BufferedReader in;
   private PrintWriter out;
   // private Socket serverSocket;
   // private ServerSocket serverSocket;
 
 
-/*
- * Constructor for Client side Connection => will send/recv messages to/from server
- * @param IP: the IP address of the server
- * @param PORT: the port number of the server
- */
+// /*
+//  * Constructor for Client side Connection => will send/recv messages to/from server
+//  * @param IP: the IP address of the server
+//  * @param PORT: the port number of the server
+//  */
 
-  public Connection(String IP, int PORT) {
-    try {
-      this.socket = new Socket(IP, PORT);
-      this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-      this.out = new PrintWriter(socket.getOutputStream(), true);
+//   public Connection(String IP, int PORT) {
+//     try {
+//       this.socket = new Socket(IP, PORT);
+//       this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+//       this.out = new PrintWriter(socket.getOutputStream(), true);
       
-    } catch (IOException e) {
-      System.out.println("Failed to initialize Connection.");
-    }
-  }
+//     } catch (IOException e) {
+//       System.out.println("Failed to initialize Connection.");
+//     }
+//   }
 
   /*
  * Constructor for Server side Connection => will send/recv messages to/from client
  * @param socket: the "accepted" client socket representing the client side
  */
 
-  public Connection(Socket socket) {
+  public Connection(Socket clientsocket) {
     try {
-      this.socket = socket;
-      this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-      this.out = new PrintWriter(socket.getOutputStream(), true);
+      this.clientsocket = clientsocket;
+      this.in = new BufferedReader(new InputStreamReader(clientsocket.getInputStream()));
+      this.out = new PrintWriter(clientsocket.getOutputStream(), true);
 
     } catch (IOException e) {
       System.out.println("Failed to initialize Connection.");
@@ -65,19 +65,29 @@ public class Connection {
     }
   }
 
+  /*
+    * Receive a message from the other side
+    * @return: the message received
+    */
   public String recv() throws IOException {
-    String ans = "";
-    try {
-      ans = in.readLine();
-    } catch (IOException e) {
-      System.out.println("Failed to receive message.");
+    boolean received = false;
+    String ans = null;
+    while (!received) {
+      try {
+        ans = in.readLine();
+        if (ans != null) {
+          received = true;
+        }
+      } catch (IOException e) {
+        System.out.println("Failed to receive message.");
+      }
     }
     return ans;
   }
 
   public void close() throws IOException {
     try{
-      socket.close();
+      clientsocket.close();
       // if(serverSocket != null){
       //   serverSocket.close();
       // }

@@ -1,9 +1,9 @@
 package edu.duke.ece651.team16.server;
-import java.util.ArrayList;
+import java.util.*;
 
 public class Territory {
   private String name;
-  private ArrayList<Territory> neighbors;
+  private List<Territory> neighbors;
   private Player owner;
 
   /**
@@ -12,6 +12,7 @@ public class Territory {
    */
     public Territory(String name) {
         this.name = name;
+        this.neighbors = new ArrayList<Territory>();
     }
 
     /**
@@ -30,21 +31,37 @@ public class Territory {
         return name;
     }
     
-    /**
-     * add neighbor
-     * 
-     * @param neighbor
-     */
-    public void setNeighbor(Territory neighbor) {
-      neighbors.add(neighbor);
-    }
 
     /**
     * get neighbor
     * @param neighbor
     * @return neighbors
     */
-    public ArrayList<Territory> getNeighbors() {
+    public List<Territory> getNeighbors() {
         return neighbors;
     }
+
+    /**
+     * set neighbors
+     * 
+     * @param neighbors
+     */
+    public void setNeighbors(List<Territory> neighbors) {
+      this.neighbors = neighbors;
+      for (Territory t : neighbors) {
+        t.addNeighbor(this);
+      }
+    }
+
+    /**
+     * add neighbor
+     * 
+     * @param neighbor
+     */
+    public void addNeighbor(Territory neighbor) {
+      if (!neighbors.contains(neighbor)) {
+        neighbors.add(neighbor);
+      }
+    }
+
 }

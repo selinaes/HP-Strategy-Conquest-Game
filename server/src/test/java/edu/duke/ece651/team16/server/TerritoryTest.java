@@ -18,10 +18,10 @@ public class TerritoryTest {
   public void test_neighbor(){
     Territory t1 = new Territory("Gondor");
     Territory t2 = new Territory("Mordor");
-    t1.setNeighbor(t2);
-    ArrayList<Territory> neighbors = new ArrayList<Territory>();
-    neighbors.add(t2);
-    assertEquals(neighbors, t1.getNeighbors());
+    t1.addNeighbor(t2);
+    ArrayList<Territory> e1 = new ArrayList<Territory>();
+    e1.add(t2);
+    assertEquals(e1, t1.getNeighbors());
   }
 
 }

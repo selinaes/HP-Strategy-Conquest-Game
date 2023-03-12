@@ -22,6 +22,7 @@ public class Server {
     private List<String> colors;
     private int port;
     // private List<Connection> connections;
+    // private HashMap<String, List<Territory>> defaultMap;
     
     public Server(int port) {
         this.players = new ArrayList<Player>();
@@ -34,6 +35,10 @@ public class Server {
         this.port = port;
         BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(32);
         this.threadPool = new ThreadPoolExecutor(2, 16, 5, TimeUnit.SECONDS, workQueue);
+        this.colors = new ArrayList<String>();
+        colors.add("Red");
+        colors.add("Blue");
+        // this.defaultMap = createDukeMap();
     }
 
     
@@ -96,7 +101,8 @@ public class Server {
             
     }
 
-    
+
+
     /* Form a hashmap playerName: player's territoriesName and corresponding neighbors
     * @return HashMap<String, ArrayList<String>>
     */
@@ -152,13 +158,14 @@ public class Server {
     * @param Connection connection
     */
     public String chooseColor(Connection connection) throws IOException {
-        connection.send("Which color do you want to choose? Please enter a number.\n Current available colors are: ");
+        // connection.send("Which color do you want to choose? Please enter a number.\n Current available colors are: ");
         String colorList = "";
         for (int i = 0; i < colors.size(); i++) {
             colorList += i + ". " + colors.get(i) + " ";
         }
-        connection.send(colorList);
+        connection.send("Which color do you want to choose? Please enter a number. Current available colors are: "+colorList);
         String index = connection.recv();
+        System.out.println("Player's color is: " + index);
         int colorindex = Integer.parseInt(index);
         if (colorindex < 0 || colorindex >= colors.size()) {
             connection.send("Invalid color index");
@@ -177,4 +184,6 @@ public class Server {
         String name = connection.recv();
         return name;
     }
+
+    
 }

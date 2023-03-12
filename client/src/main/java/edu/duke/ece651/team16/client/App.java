@@ -4,23 +4,23 @@
 package edu.duke.ece651.team16.client;
 import java.io.IOException;
 
-import edu.duke.ece651.team16.shared.*;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
+import java.io.PrintStream;
 
 
 public class App {
-  public void getMessage() throws IOException {
+
+  public static void main(String[] args) throws IOException {
+    // App a = new App();
     int port = 1234;
     String ip = "127.0.0.1";
-    Client client = new Client(ip, port);
-    client.recvMessage();
-    client.close();
-    // Connection client = new Connection(ip, port, false);
-    // client.send("Hello");
-  }
-  public static void main(String[] args) throws IOException {
-    App a = new App();
-    a.getMessage();
-    
-    // System.out.println(a.getMessage());
+    // add system input and output
+    PrintStream out = System.out;
+    BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
+    Client client = new Client(ip, port, inputReader, out);
+    client.run();
+
+  
   }
 }
