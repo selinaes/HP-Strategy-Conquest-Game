@@ -2,12 +2,12 @@ package edu.duke.ece651.team16.server;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.*;
 
 public class MapTest {
     @Test
-    public void test_basic_map() {
+    public void test_getColorList() {
         Map m1 = new Map(2);
         ArrayList<String> e1 = new ArrayList<String>();
         e1.add("Red");
@@ -20,4 +20,17 @@ public class MapTest {
         e1.add("Green");
         assertEquals(e1, m3.getColorList());
     }
+
+    @Test
+    public void test_createBasic() {
+        Map m1 = new Map(2);
+        HashMap<String, List<Territory>> e1 = new HashMap<String, List<Territory>>();
+        Territory red = new Territory("Red");
+        Territory blue = new Territory("Blue");
+        red.setNeighbors(Arrays.asList(blue));
+        e1.put("Red", Arrays.asList(red));
+        e1.put("Blue", Arrays.asList(blue));
+        assertEquals(e1, m1.createBasicMap());
+    }
+
 }

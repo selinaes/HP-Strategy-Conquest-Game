@@ -4,13 +4,29 @@ import java.util.*;
 
 public class Map {
   private int numPlayer;
-  private List<String> ColorList;
+  private ArrayList<String> ColorList;
 
+  /**
+   * constructor of the map
+   * 
+   * @param numPlayer the number of players
+   **/
   public Map(int numPlayer) {
     this.numPlayer = numPlayer;
-    this.ColorList = Arrays.asList("Red", "Blue", "Yellow", "Green").subList(0, numPlayer);
+    this.ColorList = new ArrayList<>();
+
+    ArrayList<String> colorList = new ArrayList<>();
+    colorList.addAll(Arrays.asList("Red", "Blue", "Yellow", "Green"));
+    for (int i = 0; i < numPlayer; i++) {
+      this.ColorList.add(colorList.get(i));
+    }
   }
 
+  /**
+   * create a basic map with two territories and two players
+   * 
+   * @return a map with two territories
+   **/
   public HashMap<String, List<Territory>> createBasicMap() {
     this.numPlayer = 2;
     HashMap<String, List<Territory>> basicMap = new HashMap<String, List<Territory>>();
@@ -26,9 +42,12 @@ public class Map {
     return basicMap;
   }
 
+  /**
+   * create a Duke map with 24 territories
+   * 
+   * @return a map with 24 territories
+   **/
   public HashMap<String, List<Territory>> createDukeMap() {
-    // create a list of territories with the territorry called "duke garden" and
-    // "duke chapel"
     ArrayList<Territory> totalTerritory = new ArrayList<Territory>();
 
     Territory baldwin = new Territory("Baldwin Auditorium");
@@ -69,30 +88,10 @@ public class Map {
     dukeHospital.setNeighbors(Arrays.asList(levine, dukeGarden));
     dukeGarden.setNeighbors(Arrays.asList(dukeChapel, nasher, broadhead));
 
-    totalTerritory.add(baldwin);
-    totalTerritory.add(broadhead);
-    totalTerritory.add(brodie);
-    totalTerritory.add(bryan);
-    totalTerritory.add(cameron);
-    totalTerritory.add(dukeChapel);
-    totalTerritory.add(dukeForest);
-    totalTerritory.add(dukeGarden);
-    totalTerritory.add(dukeHospital);
-    totalTerritory.add(dukeLemur);
-    totalTerritory.add(dukeLaw);
-    totalTerritory.add(fitzpatrick);
-    totalTerritory.add(jbDuke);
-    totalTerritory.add(levine);
-    totalTerritory.add(nasher);
-    totalTerritory.add(penn);
-    totalTerritory.add(perkins);
-    totalTerritory.add(scienceGarage);
-    totalTerritory.add(smith);
-    totalTerritory.add(studentWellness);
-    totalTerritory.add(fuqua);
-    totalTerritory.add(bookStore);
-    totalTerritory.add(wallace);
-    totalTerritory.add(wilson);
+    totalTerritory.addAll(Arrays.asList(baldwin, broadhead, brodie, bryan, cameron, dukeChapel, dukeForest,
+        dukeGarden, dukeHospital, dukeLemur, dukeLaw, fitzpatrick, jbDuke,
+        levine, nasher, penn, perkins, scienceGarage, smith, studentWellness,
+        fuqua, bookStore, wallace, wilson));
 
     HashMap<String, List<Territory>> dukemap = new HashMap<>();
     int numTerritories = numPlayer == 2 ? 12 : numPlayer == 3 ? 8 : numPlayer == 4 ? 6 : -1;
@@ -104,11 +103,15 @@ public class Map {
         dukemap.put(colors.get(i), new ArrayList<>(territories));
       }
     }
-
     return dukemap;
   }
 
-  public List<String> getColorList() {
+  /**
+   * get the color list of the map
+   * 
+   * @return the color list of the map
+   **/
+  public ArrayList<String> getColorList() {
     return ColorList;
   }
 }

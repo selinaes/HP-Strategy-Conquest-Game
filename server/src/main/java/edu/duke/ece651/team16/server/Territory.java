@@ -1,6 +1,7 @@
 package edu.duke.ece651.team16.server;
 
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Territory {
   private String name;
@@ -14,7 +15,8 @@ public class Territory {
    */
   public Territory(String name) {
     this.name = name;
-    this.neighbors = new ArrayList<Territory>();
+    this.neighbors = new ArrayList<>();
+
   }
 
   /**
@@ -26,6 +28,11 @@ public class Territory {
     return owner;
   }
 
+  /**
+   * set owner
+   * 
+   * @param owner
+   */
   public void setOwner(Player owner) {
     this.owner = owner;
   }
@@ -44,7 +51,7 @@ public class Territory {
    * @return neighbors
    */
   public List<Territory> getNeighbors() {
-    return neighbors;
+    return this.neighbors;
   }
 
   /**
@@ -64,12 +71,12 @@ public class Territory {
   }
 
   /**
-   * set neighbors
+   * set neighbors for both territories
    * 
    * @param neighbors
    */
   public void setNeighbors(List<Territory> neighbors) {
-    this.neighbors = neighbors;
+    this.neighbors = new ArrayList<>(neighbors);
     for (Territory t : neighbors) {
       t.addNeighbor(this);
     }
@@ -81,8 +88,8 @@ public class Territory {
    * @param neighbor
    */
   private void addNeighbor(Territory neighbor) {
-    if (!neighbors.contains(neighbor)) {
-      neighbors.add(neighbor);
+    if (!this.neighbors.contains(neighbor)) {
+      this.neighbors.add(neighbor);
     }
   }
 

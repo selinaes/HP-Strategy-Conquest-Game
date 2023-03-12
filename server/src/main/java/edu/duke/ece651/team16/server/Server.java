@@ -37,15 +37,17 @@ public class Server {
         this.threadPool = new ThreadPoolExecutor(2, 16, 5, TimeUnit.SECONDS, workQueue);
 
         Map map = new Map(2);
-        this.defaultMap = map.createBasicMap();
-        // this.colors = map.getColorList();
-        this.colors = new ArrayList<String>();
-        this.colors.add("Red");
-        this.colors.add("Blue");
+        this.defaultMap = map.createDukeMap();
+        this.colors = map.getColorList();
+        // this.colors = new ArrayList<String>();
+        // this.colors.add("Red");
+        // this.colors.add("Blue");
     }
 
     /**
      * Add a player to the server
+     * 
+     * @param Player p
      */
     public void addPlayer(Player p) {
         players.add(p);
@@ -85,7 +87,7 @@ public class Server {
                             // ask choose color, add new player to server
                             String color = chooseColor(connection);
                             String name = enterName(connection);
-                            Player p = new Player(name, color, connection, defaultMap.get("color"));
+                            Player p = new Player(name, color, connection, defaultMap.get(color));
                             addPlayer(p);
                             // send map to client
                             HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
@@ -164,11 +166,11 @@ public class Server {
 
     }
 
-    /*
+    /**
      * Prompt the player to choose a color
      * 
      * @param Connection connection
-     */
+     **/
     public String chooseColor(Connection connection) throws IOException {
         // connection.send("Which color do you want to choose? Please enter a number.\n
         // Current available colors are: ");
@@ -179,14 +181,18 @@ public class Server {
         connection.send(
                 "Which color do you want to choose? Please enter a number. Current available colors are: " + colorList);
         String index = connection.recv();
-        System.out.println("Player's color is: " + index);
+        System.out.println("Player's color choice is: " + index);
         int colorindex = Integer.parseInt(index);
+        System.out.println(colorindex);
         if (colorindex < 0 || colorindex >= colors.size()) {
             connection.send("Invalid color index");
-            chooseColor(connection);
+            return chooseColor(connection);
+        } else {
+            connection.send("Valid");
+            String chosenColor = colors.get(colorindex);
+            colors.remove(colorindex);
+            return chosenColor;
         }
-        colors.remove(colorindex);
-        return colors.get(colorindex);
     }
 
     /*
@@ -198,6 +204,18 @@ public class Server {
         connection.send("Please enter your name: ");
         String name = connection.recv();
         return name;
+    }
+
+    // prompt the player to choose number of players
+    public void chooseNumOfPlayers(Connection connection) throws IOException {
+        connection.send("How many players does the game have?(Valid player number: 2-4) Please enter a number: ");
+        String num = connection.recv();
+        int numOfPlayers = Integer.parseInt(num);
+        if (numOfPlayers < 2 || numOfPlayers > 4) {
+            connection.send("Invalid number of players");
+            chooseNumOfPlayers(connection);
+        }
+        this.numPlayer = numOfPlayers;
     }
 
 }

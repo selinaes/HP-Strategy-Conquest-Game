@@ -65,6 +65,8 @@ public class Client {
             // step1: Init Game setting: Color
             playerChooseColor();
 
+            playerEnterName();
+
             displayMap();
 
             // step2: Init Game setting: Territory, Units
@@ -158,15 +160,53 @@ public class Client {
             try {
                 clientInput = readClientInput(prompt);
                 sendResponse(clientInput);
-                // successful choose color
-                String color = clientInput;
-                out.println("Successfully set color: " + color);
+                // see if selection is valid
+                prompt = recvMsg();
+                if (prompt.equals("Valid")) {
+                    // successful choose color
+                    String color = clientInput;
+                    out.println("Successfully set color: " + color);
+                    validInput = true;
+                    return;
+                } else {
+                    playerChooseColor();
+                    return;
+                }
             } catch (IllegalArgumentException e) {
                 out.println(e.getMessage());
             }
         }
     }
 
+    /*
+     * Player enter name and send to server
+     * 
+     * @throws IOException
+     */
+    public void playerEnterName() throws IOException {
+        // receive color choosing prompt from server
+        String prompt = recvMsg();
+        String clientInput = "";
+        boolean validInput = false;
+        while (!validInput) {
+            try {
+                clientInput = readClientInput(prompt);
+                sendResponse(clientInput);
+                // successful enter name
+                String name = clientInput;
+                out.println("Successfully set name: " + name);
+                validInput = true;
+            } catch (IllegalArgumentException e) {
+                out.println(e.getMessage());
+            }
+        }
+    }
+
+    /*
+     * Display map
+     * 
+     * @throws IOException
+     */
     public void displayMap() throws IOException {
         String jsonString = recvMsg();
 
