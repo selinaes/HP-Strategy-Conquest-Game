@@ -37,7 +37,7 @@ public class TerritoryTest {
     t1.setNeighbors(neighbors);
     assertEquals(neighbors, t1.getNeighbors());
 
-    String neighName = "(next to: Morder, Narnia)";
+    String neighName = "(next to: Mordor, Narnia)";
     assertEquals(neighName, t1.getNeighborsNames());
 
   }
