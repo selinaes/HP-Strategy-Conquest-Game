@@ -30,7 +30,7 @@ public class MapTest {
         red.setNeighbors(Arrays.asList(blue));
         e1.put("Red", Arrays.asList(red));
         e1.put("Blue", Arrays.asList(blue));
-        assertEquals(e1, m1.createBasicMap());
+        assertSame(e1, m1.createBasicMap());
     }
 
 }
