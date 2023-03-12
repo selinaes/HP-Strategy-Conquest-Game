@@ -2,6 +2,7 @@ package edu.duke.ece651.team16.server;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Territory {
   private String name;
@@ -91,6 +92,18 @@ public class Territory {
     if (!this.neighbors.contains(neighbor)) {
       this.neighbors.add(neighbor);
     }
+  }
+
+  // Overwrite equals
+  @Override
+  public boolean equals(Object o) {
+    if (o != null && o.getClass().equals(getClass())) {
+      Territory t = (Territory) o;
+      // boolean nameEqual = t.getName().equals(this.getName());
+      return this.name.equals(t.name) && this.neighbors.size() == t.neighbors.size()
+          && this.neighbors.containsAll(t.neighbors) && t.neighbors.containsAll(this.neighbors);
+    }
+    return false;
   }
 
 }
