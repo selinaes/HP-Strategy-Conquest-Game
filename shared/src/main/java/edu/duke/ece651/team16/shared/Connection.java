@@ -18,26 +18,8 @@ public class Connection {
   private Socket clientsocket;
   private BufferedReader in;
   private PrintWriter out;
-  // private Socket serverSocket;
-  // private ServerSocket serverSocket;
 
 
-// /*
-//  * Constructor for Client side Connection => will send/recv messages to/from server
-//  * @param IP: the IP address of the server
-//  * @param PORT: the port number of the server
-//  */
-
-//   public Connection(String IP, int PORT) {
-//     try {
-//       this.socket = new Socket(IP, PORT);
-//       this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//       this.out = new PrintWriter(socket.getOutputStream(), true);
-      
-//     } catch (IOException e) {
-//       System.out.println("Failed to initialize Connection.");
-//     }
-//   }
 
   /*
  * Constructor for Server side Connection => will send/recv messages to/from client
