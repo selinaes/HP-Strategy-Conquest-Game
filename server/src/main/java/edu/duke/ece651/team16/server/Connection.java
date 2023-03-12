@@ -1,4 +1,4 @@
-package edu.duke.ece651.team16.shared;
+package edu.duke.ece651.team16.server;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -6,18 +6,17 @@ import java.io.PrintWriter;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-
 public class Connection {
   private Socket clientsocket;
   private BufferedReader in;
   private PrintWriter out;
 
-
-
   /*
- * Constructor for Server side Connection => will send/recv messages to/from client
- * @param socket: the "accepted" client socket representing the client side
- */
+   * Constructor for Server side Connection => will send/recv messages to/from
+   * client
+   * 
+   * @param socket: the "accepted" client socket representing the client side
+   */
 
   public Connection(Socket clientsocket) {
     try {
@@ -30,8 +29,6 @@ public class Connection {
     }
   }
 
-
-
   public void send(String msg) {
     if (out != null) {
       out.println(msg);
@@ -41,9 +38,10 @@ public class Connection {
   }
 
   /*
-    * Receive a message from the other side
-    * @return: the message received
-    */
+   * Receive a message from the other side
+   * 
+   * @return: the message received
+   */
   public String recv() throws IOException {
     boolean received = false;
     String ans = null;
@@ -61,12 +59,12 @@ public class Connection {
   }
 
   public void close() throws IOException {
-    try{
+    try {
       clientsocket.close();
       // if(serverSocket != null){
-      //   serverSocket.close();
+      // serverSocket.close();
       // }
-    }catch (IOException e){
+    } catch (IOException e) {
       System.out.println("Failed to close socket..");
     }
   }

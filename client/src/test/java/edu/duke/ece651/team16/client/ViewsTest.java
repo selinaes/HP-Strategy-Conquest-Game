@@ -17,13 +17,12 @@ public class ViewsTest {
     list.add("Narnia");
     map.put("Green xx", list);
 
-
     Views v = new Views();
     String mapdisplay = v.displayMap(map);
     String expected = "Green xx player: \n" +
-    "-----------------\n" +
-    "Oz\n" +
-    "Narnia\n\n";
+        "-----------------\n" +
+        "Oz\n" +
+        "Narnia\n\n";
     assertEquals(mapdisplay, expected);
   }
 

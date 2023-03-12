@@ -12,7 +12,7 @@ import static org.mockito.Mockito.when;
 
 public class PlayerTest {
   @Test
-  public void test_player(){
+  public void test_player() {
     Player p1 = mock(Player.class);
     Player p2 = mock(Player.class);
 
@@ -22,11 +22,12 @@ public class PlayerTest {
     assertEquals(p1.getName(), "1");
     assertEquals(p2.getName(), "2");
   }
+
   @Test
   public void test_addTerritory() throws IOException {
     Connection c1 = mock(Connection.class);
     // when(c1.getSocket()).thenReturn(s1);
-    
+
     // create a list for territories
     List<Territory> list = new ArrayList<Territory>();
     Player p = new Player("testPlayer", "blue", c1, list);
@@ -37,8 +38,9 @@ public class PlayerTest {
     list.add(t2);
 
     p.addTerritories(t1, t2);
-   
+
     assertEquals(p.getTerritories(), list);
+    assertEquals(t1.getOwner(), p);
   }
 
   @Test
@@ -49,9 +51,9 @@ public class PlayerTest {
     assertEquals(p.getName(), "testPlayer");
     assertEquals(p.getColor(), "blue");
   }
-  
+
   @Test
-  public void test_getConnection(){
+  public void test_getConnection() {
     Connection c1 = mock(Connection.class);
     List<Territory> list = new ArrayList<Territory>();
     Player p = new Player("testPlayer", "blue", c1, list);

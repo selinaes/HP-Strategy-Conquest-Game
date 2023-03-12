@@ -1,12 +1,9 @@
 package edu.duke.ece651.team16.server;
-import edu.duke.ece651.team16.shared.Connection;
 
-import java.util.ArrayList;
 import java.util.List;
 
-
 public class Player {
-    
+
     private List<Territory> Territories;
     private String name;
     private String color;
@@ -14,11 +11,12 @@ public class Player {
 
     /**
      * Constructor of the player
+     * 
      * @param name
      * @param color
      * @param connection
      */
-    Player(String name, String color, Connection connection, List<Territory> Territories){
+    Player(String name, String color, Connection connection, List<Territory> Territories) {
         this.name = name;
         this.color = color;
         this.connection = connection;
@@ -27,25 +25,29 @@ public class Player {
 
     /**
      * Add the territories of the player in the placement phase
+     * 
      * @param territory
      */
-    public void addTerritories(Territory... territory){
-        for (Territory t: territory){
+    public void addTerritories(Territory... territory) {
+        for (Territory t : territory) {
             this.Territories.add(t);
+            t.setOwner(this);
         }
     }
 
     /**
      * get the territories of the player in the placement phase
+     * 
      * @return Territories
      */
-    
+
     public List<Territory> getTerritories() {
         return this.Territories;
     }
 
     /**
      * get the name of the player
+     * 
      * @return name
      */
     public String getName() {
@@ -54,6 +56,7 @@ public class Player {
 
     /**
      * get the color of the player
+     * 
      * @return color
      */
     public String getColor() {
@@ -62,6 +65,7 @@ public class Player {
 
     /**
      * get connection of the player
+     * 
      * @return connection
      */
     public Connection getConnection() {

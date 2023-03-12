@@ -1,4 +1,4 @@
-package edu.duke.ece651.team16.shared;
+package edu.duke.ece651.team16.server;
 
 import java.io.IOException;
 
@@ -11,7 +11,6 @@ public class ConnectionTest {
     // int port = 1234;
     // String ip = "127.0.0.1";
 
-  
     // Connection server = new Connection(ip, port, true);
     // Connection client = new Connection(ip, port, false);
 
