@@ -8,11 +8,11 @@ public class Client {
 
     public Client(String ip, int port) {
         views = new Views();
-        this.client_connection = new Connection(ip, port, false);
+        this.client_connection = new Connection(ip, port);
     }
 
     // receive the map from server
-    public void recvMap() throws IOException {
+    public void recvMessage() throws IOException {
         String received = client_connection.recv();
         // printout the string
         System.out.println(received);

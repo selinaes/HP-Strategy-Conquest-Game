@@ -16,10 +16,12 @@ public class Player {
      * Constructor of the player
      * @param name
      * @param color
+     * @param connection
      */
-    Player(String name, String color){
+    Player(String name, String color, Connection connection){
         this.name = name;
         this.color = color;
+        this.connection = connection;
         Territories = new ArrayList<>();
     }
 
@@ -54,15 +56,15 @@ public class Player {
      * get the color of the player
      * @return color
      */
-    public void setColor(String color) {
-        this.color = color;
+    public String getColor() {
+        return this.color;
     }
 
     /**
-     * get the color of the player
-     * @return color
+     * get connection of the player
+     * @return connection
      */
-    public String getColor() {
-        return this.color;
+    public Connection getConnection() {
+        return this.connection;
     }
 }

@@ -1,29 +1,60 @@
 package edu.duke.ece651.team16.shared;
 
-import java.net.*;
-import java.io.*;
+import java.net.ServerSocket;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.SocketTimeoutException;
+import java.net.SocketException;
+
 
 public class Connection {
   private Socket socket;
   private BufferedReader in;
   private PrintWriter out;
-  private ServerSocket serverSocket;
+  // private Socket serverSocket;
+  // private ServerSocket serverSocket;
 
-  public Connection(String IP, int PORT, boolean isServer) {
+
+/*
+ * Constructor for Client side Connection => will send/recv messages to/from server
+ * @param IP: the IP address of the server
+ * @param PORT: the port number of the server
+ */
+
+  public Connection(String IP, int PORT) {
     try {
-      if(isServer){
-        this.serverSocket = new ServerSocket(PORT);
-        this.socket = serverSocket.accept();
-      }
-      else{
-        this.socket = new Socket(IP, PORT);
-      }
+      this.socket = new Socket(IP, PORT);
       this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
       this.out = new PrintWriter(socket.getOutputStream(), true);
+      
     } catch (IOException e) {
       System.out.println("Failed to initialize Connection.");
     }
   }
+
+  /*
+ * Constructor for Server side Connection => will send/recv messages to/from client
+ * @param socket: the "accepted" client socket representing the client side
+ */
+
+  public Connection(Socket socket) {
+    try {
+      this.socket = socket;
+      this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+      this.out = new PrintWriter(socket.getOutputStream(), true);
+
+    } catch (IOException e) {
+      System.out.println("Failed to initialize Connection.");
+    }
+  }
+
 
 
   public void send(String msg) {
@@ -47,9 +78,9 @@ public class Connection {
   public void close() throws IOException {
     try{
       socket.close();
-      if(serverSocket != null){
-        serverSocket.close();
-      }
+      // if(serverSocket != null){
+      //   serverSocket.close();
+      // }
     }catch (IOException e){
       System.out.println("Failed to close socket..");
     }

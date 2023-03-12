@@ -12,7 +12,7 @@ public class App {
     int port = 1234;
     String ip = "127.0.0.1";
     Client client = new Client(ip, port);
-    client.recvMap();
+    client.recvMessage();
     client.close();
     // Connection client = new Connection(ip, port, false);
     // client.send("Hello");

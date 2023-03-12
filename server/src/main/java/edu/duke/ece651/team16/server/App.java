@@ -10,26 +10,53 @@ import edu.duke.ece651.team16.shared.*;
 
 
 public class App {
-  public String getMessage() {
-    return "Hello from the server for "+ MyName.getName();
-  }
+  
   public static void main(String[] args) throws IOException{
-    App a = new App();
+    // Create a new instance of the App class
+    App app = new App();
+
+    // Set the port number to 1234
     int port = 1234;
 
+    // Create a new instance of the Server class and pass in the port number
     Server server = new Server(port);
-    Player p1 = new Player("p1", "blue");
-    Territory t = new Territory("Gondor");
-    server.addPlayer(p1);
-    p1.addTerritories(t);
-    HashMap<String, ArrayList<String>> map = new HashMap<String,  ArrayList<String>>();
-    ArrayList<String> list = new ArrayList<String>();
-    list.add("Gondor");
-    map.put("p1", list);
-    HashMap<String, ArrayList<String>> to_send = server.formMap();
-    server.sendMap(to_send);
-    server.close();
-
+    server.run();
+    
     
   }
+    
+    
+  //   Connection c1 = new Connection("127.0.0.1", 1234);
+
+  //   // Create a new player named "p1" with the color "blue"
+  //   Player player1 = new Player("p1", "blue", c1);
+
+  //   // Create a new territory named "Gondor"
+  //   Territory gondor = new Territory("Gondor");
+
+  //   // Add the "Gondor" territory to the "p1" player
+  //   player1.addTerritories(gondor);
+
+  //   // Add the "p1" player to the server
+  //   server.addPlayer(player1);
+
+  //   // Create a HashMap to store the territories for each player
+  //   HashMap<String, ArrayList<String>> playerTerritories = new HashMap<String, ArrayList<String>>();
+
+  //   // Create an ArrayList to store the "Gondor" territory
+  //   ArrayList<String> territoriesList = new ArrayList<String>();
+  //   territoriesList.add("Gondor");
+
+  //   // Add the "Gondor" territory to the HashMap with the "p1" player key
+  //   playerTerritories.put("p1", territoriesList);
+
+  //   // Get a HashMap of all players and their territories from the server
+  //   HashMap<String, ArrayList<String>> mapToSend = server.formMap();
+
+  //   // Send the HashMap as a JSON string to the client
+  //   server.sendMap(player1, mapToSend);
+
+  //   // Close the server connection
+  //   server.close();
+  // }
 }
