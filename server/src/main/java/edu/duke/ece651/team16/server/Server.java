@@ -20,25 +20,26 @@ public class Server {
     ThreadPoolExecutor threadPool;
     private int numPlayer;
     private List<String> colors;
-    private int port;
+    // private int port;
     // private List<Connection> connections;
-    // private HashMap<String, List<Territory>> defaultMap;
+    private HashMap<String, List<Territory>> defaultMap;
     
-    public Server(int port) {
+    public Server(ServerSocket serverSocket) {
         this.players = new ArrayList<Player>();
-        try{
-            this.listenSocket = new ServerSocket(port);
-        }
-        catch(IOException e){
-            System.out.println("Failed to initialize Connection.");
-        }
-        this.port = port;
+        this.listenSocket = serverSocket;
+        // try{
+        //     this.listenSocket = new ServerSocket(port);
+        // }
+        // catch(IOException e){
+        //     System.out.println("Failed to initialize Connection.");
+        // }
+        // this.port = port;
         BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(32);
         this.threadPool = new ThreadPoolExecutor(2, 16, 5, TimeUnit.SECONDS, workQueue);
-        this.colors = new ArrayList<String>();
-        colors.add("Red");
-        colors.add("Blue");
-        // this.defaultMap = createDukeMap();
+        
+        Map map = new Map(numPlayer);
+        this.defaultMap = map.createDukeMap();
+        this.colors = map.getColorList();
     }
 
     
@@ -55,16 +56,17 @@ public class Server {
    */
     private Socket acceptOrNull() {
         try {
-        return listenSocket.accept();
-        } catch (IOException ioe) {
+            return listenSocket.accept();
+        } 
+        catch (IOException ioe) {
         // In real code, we would want to be more discriminating here.
         // Was this a timeout, or some other problem?
-        return null;
+            return null;
         }
     }
     
     // run server to receive client's message
-    public void run() throws IOException {
+    public void run() throws IOException, JsonProcessingException {
         while (!Thread.currentThread().isInterrupted()) {
             final Socket client_socket = acceptOrNull();
             if (client_socket == null) {
@@ -83,8 +85,15 @@ public class Server {
                     // ask choose color, add new player to server
                     String color = chooseColor(connection); 
                     String name = enterName(connection);
-                    Player p = new Player(name, color, connection);
+                    Player p = new Player(name, color, connection, defaultMap.get("color"));
                     addPlayer(p);
+                    // send map to client
+                    HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
+                    try{
+                        sendMap(p, to_send);
+                    } catch (JsonProcessingException e) {
+                        System.out.println("JsonProcessingException");
+                    }
                     
                   } finally {
                     client_socket.close();
@@ -104,32 +113,33 @@ public class Server {
 
 
     /* Form a hashmap playerName: player's territoriesName and corresponding neighbors
+    * HashMap<String, ArrayList<HashMap<String, String>>>
+    * [playerName: [{{"TerritoryName1": string},{"Neighbors": [, , , ]}, {"Unit": int}}, {TerritoryName2: {"Neighbors": [, , , ]}, {"Unit": int}}]]
     * @return HashMap<String, ArrayList<String>>
     */
-    public HashMap<String, ArrayList<String>> formMap() {
-        HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
+    public HashMap<String, ArrayList<HashMap<String, String>>> formMap() {
+        HashMap<String, ArrayList<HashMap<String, String>>> map = new HashMap<String, ArrayList<HashMap<String, String>>>();
         for (Player p : players) {
-            ArrayList<String> list = new ArrayList<String>();
+            ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
             for (Territory t : p.getTerritories()) {
-                // ArrayList<Territory> neighbors = t.getNeighbors();
-                // String neighborNames = "";
-                // for (Territory neighbor : neighbors) {
-                //     neighborNames += neighbor.getName() + " ";
-                // }
-                list.add(t.getName());
-                // list.add(neighborNames);
+                HashMap<String, String> entryMap = new HashMap<String, String>();
+                entryMap.put("TerritoryName", t.getName());
+                entryMap.put("Neighbors", t.getNeighborsNames());
+                list.add(entryMap);
             }
             map.put(p.getName(), list);
         }
         return map;
     }
 
+    
+
     /**
     * Send a hashmap to client
     * @param player
     * @param HashMap<String, ArrayList<String>> to_send
     */
-    public void sendMap(Player player, HashMap<String, ArrayList<String>> to_send) throws JsonProcessingException {
+    public void sendMap(Player player, HashMap<String, ArrayList<HashMap<String, String>>> to_send) throws JsonProcessingException {
         try{
             ObjectMapper objectMapper = new ObjectMapper();
             // convert the HashMap to a JSON object

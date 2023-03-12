@@ -42,6 +42,22 @@ public class Territory {
     }
 
     /**
+    *Get Neighbor Name
+    * @return result
+    */
+    public String getNeighborsNames() {
+      String result = "";
+      result += "(next to: ";
+      for (Territory t : neighbors) {
+        result += t.getName() + ", ";
+      }
+      result = result.substring(0, result.length() - 2);
+      result += ")";
+      return result;
+    }
+
+  
+    /**
      * set neighbors
      * 
      * @param neighbors

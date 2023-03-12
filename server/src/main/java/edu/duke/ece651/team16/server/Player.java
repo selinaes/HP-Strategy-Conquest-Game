@@ -18,11 +18,11 @@ public class Player {
      * @param color
      * @param connection
      */
-    Player(String name, String color, Connection connection){
+    Player(String name, String color, Connection connection, List<Territory> Territories){
         this.name = name;
         this.color = color;
         this.connection = connection;
-        Territories = new ArrayList<>();
+        this.Territories = Territories;
     }
 
     /**

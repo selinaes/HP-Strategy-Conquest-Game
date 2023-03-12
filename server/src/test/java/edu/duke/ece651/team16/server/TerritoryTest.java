@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import edu.duke.ece651.team16.server.Territory;
 import java.util.ArrayList;
 
 public class TerritoryTest {
