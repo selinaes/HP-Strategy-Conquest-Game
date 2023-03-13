@@ -1,7 +1,13 @@
 # Risk_Game
 
-# Table of Contents
+![pipeline](https://gitlab.oit.duke.edu/zf70/Risk_Game/badges/docker_and_testCI/pipeline.svg)
 
+![coverage](https://gitlab.oit.duke.edu/zf70/Risk_Game/badges/docker_and_testCI/coverage.svg?job=test)
+
+## Coverage
+[Detailed coverage](https://zf70.pages.oit.duke.edu/Risk_Game/dashboard.html)
+
+# Table of Contents
 - [Schedule](#Schedule)
 - [Review](#Review)
   - [Requirements](#Requirements)
@@ -19,7 +25,7 @@
 ## Review
 
 ### Requirements
-
+test test
 See requirements in [prj1.pdf](prj1.pdf)
 
 ## Design Overview
@@ -198,3 +204,61 @@ Some important details:
 | Battle | resolveBattle(): vector<string Name, Unit[] units[]>| Battling in a circle list|
 
 ## Implementation
+Duke Map
+```mermaid
+flowchart LR
+    baldwin[Baldwin Auditorium]
+    broadhead[Broadhead Center]
+    brodie[Brodie Recreational Center]
+    bryan[Bryan Center]
+    smith[Smith Warehouse]
+    cameron[Cameron Indoor Stadium]
+    dukeChapel[Duke Chapel]
+    dukeForest[Duke Forest]
+    dukeGarden[Duke Garden]
+    dukeHospital[Duke Hospital]
+    dukeLemur[Duke Lemur Center]
+    dukeLaw[Duke University School of Law]
+    fitzpatrick[Fitzpatrick Center]
+    jbDuke[JB Duke Hotel]
+    levine[Levine Science Research Center]
+    nasher[Nasher Museum of Art]
+    penn[Penn Pavilion]
+    perkins[Perkins Library]
+    scienceGarage[Science Garage]
+    smith[Smith Warehouse]
+    studentWellness[Student Wellness Center]
+    fuqua[The Fuqua School of Business]
+    bookStore[University Book Store]
+    wallace[Wallace Wade Stadium]
+    wilson[Wilson Recreation Center]
+
+    baldwin --- brodie
+    baldwin --- smith
+    smith --- brodie
+    wilson --- cameron
+    wilson --- wallace
+    cameron --- wallace
+    fuqua --- dukeLaw
+    fuqua --- jbDuke
+    jbDuke --- scienceGarage
+    jbDuke --- dukeForest
+    jbDuke --- dukeLemur
+    studentWellness --- dukeLaw
+    penn --- studentWellness
+    penn --- bookStore
+    bryan --- bookStore
+    bryan --- broadhead
+    dukeChapel --- broadhead
+    dukeChapel --- perkins
+    fitzpatrick --- levine
+    fitzpatrick --- perkins
+    dukeHospital --- levine
+    dukeHospital --- dukeGarden
+    dukeGarden --- dukeChapel
+    dukeGarden --- nasher
+    dukeGarden --- broadhead
+```
+
+
+

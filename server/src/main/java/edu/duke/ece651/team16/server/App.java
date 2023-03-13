@@ -3,15 +3,25 @@
  */
 package edu.duke.ece651.team16.server;
 
-import edu.duke.ece651.team16.shared.MyName;
-
+import java.io.IOException;
+import java.net.ServerSocket;
 
 public class App {
-  public String getMessage() {
-    return "Hello from the server for "+ MyName.getName();
+
+  public static void main(String[] args) throws IOException {
+    // Set the port number to 1234
+    int port = 1234;
+
+    // Create a new instance of the Server class and pass in the port number
+    ServerSocket listenSocket = null;
+    try {
+      listenSocket = new ServerSocket(port);
+      Server server = new Server(listenSocket);
+      server.run();
+    } catch (IOException e) {
+      System.out.println("Failed to initialize Connection.");
+    }
+
   }
-  public static void main(String[] args) {
-    App a = new App();
-    System.out.println(a.getMessage());
-  }
+
 }

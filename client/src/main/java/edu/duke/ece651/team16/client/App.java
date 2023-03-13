@@ -3,15 +3,33 @@
  */
 package edu.duke.ece651.team16.client;
 
-import edu.duke.ece651.team16.shared.MyName;
+import java.io.IOException;
 
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
+import java.io.PrintStream;
+import java.net.Socket;
 
 public class App {
-  public String getMessage() {
-    return "Hello from the client for "+ MyName.getName();
-  }
-  public static void main(String[] args) {
-    App a = new App();
-    System.out.println(a.getMessage());
+  // public void clinetRun() throws IOException{
+
+  // }
+
+  public static void main(String[] args) throws IOException {
+    // App a = new App();
+    int port = 1234;
+    String ip = "127.0.0.1";
+    Socket clientSocket = null;
+    try {
+      clientSocket = new Socket(ip, port);
+    } catch (IOException e) {
+      System.out.println("Failed to initialize Connection.");
+    }
+    // add system input and output
+    PrintStream out = System.out;
+    BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
+    Client client = new Client(clientSocket, inputReader, out);
+    client.run();
+
   }
 }

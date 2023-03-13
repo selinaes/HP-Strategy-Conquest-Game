@@ -9,6 +9,7 @@ stages:
    - build
    - test
    - coverage
+   - deploy
 
    
 build:
@@ -25,7 +26,8 @@ test:
   artifacts:
     paths:
       - coverage
-      
+  coverage: '/TOTAL COVERAGE: \d+\%/'
+
 pages:
  stage: coverage
  tags:
@@ -37,3 +39,9 @@ pages:
  artifacts:
    paths:
      - public
+
+deploy:
+  tags:
+    - ece651
+  stage: deploy
+  script: ./scripts/redeploy.sh
