@@ -47,23 +47,20 @@ public class Client {
      * @throws IOException
      */
     public void run() throws IOException {
-        while (true) {
-            playerChooseNum();
-            // step1: Init Game setting: Color, enter name
-            
-            waitEveryoneDone("Stage Complete");
-            out.println("out of wait");
-            playerChooseColor();
+        playerChooseNum();
+        // step1: Init Game setting: Color, enter name
 
-            displayMap();
+        waitEveryoneDone("Stage Complete");
+        out.println("out of wait");
+        playerChooseColor();
+
+        displayMap();
 
         // step2: Init Game setting: Territory, Units
 
         // step3: Do placement
 
         // step4: Play game
-
-        return;
         // this.close();
     }
 
@@ -138,12 +135,11 @@ public class Client {
         out.println("wait everyone done");
         String prompt = recvMsg();
         boolean done = false;
-        while (!done){
+        while (!done) {
             if (prompt.equals(expectPrompt)) {
-            out.println(prompt);
-            done = true;            
-            }
-            else {
+                out.println(prompt);
+                done = true;
+            } else {
                 prompt = recvMsg();
             }
         }
@@ -220,13 +216,13 @@ public class Client {
      * @throws IOException
      */
     public void playerChooseNum() throws IOException {
+        String clientInput = "";
         out.println("Client in playerChooseNum");
         String prompt = recvMsg();
         if (prompt.equals("Not the first player. Waiting for others to set player number.")) {
             out.println(prompt);
             return;
         }
-        String clientInput = "";
         while (true) {
             try {
                 clientInput = readClientInput(prompt);

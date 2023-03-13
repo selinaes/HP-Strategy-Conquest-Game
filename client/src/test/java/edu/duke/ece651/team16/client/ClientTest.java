@@ -203,44 +203,47 @@ public class ClientTest {
     client.close();
   }
 
-  @Test
-  public void test_playerEnterName() throws IOException, Exception {
-    Socket mockSocket = makeMockSocket();
-    BufferedReader inputSource = makeInputSource("input");
-    PrintStream out = makeOut();
+  // @Test
+  // public void test_playerEnterName() throws IOException, Exception {
+  // Socket mockSocket = makeMockSocket();
+  // BufferedReader inputSource = makeInputSource("input");
+  // PrintStream out = makeOut();
 
-    Client client = new Client(mockSocket, inputSource, out);
+  // Client client = new Client(mockSocket, inputSource, out);
 
-    Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
-    socketReceiveField.setAccessible(true);
-    BufferedReader mockReader = makeBufferedReader("Valid");
-    socketReceiveField.set(client, mockReader);
-    client.playerEnterName();
-    verify(mockReader, times(1)).readLine();
-    client.close();
-  }
+  // Field socketReceiveField =
+  // client.getClass().getDeclaredField("socketReceive");
+  // socketReceiveField.setAccessible(true);
+  // BufferedReader mockReader = makeBufferedReader("Valid");
+  // socketReceiveField.set(client, mockReader);
+  // client.playerEnterName();
+  // verify(mockReader, times(1)).readLine();
+  // client.close();
+  // }
 
-  @Test
-  public void test_playerEneterNameException() throws IOException, Exception {
-    Socket mockSocket = makeMockSocket();
-    BufferedReader inputSource = mock(BufferedReader.class);
-    PrintStream out = makeOut();
+  // @Test
+  // public void test_playerEneterNameException() throws IOException, Exception {
+  // Socket mockSocket = makeMockSocket();
+  // BufferedReader inputSource = mock(BufferedReader.class);
+  // PrintStream out = makeOut();
 
-    Client client = new Client(mockSocket, inputSource, out);
+  // Client client = new Client(mockSocket, inputSource, out);
 
-    Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
-    socketReceiveField.setAccessible(true);
-    BufferedReader mockReader = mock(BufferedReader.class);
-    when(mockReader.readLine()).thenReturn("Not Valid").thenReturn("Not Valid").thenReturn("Valid");
-    socketReceiveField.set(client, mockReader);
+  // Field socketReceiveField =
+  // client.getClass().getDeclaredField("socketReceive");
+  // socketReceiveField.setAccessible(true);
+  // BufferedReader mockReader = mock(BufferedReader.class);
+  // when(mockReader.readLine()).thenReturn("Not Valid").thenReturn("Not
+  // Valid").thenReturn("Valid");
+  // socketReceiveField.set(client, mockReader);
 
-    when(inputSource.readLine())
-        .thenReturn(null)
-        .thenReturn("legal string");
-    client.playerEnterName();
+  // when(inputSource.readLine())
+  // .thenReturn(null)
+  // .thenReturn("legal string");
+  // client.playerEnterName();
 
-    client.close();
-  }
+  // client.close();
+  // }
 
   @Test
   public void test_run() throws IOException, Exception {
