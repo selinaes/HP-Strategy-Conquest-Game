@@ -1,26 +1,35 @@
-package edu.duke.ece651.team16.server;
+// package edu.duke.ece651.team16.server;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.*;
+// import static org.junit.jupiter.api.Assertions.assertEquals;
+// import static org.mockito.Mockito.mock;
+// import static org.mockito.Mockito.when;
+// import static org.mockito.Mockito.verify;
+// import static org.mockito.Mockito.times;
+// import static org.mockito.Mockito.verifyNoMoreInteractions;
+// import static org.mockito.Mockito.any;
+// import static org.mockito.Mockito.*;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ThreadPoolExecutor;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.junit.jupiter.api.Test;
+// import java.io.InputStream;
+// import java.io.OutputStream;
+// import java.net.ServerSocket;
+// import java.net.Socket;
+// import java.io.IOException;
+// import java.util.ArrayList;
+// import java.util.HashMap;
+// import java.util.List;
+// import java.util.concurrent.ThreadPoolExecutor;
+// import com.fasterxml.jackson.databind.ObjectMapper;
+// import com.fasterxml.jackson.core.JsonProcessingException;
+// import org.junit.jupiter.api.Test;
+
+// public class ServerTest {
+//   // @Test
+//   // public void test_constructor() {
+//   // ServerSocket serverSocketMock = mock(ServerSocket.class);
+//   // Server s = new Server(serverSocketMock);
+
+//   // assertEquals(port, s.getPort());
+//   // }
 
 public class ServerTest {
 

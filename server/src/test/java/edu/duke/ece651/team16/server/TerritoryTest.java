@@ -20,7 +20,7 @@ public class TerritoryTest {
     Territory t1 = new Territory("Gondor");
     Connection c1 = mock(Connection.class);
     List<Territory> list = new ArrayList<Territory>();
-    Player p1 = new Player("testPlayer", "blue", c1, list);
+    Player p1 = new Player("blue", c1, list);
     t1.setOwner(p1);
     assertEquals(p1, t1.getOwner());
   }

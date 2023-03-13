@@ -32,6 +32,12 @@ public class Game {
         this.gameState = "notStart";
     }
 
+    /** 
+     * Create a player and add to the server
+     * 
+     * @param Socket client_socket: client socket
+     * @param int numClients: number of clients
+     */
     public void createPlayer(Socket client_socket, int numClients) {
         System.out.println(numClients);
         // connect to new client, add serverside socket to connection obj
@@ -165,8 +171,7 @@ public class Game {
      * @param Connection connection
      */
     public void chooseNumOfPlayers(Connection connection, int numClients) throws IOException {
-        if(numClients == 1){
-                    
+        if(numClients == 1){      
             connection.send("You are the first player! Please set the number of players in this game(Valid player number: 2-4): ");
             String num = connection.recv();
             int numOfPlayers = Integer.parseInt(num);
@@ -187,7 +192,6 @@ public class Game {
           } 
         else{
             connection.send("Not the first player. Waiting for others to set player number.");
-
         }
     }
 
@@ -200,8 +204,12 @@ public class Game {
         return this.numPlayer;
     }
 
-    public void initializeMap(int numOfPlayers){
-        //create new map and color list
+    /**
+     * create new map and color list
+     * 
+     * @param int numOfPlayers
+     */
+    public void initializeMap(int numOfPlayers){      
         Map map = new Map(numOfPlayers);
         this.defaultMap = map.createDukeMap();
         this.colors = map.getColorList();
