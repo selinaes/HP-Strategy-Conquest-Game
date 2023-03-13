@@ -25,13 +25,22 @@ public class MapTest {
     public void test_createBasic() {
         Map m1 = new Map(2);
         HashMap<String, List<Territory>> e1 = new HashMap<String, List<Territory>>();
-        Territory red = new Territory("Red");
-        Territory blue = new Territory("Blue");
+        Territory red = new Territory("A");
+        Territory blue = new Territory("B");
         red.setNeighbors(Arrays.asList(blue));
         e1.put("Red", Arrays.asList(red));
         e1.put("Blue", Arrays.asList(blue));
+        e1.get("Red").toString();
+        assertNotEquals(m1, m1.createBasicMap().get("Blue"));
         assertEquals(e1.get("Red"), m1.createBasicMap().get("Red"));
         assertEquals(e1.get("Blue"), m1.createBasicMap().get("Blue"));
+        m1.createDukeMap();
+        Map m2 = new Map(-1);
+        m2.createDukeMap();
+        Map m3 = new Map(3);
+        m3.createDukeMap();
+        Map m4 = new Map(4);
+        m4.createDukeMap();
     }
 
 }

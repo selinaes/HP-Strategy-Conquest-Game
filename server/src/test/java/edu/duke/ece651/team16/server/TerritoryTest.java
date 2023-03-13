@@ -34,12 +34,27 @@ public class TerritoryTest {
     ArrayList<Territory> neighbors = new ArrayList<Territory>();
     neighbors.add(t2);
     neighbors.add(t3);
+
     t1.setNeighbors(neighbors);
+    t1.setNeighbors(neighbors); // test no duplicates
     assertEquals(neighbors, t1.getNeighbors());
 
     String neighName = "(next to: Mordor, Narnia)";
     assertEquals(neighName, t1.getNeighborsNames());
+    assertNotEquals(null, t1.getNeighborsNames());
 
+  }
+
+  // add test for equals() return false
+  @Test
+  public void test_equals() {
+    Territory t1 = new Territory("Gondor");
+    Territory t2 = new Territory("Mordor");
+    Territory t3 = new Territory("Narnia");
+    Territory t4 = new Territory("Gondor");
+    assertFalse(t1.equals(null));
+    assertFalse(t1.equals(t3));
+    assertTrue(t1.equals(t4));
   }
 
 }

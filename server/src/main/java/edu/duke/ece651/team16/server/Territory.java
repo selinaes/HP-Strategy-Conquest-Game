@@ -101,9 +101,32 @@ public class Territory {
       Territory t = (Territory) o;
       // boolean nameEqual = t.getName().equals(this.getName());
       return this.name.equals(t.name) && this.neighbors.size() == t.neighbors.size()
-          && this.neighbors.containsAll(t.neighbors) && t.neighbors.containsAll(this.neighbors);
+          && this.getNeighborsNames().equals(t.getNeighborsNames());
     }
     return false;
   }
+
+  @Override
+  public String toString() {
+    return "Territory{name='" + name + "'}";
+  }
+
+  // @Override
+  // public boolean equals(Object p) {
+  // // requires that o has *exactly* the same class as "this" object
+  // if (p.getClass().equals(getClass())) {
+  // Territory c = (Territory) p;
+  // if (name.equals(c.name)) {
+  // return neighbors == c.neighbors;
+  // }
+  // return false;
+  // }
+  // return false;
+  // }
+
+  // @Override
+  // public int hashCode() {
+  // return Objects.hash(name, neighbors);
+  // }
 
 }

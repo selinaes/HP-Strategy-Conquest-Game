@@ -30,8 +30,8 @@ public class Map {
   public HashMap<String, List<Territory>> createBasicMap() {
     this.numPlayer = 2;
     HashMap<String, List<Territory>> basicMap = new HashMap<String, List<Territory>>();
-    Territory red = new Territory("red");
-    Territory blue = new Territory("blue");
+    Territory red = new Territory("A");
+    Territory blue = new Territory("B");
     red.setNeighbors(Arrays.asList(blue));
     ArrayList<Territory> redTerritory = new ArrayList<Territory>();
     ArrayList<Territory> blueTerritory = new ArrayList<Territory>();
