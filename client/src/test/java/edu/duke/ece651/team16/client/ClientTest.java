@@ -200,6 +200,10 @@ public class ClientTest {
         .thenReturn("legal string");
     client.playerChooseNum();
 
+    when(mockReader.readLine()).thenReturn("Not the first player. Waiting for others to set player number.");
+    socketReceiveField.set(client, mockReader);
+    client.playerChooseNum();
+
     client.close();
   }
 
@@ -234,7 +238,9 @@ public class ClientTest {
 
     Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
     socketReceiveField.setAccessible(true);
-    BufferedReader mockReader = makeBufferedReader("Valid");
+    BufferedReader mockReader = mock(BufferedReader.class);
+    when(mockReader.readLine()).thenReturn("Valid").thenReturn("Valid")
+        .thenReturn("Stage Complete").thenReturn("Valid");
     socketReceiveField.set(client, mockReader);
 
     client.run();
