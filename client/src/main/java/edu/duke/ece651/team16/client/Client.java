@@ -49,6 +49,7 @@ public class Client {
     public void run() throws IOException {
         while (true) {
             // step1: Init Game setting: Color, enter name
+            displayInitialMap();
             playerChooseColor();
 
             playerEnterName();
@@ -184,6 +185,40 @@ public class Client {
         }
     }
 
+
+
+    public void displayInitialMap() throws IOException {
+        String jsonString = recvMsg();
+
+        // convert jsonString to jsonobject
+        ObjectMapper objectMapper = new ObjectMapper();
+        HashMap<String, ArrayList<HashMap<String, String>>> input_map;
+        try {
+            input_map = objectMapper.readValue(jsonString, HashMap.class);
+        } catch (JsonProcessingException e) {
+            System.out.println("Failed to convert json string to json object.");
+            return;
+        }
+        // Player name is the input_map key
+        // ArrayList<HashMap<String, String>> is the value of the key
+        for (Map.Entry<String, ArrayList<HashMap<String, String>>> entry : input_map.entrySet()) {
+            String color = entry.getKey();
+            out.println();
+            String title = color + " player will have these territories: ";
+            out.println(title);
+            String seperation = String.join("", Collections.nCopies(title.length(), "-"));
+            out.println(seperation);
+            ArrayList<HashMap<String, String>> playerAsset = entry.getValue();
+            for (HashMap<String, String> asset : playerAsset) {
+                String territory = asset.get("TerritoryName");
+                String neighbors = asset.get("Neighbors");
+                out.println(territory + " " + neighbors);
+            }
+            out.println();
+        }
+    }
+
+
     /**
      * Display map
      * 
@@ -247,5 +282,7 @@ public class Client {
             }
         }
     }
+
+    
 
 }

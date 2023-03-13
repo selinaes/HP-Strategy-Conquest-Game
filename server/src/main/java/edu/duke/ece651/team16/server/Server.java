@@ -20,21 +20,23 @@ public class Server {
     private int numPlayer;
     private List<String> colors;
     private HashMap<String, List<Territory>> defaultMap;
+    private int unitsPerPlayer;
 
     /**
      * Constructor for Server class that takes in a serverSocket
      * 
      * @param ServerSocket serverSocket
      */
-    public Server(ServerSocket serverSocket) {
+    public Server(ServerSocket serverSocket, int unitsPerPlayer) {
         this.players = new ArrayList<Player>();
         this.listenSocket = serverSocket;
         BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(32);
         this.threadPool = new ThreadPoolExecutor(2, 16, 5, TimeUnit.SECONDS, workQueue);
-
+        this.numPlayer = 2;
         Map map = new Map(2);
-        this.defaultMap = map.createDukeMap();
+        this.defaultMap = map.createBasicMap();
         this.colors = map.getColorList();
+        this.unitsPerPlayer = unitsPerPlayer;
     }
 
     /**
@@ -82,14 +84,25 @@ public class Server {
                             // connect to new client, add serverside socket to connection obj
                             Connection connection = new Connection(client_socket);
                             // ask choose color, add new player to server
+                            HashMap<String, ArrayList<HashMap<String, String>>> to_send = formInitialMap();
+                            try {
+                                sendInitialMap(connection, to_send);
+                            } catch (JsonProcessingException e) {
+                                System.out.println("JsonProcessingException");
+                            }
+
                             String color = chooseColor(connection);
                             String name = enterName(connection);
-                            Player p = new Player(name, color, connection, defaultMap.get(color));
+                            Player p = new Player(name, color, connection, defaultMap.get(color), unitsPerPlayer);
                             addPlayer(p);
+
+                            assignUnits(p, connection);
+
+
                             // send map to client
-                            HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
+                            HashMap<String, ArrayList<HashMap<String, String>>> to_send1 = formMap();
                             try {
-                                sendMap(p, to_send);
+                                sendMap(p, to_send1);
                             } catch (JsonProcessingException e) {
                                 System.out.println("JsonProcessingException");
                             }
@@ -126,12 +139,49 @@ public class Server {
                 // entryMap.put("PlayerName", p.getName());
                 entryMap.put("TerritoryName", t.getName());
                 entryMap.put("Neighbors", t.getNeighborsNames());
+                entryMap.put("Unit", t.getUnitsString());
                 list.add(entryMap);
             }
             map.put(p.getName(), list);
         }
         return map;
     }
+
+
+    public HashMap<String, ArrayList<HashMap<String, String>>> formInitialMap() {
+        HashMap<String, ArrayList<HashMap<String, String>>> map = new HashMap<String, ArrayList<HashMap<String, String>>>();
+        
+        for (String color: colors) {
+            ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            for (Territory t: defaultMap.get(color)) {
+                HashMap<String, String> entryMap = new HashMap<String, String>();
+                entryMap.put("TerritoryName", t.getName());
+                entryMap.put("Neighbors", t.getNeighborsNames());
+                list.add(entryMap);
+            }
+            map.put(color, list);
+        }
+        return map;
+    }
+
+    /**
+     * Send Initial Map to client
+     * 
+     * @throws JsonProcessingException
+     * 
+     */
+    public void sendInitialMap(Connection conn, HashMap<String, ArrayList<HashMap<String, String>>> to_send) throws JsonProcessingException {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            // convert the HashMap to a JSON object
+            String jsonString = objectMapper.writeValueAsString(to_send);
+            conn.send(jsonString);
+
+        } catch (JsonProcessingException e) {
+            System.out.println("JsonProcessingException");
+        }
+    }
+
 
     /**
      * Send a hashmap to client
@@ -192,6 +242,62 @@ public class Server {
             return chosenColor;
         }
     }
+
+    // /**
+    //  * Prompt the player to assign units to territories
+    //  */
+    // public String assignUnitsOneTime(Player p, Connection connection) throws IOException {
+    //     String msg = "You have " + Integer.toString(p.unplacedUnits()) + " units left. Please assign units to your territories. Please enter a number: ";
+    //     connection.send(msg);
+    //     String num = connection.recv();
+    //     int numOfUnits = Integer.parseInt(num);
+    //     if (numOfUnits < 0 || numOfUnits > p.unplacedUnits()) {
+    //         connection.send("Invalid number of units");
+    //         return assignUnitsOneTime(p, connection);
+    //     }
+    //     connection.send("Valid");
+    //     return num;
+    // }
+
+
+    /**
+     * Prompt the player to assign all units to territories
+     * 
+     */
+    public void assignUnits(Player p, Connection connection) throws IOException {
+        // send all units to the player
+        // breaks when all units are assigned and the connection receives "done"
+
+        while (p.unplacedUnits() > 0) {
+            Unit unit = p.findNextUnplacedUnit();
+            String msg_territory = "You have " + Integer.toString(p.unplacedUnits()) + " units left. If you want to finish placement, enter done. Otherwise, choose a territory to assign units to. Please enter the territory name: ";
+            connection.send(msg_territory);
+            String territoryName = connection.recv();
+            if (territoryName.equals("done")) {
+                break;
+            }
+            if (!p.getTerritoryNames().contains(territoryName)) {
+                connection.send("Invalid territory name");
+                assignUnits(p, connection);
+                return;
+            }
+            connection.send("Valid territory name");
+            p.placeUnit(territoryName, unit);
+        }
+        connection.send("finished placement");
+
+        // String msg = "You have " + Integer.toString(p.unplacedUnits()) + " units left. Please assign units to your territories. Please enter a number: ";
+        // connection.send(msg);
+        // String num = connection.recv();
+        // int numOfUnits = Integer.parseInt(num);
+        // if (numOfUnits < 0 || numOfUnits > p.unplacedUnits()) {
+        //     connection.send("Invalid number of units");
+        //     return assignUnits(p, connection);
+        // }
+        // connection.send("Valid");
+        // return num;
+    }
+
 
     /**
      * Prompt the player to enter his/her name
