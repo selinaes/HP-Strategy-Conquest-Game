@@ -1,8 +1,8 @@
 # Risk_Game
 
-![pipeline](https://gitlab.oit.duke.edu/zf70/Risk_Game/badges/docker_and_testCI/pipeline.svg)
+![pipeline](https://gitlab.oit.duke.edu/zf70/Risk_Game/badges/main/pipeline.svg)
 
-![coverage](https://gitlab.oit.duke.edu/zf70/Risk_Game/badges/docker_and_testCI/coverage.svg?job=test)
+![coverage](https://gitlab.oit.duke.edu/zf70/Risk_Game/badges/main/coverage.svg?job=test)
 
 ## Coverage
 [Detailed coverage](https://zf70.pages.oit.duke.edu/Risk_Game/dashboard.html)
