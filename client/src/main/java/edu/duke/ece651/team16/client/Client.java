@@ -57,14 +57,13 @@ public class Client {
 
             displayMap();
 
-            // step2: Init Game setting: Territory, Units
+        // step2: Init Game setting: Territory, Units
 
-            // step3: Do placement
+        // step3: Do placement
 
-            // step4: Play game
+        // step4: Play game
 
-        }
-
+        return;
         // this.close();
     }
 
@@ -159,8 +158,7 @@ public class Client {
         // receive color choosing prompt from server
         String prompt = recvMsg();
         String clientInput = "";
-        boolean validInput = false;
-        while (!validInput) {
+        while (true) {
             try {
                 clientInput = readClientInput(prompt);
                 sendResponse(clientInput);
@@ -170,14 +168,13 @@ public class Client {
                     // successful choose color
                     String color = clientInput;
                     out.println("Successfully set color: " + color);
-                    validInput = true;
                     return;
                 } else {
                     out.println("Invalid color or color already taken. Please choose again.");
                     playerChooseColor();
                     return;
                 }
-            } catch (IllegalArgumentException e) {
+            } catch (EOFException e) {
                 out.println(e.getMessage());
             }
         }
@@ -230,8 +227,7 @@ public class Client {
             return;
         }
         String clientInput = "";
-        boolean validInput = false;
-        while (!validInput) {
+        while (true) {
             try {
                 clientInput = readClientInput(prompt);
                 sendResponse(clientInput);
@@ -240,13 +236,12 @@ public class Client {
 
                     String playerNum = clientInput;
                     out.println("Successfully choose number of players: " + playerNum);
-                    validInput = true;
                     return;
                 } else {
                     playerChooseNum();
                     return;
                 }
-            } catch (IllegalArgumentException e) {
+            } catch (IOException e) {
                 out.println(e.getMessage());
             }
         }
