@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class Server {
     private ServerSocket listenSocket;
     ThreadPoolExecutor threadPool;
-    private Game game;
+    protected Game game;
     private int numClients;
     
 
