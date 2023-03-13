@@ -12,25 +12,13 @@ import static org.mockito.Mockito.when;
 
 public class PlayerTest {
   @Test
-  public void test_player() {
-    Player p1 = mock(Player.class);
-    Player p2 = mock(Player.class);
-
-    when(p1.getName()).thenReturn("1");
-    when(p2.getName()).thenReturn("2");
-
-    assertEquals(p1.getName(), "1");
-    assertEquals(p2.getName(), "2");
-  }
-
-  @Test
   public void test_addTerritory() throws IOException {
     Connection c1 = mock(Connection.class);
     // when(c1.getSocket()).thenReturn(s1);
 
     // create a list for territories
     List<Territory> list = new ArrayList<Territory>();
-    Player p = new Player("testPlayer", "blue", c1, list);
+    Player p = new Player("blue", c1, list);
 
     Territory t1 = new Territory("Narnia");
     Territory t2 = new Territory("Gondor");
@@ -44,11 +32,10 @@ public class PlayerTest {
   }
 
   @Test
-  public void test_getName_getColor() throws IOException {
+  public void test_getColor() throws IOException {
     Connection c1 = mock(Connection.class);
     List<Territory> list = new ArrayList<Territory>();
-    Player p = new Player("testPlayer", "blue", c1, list);
-    assertEquals(p.getName(), "testPlayer");
+    Player p = new Player("blue", c1, list);
     assertEquals(p.getColor(), "blue");
   }
 
@@ -56,7 +43,7 @@ public class PlayerTest {
   public void test_getConnection() {
     Connection c1 = mock(Connection.class);
     List<Territory> list = new ArrayList<Territory>();
-    Player p = new Player("testPlayer", "blue", c1, list);
+    Player p = new Player("blue", c1, list);
     assertEquals(p.getConnection(), c1);
   }
 

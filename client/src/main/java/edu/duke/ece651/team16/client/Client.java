@@ -48,10 +48,12 @@ public class Client {
      */
     public void run() throws IOException {
         while (true) {
+            playerChooseNum();
             // step1: Init Game setting: Color, enter name
+            
+            waitEveryoneDone("Stage Complete");
+            out.println("out of wait");
             playerChooseColor();
-
-            playerEnterName();
 
             displayMap();
 
@@ -129,6 +131,26 @@ public class Client {
     }
 
     /**
+     * Wait for everyone to finish
+     * 
+     * @throws IOException
+     */
+    public void waitEveryoneDone(String expectPrompt) throws IOException {
+        out.println("wait everyone done");
+        String prompt = recvMsg();
+        boolean done = false;
+        while (!done){
+            if (prompt.equals(expectPrompt)) {
+            out.println(prompt);
+            done = true;            
+            }
+            else {
+                prompt = recvMsg();
+            }
+        }
+    }
+
+    /**
      * Player choose color and send to server
      * 
      * @throws IOException
@@ -151,33 +173,10 @@ public class Client {
                     validInput = true;
                     return;
                 } else {
+                    out.println("Invalid color or color already taken. Please choose again.");
                     playerChooseColor();
                     return;
                 }
-            } catch (IllegalArgumentException e) {
-                out.println(e.getMessage());
-            }
-        }
-    }
-
-    /**
-     * Player enter name and send to server
-     * 
-     * @throws IOException
-     */
-    public void playerEnterName() throws IOException {
-        // receive name prompt from server
-        String prompt = recvMsg();
-        String clientInput = "";
-        boolean validInput = false;
-        while (!validInput) {
-            try {
-                clientInput = readClientInput(prompt);
-                sendResponse(clientInput);
-                // successful enter name
-                String name = clientInput;
-                out.println("Successfully set name: " + name);
-                validInput = true;
             } catch (IllegalArgumentException e) {
                 out.println(e.getMessage());
             }
@@ -224,7 +223,12 @@ public class Client {
      * @throws IOException
      */
     public void playerChooseNum() throws IOException {
+        out.println("Client in playerChooseNum");
         String prompt = recvMsg();
+        if (prompt.equals("Not the first player. Waiting for others to set player number.")) {
+            out.println(prompt);
+            return;
+        }
         String clientInput = "";
         boolean validInput = false;
         while (!validInput) {

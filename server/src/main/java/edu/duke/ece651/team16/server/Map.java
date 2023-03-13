@@ -16,7 +16,7 @@ public class Map {
     this.ColorList = new ArrayList<>();
 
     ArrayList<String> colorList = new ArrayList<>();
-    colorList.addAll(Arrays.asList("Red", "Blue", "Yellow", "Green"));
+    colorList.addAll(Arrays.asList("red", "blue", "yellow", "green"));
     for (int i = 0; i < numPlayer; i++) {
       this.ColorList.add(colorList.get(i));
     }
@@ -37,8 +37,8 @@ public class Map {
     ArrayList<Territory> blueTerritory = new ArrayList<Territory>();
     redTerritory.add(red);
     blueTerritory.add(blue);
-    basicMap.put("Red", redTerritory);
-    basicMap.put("Blue", blueTerritory);
+    basicMap.put("red", redTerritory);
+    basicMap.put("blue", blueTerritory);
     return basicMap;
   }
 
@@ -97,7 +97,7 @@ public class Map {
     int numTerritories = numPlayer == 2 ? 12 : numPlayer == 3 ? 8 : numPlayer == 4 ? 6 : -1;
 
     if (numTerritories != -1) {
-      List<String> colors = Arrays.asList("Red", "Blue", "Yellow", "Green").subList(0, numPlayer);
+      List<String> colors = Arrays.asList("red", "blue", "yellow", "green").subList(0, numPlayer);
       for (int i = 0; i < numPlayer; i++) {
         List<Territory> territories = totalTerritory.subList(i * numTerritories, (i + 1) * numTerritories);
         dukemap.put(colors.get(i), new ArrayList<>(territories));

@@ -10,14 +10,14 @@ public class MapTest {
     public void test_getColorList() {
         Map m1 = new Map(2);
         ArrayList<String> e1 = new ArrayList<String>();
-        e1.add("Red");
-        e1.add("Blue");
+        e1.add("red");
+        e1.add("blue");
         assertEquals(e1, m1.getColorList());
         Map m2 = new Map(3);
-        e1.add("Yellow");
+        e1.add("yellow");
         assertEquals(e1, m2.getColorList());
         Map m3 = new Map(4);
-        e1.add("Green");
+        e1.add("green");
         assertEquals(e1, m3.getColorList());
     }
 
@@ -28,12 +28,12 @@ public class MapTest {
         Territory red = new Territory("A");
         Territory blue = new Territory("B");
         red.setNeighbors(Arrays.asList(blue));
-        e1.put("Red", Arrays.asList(red));
-        e1.put("Blue", Arrays.asList(blue));
-        e1.get("Red").toString();
-        assertNotEquals(m1, m1.createBasicMap().get("Blue"));
-        assertEquals(e1.get("Red"), m1.createBasicMap().get("Red"));
-        assertEquals(e1.get("Blue"), m1.createBasicMap().get("Blue"));
+        e1.put("red", Arrays.asList(red));
+        e1.put("blue", Arrays.asList(blue));
+        e1.get("red").toString();
+        assertNotEquals(m1, m1.createBasicMap().get("blue"));
+        assertEquals(e1.get("red"), m1.createBasicMap().get("red"));
+        assertEquals(e1.get("blue"), m1.createBasicMap().get("blue"));
         m1.createDukeMap();
         Map m2 = new Map(-1);
         m2.createDukeMap();

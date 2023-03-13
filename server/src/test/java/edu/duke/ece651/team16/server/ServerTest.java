@@ -110,7 +110,6 @@ public class ServerTest {
   public void testFormMap() {
     // create mock players and territories
     Player player1 = mock(Player.class);
-    when(player1.getName()).thenReturn("Player1");
     List<Territory> territories1 = new ArrayList<>();
     Territory t1 = mock(Territory.class);
     when(t1.getName()).thenReturn("Territory1");
@@ -123,7 +122,6 @@ public class ServerTest {
     when(player1.getTerritories()).thenReturn(territories1);
 
     Player player2 = mock(Player.class);
-    when(player2.getName()).thenReturn("Player2");
     List<Territory> territories2 = new ArrayList<>();
     Territory t3 = mock(Territory.class);
     when(t3.getName()).thenReturn("Territory3");
