@@ -11,13 +11,12 @@ public class Connection {
   private BufferedReader in;
   private PrintWriter out;
 
-  /*
+  /**
    * Constructor for Server side Connection => will send/recv messages to/from
    * client
    * 
    * @param socket: the "accepted" client socket representing the client side
    */
-
   public Connection(Socket clientsocket) {
     try {
       this.clientsocket = clientsocket;
@@ -29,6 +28,11 @@ public class Connection {
     }
   }
 
+  /**
+   * send a message to out
+   *
+   * @param msg: the message to be sent
+   */
   public void send(String msg) {
     if (out != null) {
       out.println(msg);
@@ -37,7 +41,7 @@ public class Connection {
     }
   }
 
-  /*
+  /**
    * Receive a message from the other side
    * 
    * @return: the message received
@@ -58,12 +62,12 @@ public class Connection {
     return ans;
   }
 
+  /**
+   * Close the connection
+   */
   public void close() throws IOException {
     try {
       clientsocket.close();
-      // if(serverSocket != null){
-      // serverSocket.close();
-      // }
     } catch (IOException e) {
       System.out.println("Failed to close socket..");
     }

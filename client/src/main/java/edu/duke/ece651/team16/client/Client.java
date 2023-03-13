@@ -24,45 +24,31 @@ public class Client {
     final PrintStream out;
     final BufferedReader inputReader;
 
-    /*
-     * Constructor
+    /**
+     * Constructor for Client
      * 
-     * @param IP: server IP
-     * 
-     * @param port: server port
-     * 
+     * @param IP:          server IP
+     * @param port:        server port
      * @param inputSource: system input
-     * 
-     * @param out: system output
-     * 
+     * @param out:         system output
      * @throws IOException
      */
-    public Client(String IP, int port, BufferedReader inputSource, PrintStream out) throws IOException {
-        // views = new Views();
-        // this.clientIO = new ClientIO(IP, port);
-        // clientIO.send("Client are trying to connect to server...");
+    public Client(Socket clientSocket, BufferedReader inputSource, PrintStream out) throws IOException {
+        this.clientSocket = clientSocket;
         this.out = out;
         this.inputReader = inputSource;
-        try {
-            this.clientSocket = new Socket(IP, port);
-            this.socketReceive = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            this.socketSend = new PrintWriter(clientSocket.getOutputStream(), true);
-
-            // system input and output
-            // new BufferedReader(new InputStreamReader(System.in));
-        } catch (IOException e) {
-            System.out.println("Failed to initialize Connection.");
-        }
+        socketReceive = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        socketSend = new PrintWriter(clientSocket.getOutputStream(), true);
     }
 
-    /*
+    /**
      * Run client
      * 
      * @throws IOException
      */
     public void run() throws IOException {
         while (true) {
-            // step1: Init Game setting: Color
+            // step1: Init Game setting: Color, enter name
             playerChooseColor();
 
             playerEnterName();
@@ -80,11 +66,10 @@ public class Client {
         // this.close();
     }
 
-    /*
+    /**
      * Receive message from server
      * 
      * @return message
-     * 
      * @throws IOException
      */
     public String recvMsg() throws IOException {
@@ -103,13 +88,11 @@ public class Client {
         return msg;
     }
 
-    /*
+    /**
      * Read client input from system input
      * 
      * @param prompt: prompt message
-     * 
      * @return client input
-     * 
      * @throws IOException
      */
     public String readClientInput(String prompt) throws IOException {
@@ -122,18 +105,17 @@ public class Client {
         return s;
     }
 
-    /*
+    /**
      * Send response to server
      * 
      * @param response: response message
-     * 
      * @throws IOException
      */
     public void sendResponse(String response) throws IOException {
         this.socketSend.println(response);
     }
 
-    /*
+    /**
      * Close client
      * 
      * @throws IOException
@@ -146,7 +128,7 @@ public class Client {
         }
     }
 
-    /*
+    /**
      * Player choose color and send to server
      * 
      * @throws IOException
@@ -178,13 +160,13 @@ public class Client {
         }
     }
 
-    /*
+    /**
      * Player enter name and send to server
      * 
      * @throws IOException
      */
     public void playerEnterName() throws IOException {
-        // receive color choosing prompt from server
+        // receive name prompt from server
         String prompt = recvMsg();
         String clientInput = "";
         boolean validInput = false;
@@ -202,7 +184,7 @@ public class Client {
         }
     }
 
-    /*
+    /**
      * Display map
      * 
      * @throws IOException
@@ -235,4 +217,35 @@ public class Client {
             }
         }
     }
+
+    /**
+     * Player choose playerNum and send to server
+     * 
+     * @throws IOException
+     */
+    public void playerChooseNum() throws IOException {
+        String prompt = recvMsg();
+        String clientInput = "";
+        boolean validInput = false;
+        while (!validInput) {
+            try {
+                clientInput = readClientInput(prompt);
+                sendResponse(clientInput);
+                prompt = recvMsg();
+                if (prompt.equals("Valid")) {
+
+                    String playerNum = clientInput;
+                    out.println("Successfully choose number of players: " + playerNum);
+                    validInput = true;
+                    return;
+                } else {
+                    playerChooseNum();
+                    return;
+                }
+            } catch (IllegalArgumentException e) {
+                out.println(e.getMessage());
+            }
+        }
+    }
+
 }

@@ -9,9 +9,6 @@ import java.net.ServerSocket;
 public class App {
 
   public static void main(String[] args) throws IOException {
-    // Create a new instance of the App class
-    // App app = new App();
-
     // Set the port number to 1234
     int port = 1234;
 

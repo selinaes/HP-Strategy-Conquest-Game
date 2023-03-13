@@ -2,7 +2,6 @@ package edu.duke.ece651.team16.server;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Territory {
   private String name;
@@ -10,20 +9,19 @@ public class Territory {
   private Player owner;
 
   /**
-   * init Territory
+   * constructs Territory class with name
    * 
    * @param name
    */
   public Territory(String name) {
     this.name = name;
     this.neighbors = new ArrayList<>();
-
   }
 
   /**
    * get owner
    * 
-   * @return owner
+   * @return owner of the territory
    */
   public Player getOwner() {
     return owner;
@@ -32,7 +30,7 @@ public class Territory {
   /**
    * set owner
    * 
-   * @param owner
+   * @param owner of the territory
    */
   public void setOwner(Player owner) {
     this.owner = owner;
@@ -40,6 +38,8 @@ public class Territory {
 
   /**
    * get terrtory name
+   * 
+   * @return name
    */
   public String getName() {
     return name;
@@ -48,7 +48,6 @@ public class Territory {
   /**
    * get neighbor
    * 
-   * @param neighbor
    * @return neighbors
    */
   public List<Territory> getNeighbors() {
@@ -56,9 +55,9 @@ public class Territory {
   }
 
   /**
-   * Get Neighbor Name
+   * Get Neighbor Names
    * 
-   * @return result
+   * @return formatted neighbor names
    */
   public String getNeighborsNames() {
     String result = "";
@@ -74,7 +73,7 @@ public class Territory {
   /**
    * set neighbors for both territories
    * 
-   * @param neighbors
+   * @param neighbors to be set
    */
   public void setNeighbors(List<Territory> neighbors) {
     this.neighbors = new ArrayList<>(neighbors);
@@ -94,39 +93,30 @@ public class Territory {
     }
   }
 
-  // Overwrite equals
+  /**
+   * Overwrite equals
+   * 
+   * @param o
+   * @return boolean value
+   */
   @Override
   public boolean equals(Object o) {
     if (o != null && o.getClass().equals(getClass())) {
       Territory t = (Territory) o;
-      // boolean nameEqual = t.getName().equals(this.getName());
       return this.name.equals(t.name) && this.neighbors.size() == t.neighbors.size()
           && this.getNeighborsNames().equals(t.getNeighborsNames());
     }
     return false;
   }
 
+  /**
+   * Overwrite toString
+   * 
+   * @return String
+   */
   @Override
   public String toString() {
     return "Territory{name='" + name + "'}";
   }
-
-  // @Override
-  // public boolean equals(Object p) {
-  // // requires that o has *exactly* the same class as "this" object
-  // if (p.getClass().equals(getClass())) {
-  // Territory c = (Territory) p;
-  // if (name.equals(c.name)) {
-  // return neighbors == c.neighbors;
-  // }
-  // return false;
-  // }
-  // return false;
-  // }
-
-  // @Override
-  // public int hashCode() {
-  // return Objects.hash(name, neighbors);
-  // }
 
 }

@@ -7,10 +7,19 @@ import java.util.HashMap;
 public class Views {
     private boolean watch;
 
+    /**
+     * Constructor for Views
+     */
     public Views() {
         watch = true;
     }
 
+    /**
+     * display the map
+     * 
+     * @param map the map to be displayed
+     * @return the string display of the map
+     */
     public String displayMap(HashMap<String, ArrayList<String>> map) {
         StringBuilder sb = new StringBuilder();
         for (String playername : map.keySet()) {

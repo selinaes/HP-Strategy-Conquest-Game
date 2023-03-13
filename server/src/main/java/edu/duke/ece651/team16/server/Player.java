@@ -38,7 +38,7 @@ public class Player {
     /**
      * get the territories of the player in the placement phase
      * 
-     * @return Territories
+     * @return Territories of the player
      */
 
     public List<Territory> getTerritories() {
@@ -48,7 +48,7 @@ public class Player {
     /**
      * get the name of the player
      * 
-     * @return name
+     * @return name of the player
      */
     public String getName() {
         return this.name;
@@ -57,7 +57,7 @@ public class Player {
     /**
      * get the color of the player
      * 
-     * @return color
+     * @return color of the player
      */
     public String getColor() {
         return this.color;
