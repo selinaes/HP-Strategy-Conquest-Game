@@ -5,19 +5,16 @@ import java.util.List;
 public class Player {
 
     private List<Territory> Territories;
-    private String name;
     private String color;
     private Connection connection;
 
     /**
      * Constructor of the player
      * 
-     * @param name
      * @param color
      * @param connection
      */
-    Player(String name, String color, Connection connection, List<Territory> Territories) {
-        this.name = name;
+    Player(String color, Connection connection, List<Territory> Territories) {
         this.color = color;
         this.connection = connection;
         this.Territories = Territories;
@@ -45,14 +42,6 @@ public class Player {
         return this.Territories;
     }
 
-    /**
-     * get the name of the player
-     * 
-     * @return name of the player
-     */
-    public String getName() {
-        return this.name;
-    }
 
     /**
      * get the color of the player
