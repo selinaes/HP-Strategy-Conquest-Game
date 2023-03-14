@@ -54,7 +54,8 @@ public class Client {
 
             playerEnterName();
 
-            displayMap();
+            // displayMap();
+            playerAssignAllUnits();
 
             // step2: Init Game setting: Territory, Units
 
@@ -97,7 +98,7 @@ public class Client {
      * @throws IOException
      */
     public String readClientInput(String prompt) throws IOException {
-        out.println(prompt);
+        out.println("ReadClientInput: " + prompt);
         String s = null;
         s = this.inputReader.readLine();
         if (s == null) {
@@ -283,6 +284,53 @@ public class Client {
         }
     }
 
-    
+    public boolean playerAssignUnit() throws IOException {
+        String prompt = recvMsg();
+        if (prompt.equals("finished placement")) {
+            out.println("Received finished placement from server1");
+            return true;
+        }
+        String clientInput = "";
+        while (true) {
+            try {
+                clientInput = readClientInput(prompt);
+                sendResponse(clientInput);
+                prompt = recvMsg();
+                if (prompt.equals("finished placement")) {
+                    out.println("Received finished placement from server");
+                    return true;
+                }
+                else if (prompt.equals("Valid territory name")) {
+                    String territoryName = clientInput;
+                    out.println("Successfully choose territory: " + territoryName);
+                    prompt = recvMsg();
+                    continue;
+                } 
+                else if (prompt.equals("Valid number of units")){
+                    String unitNum = clientInput;
+                    out.println("Successfully set unit number: " + unitNum);
+                    return false;
+                }
+                else {
+                    out.println("Fails to assign unit");
+                    // prompt = recvMsg();
+                    return playerAssignUnit();
+                }
+            } catch (IllegalArgumentException e) {
+                out.println(e.getMessage());
+            }
+        }
+    }
+
+    public void playerAssignAllUnits() throws IOException {
+        while (true) {
+            boolean finished = playerAssignUnit();
+            if (finished) {
+                out.println("Finished assigning units Clinet Side");
+                return;
+            }
+            // prompt = recvMsg();
+        }
+    }
 
 }

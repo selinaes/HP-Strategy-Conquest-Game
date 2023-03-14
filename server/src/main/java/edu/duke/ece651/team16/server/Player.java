@@ -38,11 +38,11 @@ public class Player {
      */
     public int unplacedUnits() {
         int unplacedNum = 0;
-        for (Territory t: this.Territories) {
-            ArrayList<Unit> units = t.getUnits();
-            unplacedNum += units.size();
+        for (Unit u: this.units) {
+            if (u.getwhere() == null) {
+                unplacedNum++;
+            }
         }
-        numUnits -= unplacedNum;
         return unplacedNum;
     }
 
@@ -64,7 +64,12 @@ public class Player {
      * Place the unit in the territory
      */
     public void placeUnit(String t_name, Unit u) {
+        System.out.println("Outer loop, Territory name: " + t_name);
+        // System.out.println("Player's territory size:  " + getTerritoryNames().size());
+        // System.out.println("Player's territory:  " + getTerritoryNames().get(0));
+        // System.out.println("Check if it contains this territory:  " + getTerritoryNames().contains(t_name));
         if (getTerritoryNames().contains(t_name)) {
+            System.out.println("Territory name: " + t_name);
             Territory t = Territories.get(getTerritoryNames().indexOf(t_name));
             t.tryAddUnits(u);
         }
@@ -73,8 +78,9 @@ public class Player {
     /*
      * Place the units in the same territory
      */
-    public void placeUnitsSameTerritory(String t_name, Unit u, int num) { 
+    public void placeUnitsSameTerritory(String t_name, int num) {
         for (int i = 0; i < num; i++) {
+            Unit u = findNextUnplacedUnit();
             placeUnit(t_name, u);
         }
         

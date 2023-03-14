@@ -95,17 +95,17 @@ public class Server {
                             String name = enterName(connection);
                             Player p = new Player(name, color, connection, defaultMap.get(color), unitsPerPlayer);
                             addPlayer(p);
-
+                            System.out.println("Start placement units");
                             assignUnits(p, connection);
 
 
-                            // send map to client
-                            HashMap<String, ArrayList<HashMap<String, String>>> to_send1 = formMap();
-                            try {
-                                sendMap(p, to_send1);
-                            } catch (JsonProcessingException e) {
-                                System.out.println("JsonProcessingException");
-                            }
+                            // // send map to client
+                            // HashMap<String, ArrayList<HashMap<String, String>>> to_send1 = formMap();
+                            // try {
+                            //     sendMap(p, to_send1);
+                            // } catch (JsonProcessingException e) {
+                            //     System.out.println("JsonProcessingException");
+                            // }
 
                         } finally {
                             client_socket.close();
@@ -267,12 +267,14 @@ public class Server {
     public void assignUnits(Player p, Connection connection) throws IOException {
         // send all units to the player
         // breaks when all units are assigned and the connection receives "done"
-
+        System.out.println("p.unplacedUnits(): " + Integer.toString(p.unplacedUnits()));
         while (p.unplacedUnits() > 0) {
-            Unit unit = p.findNextUnplacedUnit();
+            // step 1: get the territory the player want to place unit on
             String msg_territory = "You have " + Integer.toString(p.unplacedUnits()) + " units left. If you want to finish placement, enter done. Otherwise, choose a territory to assign units to. Please enter the territory name: ";
             connection.send(msg_territory);
+            System.out.println("Waiting for player to choose a territory to assign units to");
             String territoryName = connection.recv();
+            System.out.println("TerritoryName: " + territoryName);
             if (territoryName.equals("done")) {
                 break;
             }
@@ -281,9 +283,25 @@ public class Server {
                 assignUnits(p, connection);
                 return;
             }
+            System.out.println("Valid territory name");
             connection.send("Valid territory name");
-            p.placeUnit(territoryName, unit);
+
+            // step 2: get the unit number the player want to place
+            String msg_amount = "You have " + Integer.toString(p.unplacedUnits()) + " units left. If you want to finish placement, enter done. Otherwise, how many units do you want to assign to " + territoryName + "? Please enter a number: ";
+            connection.send(msg_amount);
+            System.out.println("Waiting for player to choose a number of units to assign to " + territoryName);
+            String num = connection.recv();
+            int numOfUnits = Integer.parseInt(num);
+            if (numOfUnits < 0 || numOfUnits > p.unplacedUnits()) {
+                connection.send("Invalid number of units");
+                assignUnits(p, connection);
+                return;
+            }
+            System.out.println("Valid number of units");
+            connection.send("Valid number of units");
+            p.placeUnitsSameTerritory(territoryName, numOfUnits);
         }
+        System.out.println("Finished assigning units");
         connection.send("finished placement");
 
         // String msg = "You have " + Integer.toString(p.unplacedUnits()) + " units left. Please assign units to your territories. Please enter a number: ";

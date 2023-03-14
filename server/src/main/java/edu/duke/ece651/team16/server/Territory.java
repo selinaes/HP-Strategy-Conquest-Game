@@ -35,7 +35,12 @@ public class Territory {
    * @param unit
    */
   public void tryAddUnits(Unit unit){
-    if (unit.getwhere() == null && this.owner == unit.getOwner()){
+    System.out.println("try add units");
+    // System.out.println("Territory: " + unit.getwhere().getName());
+    System.out.println("Owner: " + unit.getOwner());
+    // if (unit.getwhere() == null && this.owner == unit.getOwner()){
+    if (unit.getwhere() == null){
+      System.out.println("add units");
       unit.setwhere(this);
       this.units.add(unit);
     }
