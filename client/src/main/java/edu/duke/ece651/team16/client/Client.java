@@ -269,7 +269,7 @@ public class Client {
                     playerChooseNum();
                     return;
                 }
-            } catch (IOException e) {
+            } catch (EOFException e) {
                 out.println(e.getMessage());
             }
         }
@@ -304,7 +304,7 @@ public class Client {
                     // prompt = recvMsg();
                     return playerAssignUnit();
                 }
-            } catch (IllegalArgumentException e) {
+            } catch (EOFException e) {
                 out.println(e.getMessage());
             }
         }
