@@ -31,19 +31,25 @@ public class Territory {
 
   /*
    * Add units to the territory in the placement
+   * The input unit's owner name is ensured to be the same as territory's owner
+   * name
+   * The input unit's where is ensured to be null because it is in the placement
+   * session
    * 
    * @param unit
    */
-  public void tryAddUnits(Unit unit) {
+  public void tryAddUnits(Unit... units) {
     // System.out.println("try add units");
     // System.out.println("Territory: " + unit.getwhere().getName());
     // System.out.println("Owner: " + unit.getOwner());
-    // if (unit.getwhere() == null && this.owner == unit.getOwner()){
-    if (unit.getwhere() == null) {
-      // System.out.println("add units");
-      unit.setwhere(this);
-      this.units.add(unit);
+    for (Unit u : units) {
+      u.setwhere(this);
+      this.units.add(u);
     }
+    // unit.setwhere(this);
+    // this.units.add(unit);
+    // if (unit.getwhere() == null && this.owner == unit.getOwner()){
+
   }
 
   /*

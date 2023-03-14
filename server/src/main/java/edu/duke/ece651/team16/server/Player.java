@@ -10,6 +10,7 @@ public class Player {
     private String color;
     private Connection connection;
     private int numUnits;
+    private final PlacementRuleChecker placementRuleChecker;
 
     /**
      * Constructor of the player
@@ -23,6 +24,7 @@ public class Player {
         this.Territories = Territories;
         this.numUnits = numUnits;
         this.units = new ArrayList<>();
+        this.placementRuleChecker = new AssignUnitRuleChecker(null);
         for (int i = 0; i < numUnits; i++) {
             this.units.add(new BasicUnit(this, null, false, i));
         }
@@ -45,38 +47,52 @@ public class Player {
 
     /**
      * Find next unplaced unit
+     * Precondion ensured there are enough amounts of unplaced units
      * 
      * @return the unit
      */
-    private Unit findNextUnplacedUnit() {
+    public Unit[] findNextUnplacedUnits(int amount) {
+        int count = 0;
+        Unit[] unplacedUnits = new Unit[amount];
         for (Unit u : this.units) {
-            if (u.getwhere() == null) {
-                return u;
+            if (u.getwhere() != null) {
+                continue;
+            } else {
+                unplacedUnits[count] = u;
+                count++;
+                if (count >= amount) {
+                    break;
+                }
             }
         }
-        return null;
-    }
-
-    /*
-     * Place the unit in the territory
-     */
-    private void placeUnit(String t_name, Unit u) {
-        // System.out.println("Outer loop, Territory name: " + t_name);
-        if (getTerritoryNames().contains(t_name)) {
-            // System.out.println("Territory name: " + t_name);
-            Territory t = Territories.get(getTerritoryNames().indexOf(t_name));
-            t.tryAddUnits(u);
-        }
+        return unplacedUnits;
     }
 
     /*
      * Place the units in the same territory
      */
-    public void placeUnitsSameTerritory(String t_name, int num) {
-        for (int i = 0; i < num; i++) {
-            Unit u = findNextUnplacedUnit();
-            placeUnit(t_name, u);
+    public String placeUnitsSameTerritory(String t_name, int num) {
+        if (placementRuleChecker.checkPlacement(t_name, this, num) == null) {
+            System.out.println("Territory name: " + t_name);
+            Territory t = Territories.get(getTerritoryNames().indexOf(t_name));
+            Unit[] units = findNextUnplacedUnits(num);
+            t.tryAddUnits(units);
         }
+        return placementRuleChecker.checkPlacement(t_name, this, num);
+
+        // for (int i = 0; i < num; i++) {
+        // Unit u = findNextUnplacedUnit();
+        // if (placementRuleChecker.checkPlacement(u, t_name, this) == null) {
+        // // System.out.println("Territory name: " + t_name);
+        // Territory t = Territories.get(getTerritoryNames().indexOf(t_name));
+        // t.tryAddUnits(u);
+        // } else {
+        // return placementRuleChecker.checkPlacement(u, t_name, this);
+        // }
+
+        // // placeUnit(t_name, u);
+        // }
+        // return null;
 
     }
 
