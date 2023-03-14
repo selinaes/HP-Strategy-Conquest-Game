@@ -235,6 +235,7 @@ flowchart LR
 
     baldwin --- brodie
     baldwin --- smith
+    baldwin --- dukeChapel
     smith --- brodie
     wilson --- cameron
     wilson --- wallace

@@ -47,4 +47,36 @@ public class PlayerTest {
     assertEquals(p.getConnection(), c1);
   }
 
+  @Test
+  public void test_units(){
+    Connection c1 = mock(Connection.class);
+    List<Territory> list = new ArrayList<Territory>();
+    Player p = new Player("blue", c1, list, 2);
+    assertEquals(2, p.unplacedUnits());
+  }
+
+  @Test
+  public void test_TerritoryNames(){
+    Connection c1 = mock(Connection.class);
+    List<Territory> list = new ArrayList<Territory>();
+    list.add(new Territory("A"));
+    list.add(new Territory("B"));
+    Player p = new Player("blue", c1, list, 2);
+    List<String> e1 = new ArrayList<String>();
+    e1.add("A");
+    e1.add("B");
+    assertEquals(e1, p.getTerritoryNames());
+  }
+
+  @Test
+  public void test_placeUnit(){
+    Connection c1 = mock(Connection.class);
+    List<Territory> list = new ArrayList<Territory>();
+    list.add(new Territory("A"));
+    Player p = new Player("blue", c1, list, 2);
+    p.placeUnitsSameTerritory("A", 2);
+    assertEquals(0, p.unplacedUnits());
+    // assertEquals(null, p.findNextUnplacedUnit());
+  }
+
 }

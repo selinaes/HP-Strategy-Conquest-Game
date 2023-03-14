@@ -49,11 +49,13 @@ public class Client {
     public void run() throws IOException {
         // step1: Init Game setting: Color, enter name
         playerChooseNum();
-        waitEveryoneDone("Stage Complete");
-        out.println("out of wait");
+        waitEveryoneDone("setNumPlayer Complete");
+        // out.println("out of wait");
         displayInitialMap();
         playerChooseColor();
         playerAssignAllUnits();
+        waitEveryoneDone("setUnits Complete");
+        out.println("out of wait");
         displayMap();
 
         // step2: Init Game setting: Territory, Units
@@ -140,6 +142,7 @@ public class Client {
                 out.println(prompt);
                 done = true;
             } else {
+                out.println(prompt);
                 prompt = recvMsg();
             }
         }
@@ -249,9 +252,9 @@ public class Client {
      */
     public void playerChooseNum() throws IOException {
         String clientInput = "";
-        out.println("Client in playerChooseNum");
+        // out.println("Client in playerChooseNum");
         String prompt = recvMsg();
-        if (prompt.equals("Not the first player. Waiting for others to set player number.")) {
+        if (prompt.equals("Not the first player. Please wait for the first player to set player number.")) {
             out.println(prompt);
             return;
         }
@@ -278,7 +281,7 @@ public class Client {
     public boolean playerAssignUnit() throws IOException {
         String prompt = recvMsg();
         if (prompt.equals("finished placement")) {
-            out.println("Received finished placement from server1");
+            out.println("Finished Placement. Please wait for other players to place units.");
             return true;
         }
         String clientInput = "";
@@ -288,7 +291,7 @@ public class Client {
                 sendResponse(clientInput);
                 prompt = recvMsg();
                 if (prompt.equals("finished placement")) {
-                    out.println("Received finished placement from server");
+                    out.println("Finished Placement. Please wait for other players to place units.");
                     return true;
                 } else if (prompt.equals("Valid territory name")) {
                     String territoryName = clientInput;
@@ -314,7 +317,7 @@ public class Client {
         while (true) {
             boolean finished = playerAssignUnit();
             if (finished) {
-                out.println("Finished assigning units Clinet Side");
+                // out.println("Finished assigning units Clinet Side");
                 return;
             }
             // prompt = recvMsg();

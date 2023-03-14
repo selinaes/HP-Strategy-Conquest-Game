@@ -15,7 +15,8 @@ public class Game {
     private List<String> colors;
     private HashMap<String, List<Territory>> defaultMap;
     private List<Connection> allConnections;
-    private String gameState; // notStart, setNumPlayer, setPlayerColor, setUnits, startGame
+    private String gameState; // notStart, setNumPlayer, setPlayerColor, setUnits, gameStart
+    private int readyPlayer;
     private int unitsPerPlayer;
 
     /**
@@ -32,6 +33,7 @@ public class Game {
         this.allConnections = new ArrayList<Connection>();
         this.gameState = "notStart";
         this.unitsPerPlayer = unitsPerPlayer;
+        this.readyPlayer = 0;
     }
 
     /**
@@ -68,9 +70,16 @@ public class Game {
             Player p = new Player(color, connection, defaultMap.get(color), this.unitsPerPlayer);
             addPlayer(p);
 
-            System.out.println("Start placement units");
             assignUnits(p, connection);
             // send map to client
+            while (true) {
+                synchronized (this) {
+                        if (gameState.equals("gameStart")) {
+                            break;
+                        }
+                    }
+            }
+            System.out.println("gamestate is gameStart");
             HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
             try {
                 sendMap(p, to_send);
@@ -144,16 +153,11 @@ public class Game {
      * 
      */
     public void sendInitialMap(Connection conn, HashMap<String, ArrayList<HashMap<String, String>>> to_send)
-            throws JsonProcessingException {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            // convert the HashMap to a JSON object
-            String jsonString = objectMapper.writeValueAsString(to_send);
-            conn.send(jsonString);
-
-        } catch (JsonProcessingException e) {
-            System.out.println("JsonProcessingException");
-        }
+        throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        // convert the HashMap to a JSON object
+        String jsonString = objectMapper.writeValueAsString(to_send);
+        conn.send(jsonString);
     }
 
     /**
@@ -213,6 +217,9 @@ public class Game {
      * @param Connection connection
      */
     public void chooseNumOfPlayers(Connection connection, int numClients) throws IOException {
+        synchronized (this) {
+                this.gameState = "setNumPlayer";
+            }
         if (numClients == 1) {
             connection.send(
                     "You are the first player! Please set the number of players in this game(Valid player number: 2-4): ");
@@ -225,7 +232,7 @@ public class Game {
             connection.send("Valid");
             this.numPlayer = numOfPlayers;
             for (Connection c : allConnections) {
-                c.send("Stage Complete");
+                c.send("setNumPlayer Complete");
             }
             synchronized (this) {
                 this.gameState = "setPlayerColor"; // now out of setNumPlayer stage
@@ -233,7 +240,7 @@ public class Game {
             }
 
         } else {
-            connection.send("Not the first player. Waiting for others to set player number.");
+            connection.send("Not the first player. Please wait for the first player to set player number.");
         }
     }
 
@@ -282,15 +289,15 @@ public class Game {
     public void assignUnits(Player p, Connection connection) throws IOException {
         // send all units to the player
         // breaks when all units are assigned and the connection receives "done"
-        System.out.println("p.unplacedUnits(): " + Integer.toString(p.unplacedUnits()));
+        // System.out.println("p.unplacedUnits(): " + Integer.toString(p.unplacedUnits()));
         while (p.unplacedUnits() > 0) {
             // step 1: get the territory the player want to place unit on
             String msg_territory = "You have " + Integer.toString(p.unplacedUnits())
                     + " units left. If you want to finish placement, enter done. Otherwise, choose a territory to assign units to. Please enter the territory name: ";
             connection.send(msg_territory);
-            System.out.println("Waiting for player to choose a territory to assign units to");
+            // System.out.println("Waiting for player to choose a territory to assign units to");
             String territoryName = connection.recv();
-            System.out.println("TerritoryName: " + territoryName);
+            // System.out.println("TerritoryName: " + territoryName);
             if (territoryName.equals("done")) {
                 break;
             }
@@ -299,7 +306,7 @@ public class Game {
                 assignUnits(p, connection);
                 return;
             }
-            System.out.println("Valid territory name");
+            // System.out.println("Valid territory name");
             connection.send("Valid territory name");
 
             // step 2: get the unit number the player want to place
@@ -307,7 +314,7 @@ public class Game {
                     + " units left. If you want to finish placement, enter done. Otherwise, how many units do you want to assign to "
                     + territoryName + "? Please enter a number: ";
             connection.send(msg_amount);
-            System.out.println("Waiting for player to choose a number of units to assign to " + territoryName);
+            // System.out.println("Waiting for player to choose a number of units to assign to " + territoryName);
             String num = connection.recv();
             int numOfUnits = Integer.parseInt(num);
             if (numOfUnits < 0 || numOfUnits > p.unplacedUnits()) {
@@ -315,12 +322,22 @@ public class Game {
                 assignUnits(p, connection);
                 return;
             }
-            System.out.println("Valid number of units");
+            // System.out.println("Valid number of units");
             connection.send("Valid number of units");
             p.placeUnitsSameTerritory(territoryName, numOfUnits);
         }
-        System.out.println("Finished assigning units");
+        // System.out.println("Finished assigning units");
         connection.send("finished placement");
+        synchronized (this) {
+                ++ this.readyPlayer;
+                if(readyPlayer == numPlayer){                 
+                    for (Connection c : allConnections) {
+                        System.out.println("send setunit complete");
+                        connection.send("setUnits Complete");
+                    }
+                    this.gameState = "gameStart"; 
+                }
+            }
 
         // String msg = "You have " + Integer.toString(p.unplacedUnits()) + " units
         // left. Please assign units to your territories. Please enter a number: ";
