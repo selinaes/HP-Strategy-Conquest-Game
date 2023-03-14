@@ -318,9 +318,6 @@ public class Game {
             System.out.println("Valid number of units");
             connection.send("Valid number of units");
             String message = p.placeUnitsSameTerritory(territoryName, numOfUnits);
-            if (message != null) {
-                System.out.println(message);
-            }
         }
         System.out.println("Finished assigning units");
         connection.send("finished placement");

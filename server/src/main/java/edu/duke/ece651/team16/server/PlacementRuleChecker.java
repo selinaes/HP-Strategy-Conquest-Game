@@ -42,9 +42,9 @@ public abstract class PlacementRuleChecker {
         if (result != null) {
             return result;
         }
-        if (next != null) {
-            return next.checkPlacement(territoryName, player, amount);
-        }
+        // if (next != null) {
+        // return next.checkPlacement(territoryName, player, amount);
+        // }
         return null;
     }
 }

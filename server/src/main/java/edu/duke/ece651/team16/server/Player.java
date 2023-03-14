@@ -68,28 +68,6 @@ public class Player {
         return unplacedUnits;
     }
 
-    // /*
-    // * Place the unit in the territory
-    // */
-    // public String placeUnit(String t_name, Unit u) {
-    // System.out.println("Outer loop, Territory name: " + t_name);
-    // // System.out.println("Player's territory size: " +
-    // getTerritoryNames().size());
-    // // System.out.println("Player's territory: " + getTerritoryNames().get(0));
-    // // System.out.println("Check if it contains this territory: " +
-    // // getTerritoryNames().contains(t_name));
-    // // if (this.owner == unit.getOwner() && unit.getwhere() == null) {
-    // // // System.out.println("add units");
-
-    // // }
-    // if (placementRuleChecker.checkPlacement(u, t_name, this) == null) {
-    // System.out.println("Territory name: " + t_name);
-    // Territory t = Territories.get(getTerritoryNames().indexOf(t_name));
-    // t.tryAddUnits(u);
-    // }
-    // return placementRuleChecker.checkPlacement(u, t_name, this);
-    // }
-
     /*
      * Place the units in the same territory
      */

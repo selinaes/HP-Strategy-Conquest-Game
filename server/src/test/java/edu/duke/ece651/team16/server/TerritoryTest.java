@@ -87,7 +87,7 @@ public class TerritoryTest {
     List<Territory> list = new ArrayList<Territory>();
     Player player = new Player("red", c2, list, 2);
     player.addTerritories(territory);
-    Unit unit = new BasicUnit(player, null, true, 1);
+    Unit unit = new BasicUnit(player, null, true, 2);
     territory.tryAddUnits(unit);
     assertEquals(1, territory.getUnits().size());
     assertEquals(territory, unit.getwhere());
@@ -100,13 +100,13 @@ public class TerritoryTest {
     Player player2 = new Player("blue", c1, list, 2);
     Unit unit2 = new BasicUnit(player2, null, false, 2);
     territory.tryAddUnits(unit2);
-    assertEquals(1, territory.getUnits().size());
-    assertEquals(null, unit2.getwhere());
+    assertEquals(2, territory.getUnits().size());
+    assertEquals(territory, unit2.getwhere());
 
     // Test adding unit to territory with same owner
     Unit unit3 = new BasicUnit(player, null, false, 3);
     territory.tryAddUnits(unit3);
-    assertEquals(2, territory.getUnits().size());
+    assertEquals(3, territory.getUnits().size());
     assertEquals(territory, unit.getwhere());
     assertEquals(territory, unit3.getwhere());
   }
