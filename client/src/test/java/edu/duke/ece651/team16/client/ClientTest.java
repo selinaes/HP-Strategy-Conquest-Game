@@ -15,6 +15,7 @@ import java.io.EOFException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.beans.Transient;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
@@ -155,7 +156,7 @@ public class ClientTest {
 
     client.displayMap();
 
-    String jsonString = "{\"name\":[{\"TerritoryName\":\"Baldwin Auditorium\",\"Neighbors\":\"(next to: Brodie Recreational Center, Smith Warehouse, Duke Chapel)\"}]}";
+    String jsonString = "{\"name\":[{\"TerritoryName\":\"Baldwin Auditorium\",\"Neighbors\":\"(next to: Brodie Recreational Center, Smith Warehouse, Duke Chapel)\",\"Unit\":\"1\"}]}";
     when(mockReader.readLine()).thenReturn(jsonString);
     socketReceiveField.set(client, mockReader);
 
@@ -225,6 +226,132 @@ public class ClientTest {
   }
 
   @Test
+  public void test_displayInitialMap() throws IOException, Exception {
+    Socket mockSocket = makeMockSocket();
+    BufferedReader inputSource = mock(BufferedReader.class);
+    PrintStream out = makeOut();
+
+    Client client = new Client(mockSocket, inputSource, out);
+
+    Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
+    socketReceiveField.setAccessible(true);
+    BufferedReader mockReader = mock(BufferedReader.class);
+    when(mockReader.readLine()).thenReturn("Valid");
+    socketReceiveField.set(client, mockReader);
+
+    client.displayInitialMap();
+
+    String jsonString = "{\"name\":[{\"TerritoryName\":\"Baldwin Auditorium\",\"Neighbors\":\"(next to: Brodie Recreational Center, Smith Warehouse, Duke Chapel)\"}]}";
+    when(mockReader.readLine()).thenReturn(jsonString);
+    socketReceiveField.set(client, mockReader);
+
+    client.displayInitialMap();
+
+    client.close();
+  }
+
+  @Test
+  public void test_playerAssignUnits() throws IOException, Exception {
+    String s1 = "finished placement";
+    String s2 = "Valid territory name";
+    String s3 = "Valid number of units";
+    String s4 = "Other";
+
+    Socket mockSocket = makeMockSocket();
+    String[] inputs = new String[] { "unitTest1", "unitTest2", "unitTest3", "unitTest4", "unitTest5",
+        "unitTest6" };
+    String inputString = String.join("\n", inputs) + "\n";
+    InputStream sysIn = new ByteArrayInputStream(inputString.getBytes());
+    BufferedReader inputSource = new BufferedReader(new InputStreamReader(sysIn));
+    PrintStream out = makeOut();
+
+    Client client = new Client(mockSocket, inputSource, out);
+
+    Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
+    socketReceiveField.setAccessible(true);
+    BufferedReader mockReader = mock(BufferedReader.class);
+    when(mockReader.readLine()).thenReturn(s1);
+    socketReceiveField.set(client, mockReader);
+
+    client.playerAssignUnit();
+
+    // clientInput = "unitTest1"
+    when(mockReader.readLine()).thenReturn(s4).thenReturn(s1);
+    socketReceiveField.set(client, mockReader);
+    client.playerAssignUnit();
+
+    // clientInput = "unitTest2", "unitTest3"
+    when(mockReader.readLine()).thenReturn(s4).thenReturn(s2).thenReturn(s4).thenReturn(s1);
+    socketReceiveField.set(client, mockReader);
+    client.playerAssignUnit();
+
+    // clientInput = "unitTest4"
+    when(mockReader.readLine()).thenReturn(s4).thenReturn(s3);
+    socketReceiveField.set(client, mockReader);
+    client.playerAssignUnit();
+
+    // clientInput = "unitTest5", "unitTest6"
+    when(mockReader.readLine()).thenReturn(s4).thenReturn(s4).thenReturn(s1);
+    socketReceiveField.set(client, mockReader);
+    client.playerAssignUnit();
+
+    client.close();
+  }
+
+  @Test
+  public void test_playerAssignUnitsException() throws IOException, Exception {
+    String s1 = "finished placement";
+    String s2 = "Other";
+    Socket mockSocket = makeMockSocket();
+    BufferedReader inputSource = mock(BufferedReader.class);
+    PrintStream out = makeOut();
+
+    Client client = new Client(mockSocket, inputSource, out);
+
+    Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
+    socketReceiveField.setAccessible(true);
+    BufferedReader mockReader = mock(BufferedReader.class);
+    when(mockReader.readLine()).thenReturn(s2).thenReturn(s1);
+    socketReceiveField.set(client, mockReader);
+
+    when(inputSource.readLine())
+        .thenReturn(null)
+        .thenReturn(s1);
+    client.playerAssignUnit();
+
+    client.close();
+  }
+
+  @Test
+  public void test_playerAssignAllUnits() throws IOException, Exception {
+    String s1 = "finished placement";
+    String s2 = "Valid number of units";
+    String s3 = "Other";
+    Socket mockSocket = makeMockSocket();
+    BufferedReader inputSource = makeInputSource("input");
+    PrintStream out = makeOut();
+
+    Client client = new Client(mockSocket, inputSource, out);
+
+    Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
+    socketReceiveField.setAccessible(true);
+    BufferedReader mockReader = mock(BufferedReader.class);
+
+    // playerAssignUnits return True
+    when(mockReader.readLine()).thenReturn(s1);
+    socketReceiveField.set(client, mockReader);
+    client.playerAssignAllUnits();
+
+    // playerAssignUnits return False and then retrn True
+    when(mockReader.readLine()).thenReturn(s3).thenReturn(s2).thenReturn(s1);
+    socketReceiveField.set(client, mockReader);
+    client.playerAssignAllUnits();
+
+    client.close();
+
+  }
+
+  @Test
   public void test_run() throws IOException, Exception {
     Socket mockSocket = makeMockSocket();
     String[] inputs = new String[] { "input1", "input2" };
@@ -239,8 +366,9 @@ public class ClientTest {
     Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
     socketReceiveField.setAccessible(true);
     BufferedReader mockReader = mock(BufferedReader.class);
-    when(mockReader.readLine()).thenReturn("Valid").thenReturn("Valid")
-        .thenReturn("Stage Complete").thenReturn("Valid");
+    when(mockReader.readLine()).thenReturn("playerChooseNum", "Valid")
+        .thenReturn("Stage Complete").thenReturn("displayInitialMap").thenReturn("playerChooseColor", "Valid")
+        .thenReturn("finished placement").thenReturn("displayMap");
     socketReceiveField.set(client, mockReader);
 
     client.run();
