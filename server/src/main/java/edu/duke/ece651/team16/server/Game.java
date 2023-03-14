@@ -41,13 +41,14 @@ public class Game {
      * @param int    numClients: number of clients
      */
     public void createPlayer(Socket client_socket, int numClients) {
-        System.out.println(numClients);
+        // System.out.println(numClients);
         // connect to new client, add serverside socket to connection obj
         try {
             Connection connection = new Connection(client_socket);
             allConnections.add(connection);
             chooseNumOfPlayers(connection, numClients);
-            System.out.println("Set numplayer to " + numPlayer);
+            // System.out.println("Set numplayer to " + numPlayer);
+
             // ask choose color, add new player to server
             while (true) {
                 synchronized (this) {
@@ -174,16 +175,16 @@ public class Game {
         }
     }
 
-    /*
-     * Close all connections to client
-     */
-    public void close() throws IOException {
-        // close all connection by looping players
-        for (Player p : players) {
-            p.getConnection().close();
-        }
+    // /*
+    // * Close all connections to client
+    // */
+    // public void close() throws IOException {
+    // // close all connection by looping players
+    // for (Player p : players) {
+    // p.getConnection().close();
+    // }
 
-    }
+    // }
 
     /**
      * Prompt the player to choose a color
@@ -192,7 +193,6 @@ public class Game {
      * @return string color chosen by player
      **/
     public String chooseColor(Connection connection) throws IOException {
-        System.out.println("In chooseColor");
         String colorList = "";
         for (String color : colors) {
             colorList += color + " ";
@@ -260,7 +260,6 @@ public class Game {
         Map map = new Map(numOfPlayers);
         this.defaultMap = map.createDukeMap();
         this.colors = map.getColorList();
-        System.out.println(colors);
     }
 
     // /**

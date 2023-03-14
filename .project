@@ -22,7 +22,11 @@
 	</natures>
 	<filteredResources>
 		<filter>
+<<<<<<< HEAD
+			<id>1678745336594</id>
+=======
 			<id>1678745685964</id>
+>>>>>>> docker_and_testCI
 			<name></name>
 			<type>30</type>
 			<matcher>
