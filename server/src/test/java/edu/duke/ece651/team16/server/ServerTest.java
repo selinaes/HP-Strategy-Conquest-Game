@@ -1,52 +1,70 @@
-// package edu.duke.ece651.team16.server;
+package edu.duke.ece651.team16.server;
 
-// import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 // import static org.mockito.Mockito.mock;
 // import static org.mockito.Mockito.when;
 // import static org.mockito.Mockito.verify;
 // import static org.mockito.Mockito.times;
 // import static org.mockito.Mockito.verifyNoMoreInteractions;
 // import static org.mockito.Mockito.any;
-// import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.*;
 
-// import java.io.InputStream;
-// import java.io.OutputStream;
-// import java.net.ServerSocket;
-// import java.net.Socket;
-// import java.io.IOException;
-// import java.util.ArrayList;
-// import java.util.HashMap;
-// import java.util.List;
-// import java.util.concurrent.ThreadPoolExecutor;
-// import com.fasterxml.jackson.databind.ObjectMapper;
-// import com.fasterxml.jackson.core.JsonProcessingException;
-// import org.junit.jupiter.api.Test;
-
-// public class ServerTest {
-//   // @Test
-//   // public void test_constructor() {
-//   // ServerSocket serverSocketMock = mock(ServerSocket.class);
-//   // Server s = new Server(serverSocketMock);
-
-//   // assertEquals(port, s.getPort());
-//   // }
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.junit.jupiter.api.Test;
+import java.lang.reflect.Field;
 
 public class ServerTest {
 
   @Test
-  public void testRun() throws IOException, JsonProcessingException {
+  public void testRun() throws IOException, JsonProcessingException, Exception {
 
     ServerSocket serverSocket = mock(ServerSocket.class);
     Server server = new Server(serverSocket);
     Socket socket = mock(Socket.class);
+    Game mockGame = mock(Game.class);
 
-    when(serverSocket.accept()).thenReturn(socket);
+    Field gameField = server.getClass().getDeclaredField("game");
+    gameField.setAccessible(true);
+    gameField.set(server, mockGame);
 
-    server.run();
+    when(serverSocket.accept()).thenReturn(socket).thenAnswer(invocation -> {
+      throw new IOException("Socket closed");
+    });
+    doNothing().when(mockGame).createPlayer(any(Socket.class), anyInt());
 
-    verify(serverSocket).accept();
+    // run the server in a seperate thread, and interrupt it
+    Thread serverThread = new Thread(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          server.run(); // call the run() method of the Server instance
+        } catch (IOException e) {
+
+        }
+      }
+    });
+    serverThread.start();
+
+    // Wait for the server to start
+    Thread.sleep(100);
+
+    // Interrupt the server after a short delay
+    serverThread.interrupt();
+    // Thread.sleep(100);
+
+    verify(serverSocket, atLeast(1)).accept();
     verify(socket).close();
-    verify(server.game).createPlayer(eq(socket), eq(1));
+    verify(mockGame).createPlayer(eq(socket), eq(1));
   }
 
   @Test
