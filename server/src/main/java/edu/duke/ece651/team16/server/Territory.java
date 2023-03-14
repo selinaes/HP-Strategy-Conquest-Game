@@ -34,12 +34,12 @@ public class Territory {
    * 
    * @param unit
    */
-  public void tryAddUnits(Unit unit){
+  public void tryAddUnits(Unit unit) {
     System.out.println("try add units");
     // System.out.println("Territory: " + unit.getwhere().getName());
     System.out.println("Owner: " + unit.getOwner());
     // if (unit.getwhere() == null && this.owner == unit.getOwner()){
-    if (unit.getwhere() == null){
+    if (unit.getwhere() == null) {
       System.out.println("add units");
       unit.setwhere(this);
       this.units.add(unit);
@@ -50,8 +50,7 @@ public class Territory {
    * Get the number of units in the territory
    */
   public String getUnitsString() {
-    String result = "";
-    result += Integer.toString(this.units.size()) + " units";
+    String result = Integer.toString(this.units.size()) + " units";
     return result;
   }
 

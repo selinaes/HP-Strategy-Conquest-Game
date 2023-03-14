@@ -48,11 +48,12 @@ public class Client {
      */
     public void run() throws IOException {
         // step1: Init Game setting: Color, enter name
-        displayInitialMap();
-
+        playerChooseNum();
         waitEveryoneDone("Stage Complete");
         out.println("out of wait");
+        displayInitialMap();
         playerChooseColor();
+        playerAssignAllUnits();
         displayMap();
 
         // step2: Init Game setting: Territory, Units
@@ -235,7 +236,8 @@ public class Client {
             for (HashMap<String, String> asset : playerAsset) {
                 String territory = asset.get("TerritoryName");
                 String neighbors = asset.get("Neighbors");
-                out.println(territory + " " + neighbors);
+                String units = asset.get("Unit");
+                out.println(units + " in " + territory + " " + neighbors);
             }
         }
     }
