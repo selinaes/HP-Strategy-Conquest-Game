@@ -57,7 +57,7 @@ public class Map {
     Territory cameron = new Territory("Cameron Indoor Stadium");
     Territory dukeChapel = new Territory("Duke Chapel");
     Territory dukeForest = new Territory("Duke Forest");
-    Territory dukeGarden = new Territory("Duke garden");
+    Territory dukeGarden = new Territory("Duke Garden");
     Territory dukeHospital = new Territory("Duke Hospital");
     Territory dukeLemur = new Territory("Duke Lemur Center");
     Territory dukeLaw = new Territory("Duke University School of Law");
