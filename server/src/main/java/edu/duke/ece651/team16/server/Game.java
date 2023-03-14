@@ -164,15 +164,10 @@ public class Game {
      */
     public void sendMap(Player player, HashMap<String, ArrayList<HashMap<String, String>>> to_send)
             throws JsonProcessingException {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            // convert the HashMap to a JSON object
-            String jsonString = objectMapper.writeValueAsString(to_send);
-            player.getConnection().send(jsonString);
-
-        } catch (JsonProcessingException e) {
-            System.out.println("JsonProcessingException");
-        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        // convert the HashMap to a JSON object
+        String jsonString = objectMapper.writeValueAsString(to_send);
+        player.getConnection().send(jsonString);
     }
 
     // /*

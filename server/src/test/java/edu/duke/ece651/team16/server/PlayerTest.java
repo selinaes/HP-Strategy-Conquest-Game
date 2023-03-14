@@ -18,7 +18,7 @@ public class PlayerTest {
 
     // create a list for territories
     List<Territory> list = new ArrayList<Territory>();
-    Player p = new Player("blue", c1, list);
+    Player p = new Player("blue", c1, list, 2);
 
     Territory t1 = new Territory("Narnia");
     Territory t2 = new Territory("Gondor");
@@ -35,7 +35,7 @@ public class PlayerTest {
   public void test_getColor() throws IOException {
     Connection c1 = mock(Connection.class);
     List<Territory> list = new ArrayList<Territory>();
-    Player p = new Player("blue", c1, list);
+    Player p = new Player("blue", c1, list, 2);
     assertEquals(p.getColor(), "blue");
   }
 
@@ -43,7 +43,7 @@ public class PlayerTest {
   public void test_getConnection() {
     Connection c1 = mock(Connection.class);
     List<Territory> list = new ArrayList<Territory>();
-    Player p = new Player("blue", c1, list);
+    Player p = new Player("blue", c1, list, 2);
     assertEquals(p.getConnection(), c1);
   }
 

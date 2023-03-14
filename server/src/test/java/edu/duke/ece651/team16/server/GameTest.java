@@ -57,7 +57,7 @@ public class GameTest {
   @Test
   public void test_chooseColor() throws IOException {
     Connection connectionMock = mock(Connection.class);
-    Game game = new Game();
+    Game game = new Game(2);
     when(connectionMock.recv()).thenReturn("red");
     String color = game.chooseColor(connectionMock);
     assertEquals(color, "red");
@@ -72,7 +72,7 @@ public class GameTest {
   @Test
   public void testChooseColorInvalid() throws IOException {
     Connection connectionMock = mock(Connection.class);
-    Game game = new Game();
+    Game game = new Game(2);
     when(connectionMock.recv()).thenReturn("0", "red");
     String color = game.chooseColor(connectionMock);
     verify(connectionMock, times(2))
@@ -92,7 +92,7 @@ public class GameTest {
     when(connectionMock.recv()).thenReturn("3");
 
     // create a game and call the method
-    Game game = new Game();
+    Game game = new Game(2);
     Field allConnections = game.getClass().getDeclaredField("allConnections");
     allConnections.setAccessible(true);
     allConnections.set(game, Connections);
@@ -113,7 +113,7 @@ public class GameTest {
     // create mock connection and set behavior
     Connection connectionMock = mock(Connection.class);
     // create a game and call the method
-    Game game = new Game();
+    Game game = new Game(2);
     game.chooseNumOfPlayers(connectionMock, 2);
     // check the numPlayer and sent message
     verify(connectionMock).send("Not the first player. Waiting for others to set player number.");
@@ -121,12 +121,13 @@ public class GameTest {
 
   @Test
   public void testChooseNumOfPlayersInvalid() throws IOException {
-    Game game = new Game();
+    Game game = new Game(2);
     Connection connectionMock = mock(Connection.class);
     when(connectionMock.recv()).thenReturn("1", "3");
     game.chooseNumOfPlayers(connectionMock, 1);
 
-    // HashMap<String, ArrayList<HashMap<String, String>>> actualMap = game.formMap();
+    // HashMap<String, ArrayList<HashMap<String, String>>> actualMap =
+    // game.formMap();
     verify(connectionMock, times(2))
         .send("You are the first player! Please set the number of players in this game(Valid player number: 2-4): ");
     verify(connectionMock).send("Invalid number of players");
@@ -167,10 +168,12 @@ public class GameTest {
     HashMap<String, String> t1Map = new HashMap<>();
     t1Map.put("TerritoryName", "Territory1");
     t1Map.put("Neighbors", "(next to: Territory2, Territory3)");
+    t1Map.put("Unit", null);
     player1List.add(t1Map);
     HashMap<String, String> t2Map = new HashMap<>();
     t2Map.put("TerritoryName", "Territory2");
     t2Map.put("Neighbors", "(next to: Territory1, Territory3)");
+    t2Map.put("Unit", null);
     player1List.add(t2Map);
     expectedMap.put("red", player1List);
 
@@ -178,32 +181,30 @@ public class GameTest {
     HashMap<String, String> t3Map = new HashMap<>();
     t3Map.put("TerritoryName", "Territory3");
     t3Map.put("Neighbors", "(next to: Territory1, Territory2)");
+    t3Map.put("Unit", null);
     player2List.add(t3Map);
     expectedMap.put("blue", player2List);
 
     // call the method with mock players
-    Game game = new Game();
+    Game game = new Game(2);
     // ServerSocket serverSocketMock = mock(ServerSocket.class);
     // Server server = new Server(serverSocketMock);
     game.addPlayer(player1);
     game.addPlayer(player2);
-    
+
     HashMap<String, ArrayList<HashMap<String, String>>> actualMap = game.formMap();
     // compare the expected and actual results
     assertEquals(expectedMap, actualMap);
   }
 
   @Test
-  public void test_sendMap() throws Exception{
+  public void test_sendMap() throws Exception {
     Player player1 = mock(Player.class);
-    Connection connectionMock = mock(Connection.class);
-    Game game = new Game();
-    
-    //create hashmap
-    ObjectMapper mapperMock = mock(ObjectMapper.class);
-    HashMap<String, ArrayList<HashMap<String, String>>> map = new HashMap<>();
-    when(mapperMock.writeValueAsString(map)).thenThrow(new JsonProcessingException("error"));
-    assertThrows(JsonProcessingException.class, ()->game.sendMap(player1, map));
+    Connection mockConnection = mock(Connection.class);
+    doReturn(mockConnection).when(player1).getConnection();
+    HashMap<String, ArrayList<HashMap<String, String>>> toSend = new HashMap<>();
+    Game game = new Game(2);
+    game.sendMap(player1, toSend);
   }
 
 }
