@@ -4,20 +4,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import static org.mockito.Mockito.*;
-import org.mockito.Mockito;
 
-import org.junit.jupiter.api.Test;
 
 public class GameTest {
   // @Test
@@ -25,16 +21,16 @@ public class GameTest {
 
   // }
 
-  // @Test
-  // public void testCreatePlayer() throws IOException {
-  // // Mock objects
-  // Socket mockSocket = mock(Socket.class);
-  // Connection mockConnection = mock(Connection.class);
+  @Test
+  public void testCreatePlayer() throws IOException {
+  // Mock objects
+  Socket mockSocket = mock(Socket.class);
+  Connection mockConnection = mock(Connection.class);
   // ArrayList<Connection> mockConnections = mock(ArrayList.class);
   // Player mockPlayer = mock(Player.class);
   // HashMap<String, ArrayList<HashMap<String, String>>> mockMap =
   // mock(HashMap.class);
-  // Game mockGame = spy(new Game());
+  Game mockGame = new Game(2);
 
   // // Set up mock objects
   // when(mockGame.getAllConnections()).thenReturn(mockConnections);
@@ -43,16 +39,16 @@ public class GameTest {
   // when(mockGame.chooseColor(mockConnection)).thenReturn("red");
   // doNothing().when(mockGame).sendMap(mockPlayer, mockMap);
 
-  // // Call the method being tested
-  // mockGame.createPlayer(mockSocket, 1);
+  // Call the method being tested
+  mockGame.createPlayer(mockSocket, 1);
 
   // // Verify that the expected methods were called
   // verify(mockConnections).add(any(Connection.class));
-  // verify(mockGame).chooseNumOfPlayers(any(Connection.class), eq(1));
-  // verify(mockGame).chooseColor(any(Connection.class));
-  // verify(mockGame).addPlayer(any(Player.class));
-  // verify(mockGame).sendMap(any(Player.class), any(HashMap.class));
-  // }
+  verify(mockGame).chooseNumOfPlayers(eq(mockConnection), eq(1));
+  verify(mockGame).chooseColor(any(Connection.class));
+  verify(mockGame).addPlayer(any(Player.class));
+  verify(mockGame).sendMap(any(Player.class), any(HashMap.class));
+  }
 
   @Test
   public void test_chooseColor() throws IOException {
