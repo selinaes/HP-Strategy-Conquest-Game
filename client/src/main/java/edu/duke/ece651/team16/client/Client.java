@@ -55,7 +55,7 @@ public class Client {
         playerChooseColor();
         playerAssignAllUnits();
         waitEveryoneDone("setUnits Complete");
-        out.println("out of wait");
+        // out.println("out of wait");
         displayMap();
 
         // step2: Init Game setting: Territory, Units
@@ -134,15 +134,15 @@ public class Client {
      * @throws IOException
      */
     public void waitEveryoneDone(String expectPrompt) throws IOException {
-        out.println("wait everyone done");
+        // out.println("wait everyone done");
         String prompt = recvMsg();
         boolean done = false;
         while (!done) {
             if (prompt.equals(expectPrompt)) {
-                out.println(prompt);
+                // out.println(prompt);
                 done = true;
             } else {
-                out.println(prompt);
+                // out.println(prompt);
                 prompt = recvMsg();
             }
         }
@@ -269,6 +269,7 @@ public class Client {
                     out.println("Successfully choose number of players: " + playerNum);
                     return;
                 } else {
+                    out.println("Invalid number of players.");
                     playerChooseNum();
                     return;
                 }

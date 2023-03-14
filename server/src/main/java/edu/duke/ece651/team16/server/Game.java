@@ -79,7 +79,7 @@ public class Game {
                         }
                     }
             }
-            System.out.println("gamestate is gameStart");
+            // System.out.println("gamestate is gameStart");
             HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
             try {
                 sendMap(p, to_send);
@@ -224,19 +224,29 @@ public class Game {
             connection.send(
                     "You are the first player! Please set the number of players in this game(Valid player number: 2-4): ");
             String num = connection.recv();
-            int numOfPlayers = Integer.parseInt(num);
-            if (numOfPlayers < 2 || numOfPlayers > 4) {
+            
+            try{
+                int numOfPlayers = Integer.parseInt(num);
+                if (numOfPlayers < 2 || numOfPlayers > 4) {
+                    connection.send("Invalid number of players");
+                    chooseNumOfPlayers(connection, numClients);
+                    return;
+                }
+                connection.send("Valid");
+                this.numPlayer = numOfPlayers;
+            }
+            catch (NumberFormatException e){
                 connection.send("Invalid number of players");
                 chooseNumOfPlayers(connection, numClients);
+                return;
             }
-            connection.send("Valid");
-            this.numPlayer = numOfPlayers;
+            
             for (Connection c : allConnections) {
                 c.send("setNumPlayer Complete");
             }
             synchronized (this) {
                 this.gameState = "setPlayerColor"; // now out of setNumPlayer stage
-                initializeMap(numOfPlayers);
+                initializeMap(this.numPlayer);
             }
 
         } else {
@@ -316,15 +326,23 @@ public class Game {
             connection.send(msg_amount);
             // System.out.println("Waiting for player to choose a number of units to assign to " + territoryName);
             String num = connection.recv();
-            int numOfUnits = Integer.parseInt(num);
-            if (numOfUnits < 0 || numOfUnits > p.unplacedUnits()) {
+            try{
+                int numOfUnits = Integer.parseInt(num);
+                if (numOfUnits < 0 || numOfUnits > p.unplacedUnits()) {
+                    connection.send("Invalid number of units");
+                    assignUnits(p, connection);
+                    return;
+                }
+                // System.out.println("Valid number of units");
+                connection.send("Valid number of units");
+                p.placeUnitsSameTerritory(territoryName, numOfUnits);
+            }
+            catch(NumberFormatException e){
                 connection.send("Invalid number of units");
                 assignUnits(p, connection);
                 return;
             }
-            // System.out.println("Valid number of units");
-            connection.send("Valid number of units");
-            p.placeUnitsSameTerritory(territoryName, numOfUnits);
+            
         }
         // System.out.println("Finished assigning units");
         connection.send("finished placement");
@@ -332,8 +350,7 @@ public class Game {
                 ++ this.readyPlayer;
                 if(readyPlayer == numPlayer){                 
                     for (Connection c : allConnections) {
-                        System.out.println("send setunit complete");
-                        connection.send("setUnits Complete");
+                        c.send("setUnits Complete");
                     }
                     this.gameState = "gameStart"; 
                 }

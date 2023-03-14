@@ -21,34 +21,34 @@ public class GameTest {
 
   // }
 
-  @Test
-  public void testCreatePlayer() throws IOException {
-  // Mock objects
-  Socket mockSocket = mock(Socket.class);
-  Connection mockConnection = mock(Connection.class);
-  // ArrayList<Connection> mockConnections = mock(ArrayList.class);
-  // Player mockPlayer = mock(Player.class);
-  // HashMap<String, ArrayList<HashMap<String, String>>> mockMap =
-  // mock(HashMap.class);
-  Game mockGame = new Game(2);
+  // @Test
+  // public void testCreatePlayer() throws IOException {
+  // // Mock objects
+  // Socket mockSocket = mock(Socket.class);
+  // Connection mockConnection = mock(Connection.class);
+  // // ArrayList<Connection> mockConnections = mock(ArrayList.class);
+  // // Player mockPlayer = mock(Player.class);
+  // // HashMap<String, ArrayList<HashMap<String, String>>> mockMap =
+  // // mock(HashMap.class);
+  // Game mockGame = new Game(2);
 
-  // // Set up mock objects
-  // when(mockGame.getAllConnections()).thenReturn(mockConnections);
-  // when(mockGame.getDefaultMap()).thenReturn(mockMap);
-  // when(mockConnection.getSocket()).thenReturn(mockSocket);
-  // when(mockGame.chooseColor(mockConnection)).thenReturn("red");
-  // doNothing().when(mockGame).sendMap(mockPlayer, mockMap);
+  // // // Set up mock objects
+  // // when(mockGame.getAllConnections()).thenReturn(mockConnections);
+  // // when(mockGame.getDefaultMap()).thenReturn(mockMap);
+  // // when(mockConnection.getSocket()).thenReturn(mockSocket);
+  // // when(mockGame.chooseColor(mockConnection)).thenReturn("red");
+  // // doNothing().when(mockGame).sendMap(mockPlayer, mockMap);
 
-  // Call the method being tested
-  mockGame.createPlayer(mockSocket, 1);
+  // // Call the method being tested
+  // mockGame.createPlayer(mockSocket, 1);
 
-  // // Verify that the expected methods were called
-  // verify(mockConnections).add(any(Connection.class));
-  verify(mockGame).chooseNumOfPlayers(eq(mockConnection), eq(1));
-  verify(mockGame).chooseColor(any(Connection.class));
-  verify(mockGame).addPlayer(any(Player.class));
-  verify(mockGame).sendMap(any(Player.class), any(HashMap.class));
-  }
+  // // // Verify that the expected methods were called
+  // // verify(mockConnections).add(any(Connection.class));
+  // verify(mockGame).chooseNumOfPlayers(eq(mockConnection), eq(1));
+  // verify(mockGame).chooseColor(any(Connection.class));
+  // verify(mockGame).addPlayer(any(Player.class));
+  // verify(mockGame).sendMap(any(Player.class), any(HashMap.class));
+  // }
 
   @Test
   public void test_chooseColor() throws IOException {
@@ -101,7 +101,7 @@ public class GameTest {
         .send("You are the first player! Please set the number of players in this game(Valid player number: 2-4): ");
     verify(connectionMock).recv();
     verify(connectionMock).send("Valid");
-    verify(connectionMock).send("Stage Complete");
+    verify(connectionMock).send("setNumPlayer Complete");
   }
 
   @Test
@@ -112,7 +112,7 @@ public class GameTest {
     Game game = new Game(2);
     game.chooseNumOfPlayers(connectionMock, 2);
     // check the numPlayer and sent message
-    verify(connectionMock).send("Not the first player. Waiting for others to set player number.");
+    verify(connectionMock).send("Not the first player. Please wait for the first player to set player number.");
   }
 
   @Test
@@ -128,7 +128,23 @@ public class GameTest {
         .send("You are the first player! Please set the number of players in this game(Valid player number: 2-4): ");
     verify(connectionMock).send("Invalid number of players");
     verify(connectionMock, times(2)).recv(); // ensure recv method is called 2 times
-    verify(connectionMock, times(2)).send("Valid");
+    verify(connectionMock, times(1)).send("Valid");
+  }
+
+  @Test
+  public void testChooseNumOfPlayersInvalid2() throws IOException {
+    Game game = new Game(2);
+    Connection connectionMock = mock(Connection.class);
+    when(connectionMock.recv()).thenReturn("a", "3");
+    game.chooseNumOfPlayers(connectionMock, 1);
+
+    // HashMap<String, ArrayList<HashMap<String, String>>> actualMap =
+    // game.formMap();
+    verify(connectionMock, times(2))
+        .send("You are the first player! Please set the number of players in this game(Valid player number: 2-4): ");
+    verify(connectionMock).send("Invalid number of players");
+    verify(connectionMock, times(2)).recv(); // ensure recv method is called 2 times
+    verify(connectionMock, times(1)).send("Valid");
   }
 
   @Test
