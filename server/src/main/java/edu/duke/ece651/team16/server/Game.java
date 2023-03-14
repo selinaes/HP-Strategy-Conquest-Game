@@ -45,7 +45,7 @@ public class Game {
             Connection connection = new Connection(client_socket);
             allConnections.add(connection);
             chooseNumOfPlayers(connection, numClients);
-            System.out.println("Set numplayer to " + numPlayer);
+            // System.out.println("Set numplayer to " + numPlayer);
             
             // ask choose color, add new player to server
             while (true) {
@@ -127,16 +127,16 @@ public class Game {
         }
     }
 
-    /*
-     * Close all connections to client
-     */
-    public void close() throws IOException {
-        // close all connection by looping players
-        for (Player p : players) {
-            p.getConnection().close();
-        }
+    // /*
+    //  * Close all connections to client
+    //  */
+    // public void close() throws IOException {
+    //     // close all connection by looping players
+    //     for (Player p : players) {
+    //         p.getConnection().close();
+    //     }
 
-    }
+    // }
 
     /**
      * Prompt the player to choose a color
@@ -212,6 +212,5 @@ public class Game {
         Map map = new Map(numOfPlayers);
         this.defaultMap = map.createDukeMap();
         this.colors = map.getColorList();
-        System.out.println(colors);
     }
 }
