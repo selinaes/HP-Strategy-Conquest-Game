@@ -193,6 +193,7 @@ public class GameTest {
     game.addPlayer(player2);
 
     HashMap<String, ArrayList<HashMap<String, String>>> actualMap = game.formMap();
+    HashMap<String, ArrayList<HashMap<String, String>>> initialMap = game.formInitialMap();
     // compare the expected and actual results
     assertEquals(expectedMap, actualMap);
   }
@@ -206,5 +207,16 @@ public class GameTest {
     Game game = new Game(2);
     game.sendMap(player1, toSend);
   }
+
+  @Test
+  public void test_sendInitialMap() throws Exception {
+    Connection mockConnection = mock(Connection.class);
+    HashMap<String, ArrayList<HashMap<String, String>>> toSend = new HashMap<>();
+    Game game = new Game(2);
+    game.sendInitialMap(mockConnection, toSend);
+
+    Socket mockSocket = mock(Socket.class);
+  }
+
 
 }
