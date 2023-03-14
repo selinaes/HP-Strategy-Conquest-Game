@@ -39,7 +39,7 @@ public class Game {
      * @param int numClients: number of clients
      */
     public void createPlayer(Socket client_socket, int numClients) {
-        System.out.println(numClients);
+        // System.out.println(numClients);
         // connect to new client, add serverside socket to connection obj
         try {
             Connection connection = new Connection(client_socket);
@@ -145,7 +145,6 @@ public class Game {
      * @return string color chosen by player
      **/
     public String chooseColor(Connection connection) throws IOException {
-        System.out.println("In chooseColor");
         String colorList = "";
         for (String color : colors) {
             colorList += color + " ";
