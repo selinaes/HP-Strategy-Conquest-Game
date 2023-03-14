@@ -47,13 +47,12 @@ public class Client {
      * @throws IOException
      */
     public void run() throws IOException {
-        playerChooseNum();
         // step1: Init Game setting: Color, enter name
+        displayInitialMap();
 
         waitEveryoneDone("Stage Complete");
         out.println("out of wait");
         playerChooseColor();
-
         displayMap();
 
         // step2: Init Game setting: Territory, Units
@@ -94,7 +93,7 @@ public class Client {
      * @throws IOException
      */
     public String readClientInput(String prompt) throws IOException {
-        out.println(prompt);
+        out.println("ReadClientInput: " + prompt);
         String s = null;
         s = this.inputReader.readLine();
         if (s == null) {
@@ -176,6 +175,37 @@ public class Client {
         }
     }
 
+    public void displayInitialMap() throws IOException {
+        String jsonString = recvMsg();
+
+        // convert jsonString to jsonobject
+        ObjectMapper objectMapper = new ObjectMapper();
+        HashMap<String, ArrayList<HashMap<String, String>>> input_map;
+        try {
+            input_map = objectMapper.readValue(jsonString, HashMap.class);
+        } catch (JsonProcessingException e) {
+            System.out.println("Failed to convert json string to json object.");
+            return;
+        }
+        // Player name is the input_map key
+        // ArrayList<HashMap<String, String>> is the value of the key
+        for (Map.Entry<String, ArrayList<HashMap<String, String>>> entry : input_map.entrySet()) {
+            String color = entry.getKey();
+            out.println();
+            String title = color + " player will have these territories: ";
+            out.println(title);
+            String seperation = String.join("", Collections.nCopies(title.length(), "-"));
+            out.println(seperation);
+            ArrayList<HashMap<String, String>> playerAsset = entry.getValue();
+            for (HashMap<String, String> asset : playerAsset) {
+                String territory = asset.get("TerritoryName");
+                String neighbors = asset.get("Neighbors");
+                out.println(territory + " " + neighbors);
+            }
+            out.println();
+        }
+    }
+
     /**
      * Display map
      * 
@@ -240,6 +270,52 @@ public class Client {
             } catch (IOException e) {
                 out.println(e.getMessage());
             }
+        }
+    }
+
+    public boolean playerAssignUnit() throws IOException {
+        String prompt = recvMsg();
+        if (prompt.equals("finished placement")) {
+            out.println("Received finished placement from server1");
+            return true;
+        }
+        String clientInput = "";
+        while (true) {
+            try {
+                clientInput = readClientInput(prompt);
+                sendResponse(clientInput);
+                prompt = recvMsg();
+                if (prompt.equals("finished placement")) {
+                    out.println("Received finished placement from server");
+                    return true;
+                } else if (prompt.equals("Valid territory name")) {
+                    String territoryName = clientInput;
+                    out.println("Successfully choose territory: " + territoryName);
+                    prompt = recvMsg();
+                    continue;
+                } else if (prompt.equals("Valid number of units")) {
+                    String unitNum = clientInput;
+                    out.println("Successfully set unit number: " + unitNum);
+                    return false;
+                } else {
+                    out.println("Fails to assign unit");
+                    // prompt = recvMsg();
+                    return playerAssignUnit();
+                }
+            } catch (IllegalArgumentException e) {
+                out.println(e.getMessage());
+            }
+        }
+    }
+
+    public void playerAssignAllUnits() throws IOException {
+        while (true) {
+            boolean finished = playerAssignUnit();
+            if (finished) {
+                out.println("Finished assigning units Clinet Side");
+                return;
+            }
+            // prompt = recvMsg();
         }
     }
 

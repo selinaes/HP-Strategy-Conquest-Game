@@ -22,4 +22,18 @@ public class BasicUnit implements Unit {
         this.where = where;
     }
 
+    /*
+     * Get the territory where the unit is located
+     */
+    public Territory getwhere() {
+        return this.where;
+    }
+
+    /*
+     * Get the owner of the unit
+     */
+    public Player getOwner() {
+        return this.owner;
+    }
+
 }

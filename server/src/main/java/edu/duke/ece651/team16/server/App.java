@@ -16,7 +16,7 @@ public class App {
     ServerSocket listenSocket = null;
     try {
       listenSocket = new ServerSocket(port);
-      Server server = new Server(listenSocket);
+      Server server = new Server(listenSocket, 2);
       server.run();
     } catch (IOException e) {
       System.out.println("Failed to initialize Connection.");

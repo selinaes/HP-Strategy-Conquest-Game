@@ -1,12 +1,14 @@
 package edu.duke.ece651.team16.server;
 
 import java.util.List;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Territory {
   private String name;
   private List<Territory> neighbors;
   private Player owner;
+  private ArrayList<Unit> units;
 
   /**
    * constructs Territory class with name
@@ -16,6 +18,41 @@ public class Territory {
   public Territory(String name) {
     this.name = name;
     this.neighbors = new ArrayList<>();
+    this.units = new ArrayList<>();
+  }
+
+  /*
+   * Return the units in the territory
+   */
+
+  public ArrayList<Unit> getUnits() {
+    return this.units;
+  }
+
+  /*
+   * Add units to the territory in the placement
+   * 
+   * @param unit
+   */
+  public void tryAddUnits(Unit unit){
+    System.out.println("try add units");
+    // System.out.println("Territory: " + unit.getwhere().getName());
+    System.out.println("Owner: " + unit.getOwner());
+    // if (unit.getwhere() == null && this.owner == unit.getOwner()){
+    if (unit.getwhere() == null){
+      System.out.println("add units");
+      unit.setwhere(this);
+      this.units.add(unit);
+    }
+  }
+
+  /*
+   * Get the number of units in the territory
+   */
+  public String getUnitsString() {
+    String result = "";
+    result += Integer.toString(this.units.size()) + " units";
+    return result;
   }
 
   /**
