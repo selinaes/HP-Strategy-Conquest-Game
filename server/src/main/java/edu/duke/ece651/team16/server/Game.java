@@ -213,16 +213,13 @@ public class Game {
             this.gameState = "setNumPlayer";
         }
         // synchronized (this) {
-        //         this.gameState = "setNumPlayer";
-        //     }
+        // this.gameState = "setNumPlayer";
+        // }
         if (numClients == 1) {
             connection.send(
                     "You are the first player! Please set the number of players in this game(Valid player number: 2-4): ");
             String num = connection.recv();
-
             try {
-            String num = connection.recv();  
-            try{
                 int numOfPlayers = Integer.parseInt(num);
                 if (numOfPlayers < 2 || numOfPlayers > 4) {
                     connection.send("Invalid number of players");
