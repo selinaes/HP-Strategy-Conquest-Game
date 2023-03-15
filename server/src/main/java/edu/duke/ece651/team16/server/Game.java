@@ -166,6 +166,8 @@ public class Game {
         player.getConnection().send(jsonString);
     }
 
+
+
     // /*
     // * Close all connections to client
     // */
@@ -334,6 +336,18 @@ public class Game {
         }
     }
 
+    /*
+        * Form the entry string contains choices of A(ttack), M(ove), D(one)
+        * 
+        */
+    public String formEntry(Player p) {
+        StringBuilder entry = new StringBuilder("");
+        String header = "You are the " + p.getColor() + " player, what would you like to do?";
+        entry.append(header);
+        String body = "M(ove)\n" + "A(ttack)\n" + "D(one)\n";
+        entry.append(body);
+        return entry.toString();
+    }
     /**
      * /* set number of players
      * /* @param int num
