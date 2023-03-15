@@ -64,6 +64,7 @@ public class Game {
 
             String color = chooseColor(connection);
             Player p = new Player(color, connection, defaultMap.get(color), this.unitsPerPlayer);
+
             addPlayer(p);
 
             assignUnits(p, connection);
@@ -78,6 +79,7 @@ public class Game {
             // System.out.println("gamestate is gameStart");
             HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
             sendMap(p, to_send);
+            sendEntry(p);
 
         } catch (IOException ioe) {
             // in something real, we would want to handle
@@ -342,4 +344,35 @@ public class Game {
         this.numPlayer = num;
     }
 
+    /*
+     * Form the entry string contains choices of A(ttack), M(ove), D(one)
+     * 
+     */
+    public HashMap<String, String> formEntry(Player p) {
+        StringBuilder entry = new StringBuilder("");
+        String header = "You are the " + p.getColor() + " player, what would you like to do?\n";
+        entry.append(header);
+        String body = "M(ove)\n" + "A(ttack)\n" + "D(one)\n";
+        entry.append(body);
+        HashMap<String, String> entryMap = new HashMap<String, String>();
+        entryMap.put("Entry", entry.toString());
+        return entryMap;
+    }
+
+    /*
+     * Send the entry string to the player
+     * 
+     * @param Player p
+     */
+    public void sendEntry(Player p) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        HashMap<String, String> to_send_entry = formEntry(p);
+
+        // convert the HashMap to a JSON object
+        String jsonString = objectMapper.writeValueAsString(to_send_entry);
+        // System.out.println(jsonString);
+        // conn.send(jsonString);
+
+        p.getConnection().send(jsonString);
+    }
 }
