@@ -208,57 +208,81 @@ Duke Map
 ```mermaid
 flowchart LR
     baldwin[Baldwin Auditorium]
-    broadhead[Broadhead Center]
-    brodie[Brodie Recreational Center]
+    smith[Smith Warehouse]
     bryan[Bryan Center]
-    smith[Smith Warehouse]
-    cameron[Cameron Indoor Stadium]
-    dukeChapel[Duke Chapel]
-    dukeForest[Duke Forest]
-    dukeGarden[Duke Garden]
-    dukeHospital[Duke Hospital]
-    dukeLemur[Duke Lemur Center]
-    dukeLaw[Duke University School of Law]
-    fitzpatrick[Fitzpatrick Center]
-    jbDuke[JB Duke Hotel]
-    levine[Levine Science Research Center]
-    nasher[Nasher Museum of Art]
-    penn[Penn Pavilion]
-    perkins[Perkins Library]
-    scienceGarage[Science Garage]
-    smith[Smith Warehouse]
-    studentWellness[Student Wellness Center]
+    wilson[Wilson Recreation Center]
+ 
+   cameron[Cameron Indoor Stadium]
+  
+ 
+ 
     fuqua[The Fuqua School of Business]
     bookStore[University Book Store]
     wallace[Wallace Wade Stadium]
-    wilson[Wilson Recreation Center]
+  
+    dukeLemur[Duke Lemur Center]
+    smith[Smith Warehouse]
+    studentWellness[Student Wellness Center]
 
+   dukeLaw[Duke University School of Law]
+   fitzpatrick[Fitzpatrick Center]
+   jbDuke[JB Duke Hotel]
+   levine[Levine Science Research Center]
+   
+   penn[Penn Pavilion]
+   scienceGarage[Science Garage]
+
+
+   dukeForest[Duke Forest]
     baldwin --- brodie
     baldwin --- smith
-    baldwin --- dukeChapel
+
+    brodie[Brodie Recreational Center]
     smith --- brodie
-    wilson --- cameron
-    wilson --- wallace
-    cameron --- wallace
-    fuqua --- dukeLaw
-    fuqua --- jbDuke
-    jbDuke --- scienceGarage
-    jbDuke --- dukeForest
-    jbDuke --- dukeLemur
-    studentWellness --- dukeLaw
-    penn --- studentWellness
-    penn --- bookStore
-    bryan --- bookStore
-    bryan --- broadhead
-    dukeChapel --- broadhead
+
+    dukeChapel[Duke Chapel]
+    dukeChapel --- baldwin
+
+    perkins[Perkins Library]
+    broadhead[Broadhead Center]
+
+    broadhead --- dukeChapel
     dukeChapel --- perkins
-    fitzpatrick --- levine
-    fitzpatrick --- perkins
-    dukeHospital --- levine
-    dukeHospital --- dukeGarden
+
+    nasher[Nasher Museum of Art]
+    dukeGarden[Duke Garden]
+
     dukeGarden --- dukeChapel
     dukeGarden --- nasher
-    dukeGarden --- broadhead
+    broadhead --- dukeGarden
+
+    perkins --- fitzpatrick
+    fitzpatrick --- levine
+
+    dukeHospital[Duke Hospital]
+
+    dukeHospital --- levine
+    dukeHospital --- dukeGarden
+
+    bryan --- broadhead
+    penn --- bookStore
+    penn --- studentWellness
+    studentWellness --- dukeLaw
+    bookStore --- bryan
+
+    dukeLaw --- fuqua
+    fuqua --- jbDuke
+
+    wilson --- cameron
+    wilson --- wallace
+    dukeLaw --- wilson
+    cameron --- wallace
+
+
+
+    jbDuke --- dukeForest
+   jbDuke --- scienceGarage
+   jbDuke --- dukeLemur
 ```
 
 
