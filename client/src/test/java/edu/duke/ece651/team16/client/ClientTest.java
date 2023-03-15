@@ -201,7 +201,8 @@ public class ClientTest {
         .thenReturn("legal string");
     client.playerChooseNum();
 
-    when(mockReader.readLine()).thenReturn("Not the first player. Waiting for others to set player number.");
+    when(mockReader.readLine())
+        .thenReturn("Not the first player. Please wait for the first player to set player number.");
     socketReceiveField.set(client, mockReader);
     client.playerChooseNum();
 
@@ -348,7 +349,6 @@ public class ClientTest {
     client.playerAssignAllUnits();
 
     client.close();
-
   }
 
   @Test
@@ -367,8 +367,8 @@ public class ClientTest {
     socketReceiveField.setAccessible(true);
     BufferedReader mockReader = mock(BufferedReader.class);
     when(mockReader.readLine()).thenReturn("playerChooseNum", "Valid")
-        .thenReturn("Stage Complete").thenReturn("displayInitialMap").thenReturn("playerChooseColor", "Valid")
-        .thenReturn("finished placement").thenReturn("displayMap");
+        .thenReturn("setNumPlayer Complete").thenReturn("displayInitialMap").thenReturn("playerChooseColor", "Valid")
+        .thenReturn("finished placement").thenReturn("setUnits Complete").thenReturn("displayMap");
     socketReceiveField.set(client, mockReader);
 
     client.run();
