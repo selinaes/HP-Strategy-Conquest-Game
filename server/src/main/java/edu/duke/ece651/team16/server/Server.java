@@ -71,7 +71,7 @@ public class Server {
                 public void run() {
                     try {
                         try {
-                            game.createPlayer(client_socket, numClients);
+                            game.gameFlow(client_socket, numClients);
 
                         } finally {
                             client_socket.close();

@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
 
 public class GameTest {
   @Test
-  public void testCreatePlayer() throws IOException, Exception {
+  public void testdoPlacementPhase() throws IOException, Exception {
     String[] inputs = new String[] { "2", "red", "Duke Garden", "2" };
     String inputString = String.join("\n", inputs) + "\n";
     InputStream sysIn = new ByteArrayInputStream(inputString.getBytes());
@@ -40,7 +40,7 @@ public class GameTest {
     readyPlayerField.set(Game, 1);
 
     // Call the method being tested
-    Game.createPlayer(mockSocket, 1); // not first player
+    Game.doPlacementPhase(mockSocket, 1); // not first player
   }
 
   @Test
@@ -60,7 +60,7 @@ public class GameTest {
     Thread testThread = new Thread(new Runnable() {
       @Override
       public void run() {
-        Game.createPlayer(mockSocket, 2); // call the run() method of the Server instance
+        Game.doPlacementPhase(mockSocket, 2); // call the run() method of the Server instance
       }
     });
     testThread.start();
@@ -89,7 +89,7 @@ public class GameTest {
     Thread testThread = new Thread(new Runnable() {
       @Override
       public void run() {
-        Game.createPlayer(mockSocket, 1); // call the run() method of the Server instance
+        Game.doPlacementPhase(mockSocket, 1); // call the run() method of the Server instance
       }
     });
     testThread.start();
@@ -349,7 +349,7 @@ public class GameTest {
     // when(mockConnection.recv()).thenReturn("Territory 1", "5", "done");
 
     // Call the assignUnits method
-    // game.createPlayer(mockSocket, 0);
+    // game.doPlacementPhase(mockSocket, 0);
 
     // game.assignUnits(player, mockConnection);
 

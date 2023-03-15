@@ -36,13 +36,24 @@ public class Game {
         this.readyPlayer = 0;
     }
 
+    // gameFlow()
+    public void gameFlow(Socket client_socket, int numClients) {
+        doPlacementPhase(client_socket, numClients);
+        // Action!
+        doActionPhase();
+    }
+
+    public void doActionPhase() {
+        return;
+    }
+
     /**
      * Create a player and add to the server
      * 
      * @param Socket client_socket: client socket
      * @param int    numClients: number of clients
      */
-    public void createPlayer(Socket client_socket, int numClients) {
+    public void doPlacementPhase(Socket client_socket, int numClients) {
         // System.out.println(numClients);
         // connect to new client, add serverside socket to connection obj
         Connection connection = new Connection(client_socket);
@@ -375,4 +386,10 @@ public class Game {
 
         p.getConnection().send(jsonString);
     }
+
+    // public void doAction(Connection connection){
+    // String action = connection.recv();
+    // if(action != "M" || action != "A" || action !=)
+    // }
+
 }
