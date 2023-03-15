@@ -15,4 +15,9 @@ public interface Unit {
      * Get the owner of the unit
      */
     public Player getOwner();
+
+    /*
+     * Get the alive status of the unit
+     */
+    public boolean getAlive();
 }

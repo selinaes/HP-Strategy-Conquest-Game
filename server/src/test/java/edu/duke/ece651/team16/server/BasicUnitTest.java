@@ -58,4 +58,18 @@ public class BasicUnitTest {
     assertEquals(p, owner);
   }
 
+  @Test
+  public void testGetAlive() {
+    Connection c1 = mock(Connection.class);
+    // create a list for territories
+    List<Territory> list = new ArrayList<Territory>();
+    Player p = new Player("blue", c1, list, 2);
+    Territory territory1 = new Territory("Territory 1");
+    BasicUnit unit = new BasicUnit(p, territory1, true, 1);
+
+    boolean alive = unit.getAlive();
+
+    assertEquals(true, alive);
+  }
+
 }

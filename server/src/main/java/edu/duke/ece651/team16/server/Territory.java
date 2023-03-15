@@ -29,6 +29,17 @@ public class Territory {
     return this.units;
   }
 
+  // Return units that belong to a certain player and alive
+  public ArrayList<Unit> getAliveUnitsFor(Player player) {
+    ArrayList<Unit> result = new ArrayList<>();
+    for (Unit u : this.units) {
+      if (u.getOwner() == player && u.getAlive() == true) {
+        result.add(u);
+      }
+    }
+    return result;
+  }
+
   /*
    * Add units to the territory in the placement
    * The input unit's owner name is ensured to be the same as territory's owner
@@ -38,7 +49,7 @@ public class Territory {
    * 
    * @param unit
    */
-  public void tryAddUnits(Unit... units) {
+  public void tryAddUnits(ArrayList<Unit> units) {
     // System.out.println("try add units");
     // System.out.println("Territory: " + unit.getwhere().getName());
     // System.out.println("Owner: " + unit.getOwner());
@@ -50,6 +61,25 @@ public class Territory {
     // this.units.add(unit);
     // if (unit.getwhere() == null && this.owner == unit.getOwner()){
 
+  }
+
+  /**
+   * Remove units from the territory
+   * 
+   * @param num    number of units to be removed
+   * @param player the player who owns the units
+   * @return the removed units
+   */
+  public ArrayList<Unit> tryRemoveUnits(int num, Player player) {
+    ArrayList<Unit> result = new ArrayList<>();
+    ArrayList<Unit> aliveUnitForP = this.getAliveUnitsFor(player);
+    for (int i = 0; i < num; i++) {
+      Unit u = aliveUnitForP.get(i);
+      u.setwhere(null);
+      result.add(u);
+      this.units.remove(u);
+    }
+    return result;
   }
 
   /*

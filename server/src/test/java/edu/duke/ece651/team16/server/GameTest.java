@@ -17,8 +17,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import static org.mockito.Mockito.*;
-
 public class GameTest {
   @Test
   public void testCreatePlayer() throws IOException, Exception {

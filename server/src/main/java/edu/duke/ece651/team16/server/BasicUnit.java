@@ -36,4 +36,11 @@ public class BasicUnit implements Unit {
         return this.owner;
     }
 
+    /*
+     * Get alive status of the unit
+     */
+    public boolean getAlive() {
+        return this.isAlive;
+    }
+
 }

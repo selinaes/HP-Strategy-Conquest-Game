@@ -25,7 +25,7 @@ public class PlayerTest {
     list.add(t1);
     list.add(t2);
 
-    p.addTerritories(t1, t2);
+    p.addTerritories(list);
 
     assertEquals(p.getTerritories(), list);
     assertEquals(t1.getOwner(), p);
@@ -107,24 +107,17 @@ public class PlayerTest {
     Territory territory = new Territory("A");
     list.add(territory);
     Player player = new Player("blue", c1, list, 3);
-    // Unit[] units = {
-    // new BasicUnit(player, null, true, 1),
-    // new BasicUnit(player, territory, true, 3),
-    // new BasicUnit(player, null, false, 2),
-    // new BasicUnit(player, null, false, 4)
-    // };
-    // territory.tryAddUnits(units);
     int amount = 2;
-    Unit[] unplacedUnits = player.findNextUnplacedUnits(amount);
-    assertEquals(amount, unplacedUnits.length);
+    ArrayList<Unit> unplacedUnits = player.findNextUnplacedUnits(amount);
+    assertEquals(amount, unplacedUnits.size());
 
     for (Unit u : unplacedUnits) {
       assertNull(u.getwhere());
     }
     player.placeUnitsSameTerritory("A", 2);
 
-    Unit[] unplacedUnits1 = player.findNextUnplacedUnits(1);
-    assertEquals(1, unplacedUnits1.length);
+    ArrayList<Unit> unplacedUnits1 = player.findNextUnplacedUnits(1);
+    assertEquals(1, unplacedUnits1.size());
   }
 
 }
