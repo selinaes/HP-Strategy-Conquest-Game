@@ -1,56 +1,105 @@
 package edu.duke.ece651.team16.server;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import org.junit.jupiter.api.Test;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import static org.mockito.Mockito.*;
 
 public class GameTest {
-  // @Test
-  // public void test_game() {
+  @Test
+  public void testCreatePlayer() throws IOException, Exception {
+    String[] inputs = new String[] { "2", "red", "Duke Garden", "2" };
+    String inputString = String.join("\n", inputs) + "\n";
+    InputStream sysIn = new ByteArrayInputStream(inputString.getBytes());
 
-  // }
+    // Mock objects
+    Socket mockSocket = mock(Socket.class);
+    OutputStream mockOutputStream = mock(OutputStream.class);
+    when(mockSocket.getInputStream()).thenReturn(sysIn);
+    when(mockSocket.getOutputStream()).thenReturn(mockOutputStream);
 
-  // @Test
-  // public void testCreatePlayer() throws IOException {
-  // // Mock objects
-  // Socket mockSocket = mock(Socket.class);
-  // Connection mockConnection = mock(Connection.class);
-  // // ArrayList<Connection> mockConnections = mock(ArrayList.class);
-  // // Player mockPlayer = mock(Player.class);
-  // // HashMap<String, ArrayList<HashMap<String, String>>> mockMap =
-  // // mock(HashMap.class);
-  // Game mockGame = new Game(2);
+    Game Game = new Game(2);
 
-  // // // Set up mock objects
-  // // when(mockGame.getAllConnections()).thenReturn(mockConnections);
-  // // when(mockGame.getDefaultMap()).thenReturn(mockMap);
-  // // when(mockConnection.getSocket()).thenReturn(mockSocket);
-  // // when(mockGame.chooseColor(mockConnection)).thenReturn("red");
-  // // doNothing().when(mockGame).sendMap(mockPlayer, mockMap);
+    // Get the numPlayer field of game
+    Field readyPlayerField = Game.getClass().getDeclaredField("readyPlayer");
+    readyPlayerField.setAccessible(true);
+    readyPlayerField.set(Game, 1);
 
-  // // Call the method being tested
-  // mockGame.createPlayer(mockSocket, 1);
+    // Call the method being tested
+    Game.createPlayer(mockSocket, 1); // not first player
+  }
 
-  // // // Verify that the expected methods were called
-  // // verify(mockConnections).add(any(Connection.class));
-  // verify(mockGame).chooseNumOfPlayers(eq(mockConnection), eq(1));
-  // verify(mockGame).chooseColor(any(Connection.class));
-  // verify(mockGame).addPlayer(any(Player.class));
-  // verify(mockGame).sendMap(any(Player.class), any(HashMap.class));
-  // }
+  @Test
+  public void testRun2() throws Exception {
+    String[] inputs = new String[] { "1" };
+    String inputString = String.join("\n", inputs) + "\n";
+    InputStream sysIn = new ByteArrayInputStream(inputString.getBytes());
+
+    // Mock objects
+    Socket mockSocket = mock(Socket.class);
+    OutputStream mockOutputStream = mock(OutputStream.class);
+    when(mockSocket.getInputStream()).thenReturn(sysIn);
+    when(mockSocket.getOutputStream()).thenReturn(mockOutputStream);
+
+    Game Game = new Game(2);
+
+    Thread testThread = new Thread(new Runnable() {
+      @Override
+      public void run() {
+        Game.createPlayer(mockSocket, 2); // call the run() method of the Server instance
+      }
+    });
+    testThread.start();
+
+    // Wait for the server to start
+    Thread.sleep(100);
+
+    // Interrupt the server after a short delay
+    testThread.interrupt();
+  }
+
+  @Test
+  public void testRun3() throws Exception {
+    String[] inputs = new String[] { "2", "red", "Duke Garden", "2" };
+    String inputString = String.join("\n", inputs) + "\n";
+    InputStream sysIn = new ByteArrayInputStream(inputString.getBytes());
+
+    // Mock objects
+    Socket mockSocket = mock(Socket.class);
+    OutputStream mockOutputStream = mock(OutputStream.class);
+    when(mockSocket.getInputStream()).thenReturn(sysIn);
+    when(mockSocket.getOutputStream()).thenReturn(mockOutputStream);
+
+    Game Game = new Game(2);
+
+    Thread testThread = new Thread(new Runnable() {
+      @Override
+      public void run() {
+        Game.createPlayer(mockSocket, 1); // call the run() method of the Server instance
+      }
+    });
+    testThread.start();
+
+    // Wait for the server to start
+    Thread.sleep(100);
+
+    // Interrupt the server after a short delay
+    testThread.interrupt();
+  }
 
   @Test
   public void test_chooseColor() throws IOException {
@@ -140,8 +189,6 @@ public class GameTest {
     when(connectionMock.recv()).thenReturn("a", "3");
     game.chooseNumOfPlayers(connectionMock, 1);
 
-    // HashMap<String, ArrayList<HashMap<String, String>>> actualMap =
-    // game.formMap();
     verify(connectionMock, times(2))
         .send("You are the first player! Please set the number of players in this game(Valid player number: 2-4): ");
     verify(connectionMock).send("Invalid number of players");
