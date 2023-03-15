@@ -356,6 +356,44 @@ public class GameTest {
   }
 
   @Test
+  public void testAssignUnits3() throws IOException {
+    // Create a mock Connection object
+    Connection mockConnection = mock(Connection.class);
+
+    // Create a Player object with some units to assign
+    List<Territory> territories = new ArrayList<>();
+    Territory t1 = new Territory("Territory 1");
+    territories.add(t1);
+    Player player = new Player("Player 1", mockConnection, territories, 5);
+
+    // Create a Game object to use with the method
+    Game game = new Game(5);
+    game.setNumPlayer(1);
+    game.addPlayer(player);
+
+    // Set up the Connection mock to return some values when send() and recv() are
+    // called
+    when(mockConnection.recv()).thenReturn("Territory 1", "done");
+
+    // Call the assignUnits method
+    game.assignUnits(player, mockConnection);
+
+    // Verify that the mockConnection.send() method was called with the expected
+    // strings
+    verify(mockConnection).send(
+        "You have 5 units left. If you want to finish placement, enter done. Otherwise, choose a territory to assign units to. Please enter the territory name: ");
+    verify(mockConnection).send(
+        "You have 5 units left. If you want to finish placement, enter done. Otherwise, how many units do you want to assign to Territory 1? Please enter a number: ");
+    verify(mockConnection).send("finished placement");
+    // verify(mockConnection).send("setUnits Complete");
+
+    // Verify that the Player object has the expected number of units in the
+    // Territory object
+    // Territory territory = player.getTerritoryByName("Territory 1");
+    // assertEquals("3 units", t1.getUnitsString());
+  }
+
+  @Test
   public void testAssignUnitsInvalidTerritory() throws IOException {
     Connection connection = mock(Connection.class);
     Player player = new Player("blue", connection, new ArrayList<Territory>(), 3);
