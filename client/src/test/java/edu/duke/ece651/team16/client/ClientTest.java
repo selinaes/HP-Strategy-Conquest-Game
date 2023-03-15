@@ -166,6 +166,30 @@ public class ClientTest {
   }
 
   @Test
+  public void test_displayEntry() throws IOException, Exception {
+    Socket mockSocket = makeMockSocket();
+    BufferedReader inputSource = makeInputSource("input");
+    PrintStream out = makeOut();
+    Client client = new Client(mockSocket, inputSource, out);
+
+    Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
+    socketReceiveField.setAccessible(true);
+    BufferedReader mockReader = mock(BufferedReader.class);
+    // when(mockReader.readLine()).thenReturn("Valid");
+    // socketReceiveField.set(client, mockReader);
+
+    // client.displayEntry();
+
+    String jsonString = "{\"Entry\":\"a\"}";
+    when(mockReader.readLine()).thenReturn(jsonString);
+    socketReceiveField.set(client, mockReader);
+
+    client.displayEntry();
+
+    client.close();
+  }
+
+  @Test
   public void test_playerChooseNumber() throws IOException, Exception {
     Socket mockSocket = makeMockSocket();
     BufferedReader inputSource = makeInputSource("input");
