@@ -63,12 +63,9 @@ public class Game {
             sendInitialMap(connection, to_send_initial);
 
             String color = chooseColor(connection);
-<<<<<<< HEAD
-            Player p = new Player(color, connection, defaultMap.get(color), this.unitsPerPlayer);
 
-=======
             Player p = new Player(color, connection, defaultMap.getMap().get(color), this.unitsPerPlayer);
->>>>>>> task4
+
             addPlayer(p);
 
             assignUnits(p, connection);
@@ -338,19 +335,6 @@ public class Game {
                 this.gameState = "gameStart";
             }
         }
-    }
-
-    /*
-     * Form the entry string contains choices of A(ttack), M(ove), D(one)
-     * 
-     */
-    public String formEntry(Player p) {
-        StringBuilder entry = new StringBuilder("");
-        String header = "You are the " + p.getColor() + " player, what would you like to do?";
-        entry.append(header);
-        String body = "M(ove)\n" + "A(ttack)\n" + "D(one)\n";
-        entry.append(body);
-        return entry.toString();
     }
 
     /**
