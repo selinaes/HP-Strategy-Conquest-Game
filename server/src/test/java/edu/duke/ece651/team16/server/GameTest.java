@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.junit.jupiter.api.Test;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import static org.mockito.Mockito.*;
-
 
 public class GameTest {
   // @Test
@@ -230,5 +232,183 @@ public class GameTest {
     Socket mockSocket = mock(Socket.class);
   }
 
+  @Test
+  public void testAssignUnits() throws IOException {
+    // Create a mock Connection object
+    Connection mockConnection = mock(Connection.class);
+
+    // Create a Player object with some units to assign
+    List<Territory> territories = new ArrayList<>();
+    Territory t1 = new Territory("Territory 1");
+    territories.add(t1);
+    Player player = new Player("Player 1", mockConnection, territories, 5);
+
+    // Create a Game object to use with the method
+    Game game = new Game(5);
+    game.setNumPlayer(1);
+    game.addPlayer(player);
+
+    // Set up the Connection mock to return some values when send() and recv() are
+    // called
+    when(mockConnection.recv()).thenReturn("Territory 1", "3", "done");
+
+    // Call the assignUnits method
+    game.assignUnits(player, mockConnection);
+
+    // Verify that the mockConnection.send() method was called with the expected
+    // strings
+    verify(mockConnection).send(
+        "You have 5 units left. If you want to finish placement, enter done. Otherwise, choose a territory to assign units to. Please enter the territory name: ");
+    verify(mockConnection).send(
+        "You have 5 units left. If you want to finish placement, enter done. Otherwise, how many units do you want to assign to Territory 1? Please enter a number: ");
+    verify(mockConnection).send("finished placement");
+    // verify(mockConnection).send("setUnits Complete");
+
+    // Verify that the Player object has the expected number of units in the
+    // Territory object
+    // Territory territory = player.getTerritoryByName("Territory 1");
+    assertEquals("3 units", t1.getUnitsString());
+  }
+
+  @Test
+  public void testAssignUnits2() throws IOException, Exception {
+    String[] inputs = new String[] { "Territory 1", "5", "done" };
+    String inputString = String.join("\n", inputs) + "\n";
+    Socket mockSocket = mock(Socket.class);
+    InputStream mockInputStream = new ByteArrayInputStream(inputString.getBytes());
+    OutputStream mockOutputStream = mock(OutputStream.class);
+    when(mockSocket.getInputStream()).thenReturn(mockInputStream);
+    when(mockSocket.getOutputStream()).thenReturn(mockOutputStream);
+
+    Connection mockConnection = new Connection(mockSocket);
+
+    // Create a mock Connection object
+    // Connection mockConnection = mock(Connection.class);
+
+    // Create a Player object with some units to assign
+    List<Territory> territories = new ArrayList<>();
+    Territory t1 = new Territory("Territory 1");
+    territories.add(t1);
+    Player player = new Player("Player 1", mockConnection, territories, 5);
+
+    // Create a Game object to use with the method
+    Game game = new Game(5);
+    game.setNumPlayer(1);
+
+    game.addPlayer(player);
+    // game.setNumPlayer(1);
+    // Set up the Connection mock to return some values when send() and recv() are
+    // called
+    // when(mockConnection.recv()).thenReturn("Territory 1", "5", "done");
+
+    // Call the assignUnits method
+    game.createPlayer(mockSocket, 0);
+    game.assignUnits(player, mockConnection);
+
+    assertEquals("5 unis", t1.getUnitsString());
+
+    // Thread testThread = new Thread(new Runnable() {
+    // @Override
+    // public void run() {
+    // game.assignUnits(player, mockConnection);
+    // }
+    // });
+
+    // testThread.start();
+    // Thread.sleep(100);
+    // testThread.interrupt();
+
+    // Verify that the mockConnection.send() method was called with the expected
+    // strings
+    // verify(mockConnection).send(
+    // "You have 5 units left. If you want to finish placement, enter done.
+    // Otherwise, choose a territory to assign units to. Please enter the territory
+    // name: ");
+    // verify(mockConnection).send(
+    // "You have 5 units left. If you want to finish placement, enter done.
+    // Otherwise, how many units do you want to assign to Territory 1? Please enter
+    // a number: ");
+    // verify(mockConnection).send("finished placement");
+    // verify(mockConnection).send("setUnits Complete");
+    // Verify that the Player object has the expected number of units in the
+    // Territory object
+    // Territory territory = player.getTerritoryByName("Territory 1");
+    assertEquals("5 units", t1.getUnitsString());
+  }
+
+  @Test
+  public void testAssignUnitsInvalidTerritory() throws IOException {
+    Connection connection = mock(Connection.class);
+    Player player = new Player("blue", connection, new ArrayList<Territory>(), 3);
+    when(connection.recv()).thenReturn("invalidTerritory", "done");
+
+    Game game = new Game(3);
+    game.addPlayer(player);
+
+    game.assignUnits(player, connection);
+
+    verify(connection, times(1)).send("Invalid territory name");
+  }
+
+  @Test
+  public void testAssignUnitsInvalidNumFormatException() throws IOException {
+    Connection c1 = mock(Connection.class);
+    List<Territory> list = new ArrayList<Territory>();
+    Territory territory = new Territory("A");
+    list.add(territory);
+    Player player = new Player("blue", c1, list, 3);
+
+    when(c1.recv()).thenReturn("A", "invalid", "done");
+    Game game = new Game(3);
+    game.assignUnits(player, c1);
+
+    verify(c1, times(1)).send("Invalid number of units");
+  }
+
+  @Test
+  public void testAssignUnits_InvalidNumber() throws IOException {
+    Connection c1 = mock(Connection.class);
+    List<Territory> list = new ArrayList<Territory>();
+    Territory territory = new Territory("A");
+    list.add(territory);
+    Player player = new Player("blue", c1, list, 3);
+
+    when(c1.recv()).thenReturn("A", "-1", "done");
+    Game game = new Game(3);
+    game.assignUnits(player, c1);
+
+    verify(c1, times(1)).send("Invalid number of units");
+  }
+
+  // @Test
+  // public void testAssignUnitsFinal() throws IOException {
+  // Connection connection = mock(Connection.class);
+  // List<Territory> territories = new ArrayList<Territory>();
+  // territories.add(new Territory("A"));
+  // Player player1 = new Player("blue", null, territories, 3);
+  // Player player2 = new Player("red", null, territories, 3);
+
+  // List<Connection> allConnections = new ArrayList<>();
+  // allConnections.add(connection);
+  // allConnections.add(mock(Connection.class));
+
+  // Game game = new Game(allConnections);
+  // game.assignUnits(player1, connection);
+
+  // // Verify that "finished placement" message is sent
+  // verify(connection).send("finished placement");
+
+  // // Set readyPlayer to numPlayer and verify "setUnits Complete" message is
+  // sent
+  // // to all connections
+  // game.readyPlayer = game.numPlayer;
+  // game.updateGameState();
+  // for (Connection c : allConnections) {
+  // verify(c).send("setUnits Complete");
+  // }
+
+  // // Verify that gameState is set to "gameStart"
+  // assertEquals("gameStart", game.gameState);
+  // }
 
 }

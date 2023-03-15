@@ -47,4 +47,5 @@ public abstract class PlacementRuleChecker {
         // }
         return null;
     }
+
 }
