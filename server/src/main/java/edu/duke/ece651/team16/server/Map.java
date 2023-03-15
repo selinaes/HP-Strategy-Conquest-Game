@@ -5,6 +5,7 @@ import java.util.*;
 public class Map {
   private int numPlayer;
   private ArrayList<String> ColorList;
+  private HashMap<String, List<Territory>> map;
 
   /**
    * constructor of the map
@@ -39,6 +40,7 @@ public class Map {
     blueTerritory.add(blue);
     basicMap.put("red", redTerritory);
     basicMap.put("blue", blueTerritory);
+    this.map = basicMap;
     return basicMap;
   }
 
@@ -103,6 +105,7 @@ public class Map {
         dukemap.put(colors.get(i), new ArrayList<>(territories));
       }
     }
+    this.map = dukemap;
     return dukemap;
   }
 
@@ -113,5 +116,9 @@ public class Map {
    **/
   public ArrayList<String> getColorList() {
     return ColorList;
+  }
+
+  public HashMap<String, List<Territory>> getMap() {
+    return map;
   }
 }

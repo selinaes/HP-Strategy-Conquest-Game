@@ -13,7 +13,7 @@ public class Game {
     protected List<Player> players;
     private int numPlayer;
     private List<String> colors;
-    private HashMap<String, List<Territory>> defaultMap;
+    private Map defaultMap;
     private List<Connection> allConnections;
     private String gameState; // setNumPlayer, setPlayerColor, setUnits, gameStart
     private int readyPlayer;
@@ -27,9 +27,9 @@ public class Game {
     public Game(int unitsPerPlayer) {
         this.numPlayer = 2;
         this.players = new ArrayList<Player>();
-        Map map = new Map(numPlayer);
-        this.defaultMap = map.createBasicMap();
-        this.colors = map.getColorList();
+        this.defaultMap = new Map(numPlayer);
+        defaultMap.createBasicMap();
+        this.colors = defaultMap.getColorList();
         this.allConnections = new ArrayList<Connection>();
         this.gameState = "setNumPlayer";
         this.unitsPerPlayer = unitsPerPlayer;
@@ -63,7 +63,7 @@ public class Game {
             sendInitialMap(connection, to_send_initial);
 
             String color = chooseColor(connection);
-            Player p = new Player(color, connection, defaultMap.get(color), this.unitsPerPlayer);
+            Player p = new Player(color, connection, defaultMap.getMap().get(color), this.unitsPerPlayer);
             addPlayer(p);
 
             assignUnits(p, connection);
@@ -127,7 +127,7 @@ public class Game {
 
         for (String color : colors) {
             ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-            for (Territory t : defaultMap.get(color)) {
+            for (Territory t : defaultMap.getMap().get(color)) {
                 HashMap<String, String> entryMap = new HashMap<String, String>();
                 entryMap.put("TerritoryName", t.getName());
                 entryMap.put("Neighbors", t.getNeighborsNames());
@@ -165,8 +165,6 @@ public class Game {
         String jsonString = objectMapper.writeValueAsString(to_send);
         player.getConnection().send(jsonString);
     }
-
-
 
     // /*
     // * Close all connections to client
@@ -263,9 +261,9 @@ public class Game {
      * @param int numOfPlayers
      */
     public void initializeMap(int numOfPlayers) {
-        Map map = new Map(numOfPlayers);
-        this.defaultMap = map.createDukeMap();
-        this.colors = map.getColorList();
+        this.defaultMap = new Map(numOfPlayers);
+        defaultMap.createDukeMap();
+        this.colors = defaultMap.getColorList();
     }
 
     /**
@@ -337,9 +335,9 @@ public class Game {
     }
 
     /*
-        * Form the entry string contains choices of A(ttack), M(ove), D(one)
-        * 
-        */
+     * Form the entry string contains choices of A(ttack), M(ove), D(one)
+     * 
+     */
     public String formEntry(Player p) {
         StringBuilder entry = new StringBuilder("");
         String header = "You are the " + p.getColor() + " player, what would you like to do?";
@@ -348,6 +346,7 @@ public class Game {
         entry.append(body);
         return entry.toString();
     }
+
     /**
      * /* set number of players
      * /* @param int num

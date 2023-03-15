@@ -7,7 +7,7 @@ public abstract class Order {
     protected Player player;
     protected Map gameMap;
 
-    public Order(Territory from, Territory to, int numUnits, Player player, Map gameMap){
+    public Order(Territory from, Territory to, int numUnits, Player player, Map gameMap) {
         this.from = from;
         this.to = to;
         this.numUnits = numUnits;
@@ -15,18 +15,11 @@ public abstract class Order {
         this.gameMap = gameMap;
     }
 
-    public boolean tryMove(){
-        if (from.getOwner() != player) {
-            return false;
-        }
-        if (from.getUnits().size() < numUnits) {
-            return false;
-        }
-        
+    public boolean tryMove() {
         return true;
     }
 
-    public Player getPlayer(){
+    public Player getPlayer() {
         return player;
     };
 

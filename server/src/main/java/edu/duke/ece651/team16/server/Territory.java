@@ -29,6 +29,17 @@ public class Territory {
     return this.units;
   }
 
+  // Return units that belong to a certain player and alive
+  public ArrayList<Unit> getAliveUnitsFor(Player player) {
+    ArrayList<Unit> result = new ArrayList<>();
+    for (Unit u : this.units) {
+      if (u.getOwner() == player && u.getAlive() == true) {
+        result.add(u);
+      }
+    }
+    return result;
+  }
+
   /*
    * Add units to the territory in the placement
    * The input unit's owner name is ensured to be the same as territory's owner
