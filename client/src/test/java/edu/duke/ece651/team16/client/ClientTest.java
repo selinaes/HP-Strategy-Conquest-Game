@@ -3,6 +3,9 @@ package edu.duke.ece651.team16.client;
 import org.junit.jupiter.api.Test;
 import java.lang.reflect.Field;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import java.io.IOException;
@@ -175,10 +178,6 @@ public class ClientTest {
     Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
     socketReceiveField.setAccessible(true);
     BufferedReader mockReader = mock(BufferedReader.class);
-    // when(mockReader.readLine()).thenReturn("Valid");
-    // socketReceiveField.set(client, mockReader);
-
-    // client.displayEntry();
 
     String jsonString = "{\"Entry\":\"a\"}";
     when(mockReader.readLine()).thenReturn(jsonString);
@@ -398,5 +397,27 @@ public class ClientTest {
     client.run();
 
     client.close();
+  }
+
+  @Test
+  public void testCheckMoveInputFormat() throws IOException {
+    String input1 = "A, B, 5"; // valid input
+    String input2 = "A, B"; // invalid input (not enough arguments)
+    String input4 = "A, B, x"; // invalid input (third argument contains letters)
+
+    Socket mockSocket = makeMockSocket();
+    BufferedReader inputSource = makeInputSource("input");
+    PrintStream out = makeOut();
+
+    Client client = new Client(mockSocket, inputSource, out);
+
+    // Test valid input
+    assertTrue(client.checkMoveInputFormat(input1));
+
+    // Test invalid input (not enough arguments)
+    assertFalse(client.checkMoveInputFormat(input2));
+
+    // Test invalid input (third argument contains letters)
+    assertFalse(client.checkMoveInputFormat(input4));
   }
 }

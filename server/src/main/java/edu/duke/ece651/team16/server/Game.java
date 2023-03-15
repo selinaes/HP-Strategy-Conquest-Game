@@ -54,14 +54,10 @@ public class Game {
      * @param int    numClients: number of clients
      */
     public void doPlacementPhase(Socket client_socket, int numClients) {
-        // System.out.println(numClients);
-        // connect to new client, add serverside socket to connection obj
         Connection connection = new Connection(client_socket);
         allConnections.add(connection);
         try {
             chooseNumOfPlayers(connection, numClients);// gameState = setNumPlayer
-            // System.out.println("Set numplayer to " + numPlayer);
-            // ask choose color, add new player to server
             while (true) {
                 synchronized (this) {
                     if (gameState.equals("setPlayerColor")) {
@@ -79,7 +75,6 @@ public class Game {
             addPlayer(p);
 
             assignUnits(p, connection);
-            // send map to client
             while (true) {
                 synchronized (this) {
                     if (gameState.equals("gameStart")) {
@@ -87,7 +82,6 @@ public class Game {
                     }
                 }
             }
-            // System.out.println("gamestate is gameStart");
             HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
             sendMap(p, to_send);
             sendEntry(p);
@@ -279,66 +273,112 @@ public class Game {
         this.colors = map.getColorList();
     }
 
+    // public boolean checkterritoryName()
+
+    // /**
+    // * Prompt the player to assign all units to territories
+    // *
+    // */
+    // public void assignUnits(Player p, Connection connection) throws IOException {
+    // // send all units to the player
+    // // breaks when all units are assigned and the connection receives "done"
+    // // System.out.println("p.unplacedUnits(): " +
+    // // Integer.toString(p.unplacedUnits()));
+    // while (p.unplacedUnits() > 0) {
+    // // step 1: get the territory the player want to place unit on
+    // String msg_territory = "You have " + Integer.toString(p.unplacedUnits())
+    // + " units left. If you want to finish placement, enter done. Otherwise,
+    // choose a territory to assign units to. Please enter the territory name: ";
+    // connection.send(msg_territory);
+    // // System.out.println("Waiting for player to choose a territory to assign
+    // // units
+    // // to");
+    // String territoryName = connection.recv();
+    // // System.out.println("TerritoryName: " + territoryName);
+    // if (territoryName.equals("done")) {
+    // break;
+    // }
+    // if (!p.getTerritoryNames().contains(territoryName)) {
+    // connection.send("Invalid territory name");
+    // assignUnits(p, connection);
+    // return;
+    // }
+    // // System.out.println("Valid territory name");
+    // connection.send("Valid territory name");
+
+    // // step 2: get the unit number the player want to place
+    // String msg_amount = "You have " + Integer.toString(p.unplacedUnits())
+    // + " units left. If you want to finish placement, enter done. Otherwise, how
+    // many units do you want to assign to "
+    // + territoryName + "? Please enter a number: ";
+    // connection.send(msg_amount);
+    // // System.out.println("Waiting for player to choose a number of units to
+    // // assign
+    // // to " + territoryName);
+    // String num = connection.recv();
+    // try {
+    // int numOfUnits = Integer.parseInt(num);
+    // if (numOfUnits < 0 || numOfUnits > p.unplacedUnits()) {
+    // connection.send("Invalid number of units");
+    // assignUnits(p, connection);
+    // return;
+    // }
+    // // System.out.println("Valid number of units");
+    // connection.send("Valid number of units");
+    // p.placeUnitsSameTerritory(territoryName, numOfUnits);
+    // } catch (NumberFormatException e) {
+    // connection.send("Invalid number of units");
+    // assignUnits(p, connection);
+    // return;
+    // }
+
+    // }
+    // // System.out.println("Finished assigning units");
+    // connection.send("finished placement");
+    // synchronized (this) {
+    // ++this.readyPlayer;
+    // if (readyPlayer == numPlayer) {
+    // System.out.println(allConnections.size());
+    // for (Connection c : allConnections) {
+    // c.send("setUnits Complete");
+    // }
+    // this.gameState = "gameStart";
+    // }
+    // }
+    // }
+
     /**
      * Prompt the player to assign all units to territories
      * 
      */
     public void assignUnits(Player p, Connection connection) throws IOException {
-        // send all units to the player
-        // breaks when all units are assigned and the connection receives "done"
-        // System.out.println("p.unplacedUnits(): " +
-        // Integer.toString(p.unplacedUnits()));
         while (p.unplacedUnits() > 0) {
-            // step 1: get the territory the player want to place unit on
-            String msg_territory = "You have " + Integer.toString(p.unplacedUnits())
-                    + " units left. If you want to finish placement, enter done. Otherwise, choose a territory to assign units to. Please enter the territory name: ";
-            connection.send(msg_territory);
-            // System.out.println("Waiting for player to choose a territory to assign units
-            // to");
+            promptTerritory(p, connection);
             String territoryName = connection.recv();
-            // System.out.println("TerritoryName: " + territoryName);
             if (territoryName.equals("done")) {
                 break;
             }
-            if (!p.getTerritoryNames().contains(territoryName)) {
-                connection.send("Invalid territory name");
-                assignUnits(p, connection);
+            if (!isValidTerritory(p, territoryName, connection)) {
                 return;
             }
-            // System.out.println("Valid territory name");
-            connection.send("Valid territory name");
 
-            // step 2: get the unit number the player want to place
-            String msg_amount = "You have " + Integer.toString(p.unplacedUnits())
-                    + " units left. If you want to finish placement, enter done. Otherwise, how many units do you want to assign to "
-                    + territoryName + "? Please enter a number: ";
-            connection.send(msg_amount);
-            // System.out.println("Waiting for player to choose a number of units to assign
-            // to " + territoryName);
+            promptUnitNumber(p, territoryName, connection);
             String num = connection.recv();
-            try {
-                int numOfUnits = Integer.parseInt(num);
-                if (numOfUnits < 0 || numOfUnits > p.unplacedUnits()) {
-                    connection.send("Invalid number of units");
-                    assignUnits(p, connection);
-                    return;
-                }
-                // System.out.println("Valid number of units");
-                connection.send("Valid number of units");
-                p.placeUnitsSameTerritory(territoryName, numOfUnits);
-            } catch (NumberFormatException e) {
-                connection.send("Invalid number of units");
-                assignUnits(p, connection);
+            if (!isValidUnitNumber(p, territoryName, num, connection)) {
                 return;
             }
 
+            int numOfUnits = Integer.parseInt(num);
+            p.placeUnitsSameTerritory(territoryName, numOfUnits);
         }
-        // System.out.println("Finished assigning units");
+        notifyAllPlayers(connection);
+    }
+
+    private void notifyAllPlayers(Connection connection) throws IOException {
         connection.send("finished placement");
         synchronized (this) {
             ++this.readyPlayer;
             if (readyPlayer == numPlayer) {
-                System.out.println(allConnections.size());
                 for (Connection c : allConnections) {
                     c.send("setUnits Complete");
                 }
@@ -347,9 +387,131 @@ public class Game {
         }
     }
 
+    private void promptTerritory(Player p, Connection connection) throws IOException {
+        String msg_territory = "You have " + Integer.toString(p.unplacedUnits())
+                + " units left. If you want to finish placement, enter done. Otherwise, choose a territory to assign units to. Please enter the territory name: ";
+        connection.send(msg_territory);
+    }
+
+    private boolean isValidTerritory(Player p, String territoryName, Connection connection) throws IOException {
+        if (!p.getTerritoryNames().contains(territoryName)) {
+            connection.send("Invalid territory name");
+            assignUnits(p, connection);
+            return false;
+        }
+        connection.send("Valid territory name");
+        return true;
+    }
+
+    private void promptUnitNumber(Player p, String territoryName, Connection connection) throws IOException {
+        String msg_amount = "You have " + Integer.toString(p.unplacedUnits())
+                + " units left. If you want to finish placement, enter done. Otherwise, how many units do you want to assign to "
+                + territoryName + "? Please enter a number: ";
+        connection.send(msg_amount);
+    }
+
+    private boolean isValidUnitNumber(Player p, String territoryName, String num, Connection connection)
+            throws IOException {
+        try {
+            int numOfUnits = Integer.parseInt(num);
+            if (numOfUnits < 0 || numOfUnits > p.unplacedUnits()) {
+                connection.send("Invalid number of units");
+                assignUnits(p, connection);
+                return false;
+            }
+            connection.send("Valid number of units");
+            return true;
+        } catch (NumberFormatException e) {
+            connection.send("Invalid number of units");
+            assignUnits(p, connection);
+            return false;
+        }
+    }
+
+    // public void assignUnits(Player p, Connection connection) throws IOException {
+    // // send all units to the player
+    // // breaks when all units are assigned and the connection receives "done"
+    // while (p.unplacedUnits() > 0) {
+    // String territoryName = getTerritoryName(connection, p);
+    // if (territoryName == null) {
+    // return;
+    // }
+    // if (territoryName.equals("Invalid Territory Name")) {
+    // assignUnits(p, connection);
+    // return;
+    // }
+
+    // int numOfUnits = getNumOfUnits(connection, p, territoryName);
+    // if (numOfUnits == -1) {
+    // return;
+    // }
+
+    // p.placeUnitsSameTerritory(territoryName, numOfUnits);
+    // }
+
+    // notifyAllPlayers(connection);
+    // }
+
+    // private String getTerritoryName(Connection connection, Player p) throws
+    // IOException {
+    // String msg_territory = "You have " + Integer.toString(p.unplacedUnits())
+    // + " units left. If you want to finish placement, enter done. Otherwise,
+    // choose a territory to assign units to. Please enter the territory name: ";
+    // connection.send(msg_territory);
+    // String territoryName = connection.recv();
+    // if (territoryName.equals("done")) {
+    // return null;
+    // }
+    // if (!p.getTerritoryNames().contains(territoryName)) {
+    // connection.send("Invalid territory name");
+    // // assignUnits(p, connection);
+    // return "Invalid Territory Name";
+    // }
+    // connection.send("Valid territory name");
+    // return territoryName;
+    // }
+
+    // private int getNumOfUnits(Connection connection, Player p, String
+    // territoryName) throws IOException {
+    // String msg_amount = "You have " + Integer.toString(p.unplacedUnits())
+    // + " units left. If you want to finish placement, enter done. Otherwise, how
+    // many units do you want to assign to "
+    // + territoryName + "? Please enter a number: ";
+    // connection.send(msg_amount);
+    // String num = connection.recv();
+    // try {
+    // int numOfUnits = Integer.parseInt(num);
+    // if (numOfUnits < 0 || numOfUnits > p.unplacedUnits()) {
+    // connection.send("Invalid number of units");
+    // assignUnits(p, connection);
+    // return -1;
+    // }
+    // connection.send("Valid number of units");
+    // return numOfUnits;
+    // } catch (NumberFormatException e) {
+    // connection.send("Invalid number of units");
+    // assignUnits(p, connection);
+    // return -1;
+    // }
+    // }
+
+    // private void notifyAllPlayers(Connection connection) throws IOException {
+    // connection.send("finished placement");
+    // synchronized (this) {
+    // ++this.readyPlayer;
+    // if (readyPlayer == numPlayer) {
+    // for (Connection c : allConnections) {
+    // c.send("setUnits Complete");
+    // }
+    // this.gameState = "gameStart";
+    // }
+    // }
+    // }
+
     /**
-     * /* set number of players
-     * /* @param int num
+     * set number of players
+     * 
+     * @param int num
      */
     public void setNumPlayer(int num) {
         this.numPlayer = num;
@@ -378,18 +540,49 @@ public class Game {
     public void sendEntry(Player p) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         HashMap<String, String> to_send_entry = formEntry(p);
-
         // convert the HashMap to a JSON object
         String jsonString = objectMapper.writeValueAsString(to_send_entry);
-        // System.out.println(jsonString);
-        // conn.send(jsonString);
-
         p.getConnection().send(jsonString);
     }
 
-    // public void doAction(Connection connection){
-    // String action = connection.recv();
-    // if(action != "M" || action != "A" || action !=)
-    // }
+    /*
+     * Do Action phase of the game
+     * 
+     * @param Player p
+     */
+    public void doAction(Player p) throws JsonProcessingException, IOException {
+        // choose action step. Client side checked. No reprompt
+        sendEntry(p);
+        String action = p.getConnection().recv().toLowerCase();
+        // perform action, invalid reprompt
+        boolean done = false;
+        while (!done) {
+            if (action.equals("m")) { // move
+                doOneMove(p);
+            } else if (action.equals("a")) { // attack
+                p.getConnection()
+                        .send("Please enter <Territory to attack from, Territory toattack, number of units>(e.g. T1, T2, 2)");
+            } else { // done
+                done = true;
+                p.getConnection().send("Finished your turn. Please wait for other players to finish their actions.");
+                return;
+            }
+            doAction(p);
+        }
+    }
+
+    /*
+     * Do one move in the move phase
+     * 
+     * @param Player p
+     */
+    public void doOneMove(Player p) {
+        p.getConnection().send("Please enter <Territory to move from> <Territory to move to> <number of units>");
+        // call moveOrder
+
+        // if valid, send("valid")
+
+        // if invalid, send("reson"), then recurse doOneMove()
+    }
 
 }
