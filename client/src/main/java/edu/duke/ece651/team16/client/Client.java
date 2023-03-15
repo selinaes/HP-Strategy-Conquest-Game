@@ -57,6 +57,7 @@ public class Client {
         waitEveryoneDone("setUnits Complete");
         // out.println("out of wait");
         displayMap();
+        displayEntry();
 
         // step2: Init Game setting: Territory, Units
 
@@ -208,6 +209,22 @@ public class Client {
             }
             out.println();
         }
+    }
+
+    public void displayEntry() throws IOException {
+        String to_display = recvMsg();
+
+        // convert jsonString to jsonobject
+        ObjectMapper objectMapper = new ObjectMapper();
+        HashMap<String, String> input_entry;
+        try {
+            input_entry = objectMapper.readValue(to_display, HashMap.class);
+        } catch (JsonProcessingException e) {
+            System.out.println("Failed to convert json string to json object.");
+            return;
+        }
+        String entry_display = input_entry.get("Entry");
+        out.println(entry_display);
     }
 
     /**

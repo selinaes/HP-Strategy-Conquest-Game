@@ -10,7 +10,7 @@ public class Player {
     private String color;
     private Connection connection;
     private int numUnits;
-    private final PlacementRuleChecker placementRuleChecker;
+    private final AssignUnitRuleChecker placementchecker;
 
     /**
      * Constructor of the player
@@ -24,7 +24,7 @@ public class Player {
         this.Territories = Territories;
         this.numUnits = numUnits;
         this.units = new ArrayList<>();
-        this.placementRuleChecker = new AssignUnitRuleChecker(null);
+        this.placementchecker = new AssignUnitRuleChecker();
         for (int i = 0; i < numUnits; i++) {
             this.units.add(new BasicUnit(this, null, false, i));
         }
@@ -72,13 +72,13 @@ public class Player {
      * Place the units in the same territory
      */
     public String placeUnitsSameTerritory(String t_name, int num) {
-        if (placementRuleChecker.checkPlacement(t_name, this, num) == null) {
+        if (placementchecker.checkMyRule(t_name, this, num) == null) {
             System.out.println("Territory name: " + t_name);
             Territory t = Territories.get(getTerritoryNames().indexOf(t_name));
             Unit[] units = findNextUnplacedUnits(num);
             t.tryAddUnits(units);
         }
-        return placementRuleChecker.checkPlacement(t_name, this, num);
+        return placementchecker.checkMyRule(t_name, this, num);
 
         // for (int i = 0; i < num; i++) {
         // Unit u = findNextUnplacedUnit();
