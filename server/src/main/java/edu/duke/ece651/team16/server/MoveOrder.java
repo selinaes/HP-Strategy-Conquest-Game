@@ -1,5 +1,7 @@
 package edu.duke.ece651.team16.server;
 
+import java.util.ArrayList;
+
 public class MoveOrder extends Order {
 
     // shortest path
@@ -10,12 +12,23 @@ public class MoveOrder extends Order {
         // this.validPath = validPath(gameMap);
     }
 
-    public boolean tryMove() {
+    /**
+     * try to move units from fromTerritory to toTerritory
+     * 
+     * @return null if the move is valid, otherwise return the error message
+     */
+    public String tryMove() {
         OrderRuleChecker checker = new MoveInputRuleChecker(new MovePathRuleChecker(null));
-        if (!checker.check(from, to, numUnits, player, gameMap)) {
-            return false;
+        String moveProblem = checker.checkOrder(from, to, player, numUnits, gameMap);
+        if (moveProblem == null) {
+            // remove units from fromTerritory
+            ArrayList<Unit> moveUnits = from.tryRemoveUnits(numUnits, player);
+            // add units to toTerritory
+            to.tryAddUnits(moveUnits);
+            return null;
+
         }
-        return true;
+        return moveProblem;
     }
 
 }

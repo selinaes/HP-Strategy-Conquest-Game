@@ -6,6 +6,7 @@ public abstract class Order {
     protected int numUnits;
     protected Player player;
     protected Map gameMap;
+    // protected OrderRuleChecker OrderRuleChecker;
 
     public Order(Territory from, Territory to, int numUnits, Player player, Map gameMap) {
         this.from = from;
@@ -13,10 +14,7 @@ public abstract class Order {
         this.numUnits = numUnits;
         this.player = player;
         this.gameMap = gameMap;
-    }
-
-    public boolean tryMove() {
-        return true;
+        // this.OrderRuleChecker = new MoveInputRuleChecker(new MovePathRuleChecker());
     }
 
     public Player getPlayer() {

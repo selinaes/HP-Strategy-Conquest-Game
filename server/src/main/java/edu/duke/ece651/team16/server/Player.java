@@ -21,7 +21,8 @@ public class Player {
     Player(String color, Connection connection, List<Territory> Territories, int numUnits) {
         this.color = color;
         this.connection = connection;
-        this.Territories = Territories;
+        this.Territories = new ArrayList<>();
+        addTerritories(Territories);
         this.numUnits = numUnits;
         this.units = new ArrayList<>();
         this.placementRuleChecker = new AssignUnitRuleChecker(null);
@@ -51,14 +52,14 @@ public class Player {
      * 
      * @return the unit
      */
-    public Unit[] findNextUnplacedUnits(int amount) {
+    public ArrayList<Unit> findNextUnplacedUnits(int amount) {
         int count = 0;
-        Unit[] unplacedUnits = new Unit[amount];
+        ArrayList<Unit> unplacedUnits = new ArrayList<>();
         for (Unit u : this.units) {
             if (u.getwhere() != null) {
                 continue;
             } else {
-                unplacedUnits[count] = u;
+                unplacedUnits.add(u);
                 count++;
                 if (count >= amount) {
                     break;
@@ -75,7 +76,7 @@ public class Player {
         if (placementRuleChecker.checkPlacement(t_name, this, num) == null) {
             System.out.println("Territory name: " + t_name);
             Territory t = Territories.get(getTerritoryNames().indexOf(t_name));
-            Unit[] units = findNextUnplacedUnits(num);
+            ArrayList<Unit> units = findNextUnplacedUnits(num);
             t.tryAddUnits(units);
         }
         return placementRuleChecker.checkPlacement(t_name, this, num);
@@ -114,7 +115,7 @@ public class Player {
      * 
      * @param territory
      */
-    public void addTerritories(Territory... territory) {
+    public void addTerritories(List<Territory> territory) {
         for (Territory t : territory) {
             this.Territories.add(t);
             t.setOwner(this);

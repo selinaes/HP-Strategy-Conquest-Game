@@ -40,7 +40,7 @@ public class Map {
     blueTerritory.add(blue);
     basicMap.put("red", redTerritory);
     basicMap.put("blue", blueTerritory);
-    this.map = basicMap;
+    setMap(basicMap);
     return basicMap;
   }
 
@@ -105,7 +105,7 @@ public class Map {
         dukemap.put(colors.get(i), new ArrayList<>(territories));
       }
     }
-    this.map = dukemap;
+    setMap(dukemap);
     return dukemap;
   }
 
@@ -120,5 +120,9 @@ public class Map {
 
   public HashMap<String, List<Territory>> getMap() {
     return map;
+  }
+
+  public void setMap(HashMap<String, List<Territory>> map) {
+    this.map = map;
   }
 }

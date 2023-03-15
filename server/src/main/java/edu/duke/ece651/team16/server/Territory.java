@@ -49,7 +49,7 @@ public class Territory {
    * 
    * @param unit
    */
-  public void tryAddUnits(Unit... units) {
+  public void tryAddUnits(ArrayList<Unit> units) {
     // System.out.println("try add units");
     // System.out.println("Territory: " + unit.getwhere().getName());
     // System.out.println("Owner: " + unit.getOwner());
@@ -61,6 +61,25 @@ public class Territory {
     // this.units.add(unit);
     // if (unit.getwhere() == null && this.owner == unit.getOwner()){
 
+  }
+
+  /**
+   * Remove units from the territory
+   * 
+   * @param num    number of units to be removed
+   * @param player the player who owns the units
+   * @return the removed units
+   */
+  public ArrayList<Unit> tryRemoveUnits(int num, Player player) {
+    ArrayList<Unit> result = new ArrayList<>();
+    ArrayList<Unit> aliveUnitForP = this.getAliveUnitsFor(player);
+    for (int i = 0; i < num; i++) {
+      Unit u = aliveUnitForP.get(i);
+      u.setwhere(null);
+      result.add(u);
+      this.units.remove(u);
+    }
+    return result;
   }
 
   /*

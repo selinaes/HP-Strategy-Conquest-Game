@@ -1,6 +1,10 @@
 package edu.duke.ece651.team16.server;
 
 public class MoveInputRuleChecker extends OrderRuleChecker {
+    public MoveInputRuleChecker(OrderRuleChecker next) {
+        super(next);
+    }
+
     @Override
     public String checkMyRule(Territory from, Territory to, Player player, int numUnits, Map map) {
         if (from.getOwner() != player) {
@@ -16,7 +20,4 @@ public class MoveInputRuleChecker extends OrderRuleChecker {
         return null;
     }
 
-    public MoveInputRuleChecker(OrderRuleChecker next) {
-        super(next);
-    }
 }
