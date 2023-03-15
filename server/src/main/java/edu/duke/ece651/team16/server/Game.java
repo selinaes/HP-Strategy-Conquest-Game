@@ -15,7 +15,7 @@ public class Game {
     private List<String> colors;
     private HashMap<String, List<Territory>> defaultMap;
     private List<Connection> allConnections;
-    private String gameState; // notStart, setNumPlayer, setPlayerColor, setUnits, gameStart
+    private String gameState; // setNumPlayer, setPlayerColor, setUnits, gameStart
     private int readyPlayer;
     private int unitsPerPlayer;
 
@@ -31,7 +31,7 @@ public class Game {
         this.defaultMap = map.createBasicMap();
         this.colors = map.getColorList();
         this.allConnections = new ArrayList<Connection>();
-        this.gameState = "notStart";
+        this.gameState = "setNumPlayer";
         this.unitsPerPlayer = unitsPerPlayer;
         this.readyPlayer = 0;
     }
@@ -45,12 +45,11 @@ public class Game {
     public void createPlayer(Socket client_socket, int numClients) {
         // System.out.println(numClients);
         // connect to new client, add serverside socket to connection obj
+        Connection connection = new Connection(client_socket);
+        allConnections.add(connection);
         try {
-            Connection connection = new Connection(client_socket);
-            allConnections.add(connection);
-            chooseNumOfPlayers(connection, numClients);
+            chooseNumOfPlayers(connection, numClients);// gameState = setNumPlayer
             // System.out.println("Set numplayer to " + numPlayer);
-
             // ask choose color, add new player to server
             while (true) {
                 synchronized (this) {
@@ -61,11 +60,8 @@ public class Game {
             }
 
             HashMap<String, ArrayList<HashMap<String, String>>> to_send_initial = formInitialMap();
-            try {
-                sendInitialMap(connection, to_send_initial);
-            } catch (JsonProcessingException e) {
-                System.out.println("JsonProcessingException");
-            }
+            sendInitialMap(connection, to_send_initial);
+
             String color = chooseColor(connection);
             Player p = new Player(color, connection, defaultMap.get(color), this.unitsPerPlayer);
             addPlayer(p);
@@ -81,11 +77,7 @@ public class Game {
             }
             // System.out.println("gamestate is gameStart");
             HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
-            try {
-                sendMap(p, to_send);
-            } catch (JsonProcessingException e) {
-                System.out.println("JsonProcessingException");
-            }
+            sendMap(p, to_send);
 
         } catch (IOException ioe) {
             // in something real, we would want to handle
@@ -217,14 +209,13 @@ public class Game {
      * @param Connection connection
      */
     public void chooseNumOfPlayers(Connection connection, int numClients) throws IOException {
-        synchronized (this) {
-                this.gameState = "setNumPlayer";
-            }
+        // synchronized (this) {
+        //         this.gameState = "setNumPlayer";
+        //     }
         if (numClients == 1) {
             connection.send(
                     "You are the first player! Please set the number of players in this game(Valid player number: 2-4): ");
-            String num = connection.recv();
-            
+            String num = connection.recv();  
             try{
                 int numOfPlayers = Integer.parseInt(num);
                 if (numOfPlayers < 2 || numOfPlayers > 4) {
@@ -248,7 +239,6 @@ public class Game {
                 this.gameState = "setPlayerColor"; // now out of setNumPlayer stage
                 initializeMap(this.numPlayer);
             }
-
         } else {
             connection.send("Not the first player. Please wait for the first player to set player number.");
         }
