@@ -236,6 +236,7 @@ public class ClientTest {
   public void test_waitEveryoneDone() throws IOException, Exception {
     Socket mockSocket = makeMockSocket();
     BufferedReader inputSource = mock(BufferedReader.class);
+    
     PrintStream out = makeOut();
 
     Client client = new Client(mockSocket, inputSource, out);
