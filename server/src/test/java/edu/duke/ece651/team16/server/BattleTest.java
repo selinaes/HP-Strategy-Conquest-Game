@@ -20,6 +20,7 @@ public class BattleTest {
     BasicUnit unit = new BasicUnit(p1, mock(Territory.class), true, 0);
     units.add(unit);
     battle.addGroup(units);
+    assertEquals(1, battle.getParties().size());
   }
 
   @Test
@@ -94,7 +95,7 @@ public class BattleTest {
     partyB.add(unit3);
 
     battle.addGroup(partyB);
-    int i = 15;
+    int i = 50;
     while (i > 0) {
       Player winner = battle.resolveBattle();
       if (winner.equals(p2)) {

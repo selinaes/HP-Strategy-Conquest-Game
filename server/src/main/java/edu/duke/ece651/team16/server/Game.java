@@ -531,11 +531,11 @@ public class Game {
     /**
      * After one turn of moving and attacking, resolve battle for each territory
      */
-    // public void worldwar() {
-    //     for (String playercolor : defaultMap.getMap().keySet()) {
-    //         for (Territory territory : defaultMap.getMap().get(playercolor)) {
-    //             territory.resolveBattle();
-    //         }
-    //     }
-    // }
+    public void worldwar() {
+        for (String playercolor : defaultMap.getMap().keySet()) {
+            for (Territory territory : defaultMap.getMap().get(playercolor)) {
+                territory.doBattle();
+            }
+        }
+    }
 }
