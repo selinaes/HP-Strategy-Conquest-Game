@@ -23,7 +23,7 @@ public class Player {
         this.connection = connection;
         this.Territories = new ArrayList<>();
         addTerritories(Territories);
-        this.numUnits = numUnits;
+        this.numUnits = numUnits; // All owned units including dead and unplaced
         this.units = new ArrayList<>();
         this.placementchecker = new AssignUnitRuleChecker();
         for (int i = 0; i < numUnits; i++) {
@@ -134,5 +134,16 @@ public class Player {
      */
     public Connection getConnection() {
         return this.connection;
+    }
+
+    /**
+     * Generate new Units on each territory each round
+     */
+    public void generateNewUnit(Territory t) {
+        Unit newUnit = new BasicUnit(this, t, false, numUnits++);
+        ArrayList<Unit> newGenerated = new ArrayList<>();
+        newGenerated.add(newUnit);
+        t.tryAddUnits(newGenerated);
+        units.add(newUnit);
     }
 }

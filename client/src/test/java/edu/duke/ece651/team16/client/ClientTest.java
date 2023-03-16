@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import java.io.IOException;
@@ -185,6 +186,10 @@ public class ClientTest {
 
     client.displayEntry();
 
+    when(mockReader.readLine()).thenReturn("Valid");
+    socketReceiveField.set(client, mockReader);
+    client.displayEntry();
+
     client.close();
   }
 
@@ -244,7 +249,7 @@ public class ClientTest {
     Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
     socketReceiveField.setAccessible(true);
     BufferedReader mockReader = mock(BufferedReader.class);
-    when(mockReader.readLine()).thenReturn("Not Valid").thenReturn("Valid");
+    when(mockReader.readLine()).thenReturn("not valid").thenReturn("stage Complete");
     socketReceiveField.set(client, mockReader);
     client.waitEveryoneDone();
     client.close();
@@ -281,9 +286,11 @@ public class ClientTest {
     String s2 = "Valid territory name";
     String s3 = "Valid number of units";
     String s4 = "Other";
+    String s5 = "finished stage";
 
     Socket mockSocket = makeMockSocket();
-    String[] inputs = new String[] { "unitTest1", "unitTest2", "unitTest3", "unitTest4", "unitTest5",
+    String[] inputs = new String[] { "unitTest1", "unitTest2", "unitTest3",
+        "unitTest4", "unitTest5",
         "unitTest6" };
     String inputString = String.join("\n", inputs) + "\n";
     InputStream sysIn = new ByteArrayInputStream(inputString.getBytes());
@@ -295,7 +302,7 @@ public class ClientTest {
     Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
     socketReceiveField.setAccessible(true);
     BufferedReader mockReader = mock(BufferedReader.class);
-    when(mockReader.readLine()).thenReturn(s1);
+    when(mockReader.readLine()).thenReturn(s5);
     socketReceiveField.set(client, mockReader);
 
     client.playerAssignUnit();
@@ -352,6 +359,7 @@ public class ClientTest {
     String s1 = "finished placement";
     String s2 = "Valid number of units";
     String s3 = "Other";
+    String s4 = "finished stage";
     Socket mockSocket = makeMockSocket();
     BufferedReader inputSource = makeInputSource("input");
     PrintStream out = makeOut();
@@ -363,12 +371,12 @@ public class ClientTest {
     BufferedReader mockReader = mock(BufferedReader.class);
 
     // playerAssignUnits return True
-    when(mockReader.readLine()).thenReturn(s1);
+    when(mockReader.readLine()).thenReturn(s4);
     socketReceiveField.set(client, mockReader);
     client.playerAssignAllUnits();
 
     // playerAssignUnits return False and then retrn True
-    when(mockReader.readLine()).thenReturn(s3).thenReturn(s2).thenReturn(s1);
+    when(mockReader.readLine()).thenReturn(s3).thenReturn(s2).thenReturn(s4);
     socketReceiveField.set(client, mockReader);
     client.playerAssignAllUnits();
 
@@ -378,7 +386,7 @@ public class ClientTest {
   @Test
   public void test_run() throws IOException, Exception {
     Socket mockSocket = makeMockSocket();
-    String[] inputs = new String[] { "input1", "input2" };
+    String[] inputs = new String[] { "input1", "input2", "d" };
     String inputString = String.join("\n", inputs) + "\n";
     InputStream sysIn = new ByteArrayInputStream(inputString.getBytes());
     BufferedReader inputSource = new BufferedReader(new InputStreamReader(sysIn));
@@ -392,10 +400,11 @@ public class ClientTest {
     BufferedReader mockReader = mock(BufferedReader.class);
     when(mockReader.readLine()).thenReturn("playerChooseNum", "Valid")
         .thenReturn("stage Complete").thenReturn("displayInitialMap").thenReturn("playerChooseColor", "Valid")
-        .thenReturn("finished stage").thenReturn("stage Complete").thenReturn("displayMap");
+        .thenReturn("finished stage").thenReturn("stage Complete").thenReturn("displayMap").thenReturn("Map")
+        .thenReturn("finished stage").thenReturn("stage Complete");
     socketReceiveField.set(client, mockReader);
 
-    // client.run();
+    client.run();
 
     client.close();
   }
@@ -420,5 +429,46 @@ public class ClientTest {
 
     // Test invalid input (third argument contains letters)
     assertFalse(client.checkMoveInputFormat(input4));
+  }
+
+  @Test
+  public void test_playerOneAction() throws IOException, Exception {
+    Socket mockSocket = makeMockSocket();
+    BufferedReader inputSource = mock(BufferedReader.class);
+    when(inputSource.readLine())
+        .thenReturn(null).thenReturn("t, t", "t, t, 3", "Prompt, prompt, 3");
+    PrintStream out = makeOut();
+
+    Client client = new Client(mockSocket, inputSource, out);
+    Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
+    socketReceiveField.setAccessible(true);
+    BufferedReader mockReader = mock(BufferedReader.class);
+    when(mockReader.readLine()).thenReturn("Prompt").thenReturn("Not Valid").thenReturn("Valid");
+    socketReceiveField.set(client, mockReader);
+
+    client.playerOneAction();
+    client.close();
+  }
+
+  @Test
+  public void test_playerActionTurn() throws IOException, Exception {
+    Socket mockSocket = makeMockSocket();
+    BufferedReader inputSource = mock(BufferedReader.class);
+    when(inputSource.readLine()).thenReturn("s", "m", "Prompt, prompt, 3", "d", "d");
+    PrintStream out = makeOut();
+
+    Client client = new Client(mockSocket, inputSource, out);
+    Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
+    socketReceiveField.setAccessible(true);
+    BufferedReader mockReader = mock(BufferedReader.class);
+
+    String jsonString = "{\"Entry\":\"a\"}";
+    when(mockReader.readLine()).thenReturn(jsonString).thenReturn("recvMsg").thenReturn("Valid").thenReturn(jsonString)
+        .thenReturn("finished stage").thenReturn(jsonString).thenReturn("not finish");
+    socketReceiveField.set(client, mockReader);
+
+    client.playerActionTurn();
+    client.playerActionTurn();
+    client.close();
   }
 }
