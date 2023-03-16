@@ -57,8 +57,8 @@ public class Client {
         displayMap();
 
         // action phase
-        // playerActionTurn();
-        // waitEveryoneDone();
+        playerActionTurn();
+        waitEveryoneDone();
     }
 
     /**
