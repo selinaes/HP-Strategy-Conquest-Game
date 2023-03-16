@@ -529,7 +529,7 @@ public class Game {
     public void worldwar() {
         for (String playercolor : defaultMap.getMap().keySet()) {
             for (Territory territory : defaultMap.getMap().get(playercolor)) {
-                territory.resolveBattle();
+                territory.doBattle();
             }
         }
     }

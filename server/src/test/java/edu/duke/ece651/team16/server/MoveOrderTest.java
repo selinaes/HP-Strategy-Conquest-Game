@@ -23,7 +23,7 @@ public class MoveOrderTest {
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
     Map map = new Map(1);
     MoveOrder mo = new MoveOrder(t1, t2, 1, p1, map);
-    assertEquals(null, mo.tryMove());
+    assertEquals(null, mo.tryAction());
   }
 
   @Test
@@ -38,7 +38,7 @@ public class MoveOrderTest {
     Map map = new Map(1);
     MoveOrder mo = new MoveOrder(t1, t2, 1, p1, map);
     mo.getPlayer();
-    assertEquals("You do not have enough alive units in the from territory", mo.tryMove());
+    assertEquals("You do not have enough alive units in the from territory", mo.tryAction());
   }
 
 }

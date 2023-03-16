@@ -21,7 +21,7 @@ public class AttackOrderTest {
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
     Map map = new Map(1);
     AttackOrder at = new AttackOrder(t1, t2, 1, p1, map);
-    assertEquals(null, at.tryAttack());
+    assertEquals(null, at.tryAction());
   }
 
   @Test
@@ -38,7 +38,7 @@ public class AttackOrderTest {
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
     Map map = new Map(1);
     AttackOrder at = new AttackOrder(t1, t2, 1, p1, map);
-    assertEquals("You do own the to territory", at.tryAttack());
+    assertEquals("You do own the to territory", at.tryAction());
   }
 
 }
