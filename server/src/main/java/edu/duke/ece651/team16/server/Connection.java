@@ -62,7 +62,7 @@ public class Connection {
       // }
       catch (IOException e) {
         System.out.println("Failed to receive message.");
-        System.exit(1);
+        // System.exit(1);
       }
     }
     return ans;

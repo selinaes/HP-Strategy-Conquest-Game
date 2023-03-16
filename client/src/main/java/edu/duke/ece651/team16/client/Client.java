@@ -47,17 +47,18 @@ public class Client {
      * @throws IOException
      */
     public void run() throws IOException {
+        // placment phase
         playerChooseNum();
-        waitEveryoneDone("setNumPlayer Complete");
-        // out.println("out of wait");
+        waitEveryoneDone();
         displayInitialMap();
         playerChooseColor();
         playerAssignAllUnits();
-        waitEveryoneDone("setUnits Complete");
-        // out.println("out of wait");
+        waitEveryoneDone();
         displayMap();
 
+        // action phase
         playerActionTurn();
+        waitEveryoneDone();
     }
 
     /**
@@ -127,8 +128,9 @@ public class Client {
      * 
      * @throws IOException
      */
-    public void waitEveryoneDone(String expectPrompt) throws IOException {
+    public void waitEveryoneDone() throws IOException {
         // out.println("wait everyone done");
+        String expectPrompt = "stage Complete";
         String prompt = recvMsg();
         boolean done = false;
         while (!done) {
@@ -173,6 +175,11 @@ public class Client {
         }
     }
 
+    /**
+     * Display the initial map to the player
+     * 
+     * @throws IOException
+     */
     public void displayInitialMap() throws IOException {
         String jsonString = recvMsg();
 
@@ -204,6 +211,12 @@ public class Client {
         }
     }
 
+    /**
+     * Display actions for player
+     * 
+     * @throws IOException
+     * @return String of actions
+     */
     public String displayEntry() throws IOException {
         String to_display = recvMsg();
 
@@ -227,7 +240,6 @@ public class Client {
      */
     public void displayMap() throws IOException {
         String jsonString = recvMsg();
-
         // convert jsonString to jsonobject
         ObjectMapper objectMapper = new ObjectMapper();
         HashMap<String, ArrayList<HashMap<String, String>>> input_map;
@@ -291,7 +303,7 @@ public class Client {
 
     public boolean playerAssignUnit() throws IOException {
         String prompt = recvMsg();
-        if (prompt.equals("finished placement")) {
+        if (prompt.equals("finished stage")) {
             out.println("Finished Placement. Please wait for other players to place units.");
             return true;
         }
@@ -328,10 +340,8 @@ public class Client {
         while (true) {
             boolean finished = playerAssignUnit();
             if (finished) {
-                // out.println("Finished assigning units Clinet Side");
                 return;
             }
-            // prompt = recvMsg();
         }
     }
 
@@ -357,7 +367,10 @@ public class Client {
 
             if (clientInput.equals("d")) {
                 String msg = recvMsg();
-                out.println(msg);
+                if (msg.equals("finished stage")) {
+                    out.println("Finished 1 Turn of orders. Please wait for other players to issue orders.");
+                }
+                // out.println(msg);
                 break;
             }
             // perform 1 action, move or attack

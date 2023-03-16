@@ -14,7 +14,7 @@ public class Game {
     private List<String> colors;
     private Map defaultMap;
     private List<Connection> allConnections;
-    private String gameState; // setNumPlayer, setPlayerColor, setUnits, gameStart
+    private String gameState; // setNumPlayer, setPlayerColor, setUnits, gameStart, worldWar
     private int readyPlayer;
     private int unitsPerPlayer;
 
@@ -43,6 +43,13 @@ public class Game {
 
     public void doActionPhase(Player p) throws JsonProcessingException, IOException {
         doAction(p);
+        while (true) {
+            synchronized (this) {
+                if (gameState.equals("worldWar")) {
+                    break;
+                }
+            }
+        }
         // worldwar();
     }
 
@@ -69,9 +76,7 @@ public class Game {
             sendInitialMap(connection, to_send_initial);
 
             String color = chooseColor(connection);
-
             Player p = new Player(color, connection, defaultMap.getMap().get(color), this.unitsPerPlayer);
-
             addPlayer(p);
 
             assignUnits(p, connection);
@@ -84,7 +89,7 @@ public class Game {
             }
             HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
             sendMap(p, to_send);
-
+            readyPlayer = 0;
             return p;
 
         } catch (IOException ioe) {
@@ -243,7 +248,7 @@ public class Game {
             }
 
             for (Connection c : allConnections) {
-                c.send("setNumPlayer Complete");
+                c.send("stage Complete");
             }
             synchronized (this) {
                 this.gameState = "setPlayerColor"; // now out of setNumPlayer stage
@@ -301,7 +306,7 @@ public class Game {
             int numOfUnits = Integer.parseInt(num);
             p.placeUnitsSameTerritory(territoryName, numOfUnits);
         }
-        notifyAllPlayers(connection);
+        notifyAllPlayers(connection, "gameStart");
     }
 
     /**
@@ -310,15 +315,15 @@ public class Game {
      * @param Connection connection
      * @throws IOException
      */
-    public void notifyAllPlayers(Connection connection) throws IOException {
-        connection.send("finished placement");
+    public void notifyAllPlayers(Connection connection, String newStage) throws IOException {
+        connection.send("finished stage");
         synchronized (this) {
             ++this.readyPlayer;
             if (readyPlayer == numPlayer) {
                 for (Connection c : allConnections) {
-                    c.send("setUnits Complete");
+                    c.send("stage Complete");
                 }
-                this.gameState = "gameStart";
+                this.gameState = newStage;
             }
         }
     }
@@ -452,7 +457,7 @@ public class Game {
                 doOneAction(p, action);
             } else { // done
                 done = true;
-                p.getConnection().send("Finished your turn. Please wait for other players to finish their actions.");
+                notifyAllPlayers(p.getConnection(), "worldWar");
                 return done;
             }
             done = doAction(p);
@@ -526,11 +531,11 @@ public class Game {
     /**
      * After one turn of moving and attacking, resolve battle for each territory
      */
-    public void worldwar() {
-        for (String playercolor : defaultMap.getMap().keySet()) {
-            for (Territory territory : defaultMap.getMap().get(playercolor)) {
-                territory.resolveBattle();
-            }
-        }
-    }
+    // public void worldwar() {
+    //     for (String playercolor : defaultMap.getMap().keySet()) {
+    //         for (Territory territory : defaultMap.getMap().get(playercolor)) {
+    //             territory.resolveBattle();
+    //         }
+    //     }
+    // }
 }
