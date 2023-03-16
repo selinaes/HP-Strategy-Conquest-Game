@@ -56,8 +56,8 @@ public class Client {
         waitEveryoneDone("setUnits Complete");
         // out.println("out of wait");
         displayMap();
-        // displayEntry();
-        // playerDoAction();
+
+        playerActionTurn();
     }
 
     /**
@@ -348,7 +348,7 @@ public class Client {
             // choose action step. Client side check until valid, then send
             String choices = displayEntry();
             clientInput = readClientInput(choices).toLowerCase();
-            while (!clientInput.equals("m") || !clientInput.equals("a") || !clientInput.equals("d")) {
+            while (!clientInput.equals("m") && !clientInput.equals("a") && !clientInput.equals("d")) {
                 out.println("Invalid action");
                 out.println(choices);
                 clientInput = readClientInput(choices).toLowerCase();
@@ -377,7 +377,6 @@ public class Client {
                 // inside client, check correct method, send response, then re-receive
                 boolean correctFormat = false;
                 while (!correctFormat) {
-                    out.println(prompt);
                     clientInput = readClientInput(prompt);
                     if (checkMoveInputFormat(clientInput)) {
                         correctFormat = true;
@@ -388,9 +387,7 @@ public class Client {
                 sendResponse(clientInput);
                 prompt = recvMsg();
                 if (prompt.equals("Valid")) {
-                    // String playerNum = clientInput;
-                    // out.println("Successfully choose number of players: " + playerNum);
-                    out.println("Successfully registered valid order");
+                    out.println("Execute Action Successfully");
                     return;
                 } else {
                     out.println(prompt);

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.net.Socket;
 import java.net.ServerSocket;
+import java.util.HashMap;
 
 // import com.worklight.server.util.JSONUtils;
 
@@ -37,14 +38,14 @@ public class Game {
     }
 
     // gameFlow()
-    public void gameFlow(Socket client_socket, int numClients) {
-        doPlacementPhase(client_socket, numClients);
+    public void gameFlow(Socket client_socket, int numClients) throws JsonProcessingException, IOException {
+        Player p = doPlacementPhase(client_socket, numClients);
         // Action!
-        doActionPhase();
+        doActionPhase(p);
     }
 
-    public void doActionPhase() {
-        return;
+    public void doActionPhase(Player p) throws JsonProcessingException, IOException{
+        doAction(p);
     }
 
     /**
@@ -53,7 +54,7 @@ public class Game {
      * @param Socket client_socket: client socket
      * @param int    numClients: number of clients
      */
-    public void doPlacementPhase(Socket client_socket, int numClients) {
+    public Player doPlacementPhase(Socket client_socket, int numClients) {
         Connection connection = new Connection(client_socket);
         allConnections.add(connection);
         try {
@@ -85,14 +86,15 @@ public class Game {
             }
             HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
             sendMap(p, to_send);
-            sendEntry(p);
+
+            return p;
 
         } catch (IOException ioe) {
             // in something real, we would want to handle
             // this better... but for this, there isn't much we can or
             // really want to do.
         }
-
+        return null;
     }
 
     /**
@@ -521,6 +523,7 @@ public class Game {
     /*
      * Form the entry string contains choices of A(ttack), M(ove), D(one)
      * 
+     * @param Player p
      */
     public HashMap<String, String> formEntry(Player p) {
         StringBuilder entry = new StringBuilder("");
@@ -549,7 +552,7 @@ public class Game {
     /*
      * Do Action phase of the game
      * 
-     * @param Player p
+     * @param Player p 
      */
     public void doAction(Player p) throws JsonProcessingException, IOException {
         // choose action step. Client side checked. No reprompt
@@ -577,13 +580,53 @@ public class Game {
      * 
      * @param Player p
      */
-    public void doOneMove(Player p) {
-        p.getConnection().send("Please enter <Territory to move from> <Territory to move to> <number of units>");
+    public void doOneMove(Player p) throws IOException{
+        p.getConnection().send("Please enter in the following format: Territory from, Territory to, number of units(e.g. T1, T2, 2)");
+        String actionInput = p.getConnection().recv(); // e.g. T1, T2, 2
+        String[] input = actionInput.split(", ");
+        // parse actionInput
+        String from = input[0];
+        String to = input[1];
+        int num = Integer.parseInt(input[2]);
+
+        // get Territory
+        Territory fromTerritory = checkNameReturnTerritory(from, defaultMap);
+        Territory toTerritory = checkNameReturnTerritory(to, defaultMap);
+
+        if (fromTerritory == null || toTerritory == null) {
+            p.getConnection().send("Invalid Territory Name");
+            doOneMove(p);
+        }
         // call moveOrder
-
+        MoveOrder moveOrder = new MoveOrder(fromTerritory, toTerritory, num, p, defaultMap);
         // if valid, send("valid")
+        String trymove = moveOrder.tryMove();
+        if(trymove == null){
+            p.getConnection().send("Valid");
+        }
+        // if invalid, send("reason"), then recurse doOneMove()
+        else{
+            p.getConnection().send(trymove);
+            doOneMove(p);
+        }
+    }
 
-        // if invalid, send("reson"), then recurse doOneMove()
+    /**
+     * check if one placement rule is valid
+     * 
+     * @param territory_name the territory name
+     * @return null if the placement rule is valid, otherwise return the error
+     *         message
+     */
+    public Territory checkNameReturnTerritory(String territory_name, Map map) {
+        for (String playercolor: map.getMap().keySet()){
+            for (Territory territory: map.getMap().get(playercolor)){
+                if (territory_name.equals(territory.getName())){
+                    return territory;
+                }
+            }
+        }
+        return null;
     }
 
 }
