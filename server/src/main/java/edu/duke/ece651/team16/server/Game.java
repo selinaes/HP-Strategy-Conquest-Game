@@ -457,7 +457,7 @@ public class Game {
      * 
      * @param Player p 
      */
-    public void doAction(Player p) throws JsonProcessingException, IOException {
+    public boolean doAction(Player p) throws JsonProcessingException, IOException {
         // choose action step. Client side checked. No reprompt
         sendEntry(p);
         String action = p.getConnection().recv().toLowerCase();
@@ -472,10 +472,11 @@ public class Game {
             } else { // done
                 done = true;
                 p.getConnection().send("Finished your turn. Please wait for other players to finish their actions.");
-                return;
+                return done;
             }
-            doAction(p);
+            done = doAction(p);
         }
+        return done;
     }
 
     /*
@@ -499,6 +500,7 @@ public class Game {
         if (fromTerritory == null || toTerritory == null) {
             p.getConnection().send("Invalid Territory Name");
             doOneMove(p);
+            return;
         }
         // call moveOrder
         MoveOrder moveOrder = new MoveOrder(fromTerritory, toTerritory, num, p, defaultMap);
@@ -511,6 +513,7 @@ public class Game {
         else{
             p.getConnection().send(trymove);
             doOneMove(p);
+            return;
         }
     }
 
@@ -531,5 +534,4 @@ public class Game {
         }
         return null;
     }
-
 }

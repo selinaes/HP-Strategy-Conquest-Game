@@ -356,6 +356,8 @@ public class Client {
             sendResponse(clientInput);
 
             if (clientInput.equals("d")) {
+                String msg = recvMsg();
+                out.println(msg);
                 break;
             }
             // perform 1 action, move or attack

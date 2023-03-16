@@ -74,7 +74,7 @@ public class Player {
      */
     public String placeUnitsSameTerritory(String t_name, int num) {
         if (placementchecker.checkMyRule(t_name, this, num) == null) {
-            System.out.println("Territory name: " + t_name);
+            // System.out.println("Territory name: " + t_name);
             Territory t = Territories.get(getTerritoryNames().indexOf(t_name));
             ArrayList<Unit> units = findNextUnplacedUnits(num);
             t.tryAddUnits(units);
