@@ -20,4 +20,19 @@ public interface Unit {
      * Get the alive status of the unit
      */
     public boolean getAlive();
+
+    /*
+     * Get the attack status of the unit
+     */
+    public boolean getisAttacker();
+
+    /*
+     * Set the attack status of the unit
+     */
+    public void setisAttacker();
+
+    /*
+     * Set the unit's alive status
+     */
+    public void setDead();
 }

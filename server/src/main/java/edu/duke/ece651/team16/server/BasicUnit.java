@@ -43,4 +43,24 @@ public class BasicUnit implements Unit {
         return this.isAlive;
     }
 
+    /*
+     * Set attacker status of the unit
+     */
+    public boolean getisAttacker() {
+        return this.isAttacker;
+    }
+
+    /*
+     * Set the attack status of the unit
+     */
+    public void setisAttacker() {
+        this.isAttacker = true;
+    }
+
+    /*
+     * Set the unit's alive status
+     */
+    public void setDead() {
+        this.isAlive = false;
+    }
 }
