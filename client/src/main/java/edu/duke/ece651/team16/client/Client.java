@@ -47,7 +47,6 @@ public class Client {
      * @throws IOException
      */
     public void run() throws IOException {
-        // step1: Init Game setting: Color, enter name
         playerChooseNum();
         waitEveryoneDone("setNumPlayer Complete");
         // out.println("out of wait");
@@ -57,14 +56,8 @@ public class Client {
         waitEveryoneDone("setUnits Complete");
         // out.println("out of wait");
         displayMap();
-        displayEntry();
 
-        // step2: Init Game setting: Territory, Units
-
-        // step3: Do placement
-
-        // step4: Play game
-        // this.close();
+        playerActionTurn();
     }
 
     /**
@@ -97,7 +90,7 @@ public class Client {
      * @throws IOException
      */
     public String readClientInput(String prompt) throws IOException {
-        out.println("ReadClientInput: " + prompt);
+        out.println(prompt);
         String s = null;
         s = this.inputReader.readLine();
         if (s == null) {
@@ -211,7 +204,7 @@ public class Client {
         }
     }
 
-    public void displayEntry() throws IOException {
+    public String displayEntry() throws IOException {
         String to_display = recvMsg();
 
         // convert jsonString to jsonobject
@@ -221,10 +214,10 @@ public class Client {
             input_entry = objectMapper.readValue(to_display, HashMap.class);
         } catch (JsonProcessingException e) {
             System.out.println("Failed to convert json string to json object.");
-            return;
+            return "";
         }
         String entry_display = input_entry.get("Entry");
-        out.println(entry_display);
+        return entry_display;
     }
 
     /**
@@ -340,6 +333,92 @@ public class Client {
             }
             // prompt = recvMsg();
         }
+    }
+
+    /**
+     * Player choose action and send to server; then loop to enter each action
+     * 
+     * @throws IOException
+     */
+    public void playerActionTurn() throws IOException {
+        String clientInput = "";
+        // break if done
+        while (true) {
+            // back and forth until done, n times
+            // choose action step. Client side check until valid, then send
+            String choices = displayEntry();
+            clientInput = readClientInput(choices).toLowerCase();
+            while (!clientInput.equals("m") && !clientInput.equals("a") && !clientInput.equals("d")) {
+                out.println("Invalid action");
+                out.println(choices);
+                clientInput = readClientInput(choices).toLowerCase();
+            }
+            sendResponse(clientInput);
+
+            if (clientInput.equals("d")) {
+                String msg = recvMsg();
+                out.println(msg);
+                break;
+            }
+            // perform 1 action, move or attack
+            playerOneAction();
+        }
+
+    }
+
+    /**
+     * Player send action input to server
+     * 
+     * @throws IOException
+     */
+    public void playerOneAction() throws IOException {
+        String clientInput = "";
+        String prompt = recvMsg(); // "Please enter <Territor ......"
+        while (true) {
+            try {
+                // inside client, check correct method, send response, then re-receive
+                boolean correctFormat = false;
+                while (!correctFormat) {
+                    clientInput = readClientInput(prompt);
+                    if (checkMoveInputFormat(clientInput)) {
+                        correctFormat = true;
+                    } else {
+                        out.println("Wrong Format");
+                    }
+                }
+                sendResponse(clientInput);
+                prompt = recvMsg();
+                if (prompt.equals("Valid")) {
+                    out.println("Execute Action Successfully");
+                    return;
+                } else {
+                    out.println(prompt);
+                    playerOneAction();
+                    return;
+                }
+            } catch (EOFException e) {
+                out.println(e.getMessage());
+            }
+        }
+
+    }
+
+    /**
+     * Check if the move/attack input format is correct
+     *
+     * @param clientInput the input from client
+     */
+
+    public boolean checkMoveInputFormat(String clientInput) {
+        String[] input = clientInput.split(", ");
+        if (input.length != 3) {
+            return false;
+        }
+        String unitNum = input[2];
+        if (!unitNum.matches("[0-9]+")) {
+            return false;
+        }
+        return true;
     }
 
 }

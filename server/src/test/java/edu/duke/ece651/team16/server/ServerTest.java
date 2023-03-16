@@ -35,7 +35,7 @@ public class ServerTest {
     when(serverSocket.accept()).thenReturn(socket).thenAnswer(invocation -> {
       throw new IOException("Socket closed");
     });
-    doNothing().when(mockGame).createPlayer(any(Socket.class), anyInt());
+    doNothing().when(mockGame).gameFlow(any(Socket.class), anyInt());
 
     // run the server in a seperate thread, and interrupt it
     Thread serverThread = new Thread(new Runnable() {
@@ -59,7 +59,7 @@ public class ServerTest {
 
     verify(serverSocket, atLeast(1)).accept();
     verify(socket).close();
-    verify(mockGame).createPlayer(eq(socket), eq(1));
+    verify(mockGame).gameFlow(eq(socket), eq(1));
   }
 
   @Test

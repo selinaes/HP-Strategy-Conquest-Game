@@ -32,7 +32,7 @@ public class MovePathRuleChecker extends OrderRuleChecker {
 
         List<Territory> neighbors = current.getNeighbors();
         for (Territory neighbor : neighbors) {
-            System.out.println(player.getColor());
+            // System.out.println(player.getColor());
             if (!visited.contains(neighbor)) {
                 if (neighbor.getOwner().getColor() == player.getColor()) {
                     visited.add(neighbor);
