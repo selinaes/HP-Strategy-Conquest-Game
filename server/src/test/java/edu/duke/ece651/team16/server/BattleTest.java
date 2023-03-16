@@ -76,7 +76,7 @@ public class BattleTest {
   public void testResolveBattle_Equal() {
     Battle battle = new Battle();
     Combat c = new Combat();
-    c.setSeed(42);
+    // c.setSeed(42);
     c.setDiceNum(2);
     battle.setCombat(c);
 

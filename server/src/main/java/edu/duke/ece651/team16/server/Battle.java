@@ -73,7 +73,7 @@ public class Battle {
                         parties.remove(indexA);
                         index = -1;
                     }
-                } else if (winner.equals(unitA)) {
+                } else {
                     unitB.setDead();
                     unitsB.remove(0);
                     if (unitsB.isEmpty()) {
