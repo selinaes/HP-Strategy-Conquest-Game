@@ -11,10 +11,6 @@ import java.io.PrintStream;
 import java.net.Socket;
 
 public class App {
-  // public void clinetRun() throws IOException{
-
-  // }
-
   public static void main(String[] args) throws IOException {
     // App a = new App();
     int port = 1234;

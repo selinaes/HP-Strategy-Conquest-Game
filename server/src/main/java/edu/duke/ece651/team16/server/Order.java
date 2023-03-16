@@ -21,4 +21,7 @@ public abstract class Order {
         return player;
     };
 
+    public String tryAction() {
+        return null;
+    }
 }

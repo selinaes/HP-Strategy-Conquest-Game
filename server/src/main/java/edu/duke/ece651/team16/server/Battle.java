@@ -25,13 +25,22 @@ public class Battle {
         parties.add(units);
     }
 
-    /*
+    /**
      * Set the combat
      * 
      * @param combat
      */
     public void setCombat(Combat combat) {
         this.combat = combat;
+    }
+
+    /**
+     * get the size of parties
+     * 
+     * @return parties
+     */
+    public ArrayList<ArrayList<Unit>> getParties() {
+        return parties;
     }
 
     // /*

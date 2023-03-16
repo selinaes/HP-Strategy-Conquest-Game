@@ -8,8 +8,6 @@ import java.net.Socket;
 import java.net.ServerSocket;
 import java.util.HashMap;
 
-// import com.worklight.server.util.JSONUtils;
-
 public class Game {
     protected List<Player> players;
     private int numPlayer;
@@ -40,12 +38,12 @@ public class Game {
     // gameFlow()
     public void gameFlow(Socket client_socket, int numClients) throws JsonProcessingException, IOException {
         Player p = doPlacementPhase(client_socket, numClients);
-        // Action!
         doActionPhase(p);
     }
 
-    public void doActionPhase(Player p) throws JsonProcessingException, IOException{
+    public void doActionPhase(Player p) throws JsonProcessingException, IOException {
         doAction(p);
+        // worldwar();
     }
 
     /**
@@ -306,11 +304,10 @@ public class Game {
         notifyAllPlayers(connection);
     }
 
-    /*
+    /**
      * Notify all players that the player has finished assigning units
      * 
      * @param Connection connection
-     * 
      * @throws IOException
      */
     public void notifyAllPlayers(Connection connection) throws IOException {
@@ -326,13 +323,11 @@ public class Game {
         }
     }
 
-    /*
+    /**
      * Prompt the player to choose a territory
      * 
-     * @param Player p
-     * 
+     * @param Player     p
      * @param Connection connection
-     * 
      * @throws IOException
      */
 
@@ -342,17 +337,13 @@ public class Game {
         connection.send(msg_territory);
     }
 
-    /*
+    /**
      * Check if the territory name is valid
      * 
-     * @param Player p
-     * 
-     * @param String territoryName
-     * 
+     * @param Player     p
+     * @param String     territoryName
      * @param Connection connection
-     * 
      * @return boolean
-     * 
      * @throws IOException
      */
     private boolean isValidTerritory(Player p, String territoryName, Connection connection) throws IOException {
@@ -365,15 +356,12 @@ public class Game {
         return true;
     }
 
-    /*
+    /**
      * Prompt the player to choose a number of units
      * 
-     * @param Player p
-     * 
-     * @param String territoryName
-     * 
+     * @param Player     p
+     * @param String     territoryName
      * @param Connection connection
-     * 
      * @throws IOException
      */
     private void promptUnitNumber(Player p, String territoryName, Connection connection) throws IOException {
@@ -383,17 +371,13 @@ public class Game {
         connection.send(msg_amount);
     }
 
-    /*
+    /**
      * Check if the number of units is valid
      * 
-     * @param Player p
-     * 
-     * @param String territoryName
-     * 
-     * @param String num
-     * 
+     * @param Player     p
+     * @param String     territoryName
+     * @param String     num
      * @param Connection connection
-     * 
      * @return boolean
      */
     private boolean isValidUnitNumber(Player p, String territoryName, String num, Connection connection)
@@ -423,7 +407,7 @@ public class Game {
         this.numPlayer = num;
     }
 
-    /*
+    /**
      * Form the entry string contains choices of A(ttack), M(ove), D(one)
      * 
      * @param Player p
@@ -439,7 +423,7 @@ public class Game {
         return entryMap;
     }
 
-    /*
+    /**
      * Send the entry string to the player
      * 
      * @param Player p
@@ -452,10 +436,10 @@ public class Game {
         p.getConnection().send(jsonString);
     }
 
-    /*
+    /**
      * Do Action phase of the game
      * 
-     * @param Player p 
+     * @param Player p
      */
     public boolean doAction(Player p) throws JsonProcessingException, IOException {
         // choose action step. Client side checked. No reprompt
@@ -464,11 +448,8 @@ public class Game {
         // perform action, invalid reprompt
         boolean done = false;
         while (!done) {
-            if (action.equals("m")) { // move
-                doOneMove(p);
-            } else if (action.equals("a")) { // attack
-                p.getConnection()
-                        .send("Please enter <Territory to attack from, Territory toattack, number of units>(e.g. T1, T2, 2)");
+            if (action.equals("m") || action.equals("a")) { // move or attack
+                doOneAction(p, action);
             } else { // done
                 done = true;
                 p.getConnection().send("Finished your turn. Please wait for other players to finish their actions.");
@@ -479,13 +460,9 @@ public class Game {
         return done;
     }
 
-    /*
-     * Do one move in the move phase
-     * 
-     * @param Player p
-     */
-    public void doOneMove(Player p) throws IOException{
-        p.getConnection().send("Please enter in the following format: Territory from, Territory to, number of units(e.g. T1, T2, 2)");
+    public Order makeActionOrder(Player p, String actionName) throws IOException {
+        p.getConnection().send(
+                "Please enter in the following format: Territory from, Territory to, number of units(e.g. T1, T2, 2)");
         String actionInput = p.getConnection().recv(); // e.g. T1, T2, 2
         String[] input = actionInput.split(", ");
         // parse actionInput
@@ -499,20 +476,31 @@ public class Game {
 
         if (fromTerritory == null || toTerritory == null) {
             p.getConnection().send("Invalid Territory Name");
-            doOneMove(p);
-            return;
+            return makeActionOrder(p, actionName);
         }
-        // call moveOrder
-        MoveOrder moveOrder = new MoveOrder(fromTerritory, toTerritory, num, p, defaultMap);
-        // if valid, send("valid")
-        String trymove = moveOrder.tryMove();
-        if(trymove == null){
+        if (actionName.equals("m")) {
+            Order order = new MoveOrder(fromTerritory, toTerritory, num, p, defaultMap);
+            return order;
+        }
+        return (new AttackOrder(fromTerritory, toTerritory, num, p, defaultMap));
+
+    }
+
+    /**
+     * Do one move in the move phase
+     * 
+     * @param Player p
+     */
+    public void doOneAction(Player p, String actionName) throws IOException {
+        Order order = makeActionOrder(p, actionName);
+        String tryAction = order.tryAction();
+        if (tryAction == null) { // valid
             p.getConnection().send("Valid");
         }
         // if invalid, send("reason"), then recurse doOneMove()
-        else{
-            p.getConnection().send(trymove);
-            doOneMove(p);
+        else {
+            p.getConnection().send(tryAction);
+            doOneAction(p, actionName);
             return;
         }
     }
@@ -525,13 +513,24 @@ public class Game {
      *         message
      */
     public Territory checkNameReturnTerritory(String territory_name, Map map) {
-        for (String playercolor: map.getMap().keySet()){
-            for (Territory territory: map.getMap().get(playercolor)){
-                if (territory_name.equals(territory.getName())){
+        for (String playercolor : map.getMap().keySet()) {
+            for (Territory territory : map.getMap().get(playercolor)) {
+                if (territory_name.equals(territory.getName())) {
                     return territory;
                 }
             }
         }
         return null;
+    }
+
+    /**
+     * After one turn of moving and attacking, resolve battle for each territory
+     */
+    public void worldwar() {
+        for (String playercolor : defaultMap.getMap().keySet()) {
+            for (Territory territory : defaultMap.getMap().get(playercolor)) {
+                territory.resolveBattle();
+            }
+        }
     }
 }

@@ -9,6 +9,7 @@ public class Territory {
   private List<Territory> neighbors;
   private Player owner;
   private ArrayList<Unit> units;
+  private Battle battle;
 
   /**
    * constructs Territory class with name
@@ -19,6 +20,7 @@ public class Territory {
     this.name = name;
     this.neighbors = new ArrayList<>();
     this.units = new ArrayList<>();
+    this.battle = new Battle();
   }
 
   /*
@@ -29,7 +31,39 @@ public class Territory {
     return this.units;
   }
 
-  // Return units that belong to a certain player and alive
+  /**
+   * 
+   * @return if battle exists
+   */
+  public boolean existsBattle() {
+    if (battle.getParties().size() > 0) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * If there is a battle, add units to the battle to defend the territory
+   */
+  public void defendHome() {
+    if (existsBattle()) {
+      battle.addGroup(units);
+    }
+  }
+
+  /**
+   * Resolve battle phase for one territory
+   */
+  public void doBattle() {
+    defendHome();
+    Player winner = battle.resolveBattle();
+    this.owner = winner;
+    this.units = battle.getParties().get(0);
+  }
+
+  /**
+   * // Return units that belong to a certain player and alive
+   */
   public ArrayList<Unit> getAliveUnitsFor(Player player) {
     ArrayList<Unit> result = new ArrayList<>();
     for (Unit u : this.units) {
@@ -40,7 +74,7 @@ public class Territory {
     return result;
   }
 
-  /*
+  /**
    * Add units to the territory in the placement
    * The input unit's owner name is ensured to be the same as territory's owner
    * name
@@ -61,6 +95,13 @@ public class Territory {
     // this.units.add(unit);
     // if (unit.getwhere() == null && this.owner == unit.getOwner()){
 
+  }
+
+  /**
+   * Add units to the territory in the battle
+   */
+  public void tryAddAttackers(ArrayList<Unit> units) {
+    this.battle.addGroup(units);
   }
 
   /**

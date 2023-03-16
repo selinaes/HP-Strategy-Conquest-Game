@@ -13,7 +13,8 @@ public class MoveOrder extends Order {
      * 
      * @return null if the move is valid, otherwise return the error message
      */
-    public String tryMove() {
+    @Override
+    public String tryAction() {
         OrderRuleChecker checker = new MoveInputRuleChecker(new MovePathRuleChecker(null));
         String moveProblem = checker.checkOrder(from, to, player, numUnits, gameMap);
         if (moveProblem == null) {

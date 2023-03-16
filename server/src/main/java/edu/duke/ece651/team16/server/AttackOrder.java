@@ -13,14 +13,15 @@ public class AttackOrder extends Order {
      * 
      * @return null if the move is valid, otherwise return the error message
      */
-    public String tryAttack() {
+    @Override
+    public String tryAction() {
         OrderRuleChecker checker = new AttackInputRuleChecker(new AttackInputRuleChecker(null));
         String attackProblem = checker.checkOrder(from, to, player, numUnits, gameMap);
         if (attackProblem == null) {
             // remove units from fromTerritory
-            ArrayList<Unit> moveUnits = from.tryRemoveUnits(numUnits, player);
-            // add units to toTerritory
-            to.tryAddUnits(moveUnits);
+            ArrayList<Unit> attackUnits = from.tryRemoveUnits(numUnits, player);
+            // add units to parties, wait for battle
+            to.tryAddAttackers(attackUnits);
             return null;
         }
         return attackProblem;
