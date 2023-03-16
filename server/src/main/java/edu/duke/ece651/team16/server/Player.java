@@ -81,20 +81,6 @@ public class Player {
         }
         return placementchecker.checkMyRule(t_name, this, num);
 
-        // for (int i = 0; i < num; i++) {
-        // Unit u = findNextUnplacedUnit();
-        // if (placementRuleChecker.checkPlacement(u, t_name, this) == null) {
-        // // System.out.println("Territory name: " + t_name);
-        // Territory t = Territories.get(getTerritoryNames().indexOf(t_name));
-        // t.tryAddUnits(u);
-        // } else {
-        // return placementRuleChecker.checkPlacement(u, t_name, this);
-        // }
-
-        // // placeUnit(t_name, u);
-        // }
-        // return null;
-
     }
 
     /*
