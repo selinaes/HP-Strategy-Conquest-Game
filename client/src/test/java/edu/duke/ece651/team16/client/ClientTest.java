@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import java.io.IOException;
@@ -185,6 +186,10 @@ public class ClientTest {
 
     client.displayEntry();
 
+    when(mockReader.readLine()).thenReturn("Valid");
+    socketReceiveField.set(client, mockReader);
+    client.displayEntry();
+
     client.close();
   }
 
@@ -243,7 +248,7 @@ public class ClientTest {
     Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
     socketReceiveField.setAccessible(true);
     BufferedReader mockReader = mock(BufferedReader.class);
-    when(mockReader.readLine()).thenReturn("Not Valid").thenReturn("Valid");
+    when(mockReader.readLine()).thenReturn("not valid").thenReturn("stage Complete");
     socketReceiveField.set(client, mockReader);
     client.waitEveryoneDone();
     client.close();
@@ -280,9 +285,11 @@ public class ClientTest {
     String s2 = "Valid territory name";
     String s3 = "Valid number of units";
     String s4 = "Other";
+    String s5 = "finished stage";
 
     Socket mockSocket = makeMockSocket();
-    String[] inputs = new String[] { "unitTest1", "unitTest2", "unitTest3", "unitTest4", "unitTest5",
+    String[] inputs = new String[] { "unitTest1", "unitTest2", "unitTest3",
+        "unitTest4", "unitTest5",
         "unitTest6" };
     String inputString = String.join("\n", inputs) + "\n";
     InputStream sysIn = new ByteArrayInputStream(inputString.getBytes());
@@ -294,7 +301,7 @@ public class ClientTest {
     Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
     socketReceiveField.setAccessible(true);
     BufferedReader mockReader = mock(BufferedReader.class);
-    when(mockReader.readLine()).thenReturn(s1);
+    when(mockReader.readLine()).thenReturn(s5);
     socketReceiveField.set(client, mockReader);
 
     client.playerAssignUnit();
@@ -351,6 +358,7 @@ public class ClientTest {
     String s1 = "finished placement";
     String s2 = "Valid number of units";
     String s3 = "Other";
+    String s4 = "finished stage";
     Socket mockSocket = makeMockSocket();
     BufferedReader inputSource = makeInputSource("input");
     PrintStream out = makeOut();
@@ -362,12 +370,12 @@ public class ClientTest {
     BufferedReader mockReader = mock(BufferedReader.class);
 
     // playerAssignUnits return True
-    when(mockReader.readLine()).thenReturn(s1);
+    when(mockReader.readLine()).thenReturn(s4);
     socketReceiveField.set(client, mockReader);
     client.playerAssignAllUnits();
 
     // playerAssignUnits return False and then retrn True
-    when(mockReader.readLine()).thenReturn(s3).thenReturn(s2).thenReturn(s1);
+    when(mockReader.readLine()).thenReturn(s3).thenReturn(s2).thenReturn(s4);
     socketReceiveField.set(client, mockReader);
     client.playerAssignAllUnits();
 
@@ -390,7 +398,8 @@ public class ClientTest {
     socketReceiveField.setAccessible(true);
     BufferedReader mockReader = mock(BufferedReader.class);
     when(mockReader.readLine()).thenReturn("playerChooseNum", "Valid")
-        .thenReturn("stage Complete").thenReturn("displayInitialMap").thenReturn("playerChooseColor", "Valid")
+        .thenReturn("stage Complete").thenReturn("displayInitialMap").thenReturn("playerChooseColor",
+            "Valid")
         .thenReturn("finished stage").thenReturn("stage Complete").thenReturn("displayMap");
     socketReceiveField.set(client, mockReader);
 
@@ -419,5 +428,9 @@ public class ClientTest {
 
     // Test invalid input (third argument contains letters)
     assertFalse(client.checkMoveInputFormat(input4));
+  }
+
+  @Test
+  public void test_playerActionTurn() {
   }
 }

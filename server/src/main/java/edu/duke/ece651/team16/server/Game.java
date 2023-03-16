@@ -532,10 +532,12 @@ public class Game {
      * After one turn of moving and attacking, resolve battle for each territory
      */
     public void worldwar() {
-        for (String playercolor : defaultMap.getMap().keySet()) {
-            for (Territory territory : defaultMap.getMap().get(playercolor)) {
+        for (Player p : players) {
+            for (Territory territory : p.getTerritories()) {
                 territory.doBattle();
+                p.generateNewUnit(territory);
             }
         }
     }
+
 }
