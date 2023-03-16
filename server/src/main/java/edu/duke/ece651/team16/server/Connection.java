@@ -56,13 +56,13 @@ public class Connection {
         if (ans != null) {
           received = true;
         }
-      } 
+      }
       // catch (SocketTimeoutException e) {
-      //   System.out.println("Timeout occurred while waiting for message.");
+      // System.out.println("Timeout occurred while waiting for message.");
       // }
       catch (IOException e) {
         System.out.println("Failed to receive message.");
-        System.exit(1);
+        // System.exit(1);
       }
     }
     return ans;

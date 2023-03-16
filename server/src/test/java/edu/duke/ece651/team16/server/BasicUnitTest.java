@@ -22,6 +22,7 @@ public class BasicUnitTest {
     BasicUnit unit = new BasicUnit(p, territory1, true, 1);
 
     unit.setwhere(territory2);
+    unit.setisAttacker();
 
     assertEquals(territory2, unit.getwhere());
   }

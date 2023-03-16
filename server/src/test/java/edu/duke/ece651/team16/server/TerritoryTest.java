@@ -4,7 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
-
+import java.lang.reflect.Field;
+import java.lang.annotation.Target;
 import java.util.*;
 
 public class TerritoryTest {
@@ -159,4 +160,19 @@ public class TerritoryTest {
     assertEquals(2, territory.getAliveUnitsFor(player).size());
   }
 
+  @Test
+  public void test_Battle() throws Exception {
+    // Territory territory = new Territory("Gondor");
+    // Field battleField = territory.getClass().getDeclaredField("battle");
+    // battleField.setAccessible(true);
+    // Battle b = new Battle();
+    // Battle b2 = new Battle();
+    // ArrayList<Unit> u = new ArrayList<Unit>();
+    // u.add(mock(Unit.class));
+    // b2.addGroup(u);
+    // battleField.set(territory, b);
+    // territory.doBattle();
+    // battleField.set(territory, b2);
+    // territory.doBattle();
+  }
 }
