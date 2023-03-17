@@ -76,9 +76,7 @@ public class Server {
                             client_socket.close();
                         }
                     } catch (IOException ioe) {
-                        // in something real, we would want to handle
-                        // this better... but for this, there isn't much we can or
-                        // really want to do.
+                        System.out.println(ioe.getMessage());
                     }
                 }
             });

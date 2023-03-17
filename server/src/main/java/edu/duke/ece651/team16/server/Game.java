@@ -14,7 +14,7 @@ public class Game {
     private List<String> colors;
     private Map defaultMap;
     private List<Connection> allConnections;
-    private String gameState; // setNumPlayer, setPlayerColor, setUnits, issueOrder, worldWar, warEnd
+    private String gameState; // setNumPlayer, setPlayerColor, setUnits, placementEnd, worldWar, warEnd
     private int readyPlayer;
     private int unitsPerPlayer;
     private int playerLowBound;
@@ -41,10 +41,10 @@ public class Game {
         this.gameRound = 0;
     }
 
-    public void printPlayer(){
+    public void printPlayer() {
         System.out.println("===Update Player List====");
-        for(Player p : players){
-            System.out.println("Player is "+ p.getColor());
+        for (Player p : players) {
+            System.out.println("Player is " + p.getColor());
         }
         System.out.println("========End=======\n");
     }
@@ -63,7 +63,6 @@ public class Game {
         while (findWinner() == null) {
             p.getConnection().send("Game continues");
             doActionPhase(p);
-            
         }
         Player winner = findWinner();
         // notify this player of winner!
@@ -82,46 +81,53 @@ public class Game {
         HashMap<String, String> to_send_log = new HashMap<>();
 
         doAction(p);
-        System.out.println("Round " + this.gameRound +" Line 85 for user " + p.getColor() + "state" + gameState);
+
+        System.out.println("Round " + this.gameRound + " Line 85 for user " + p.getColor() + " state " + gameState);
         while (true) {
             synchronized (this) {
                 if (gameState.equals("worldWar")) {
+                    ++readyPlayer;
                     break;
                 }
             }
         }
-        System.out.println("Round " + this.gameRound +" Line 93 for user " + p.getColor() + "state" + gameState);
-        // HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
-        // sendMap(p, to_send);
-        // System.out.println("World war");
-        if (p.equals(players.get(0))) {
-            to_send_log = worldwar();
-            System.out.println("Round " + this.gameRound +"World war execution user: " + p.getColor());
-            for (Player player : players) {
-                sendLog(player, to_send_log);
-            }
-            System.out.println("Round " + this.gameRound +" Line 103 for user " + p.getColor());
-            synchronized (this) {
+        System.out.println("Round " + this.gameRound + " Line 93 for user " + p.getColor() + " state " + gameState);
+
+        // if all players are ready, then execute world war (the last player who reached
+        // here)
+        synchronized (this) {
+            if (readyPlayer == numPlayer) {
+                to_send_log = worldwar();
+                System.out.println("Round " + this.gameRound + " World war execution user: " + p.getColor());
+                for (Player player : players) {
+                    sendLog(player, to_send_log);
+                }
+                System.out.println("Round " + this.gameRound + " Line 103 for user " + p.getColor());
+
                 this.gameState = "warEnd";
                 this.gameRound++;
                 this.readyPlayer = 0;
+
             }
         }
-        System.out.println("Round " + this.gameRound +"Line 110 for user " + p.getColor());
+
+        System.out.println("Round " + this.gameRound + " Line 110 for user " + p.getColor());
         while (true) {
             synchronized (this) {
                 if (gameState.equals("warEnd")) {
                     break;
-                } 
+                }
             }
         }
-        System.out.println("Round " + this.gameRound +"Line 118 for user" + p.getColor());
+        System.out.println("Round " + this.gameRound + " Line 118 for user " + p.getColor());
         HashMap<String, ArrayList<HashMap<String, String>>> to_send1 = formMap();
         sendMap(p, to_send1);
 
         // after 1 turn, phase go back to issueOrder
+        // if (p.equals(players.get(0))) {
         // synchronized (this) {
         // this.gameState = "issueOrder";
+        // }
         // }
     }
 
@@ -154,7 +160,7 @@ public class Game {
         assignUnits(p, connection);
         while (true) {
             synchronized (this) {
-                if (gameState.equals("issueOrder")) {
+                if (gameState.equals("placementEnd")) {
                     break;
                 }
             }
@@ -289,9 +295,9 @@ public class Game {
      * @param int        numClients
      */
     public void chooseNumOfPlayers(Connection connection, int numClients) {
-        synchronized (this) {
-            this.gameState = "setNumPlayer";
-        }
+        // synchronized (this) {
+        // this.gameState = "setNumPlayer";
+        // }
         if (numClients == 1) {
             connection.send(
                     "You are the first player! Please set the number of players in this game(Valid player number: 2-4): ");
@@ -373,7 +379,7 @@ public class Game {
             int numOfUnits = Integer.parseInt(num);
             p.placeUnitsSameTerritory(territoryName, numOfUnits);
         }
-        notifyAllPlayers(connection, "issueOrder");
+        notifyAllPlayers(connection, "placementEnd");
     }
 
     /**
@@ -391,6 +397,7 @@ public class Game {
                     c.send("stage Complete");
                 }
                 this.gameState = newStage;
+                this.readyPlayer = 0;
             }
         }
     }

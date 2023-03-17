@@ -20,6 +20,10 @@ public class App {
       server.run();
     } catch (IOException e) {
       System.out.println("Failed to initialize Connection.");
+    } finally {
+      if (listenSocket != null) {
+        listenSocket.close();
+      }
     }
 
   }
