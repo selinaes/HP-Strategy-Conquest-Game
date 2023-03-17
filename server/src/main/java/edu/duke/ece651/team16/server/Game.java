@@ -41,10 +41,10 @@ public class Game {
         this.gameRound = 0;
     }
 
-    public void printPlayer(){
+    public void printPlayer() {
         System.out.println("===Update Player List====");
-        for(Player p : players){
-            System.out.println("Player is "+ p.getColor());
+        for (Player p : players) {
+            System.out.println("Player is " + p.getColor());
         }
         System.out.println("========End=======\n");
     }
@@ -63,7 +63,7 @@ public class Game {
         while (findWinner() == null) {
             p.getConnection().send("Game continues");
             doActionPhase(p);
-            
+
         }
         Player winner = findWinner();
         // notify this player of winner!
@@ -80,9 +80,27 @@ public class Game {
     public void doActionPhase(Player p) {
 
         HashMap<String, String> to_send_log = new HashMap<>();
+        if (p.getisWatch()) {
+            // send done
+            p.getConnection().send("watching");
+            notifyAllPlayers(p.getConnection(), "worldWar");
+        } else if (p.checkLose()) {
+            p.getConnection().send("Choose watch");
+            if (ifChooseWatch(p.getConnection()) == "e") {
+                synchronized (this) {
+                    players.remove(p);
+                    --numPlayer;
+                    return;
+                }
 
-        doAction(p);
-        System.out.println("Round " + this.gameRound +" Line 85 for user " + p.getColor() + "state" + gameState);
+            } else {
+                p.setWatch();
+            }
+        } else {
+            p.getConnection().send("do nothing");
+            doAction(p);
+        }
+        System.out.println("Round " + this.gameRound + " Line 85 for user " + p.getColor() + "state" + gameState);
         while (true) {
             synchronized (this) {
                 if (gameState.equals("worldWar")) {
@@ -90,39 +108,39 @@ public class Game {
                 }
             }
         }
-        System.out.println("Round " + this.gameRound +" Line 93 for user " + p.getColor() + "state" + gameState);
+        System.out.println("Round " + this.gameRound + " Line 93 for user " + p.getColor() + "state" + gameState);
         // HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
         // sendMap(p, to_send);
         // System.out.println("World war");
         if (p.equals(players.get(0))) {
             to_send_log = worldwar();
-            System.out.println("Round " + this.gameRound +"World war execution user: " + p.getColor());
+            System.out.println("Round " + this.gameRound + "World war execution user: " + p.getColor());
             for (Player player : players) {
                 sendLog(player, to_send_log);
             }
-            System.out.println("Round " + this.gameRound +" Line 103 for user " + p.getColor());
+            System.out.println("Round " + this.gameRound + " Line 103 for user " + p.getColor());
             synchronized (this) {
                 this.gameState = "warEnd";
                 this.gameRound++;
                 this.readyPlayer = 0;
             }
         }
-        System.out.println("Round " + this.gameRound +"Line 110 for user " + p.getColor());
+        System.out.println("Round " + this.gameRound + "Line 110 for user " + p.getColor());
         while (true) {
             synchronized (this) {
                 if (gameState.equals("warEnd")) {
                     break;
-                } 
+                }
             }
         }
-        System.out.println("Round " + this.gameRound +"Line 118 for user" + p.getColor());
+        System.out.println("Round " + this.gameRound + "Line 118 for user" + p.getColor());
         HashMap<String, ArrayList<HashMap<String, String>>> to_send1 = formMap();
         sendMap(p, to_send1);
 
         // after 1 turn, phase go back to issueOrder
-        // synchronized (this) {
-        // this.gameState = "issueOrder";
-        // }
+        synchronized (this) {
+            this.gameState = "issueOrder";
+        }
     }
 
     /**
@@ -224,7 +242,7 @@ public class Game {
     /**
      * Send Initial Map to client
      * 
-     * @param Connection                        conn
+     * @param Connection                        connection
      * @param HashMap<String,ArrayList<String>> the map to_send
      */
     public void sendInitialMap(Connection conn, HashMap<String, ArrayList<HashMap<String, String>>> to_send) {
@@ -283,15 +301,34 @@ public class Game {
     }
 
     /**
+     * Prompt the lose player to choose watch or exit
+     * 
+     * @param Connection connection
+     * @return string chosen by player
+     **/
+    public String ifChooseWatch(Connection connection) {
+        connection.send("If you want to watch game, Please enter: w; --- If you want to exit, Please enter: e");
+        String chooseWatch = connection.recv();
+        chooseWatch = chooseWatch.toLowerCase();
+        if (!chooseWatch.equals("w") && !chooseWatch.equals("e")) {
+            connection.send("Invalid choice");
+            return ifChooseWatch(connection);
+        } else {
+            connection.send("Valid");
+            return chooseWatch;
+        }
+    }
+
+    /**
      * prompt the player to choose number of players
      * 
      * @param Connection connection
      * @param int        numClients
      */
     public void chooseNumOfPlayers(Connection connection, int numClients) {
-        synchronized (this) {
-            this.gameState = "setNumPlayer";
-        }
+        // synchronized (this) {
+        // this.gameState = "setNumPlayer";
+        // }
         if (numClients == 1) {
             connection.send(
                     "You are the first player! Please set the number of players in this game(Valid player number: 2-4): ");
@@ -485,6 +522,17 @@ public class Game {
         String header = "You are the " + p.getColor() + " player, what would you like to do?\n";
         entry.append(header);
         String body = "M(ove)\n" + "A(ttack)\n" + "D(one)\n";
+        entry.append(body);
+        HashMap<String, String> entryMap = new HashMap<String, String>();
+        entryMap.put("Entry", entry.toString());
+        return entryMap;
+    }
+
+    public HashMap<String, String> formExitWatch(Player p) {
+        StringBuilder entry = new StringBuilder("");
+        String header = "You are the " + p.getColor() + " player, you have lost the game, what would you like to do?\n";
+        entry.append(header);
+        String body = "W(atch)\n" + "E(xit )\n";
         entry.append(body);
         HashMap<String, String> entryMap = new HashMap<String, String>();
         entryMap.put("Entry", entry.toString());

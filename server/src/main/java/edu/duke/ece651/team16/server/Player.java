@@ -11,6 +11,7 @@ public class Player {
     private Connection connection;
     private int numUnits;
     private final AssignUnitRuleChecker placementchecker;
+    private boolean isWatch;
 
     /**
      * Constructor of the player
@@ -29,6 +30,7 @@ public class Player {
         for (int i = 0; i < numUnits; i++) {
             this.units.add(new BasicUnit(this, null, false, i));
         }
+        this.isWatch = false;
     }
 
     /**
@@ -173,5 +175,13 @@ public class Player {
             return true;
         }
         return false;
+    }
+
+    public void setWatch() {
+        this.isWatch = true;
+    }
+
+    public boolean getisWatch() {
+        return this.isWatch;
     }
 }
