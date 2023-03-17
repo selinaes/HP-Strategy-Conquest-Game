@@ -46,7 +46,8 @@ public class Territory {
    * If there is a battle, add units to the battle to defend the territory
    */
   public void defendHome() {
-    if (existsBattle()) {
+    System.out.println("Player " + owner.getColor() + "'s unit size is " + this.units.size());
+    if (this.units.size() > 0 && !this.battle.checkGroupExisted(units)) {
       battle.addGroup(units);
     }
   }
@@ -54,12 +55,32 @@ public class Territory {
   /**
    * Resolve battle phase for one territory
    */
-  public void doBattle() {
+  public String doBattle() {
     defendHome();
+    String prelog = battle.GameLog();
     Player winner = battle.resolveBattle();
+    // String postlog = battle.GameLog();
+    String gameLog = "Battle participants: " + prelog + "\nWinner: " + winner.getColor() + "\n";
+    List<Territory> to_add = new ArrayList<>();
+    to_add.add(this);
+    if (!winner.equals(this.owner)) {
+      this.owner.removeTerritory(this);
+      winner.addTerritories(to_add);
+    }
     this.owner = winner;
     this.units = battle.getParties().get(0);
+    System.out.println("After battle " + name + "'s units size is " + units.size());
+
+    return gameLog;
   }
+
+  // public void sendLog(Player player, HashMap<String, String> to_send)
+  // throws JsonProcessingException {
+  // ObjectMapper objectMapper = new ObjectMapper();
+  // // convert the HashMap to a JSON object
+  // String jsonString = objectMapper.writeValueAsString(to_send);
+  // player.getConnection().send(jsonString);
+  // }
 
   /**
    * // Return units that belong to a certain player and alive
@@ -101,7 +122,10 @@ public class Territory {
    * Add units to the territory in the battle
    */
   public void tryAddAttackers(ArrayList<Unit> units) {
-    this.battle.addGroup(units);
+    if (units.size() > 0) {
+      this.battle.addGroup(units);
+    }
+
   }
 
   /**

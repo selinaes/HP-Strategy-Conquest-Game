@@ -56,9 +56,21 @@ public class Client {
         waitEveryoneDone();
         displayMap();
 
-        // action phase
+        // String msg = recvMsg();
+        // while (msg.equals("Game continues")) {
+        // // action phase
+        // playerActionTurn();
+        // // displayMap();
+        // waitEveryoneDone();
+        // displayMap();
+        // msg = recvMsg();
+        // }
+        // game over
+        // out.println("Game over. Winner is " + msg);
+
         playerActionTurn();
         waitEveryoneDone();
+        displayLog();
         displayMap();
     }
 
@@ -98,6 +110,7 @@ public class Client {
         if (s == null) {
             throw new EOFException();
         }
+        out.println(s);
         return s;
     }
 
@@ -265,6 +278,35 @@ public class Client {
                 String units = asset.get("Unit");
                 out.println(units + " in " + territory + " " + neighbors);
             }
+        }
+    }
+
+    /**
+     * Display map
+     *
+     * @throws IOException
+     */
+    public void displayLog() throws IOException {
+        String jsonString = recvMsg();
+        // convert jsonString to jsonobject
+        ObjectMapper objectMapper = new ObjectMapper();
+        HashMap<String, String> input_Log;
+        try {
+            input_Log = objectMapper.readValue(jsonString, HashMap.class);
+        } catch (JsonProcessingException e) {
+            System.out.println("Failed to convert json string to json object.");
+            return;
+        }
+        // Player name is the input_map key
+        // ArrayList<HashMap<String, String>> is the value of the key
+        for (Map.Entry<String, String> entry : input_Log.entrySet()) {
+            String territoryName = entry.getKey();
+            String title = "War Log in " + territoryName + ": ";
+            out.println(title);
+            String seperation = String.join("", Collections.nCopies(title.length(),
+                    "-"));
+            out.println(seperation);
+            out.println(entry.getValue());
         }
     }
 

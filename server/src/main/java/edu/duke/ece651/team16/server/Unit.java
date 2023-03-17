@@ -35,4 +35,6 @@ public interface Unit {
      * Set the unit's alive status
      */
     public void setDead();
+
+    public int getId();
 }

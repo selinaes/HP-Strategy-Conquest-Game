@@ -14,7 +14,7 @@ public class Game {
     private List<String> colors;
     private Map defaultMap;
     private List<Connection> allConnections;
-    private String gameState; // setNumPlayer, setPlayerColor, setUnits, gameStart, worldWar
+    private String gameState; // setNumPlayer, setPlayerColor, setUnits, issueOrder, worldWar, warEnd
     private int readyPlayer;
     private int unitsPerPlayer;
     private int playerLowBound;
@@ -47,6 +47,13 @@ public class Game {
      */
     public void gameFlow(Socket client_socket, int numClients) {
         Player p = doPlacementPhase(client_socket, numClients);
+        // while (findWinner() == null) {
+        // doActionPhase(p);
+        // p.getConnection().send("Game continues");
+        // }
+        // Player winner = findWinner();
+        // // notify this player of winner!
+        // p.getConnection().send(winner.getColor());
         doActionPhase(p);
     }
 
@@ -56,7 +63,11 @@ public class Game {
      * @param Player p: the player
      */
     public void doActionPhase(Player p) {
+
+        HashMap<String, String> to_send_log = new HashMap<>();
+
         doAction(p);
+
         while (true) {
             synchronized (this) {
                 if (gameState.equals("worldWar")) {
@@ -64,9 +75,33 @@ public class Game {
                 }
             }
         }
-        // worldwar();
+
         // HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
         // sendMap(p, to_send);
+        // System.out.println("World war");
+        if (p.equals(players.get(0))) {
+            to_send_log = worldwar();
+            for (Player player : players) {
+                sendLog(player, to_send_log);
+            }
+            synchronized (this) {
+                this.gameState = "warEnd";
+            }
+        }
+        while (true) {
+            synchronized (this) {
+                if (gameState.equals("warEnd")) {
+                    break;
+                }
+            }
+        }
+        HashMap<String, ArrayList<HashMap<String, String>>> to_send1 = formMap();
+        sendMap(p, to_send1);
+
+        // after 1 turn, phase go back to issueOrder
+        // synchronized (this) {
+        // this.gameState = "issueOrder";
+        // }
     }
 
     /**
@@ -86,19 +121,24 @@ public class Game {
                 }
             }
         }
-        HashMap<String, ArrayList<HashMap<String, String>>> to_send_initial = formInitialMap();
-        sendInitialMap(connection, to_send_initial);
-        String color = chooseColor(connection);
-        Player p = new Player(color, connection, defaultMap.getMap().get(color), this.unitsPerPlayer);
-        addPlayer(p);
-        assignUnits(p, connection);
-        while (true) {
-            synchronized (this) {
-                if (gameState.equals("gameStart")) {
-                    break;
+
+
+            HashMap<String, ArrayList<HashMap<String, String>>> to_send_initial = formInitialMap();
+            sendInitialMap(connection, to_send_initial);
+
+            String color = chooseColor(connection);
+            Player p = new Player(color, connection, defaultMap.getMap().get(color), this.unitsPerPlayer);
+            addPlayer(p);
+
+            assignUnits(p, connection);
+            while (true) {
+                synchronized (this) {
+                    if (gameState.equals("issueOrder")) {
+                        break;
+                    }
                 }
             }
-        }
+        
         HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
         sendMap(p, to_send);
         readyPlayer = 0;
@@ -279,6 +319,7 @@ public class Game {
     public void initializeMap(int numOfPlayers) {
         this.defaultMap = new Map(numOfPlayers);
         defaultMap.createDukeMap();
+        // defaultMap.createTestMap();
         this.colors = defaultMap.getColorList();
     }
 
@@ -311,7 +352,7 @@ public class Game {
             int numOfUnits = Integer.parseInt(num);
             p.placeUnitsSameTerritory(territoryName, numOfUnits);
         }
-        notifyAllPlayers(connection, "gameStart");
+        notifyAllPlayers(connection, "issueOrder");
     }
 
     /**
@@ -448,6 +489,17 @@ public class Game {
     }
 
     /**
+     * Send the entry string to the player
+     *
+     * @param Player p
+     */
+    public void sendLog(Player p, HashMap<String, String> to_send) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(to_send);
+        p.getConnection().send(jsonString);
+    }
+
+    /**
      * Do Action phase of the game
      * 
      * @param Player p
@@ -547,13 +599,41 @@ public class Game {
     /**
      * After one turn of moving and attacking, resolve battle for each territory
      */
-    public void worldwar() {
+    public HashMap<String, String> worldwar() {
+        HashMap<String, String> worldLog = new HashMap<>();
         for (Player p : players) {
-            for (Territory territory : p.getTerritories()) {
-                territory.doBattle();
-                p.generateNewUnit(territory);
+            List<Territory> territoriesCopy = List.copyOf(p.getTerritories()); // otherwise
+                                                                               // ConcurrentModificationException
+            for (Territory territory : territoriesCopy) {
+                if (territory.existsBattle()) {
+                    System.out.println("Player " + p.getColor() + " turn and " + territory.getName() + " in battle");
+                    String battleLog = territory.doBattle();
+                    worldLog.put(territory.getName(), battleLog);
+                }
             }
         }
+        for (Player p : players) {
+            p.generateNewUnit();
+        }
+        return worldLog;
+    }
+
+    /**
+     * Check if the game is over, and find the winner
+     * 
+     * @return winner if the game is over, otherwise return null
+     */
+    public Player findWinner() {
+        List<Player> playersCopy = List.copyOf(players);
+        for (Player p : players) {
+            if (p.checkLose()) {
+                playersCopy.remove(p);
+            }
+        }
+        if (playersCopy.size() == 1) {
+            return playersCopy.get(0);
+        }
+        return null;
     }
 
 }

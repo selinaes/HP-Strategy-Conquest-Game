@@ -15,7 +15,7 @@ public class AttackOrder extends Order {
      */
     @Override
     public String tryAction() {
-        OrderRuleChecker checker = new AttackInputRuleChecker(new AttackInputRuleChecker(null));
+        OrderRuleChecker checker = new AttackInputRuleChecker(new AttackAdjacentRuleChecker(null));
         String attackProblem = checker.checkOrder(from, to, player, numUnits, gameMap);
         if (attackProblem == null) {
             // remove units from fromTerritory
