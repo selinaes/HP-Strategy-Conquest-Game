@@ -344,6 +344,12 @@ public class Client {
         }
     }
 
+    /**
+     * Player choose territory and set unit number
+     * 
+     * @throws IOException
+     * @return boolean if player finished placement
+     */
     public boolean playerAssignUnit() throws IOException {
         String prompt = recvMsg();
         if (prompt.equals("finished stage")) {
@@ -379,6 +385,11 @@ public class Client {
         }
     }
 
+    /**
+     * Player assign units until finished
+     * 
+     * @throws IOException
+     */
     public void playerAssignAllUnits() throws IOException {
         while (true) {
             boolean finished = playerAssignUnit();

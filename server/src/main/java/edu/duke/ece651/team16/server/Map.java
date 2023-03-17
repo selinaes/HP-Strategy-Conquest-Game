@@ -121,8 +121,13 @@ public class Map {
         fuqua, bookStore, wallace, wilson));
 
     HashMap<String, List<Territory>> dukemap = new HashMap<>();
-    int numTerritories = numPlayer == 2 ? 12 : numPlayer == 3 ? 8 : numPlayer == 4 ? 6 : -1;
-
+    // int numTerritories = numPlayer == 2 ? 12 : numPlayer == 3 ? 8 : numPlayer == 4 ? 6 : -1;
+    int numTerritories;
+    if (numPlayer < 1 || numPlayer > 24) {
+      numTerritories = -1;
+    } else {
+      numTerritories = 24 / numPlayer;
+    }
     if (numTerritories != -1) {
       List<String> colors = Arrays.asList("red", "blue", "yellow", "green").subList(0, numPlayer);
       for (int i = 0; i < numPlayer; i++) {

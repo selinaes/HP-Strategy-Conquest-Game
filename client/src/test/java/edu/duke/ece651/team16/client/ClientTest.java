@@ -241,6 +241,7 @@ public class ClientTest {
   public void test_waitEveryoneDone() throws IOException, Exception {
     Socket mockSocket = makeMockSocket();
     BufferedReader inputSource = mock(BufferedReader.class);
+    
     PrintStream out = makeOut();
 
     Client client = new Client(mockSocket, inputSource, out);
@@ -385,7 +386,7 @@ public class ClientTest {
   @Test
   public void test_run() throws IOException, Exception {
     Socket mockSocket = makeMockSocket();
-    String[] inputs = new String[] { "input1", "input2" };
+    String[] inputs = new String[] { "input1", "input2", "d" };
     String inputString = String.join("\n", inputs) + "\n";
     InputStream sysIn = new ByteArrayInputStream(inputString.getBytes());
     BufferedReader inputSource = new BufferedReader(new InputStreamReader(sysIn));
@@ -398,12 +399,12 @@ public class ClientTest {
     socketReceiveField.setAccessible(true);
     BufferedReader mockReader = mock(BufferedReader.class);
     when(mockReader.readLine()).thenReturn("playerChooseNum", "Valid")
-        .thenReturn("stage Complete").thenReturn("displayInitialMap").thenReturn("playerChooseColor",
-            "Valid")
-        .thenReturn("finished stage").thenReturn("stage Complete").thenReturn("displayMap");
+        .thenReturn("stage Complete").thenReturn("displayInitialMap").thenReturn("playerChooseColor", "Valid")
+        .thenReturn("finished stage").thenReturn("stage Complete").thenReturn("displayMap").thenReturn("Map")
+        .thenReturn("finished stage").thenReturn("stage Complete");
     socketReceiveField.set(client, mockReader);
 
-    // client.run();
+    client.run();
 
     client.close();
   }
@@ -431,6 +432,43 @@ public class ClientTest {
   }
 
   @Test
-  public void test_playerActionTurn() {
+  public void test_playerOneAction() throws IOException, Exception {
+    Socket mockSocket = makeMockSocket();
+    BufferedReader inputSource = mock(BufferedReader.class);
+    when(inputSource.readLine())
+        .thenReturn(null).thenReturn("t, t", "t, t, 3", "Prompt, prompt, 3");
+    PrintStream out = makeOut();
+
+    Client client = new Client(mockSocket, inputSource, out);
+    Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
+    socketReceiveField.setAccessible(true);
+    BufferedReader mockReader = mock(BufferedReader.class);
+    when(mockReader.readLine()).thenReturn("Prompt").thenReturn("Not Valid").thenReturn("Valid");
+    socketReceiveField.set(client, mockReader);
+
+    client.playerOneAction();
+    client.close();
+  }
+
+  @Test
+  public void test_playerActionTurn() throws IOException, Exception {
+    Socket mockSocket = makeMockSocket();
+    BufferedReader inputSource = mock(BufferedReader.class);
+    when(inputSource.readLine()).thenReturn("s", "m", "Prompt, prompt, 3", "d", "d");
+    PrintStream out = makeOut();
+
+    Client client = new Client(mockSocket, inputSource, out);
+    Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
+    socketReceiveField.setAccessible(true);
+    BufferedReader mockReader = mock(BufferedReader.class);
+
+    String jsonString = "{\"Entry\":\"a\"}";
+    when(mockReader.readLine()).thenReturn(jsonString).thenReturn("recvMsg").thenReturn("Valid").thenReturn(jsonString)
+        .thenReturn("finished stage").thenReturn(jsonString).thenReturn("not finish");
+    socketReceiveField.set(client, mockReader);
+
+    client.playerActionTurn();
+    client.playerActionTurn();
+    client.close();
   }
 }

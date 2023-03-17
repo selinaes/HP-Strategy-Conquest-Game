@@ -47,7 +47,7 @@ public class Connection {
    * 
    * @return: the message received
    */
-  public String recv() throws IOException {
+  public String recv() {
     boolean received = false;
     String ans = null;
     while (!received) {
@@ -57,9 +57,6 @@ public class Connection {
           received = true;
         }
       }
-      // catch (SocketTimeoutException e) {
-      // System.out.println("Timeout occurred while waiting for message.");
-      // }
       catch (IOException e) {
         System.out.println("Failed to receive message.");
         // System.exit(1);
@@ -71,7 +68,7 @@ public class Connection {
   /**
    * Close the connection
    */
-  public void close() throws IOException {
+  public void close() {
     try {
       clientsocket.close();
     } catch (IOException e) {

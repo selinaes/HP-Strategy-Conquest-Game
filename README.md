@@ -25,15 +25,14 @@
 ## Review
 
 ### Requirements
-test test
 See requirements in [prj1.pdf](prj1.pdf)
 
 ## Design Overview
 
 MoveInputChecker and AttackInputChecker should:
 - check units > 0 
-- check source territory is your.
-- check destinination territory is your.
+- check source territory is yours.
+- check destinination territory is yours.
 
 ### UML Diagram
 ```mermaid

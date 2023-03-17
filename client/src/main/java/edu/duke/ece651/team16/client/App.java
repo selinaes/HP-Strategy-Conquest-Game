@@ -11,6 +11,14 @@ import java.io.PrintStream;
 import java.net.Socket;
 
 public class App {
+  private final String ip;
+  private final int port;
+
+  public App(String ip, int port) {
+    this.ip = ip;
+    this.port = port;
+  }
+
   public static void main(String[] args) throws IOException {
     // App a = new App();
     int port = 1234;

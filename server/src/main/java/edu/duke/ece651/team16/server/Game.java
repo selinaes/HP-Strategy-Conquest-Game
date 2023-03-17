@@ -17,6 +17,8 @@ public class Game {
     private String gameState; // setNumPlayer, setPlayerColor, setUnits, issueOrder, worldWar, warEnd
     private int readyPlayer;
     private int unitsPerPlayer;
+    private int playerLowBound;
+    private int playerHighBound;
 
     /**
      * Constructor for Server class that takes in a serverSocket
@@ -33,10 +35,17 @@ public class Game {
         this.gameState = "setNumPlayer";
         this.unitsPerPlayer = unitsPerPlayer;
         this.readyPlayer = 0;
+        this.playerLowBound = 2;
+        this.playerHighBound = 4;
     }
 
-    // gameFlow()
-    public void gameFlow(Socket client_socket, int numClients) throws JsonProcessingException, IOException {
+    /**
+     * the flow of the game, with diffeeent phases
+     * 
+     * @param ServerSocket serverSocket: the server socket
+     * @param int          numClients: the number of clients
+     */
+    public void gameFlow(Socket client_socket, int numClients) {
         Player p = doPlacementPhase(client_socket, numClients);
         // while (findWinner() == null) {
         // doActionPhase(p);
@@ -48,8 +57,15 @@ public class Game {
         doActionPhase(p);
     }
 
-    public void doActionPhase(Player p) throws JsonProcessingException, IOException {
+    /**
+     * the action phase of the game
+     *
+     * @param Player p: the player
+     */
+    public void doActionPhase(Player p) {
+
         HashMap<String, String> to_send_log = new HashMap<>();
+
         doAction(p);
 
         while (true) {
@@ -59,6 +75,7 @@ public class Game {
                 }
             }
         }
+
         // HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
         // sendMap(p, to_send);
         // System.out.println("World war");
@@ -96,15 +113,15 @@ public class Game {
     public Player doPlacementPhase(Socket client_socket, int numClients) {
         Connection connection = new Connection(client_socket);
         allConnections.add(connection);
-        try {
-            chooseNumOfPlayers(connection, numClients);// gameState = setNumPlayer
-            while (true) {
-                synchronized (this) {
-                    if (gameState.equals("setPlayerColor")) {
-                        break;
-                    }
+        chooseNumOfPlayers(connection, numClients);// gameState = setNumPlayer
+        while (true) {
+            synchronized (this) {
+                if (gameState.equals("setPlayerColor")) {
+                    break;
                 }
             }
+        }
+
 
             HashMap<String, ArrayList<HashMap<String, String>>> to_send_initial = formInitialMap();
             sendInitialMap(connection, to_send_initial);
@@ -121,17 +138,11 @@ public class Game {
                     }
                 }
             }
-            HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
-            sendMap(p, to_send);
-            readyPlayer = 0;
-            return p;
-
-        } catch (IOException ioe) {
-            // in something real, we would want to handle
-            // this better... but for this, there isn't much we can or
-            // really want to do.
-        }
-        return null;
+        
+        HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
+        sendMap(p, to_send);
+        readyPlayer = 0;
+        return p;
     }
 
     /**
@@ -169,9 +180,12 @@ public class Game {
         return map;
     }
 
+    /**
+     * form the initial map to send to client
+     * 
+     */
     public HashMap<String, ArrayList<HashMap<String, String>>> formInitialMap() {
         HashMap<String, ArrayList<HashMap<String, String>>> map = new HashMap<String, ArrayList<HashMap<String, String>>>();
-
         for (String color : colors) {
             ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
             for (Territory t : defaultMap.getMap().get(color)) {
@@ -188,15 +202,18 @@ public class Game {
     /**
      * Send Initial Map to client
      * 
-     * @throws JsonProcessingException
-     * 
+     * @param Connection conn
+     * @param HashMap<String,ArrayList<String>> the map to_send
      */
-    public void sendInitialMap(Connection conn, HashMap<String, ArrayList<HashMap<String, String>>> to_send)
-            throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        // convert the HashMap to a JSON object
-        String jsonString = objectMapper.writeValueAsString(to_send);
-        conn.send(jsonString);
+    public void sendInitialMap(Connection conn, HashMap<String, ArrayList<HashMap<String, String>>> to_send) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            // convert the HashMap to a JSON object
+            String jsonString = objectMapper.writeValueAsString(to_send);
+            conn.send(jsonString);
+        } catch (JsonProcessingException e) {
+            System.err.println("Error in sending map");
+        }
     }
 
     /**
@@ -205,24 +222,18 @@ public class Game {
      * @param player                            to be sent to
      * @param HashMap<String,ArrayList<String>> the map to_send
      */
-    public void sendMap(Player player, HashMap<String, ArrayList<HashMap<String, String>>> to_send)
-            throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        // convert the HashMap to a JSON object
-        String jsonString = objectMapper.writeValueAsString(to_send);
-        player.getConnection().send(jsonString);
+    public void sendMap(Player player, HashMap<String, ArrayList<HashMap<String, String>>> to_send) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            // convert the HashMap to a JSON object
+            String jsonString = objectMapper.writeValueAsString(to_send);
+            player.getConnection().send(jsonString);
+        } catch (JsonProcessingException e) {
+            System.err.println("Error in sending map");
+        }
+
     }
 
-    // /*
-    // * Close all connections to client
-    // */
-    // public void close() throws IOException {
-    // // close all connection by looping players
-    // for (Player p : players) {
-    // p.getConnection().close();
-    // }
-
-    // }
 
     /**
      * Prompt the player to choose a color
@@ -230,7 +241,7 @@ public class Game {
      * @param Connection connection
      * @return string color chosen by player
      **/
-    public String chooseColor(Connection connection) throws IOException {
+    public String chooseColor(Connection connection) {
         String colorList = "";
         for (String color : colors) {
             colorList += color + " ";
@@ -254,21 +265,19 @@ public class Game {
      * prompt the player to choose number of players
      * 
      * @param Connection connection
+     * @param int        numClients
      */
-    public void chooseNumOfPlayers(Connection connection, int numClients) throws IOException {
+    public void chooseNumOfPlayers(Connection connection, int numClients) {
         synchronized (this) {
             this.gameState = "setNumPlayer";
         }
-        // synchronized (this) {
-        // this.gameState = "setNumPlayer";
-        // }
         if (numClients == 1) {
             connection.send(
                     "You are the first player! Please set the number of players in this game(Valid player number: 2-4): ");
             String num = connection.recv();
             try {
                 int numOfPlayers = Integer.parseInt(num);
-                if (numOfPlayers < 2 || numOfPlayers > 4) {
+                if (numOfPlayers < this.playerLowBound || numOfPlayers > this.playerHighBound) {
                     connection.send("Invalid number of players");
                     chooseNumOfPlayers(connection, numClients);
                     return;
@@ -317,8 +326,10 @@ public class Game {
     /**
      * Prompt the player to assign all units to territories
      * 
+     * @param Player p
+     * @param Connection connection
      */
-    public void assignUnits(Player p, Connection connection) throws IOException {
+    public void assignUnits(Player p, Connection connection) {
         while (p.unplacedUnits() > 0) {
             promptTerritory(p, connection);
             String territoryName = connection.recv();
@@ -348,9 +359,9 @@ public class Game {
      * Notify all players that the player has finished assigning units
      * 
      * @param Connection connection
-     * @throws IOException
+     * @param String     newStage
      */
-    public void notifyAllPlayers(Connection connection, String newStage) throws IOException {
+    public void notifyAllPlayers(Connection connection, String newStage) {
         connection.send("finished stage");
         synchronized (this) {
             ++this.readyPlayer;
@@ -368,10 +379,8 @@ public class Game {
      * 
      * @param Player     p
      * @param Connection connection
-     * @throws IOException
      */
-
-    private void promptTerritory(Player p, Connection connection) throws IOException {
+    private void promptTerritory(Player p, Connection connection) {
         String msg_territory = "You have " + Integer.toString(p.unplacedUnits())
                 + " units left. If you want to finish placement, enter done. Otherwise, choose a territory to assign units to. Please enter the territory name: ";
         connection.send(msg_territory);
@@ -384,9 +393,8 @@ public class Game {
      * @param String     territoryName
      * @param Connection connection
      * @return boolean
-     * @throws IOException
      */
-    private boolean isValidTerritory(Player p, String territoryName, Connection connection) throws IOException {
+    private boolean isValidTerritory(Player p, String territoryName, Connection connection) {
         if (!p.getTerritoryNames().contains(territoryName)) {
             connection.send("Invalid territory name");
             assignUnits(p, connection);
@@ -402,9 +410,8 @@ public class Game {
      * @param Player     p
      * @param String     territoryName
      * @param Connection connection
-     * @throws IOException
      */
-    private void promptUnitNumber(Player p, String territoryName, Connection connection) throws IOException {
+    private void promptUnitNumber(Player p, String territoryName, Connection connection) {
         String msg_amount = "You have " + Integer.toString(p.unplacedUnits())
                 + " units left. If you want to finish placement, enter done. Otherwise, how many units do you want to assign to "
                 + territoryName + "? Please enter a number: ";
@@ -420,8 +427,7 @@ public class Game {
      * @param Connection connection
      * @return boolean
      */
-    private boolean isValidUnitNumber(Player p, String territoryName, String num, Connection connection)
-            throws IOException {
+    private boolean isValidUnitNumber(Player p, String territoryName, String num, Connection connection) {
         try {
             int numOfUnits = Integer.parseInt(num);
             if (numOfUnits < 0 || numOfUnits > p.unplacedUnits()) {
@@ -451,6 +457,7 @@ public class Game {
      * Form the entry string contains choices of A(ttack), M(ove), D(one)
      * 
      * @param Player p
+     * @return HashMap<String, String>
      */
     public HashMap<String, String> formEntry(Player p) {
         StringBuilder entry = new StringBuilder("");
@@ -468,12 +475,17 @@ public class Game {
      * 
      * @param Player p
      */
-    public void sendEntry(Player p) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        HashMap<String, String> to_send_entry = formEntry(p);
-        // convert the HashMap to a JSON object
-        String jsonString = objectMapper.writeValueAsString(to_send_entry);
-        p.getConnection().send(jsonString);
+    public void sendEntry(Player p) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            HashMap<String, String> to_send_entry = formEntry(p);
+            // convert the HashMap to a JSON object
+            String jsonString = objectMapper.writeValueAsString(to_send_entry);
+            p.getConnection().send(jsonString);
+        } catch (JsonProcessingException e) {
+            System.err.println("Error in sending entry");
+        }
+
     }
 
     /**
@@ -491,8 +503,9 @@ public class Game {
      * Do Action phase of the game
      * 
      * @param Player p
+     * @return boolean
      */
-    public boolean doAction(Player p) throws JsonProcessingException, IOException {
+    public boolean doAction(Player p) {
         // choose action step. Client side checked. No reprompt
         sendEntry(p);
         String action = p.getConnection().recv().toLowerCase();
@@ -511,7 +524,14 @@ public class Game {
         return done;
     }
 
-    public Order makeActionOrder(Player p, String actionName) throws IOException {
+    /**
+     * ask the player to enter info for action: Territory from, Territory to, number of units(e.g. T1, T2, 2)
+     * 
+     * @param Player p
+     * @param String actionname
+     * @return Order
+     */
+    public Order makeActionOrder(Player p, String actionName) {
         p.getConnection().send(
                 "Please enter in the following format: Territory from, Territory to, number of units(e.g. T1, T2, 2)");
         String actionInput = p.getConnection().recv(); // e.g. T1, T2, 2
@@ -541,8 +561,9 @@ public class Game {
      * Do one move in the move phase
      * 
      * @param Player p
+     * @param String actionName
      */
-    public void doOneAction(Player p, String actionName) throws IOException {
+    public void doOneAction(Player p, String actionName) {
         Order order = makeActionOrder(p, actionName);
         String tryAction = order.tryAction();
         if (tryAction == null) { // valid
@@ -560,6 +581,7 @@ public class Game {
      * check if one placement rule is valid
      * 
      * @param territory_name the territory name
+     * @param map            the map
      * @return null if the placement rule is valid, otherwise return the error
      *         message
      */
