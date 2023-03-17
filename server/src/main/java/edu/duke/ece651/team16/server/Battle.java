@@ -115,9 +115,10 @@ public class Battle {
      */
     public String GameLog() {
         String log = "";
+        combineUnitsFromSamePlayer();
         for (ArrayList<Unit> party : parties) {
             log += "Player " + party.get(0).getOwner().getColor() + " has " + party.size()
-                    + " units in this battle. ";
+                    + " units. ";
         }
         return log;
     }

@@ -55,13 +55,12 @@ public class Territory {
   /**
    * Resolve battle phase for one territory
    */
-  public HashMap<String, String> doBattle() {
-    HashMap<String, String> result = new HashMap<>();
+  public String doBattle() {
     defendHome();
     String prelog = battle.GameLog();
     Player winner = battle.resolveBattle();
-    String postlog = battle.GameLog();
-    String gameLog = "Territory " + name + "\nBattle participants:\n" + prelog + "\nWinner:\n" + postlog;
+    // String postlog = battle.GameLog();
+    String gameLog = "Battle participants: " + prelog + "\nWinner: " + winner.getColor() + "\n";
     List<Territory> to_add = new ArrayList<>();
     to_add.add(this);
     if (!winner.equals(this.owner)) {
@@ -71,8 +70,8 @@ public class Territory {
     this.owner = winner;
     this.units = battle.getParties().get(0);
     System.out.println("After battle " + name + "'s units size is " + units.size());
-    result.put("Game Log", gameLog);
-    return result;
+
+    return gameLog;
   }
 
   // public void sendLog(Player player, HashMap<String, String> to_send)

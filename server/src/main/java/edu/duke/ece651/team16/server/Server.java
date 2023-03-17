@@ -29,7 +29,7 @@ public class Server {
         this.listenSocket = serverSocket;
         BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(32);
         this.threadPool = new ThreadPoolExecutor(2, 16, 5, TimeUnit.SECONDS, workQueue);
-        this.game = new Game(2);
+        this.game = new Game(5);
         this.numClients = 0;
     }
 

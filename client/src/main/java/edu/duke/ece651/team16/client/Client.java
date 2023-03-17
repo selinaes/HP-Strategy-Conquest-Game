@@ -70,6 +70,7 @@ public class Client {
 
         playerActionTurn();
         waitEveryoneDone();
+        displayLog();
         displayMap();
     }
 
@@ -282,14 +283,14 @@ public class Client {
 
     /**
      * Display map
-     * 
+     *
      * @throws IOException
      */
     public void displayLog() throws IOException {
         String jsonString = recvMsg();
         // convert jsonString to jsonobject
         ObjectMapper objectMapper = new ObjectMapper();
-        HashMap<String, ArrayList<HashMap<String, String>>> input_map;
+        HashMap<String, String> input_Log;
         try {
             input_Log = objectMapper.readValue(jsonString, HashMap.class);
         } catch (JsonProcessingException e) {
@@ -298,17 +299,14 @@ public class Client {
         }
         // Player name is the input_map key
         // ArrayList<HashMap<String, String>> is the value of the key
-        for (Map.Entry<String, ArrayList<HashMap<String, String>>> entry : input_map.entrySet()) {
-            String playername = entry.getKey();
-            String title = playername + " player: ";
+        for (Map.Entry<String, String> entry : input_Log.entrySet()) {
+            String territoryName = entry.getKey();
+            String title = "War Log in " + territoryName + ": ";
             out.println(title);
-            String seperation = String.join("", Collections.nCopies(title.length(), "-"));
+            String seperation = String.join("", Collections.nCopies(title.length(),
+                    "-"));
             out.println(seperation);
-            ArrayList<HashMap<String, String>> playerAsset = entry.getValue();
-            for (HashMap<String, String> asset : playerAsset) {
-                String log = asset.get("Game Log");
-                out.println("Game Log:\n" + log);
-            }
+            out.println(entry.getValue());
         }
     }
 

@@ -49,6 +49,7 @@ public class Game {
     }
 
     public void doActionPhase(Player p) throws JsonProcessingException, IOException {
+        HashMap<String, String> to_send_log = new HashMap<>();
         doAction(p);
 
         while (true) {
@@ -62,7 +63,13 @@ public class Game {
         // sendMap(p, to_send);
         // System.out.println("World war");
         if (p.equals(players.get(0))) {
-            worldwar();
+            to_send_log = worldwar();
+            for (Player player : players) {
+                sendLog(player, to_send_log);
+            }
+            synchronized (this) {
+                this.gameState = "warEnd";
+            }
         }
         while (true) {
             synchronized (this) {
@@ -470,6 +477,17 @@ public class Game {
     }
 
     /**
+     * Send the entry string to the player
+     *
+     * @param Player p
+     */
+    public void sendLog(Player p, HashMap<String, String> to_send) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(to_send);
+        p.getConnection().send(jsonString);
+    }
+
+    /**
      * Do Action phase of the game
      * 
      * @param Player p
@@ -559,30 +577,23 @@ public class Game {
     /**
      * After one turn of moving and attacking, resolve battle for each territory
      */
-    public void worldwar() {
+    public HashMap<String, String> worldwar() {
+        HashMap<String, String> worldLog = new HashMap<>();
         for (Player p : players) {
             List<Territory> territoriesCopy = List.copyOf(p.getTerritories()); // otherwise
                                                                                // ConcurrentModificationException
             for (Territory territory : territoriesCopy) {
                 if (territory.existsBattle()) {
                     System.out.println("Player " + p.getColor() + " turn and " + territory.getName() + " in battle");
-                    HashMap<String, String> to_send_map = territory.doBattle();
-                    // try {
-                    // ObjectMapper objectMapper = new ObjectMapper();
-                    // String jsonString = objectMapper.writeValueAsString(to_send_map);
-                    // p.getConnection().send(jsonString);
-                    // } catch (JsonProcessingException e) {
-                    // e.printStackTrace();
-                    // }
+                    String battleLog = territory.doBattle();
+                    worldLog.put(territory.getName(), battleLog);
                 }
             }
         }
-        // for (Player p : players) {
-        // p.generateNewUnit();
-        // }
-        synchronized (this) {
-            this.gameState = "warEnd";
+        for (Player p : players) {
+            p.generateNewUnit();
         }
+        return worldLog;
     }
 
     /**
