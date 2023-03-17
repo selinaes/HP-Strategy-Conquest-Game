@@ -19,6 +19,7 @@ public class Game {
     private int unitsPerPlayer;
     private int playerLowBound;
     private int playerHighBound;
+    private int gameRound;
 
     /**
      * Constructor for Server class that takes in a serverSocket
@@ -26,7 +27,7 @@ public class Game {
      * @param ServerSocket serverSocket
      */
     public Game(int unitsPerPlayer) {
-        this.numPlayer = 2;
+        this.numPlayer = 4;
         this.players = new ArrayList<Player>();
         this.defaultMap = new Map(numPlayer);
         defaultMap.createBasicMap();
@@ -37,6 +38,15 @@ public class Game {
         this.readyPlayer = 0;
         this.playerLowBound = 2;
         this.playerHighBound = 4;
+        this.gameRound = 0;
+    }
+
+    public void printPlayer(){
+        System.out.println("===Update Player List====");
+        for(Player p : players){
+            System.out.println("Player is "+ p.getColor());
+        }
+        System.out.println("========End=======\n");
     }
 
     /**
@@ -47,17 +57,22 @@ public class Game {
      */
     public void gameFlow(Socket client_socket, int numClients) {
         Player p = doPlacementPhase(client_socket, numClients);
-        // while (findWinner() == null) {
+        synchronized (this) {
+            this.readyPlayer = 0;
+        }
+        while (findWinner() == null) {
+            p.getConnection().send("Game continues");
+            doActionPhase(p);
+            
+        }
+        Player winner = findWinner();
+        // notify this player of winner!
+        p.getConnection().send(winner.getColor());
         // doActionPhase(p);
-        // p.getConnection().send("Game continues");
-        // }
-        // Player winner = findWinner();
-        // // notify this player of winner!
-        // p.getConnection().send(winner.getColor());
-        doActionPhase(p);
     }
 
     /**
+     * 
      * the action phase of the game
      *
      * @param Player p: the player
@@ -67,7 +82,7 @@ public class Game {
         HashMap<String, String> to_send_log = new HashMap<>();
 
         doAction(p);
-
+        System.out.println("Round " + this.gameRound +" Line 85 for user " + p.getColor() + "state" + gameState);
         while (true) {
             synchronized (this) {
                 if (gameState.equals("worldWar")) {
@@ -75,26 +90,32 @@ public class Game {
                 }
             }
         }
-
+        System.out.println("Round " + this.gameRound +" Line 93 for user " + p.getColor() + "state" + gameState);
         // HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
         // sendMap(p, to_send);
         // System.out.println("World war");
         if (p.equals(players.get(0))) {
             to_send_log = worldwar();
+            System.out.println("Round " + this.gameRound +"World war execution user: " + p.getColor());
             for (Player player : players) {
                 sendLog(player, to_send_log);
             }
+            System.out.println("Round " + this.gameRound +" Line 103 for user " + p.getColor());
             synchronized (this) {
                 this.gameState = "warEnd";
+                this.gameRound++;
+                this.readyPlayer = 0;
             }
         }
+        System.out.println("Round " + this.gameRound +"Line 110 for user " + p.getColor());
         while (true) {
             synchronized (this) {
                 if (gameState.equals("warEnd")) {
                     break;
-                }
+                } 
             }
         }
+        System.out.println("Round " + this.gameRound +"Line 118 for user" + p.getColor());
         HashMap<String, ArrayList<HashMap<String, String>>> to_send1 = formMap();
         sendMap(p, to_send1);
 
@@ -128,6 +149,7 @@ public class Game {
         String color = chooseColor(connection);
         Player p = new Player(color, connection, defaultMap.getMap().get(color), this.unitsPerPlayer);
         addPlayer(p);
+        System.out.println("Player " + p.getColor() + " added");
 
         assignUnits(p, connection);
         while (true) {
@@ -140,7 +162,7 @@ public class Game {
 
         HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
         sendMap(p, to_send);
-        readyPlayer = 0;
+        // readyPlayer = 0;
         return p;
     }
 
@@ -151,6 +173,7 @@ public class Game {
      */
     public void addPlayer(Player p) {
         players.add(p);
+        printPlayer();
     }
 
     /**
@@ -316,8 +339,8 @@ public class Game {
      */
     public void initializeMap(int numOfPlayers) {
         this.defaultMap = new Map(numOfPlayers);
-        defaultMap.createDukeMap();
-        // defaultMap.createTestMap();
+        // defaultMap.createDukeMap();
+        defaultMap.createTestMap();
         this.colors = defaultMap.getColorList();
     }
 
@@ -606,7 +629,7 @@ public class Game {
     public HashMap<String, String> worldwar() {
         HashMap<String, String> worldLog = new HashMap<>();
         for (Player p : players) {
-            List<Territory> territoriesCopy = List.copyOf(p.getTerritories()); // otherwise
+            List<Territory> territoriesCopy = List.copyOf(p.getTerritories()); // immutable copy. if don't copy,
                                                                                // ConcurrentModificationException
             for (Territory territory : territoriesCopy) {
                 if (territory.existsBattle()) {
@@ -616,10 +639,14 @@ public class Game {
                 }
             }
         }
+        generateUnit();
+        return worldLog;
+    }
+
+    public void generateUnit() {
         for (Player p : players) {
             p.generateNewUnit();
         }
-        return worldLog;
     }
 
     /**
@@ -628,7 +655,7 @@ public class Game {
      * @return winner if the game is over, otherwise return null
      */
     public Player findWinner() {
-        List<Player> playersCopy = List.copyOf(players);
+        List<Player> playersCopy = new ArrayList<>(players); // mutable copy
         for (Player p : players) {
             if (p.checkLose()) {
                 playersCopy.remove(p);

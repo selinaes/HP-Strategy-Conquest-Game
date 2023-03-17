@@ -23,7 +23,19 @@ public class Battle {
      * @param units
      */
     public void addGroup(ArrayList<Unit> units) {
-        parties.add(units);
+        boolean placed = false;
+        for (int i = 0; i < parties.size(); ++i) {
+            if (parties.get(i).get(0).getOwner().equals(units.get(0).getOwner())){         
+                parties.get(i).addAll(units);
+                // parties.set(i, temp);
+                placed = true;
+                break;
+            }
+        }
+        if (!placed) {
+            parties.add(units);
+        }
+            
     }
 
     /**
@@ -79,34 +91,36 @@ public class Battle {
     /**
      * Combine units from the same player
      */
-    private void combineUnitsFromSamePlayer() {
-        System.out.println("============Before Combine:============");
-        System.out.println("Parties has: ");
-        for (ArrayList<Unit> p : parties) {
-            System.out.println("Player " + p.get(0).getOwner().getColor() + "'s Units:");
-            for (Unit u : p) {
-                System.out.println("Unit :" + u.getId());
-            }
-        }
-        HashMap<Player, ArrayList<Unit>> ownerToUnits = new HashMap<>();
-        for (ArrayList<Unit> party : parties) {
-            Player owner = party.get(0).getOwner();
-            if (ownerToUnits.containsKey(owner)) {
-                ownerToUnits.get(owner).addAll(party);
-            } else {
-                ownerToUnits.put(owner, new ArrayList<>(party));
-            }
-        }
-        this.parties = new ArrayList<>(ownerToUnits.values());
-        System.out.println("============After Combine:============");
-        System.out.println("Parties has: ");
-        for (ArrayList<Unit> p : parties) {
-            System.out.println("Player " + p.get(0).getOwner().getColor() + "'s Units:");
-            for (Unit u : p) {
-                System.out.println("Unit :" + u.getId());
-            }
-        }
-    }
+    // private void combineUnitsFromSamePlayer() {
+    //     System.out.println("\n\n============Before Combine:============");
+    //     System.out.println("Parties has: ");
+    //     for (ArrayList<Unit> p : this.parties) {
+    //         System.out.println("Player " + p.get(0).getOwner().getColor() + "'s Units:");
+    //         for (Unit u : p) {
+    //             System.out.print("Unit id:" + u.getId() + "\n");
+    //         }
+    //         System.out.println();
+    //     }
+    //     HashMap<Player, ArrayList<Unit>> ownerToUnits = new HashMap<>();
+    //     for (ArrayList<Unit> party : this.parties) {
+    //         Player owner = party.get(0).getOwner();
+    //         if (ownerToUnits.containsKey(owner)) {
+    //             ownerToUnits.get(owner).addAll(party);
+    //         } else {
+    //             ownerToUnits.put(owner, new ArrayList<>(party));
+    //         }
+    //     }
+    //     this.parties = new ArrayList<>(ownerToUnits.values());
+    //     System.out.println("\n============After Combine:============");
+    //     System.out.println("Parties has: ");
+    //     for (ArrayList<Unit> p : this.parties) {
+    //         System.out.println("Player " + p.get(0).getOwner().getColor() + "'s Units:");
+    //         for (Unit u : p) {
+    //             System.out.print("Unit id:" + u.getId() + "\n");
+    //         }
+    //         System.out.println();
+    //     }
+    // }
 
     /**
      * Form a game log that shows the number of units in each party
@@ -115,7 +129,7 @@ public class Battle {
      */
     public String GameLog() {
         String log = "";
-        combineUnitsFromSamePlayer();
+        // combineUnitsFromSamePlayer();
         for (ArrayList<Unit> party : parties) {
             log += "Player " + party.get(0).getOwner().getColor() + " has " + party.size()
                     + " units. ";
@@ -123,17 +137,21 @@ public class Battle {
         return log;
     }
 
+    public void clearParty() {
+        this.parties = new ArrayList<ArrayList<Unit>>();
+    }
+
     public Player resolveBattle() {
-        combineUnitsFromSamePlayer();
+        // combineUnitsFromSamePlayer();
         int index = 0;
-        System.out.println("Parties size: " + parties);
+        // System.out.println("Parties size: " + parties);
         while (parties.size() > 1) {
             // get the first unit of the party
             int indexA = index % parties.size();
             int indexB = (index + 1) % parties.size();
-            System.out.println("IndexA: " + indexA);
-            System.out.println("IndexB: " + indexB);
-            System.out.println("Parties size: " + parties.size());
+            // System.out.println("IndexA: " + indexA);
+            // System.out.println("IndexB: " + indexB);
+            // System.out.println("Parties size: " + parties.size());
             ArrayList<Unit> unitsA = parties.get(indexA);
             ArrayList<Unit> unitsB = parties.get(indexB);
             Unit unitA = unitsA.get(0);

@@ -46,7 +46,7 @@ public class Territory {
    * If there is a battle, add units to the battle to defend the territory
    */
   public void defendHome() {
-    System.out.println("Player " + owner.getColor() + "'s unit size is " + this.units.size());
+    // System.out.println("Player " + owner.getColor() + "'s home unit size is " + this.units.size());
     if (this.units.size() > 0 && !this.battle.checkGroupExisted(units)) {
       battle.addGroup(units);
     }
@@ -60,7 +60,7 @@ public class Territory {
     String prelog = battle.GameLog();
     Player winner = battle.resolveBattle();
     // String postlog = battle.GameLog();
-    String gameLog = "Battle participants: " + prelog + "\nWinner: " + winner.getColor() + "\n";
+    String gameLog = "Battle participants: " + prelog + "\nBattle Winner: " + winner.getColor() + "\n";
     List<Territory> to_add = new ArrayList<>();
     to_add.add(this);
     if (!winner.equals(this.owner)) {
@@ -69,8 +69,8 @@ public class Territory {
     }
     this.owner = winner;
     this.units = battle.getParties().get(0);
-    System.out.println("After battle " + name + "'s units size is " + units.size());
-
+    // System.out.println("After battle " + name + "'s units size is " + units.size());
+    battle.clearParty();
     return gameLog;
   }
 
@@ -213,8 +213,8 @@ public class Territory {
    * @param neighbors to be set
    */
   public void setNeighbors(List<Territory> neighbors) {
-    this.neighbors = new ArrayList<>(neighbors);
-    for (Territory t : neighbors) {
+    for(Territory t: neighbors){
+      addNeighbor(t);
       t.addNeighbor(this);
     }
   }

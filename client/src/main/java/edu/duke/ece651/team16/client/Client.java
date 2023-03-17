@@ -56,22 +56,25 @@ public class Client {
         waitEveryoneDone();
         displayMap();
 
-        // String msg = recvMsg();
-        // while (msg.equals("Game continues")) {
-        // // action phase
-        // playerActionTurn();
-        // // displayMap();
-        // waitEveryoneDone();
-        // displayMap();
-        // msg = recvMsg();
-        // }
+        String msg = recvMsg();
+        while (msg.equals("Game continues")) {
+            out.println("\n\nNew round starts.");
+            // action phase
+            playerActionTurn();
+            // displayMap();
+            waitEveryoneDone();
+            out.println("out of wait");
+            displayLog();
+            displayMap();
+            msg = recvMsg();
+        }
         // game over
-        // out.println("Game over. Winner is " + msg);
+        out.println("Game over. Winner is " + msg);
 
-        playerActionTurn();
-        waitEveryoneDone();
-        displayLog();
-        displayMap();
+        // playerActionTurn();
+        // waitEveryoneDone();
+        // displayLog();
+        // displayMap();
     }
 
     /**
@@ -143,7 +146,7 @@ public class Client {
      * @throws IOException
      */
     public void waitEveryoneDone() throws IOException {
-        // out.println("wait everyone done");
+        out.println("wait everyone done");
         String expectPrompt = "stage Complete";
         String prompt = recvMsg();
         boolean done = false;

@@ -28,7 +28,7 @@ public class Server {
 
         this.listenSocket = serverSocket;
         BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(32);
-        this.threadPool = new ThreadPoolExecutor(2, 16, 5, TimeUnit.SECONDS, workQueue);
+        this.threadPool = new ThreadPoolExecutor(4, 16, 5, TimeUnit.SECONDS, workQueue);
         this.game = new Game(5);
         this.numClients = 0;
     }
@@ -70,6 +70,7 @@ public class Server {
                 public void run() {
                     try {
                         try {
+                            System.out.println("Client connected" + numClients);
                             game.gameFlow(client_socket, numClients);
                         } finally {
                             client_socket.close();
