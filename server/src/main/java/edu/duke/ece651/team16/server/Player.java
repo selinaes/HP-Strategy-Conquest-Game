@@ -108,6 +108,19 @@ public class Player {
         }
     }
 
+    // public void checkOwnedTerritories() {
+    // for (Territory t : Territories) {
+    // if (!t.getOwner().equals(this)) {
+    // Territories.remove(t);
+    // }
+    // }
+
+    // }
+
+    public void removeTerritory(Territory t) {
+        Territories.remove(t);
+    }
+
     /**
      * get the territories of the player in the placement phase
      * 
@@ -139,11 +152,26 @@ public class Player {
     /**
      * Generate new Units on each territory each round
      */
-    public void generateNewUnit(Territory t) {
-        Unit newUnit = new BasicUnit(this, t, false, numUnits++);
-        ArrayList<Unit> newGenerated = new ArrayList<>();
-        newGenerated.add(newUnit);
-        t.tryAddUnits(newGenerated);
-        units.add(newUnit);
+    public void generateNewUnit() {
+        for (Territory t : Territories) {
+            Unit newUnit = new BasicUnit(this, t, false, numUnits++);
+            ArrayList<Unit> newGenerated = new ArrayList<>();
+            newGenerated.add(newUnit);
+            t.tryAddUnits(newGenerated);// territory add unit
+            this.units.add(newUnit);// player's all units + 1 * num(territroy)
+        }
+        System.out.println("finish generate");
+    }
+
+    /**
+     * Check if the player has lost the game
+     * 
+     * @return true if the player has lost the game
+     */
+    public boolean checkLose() {
+        if (Territories.size() == 0) {
+            return true;
+        }
+        return false;
     }
 }

@@ -69,6 +69,7 @@ public class BattleTest {
     battle.addGroup(partyC);
     battle.addGroup(partyD);
     battle.addGroup(partyE);
+    battle.addGroup(partyA);
     battle.resolveBattle();
     // assertEquals(p1, battle.resolveBattle());
   }

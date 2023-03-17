@@ -31,7 +31,6 @@ public class Server {
         this.threadPool = new ThreadPoolExecutor(2, 16, 5, TimeUnit.SECONDS, workQueue);
         this.game = new Game(2);
         this.numClients = 0;
-
     }
 
     /**
@@ -72,7 +71,6 @@ public class Server {
                     try {
                         try {
                             game.gameFlow(client_socket, numClients);
-
                         } finally {
                             client_socket.close();
                         }

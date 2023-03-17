@@ -1,6 +1,7 @@
 package edu.duke.ece651.team16.server;
 
 import java.util.*;
+import java.util.ArrayList;
 
 public class Battle {
     private ArrayList<ArrayList<Unit>> parties;
@@ -43,6 +44,21 @@ public class Battle {
         return parties;
     }
 
+    /**
+     * Check if the battlefield has the given party's party
+     * 
+     * @param units the given party
+     * @return boolean true if the battlefield has the given party's party
+     */
+    public boolean checkGroupExisted(ArrayList<Unit> units) {
+        for (ArrayList<Unit> party : parties) {
+            if (party.get(0).getOwner().equals(units.get(0).getOwner())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // /*
     // * Check if the party is alive
     // *
@@ -60,12 +76,63 @@ public class Battle {
     // return false;
     // }
 
+    /**
+     * Combine units from the same player
+     */
+    private void combineUnitsFromSamePlayer() {
+        System.out.println("============Before Combine:============");
+        System.out.println("Parties has: ");
+        for (ArrayList<Unit> p : parties) {
+            System.out.println("Player " + p.get(0).getOwner().getColor() + "'s Units:");
+            for (Unit u : p) {
+                System.out.println("Unit :" + u.getId());
+            }
+        }
+        HashMap<Player, ArrayList<Unit>> ownerToUnits = new HashMap<>();
+        for (ArrayList<Unit> party : parties) {
+            Player owner = party.get(0).getOwner();
+            if (ownerToUnits.containsKey(owner)) {
+                ownerToUnits.get(owner).addAll(party);
+            } else {
+                ownerToUnits.put(owner, new ArrayList<>(party));
+            }
+        }
+        this.parties = new ArrayList<>(ownerToUnits.values());
+        System.out.println("============After Combine:============");
+        System.out.println("Parties has: ");
+        for (ArrayList<Unit> p : parties) {
+            System.out.println("Player " + p.get(0).getOwner().getColor() + "'s Units:");
+            for (Unit u : p) {
+                System.out.println("Unit :" + u.getId());
+            }
+        }
+    }
+
+    /**
+     * Form a game log that shows the number of units in each party
+     * 
+     * @return String
+     */
+    public String GameLog() {
+        String log = "";
+        for (ArrayList<Unit> party : parties) {
+            log += "Player " + party.get(0).getOwner().getColor() + " has " + party.size()
+                    + " units in this battle. ";
+        }
+        return log;
+    }
+
     public Player resolveBattle() {
+        combineUnitsFromSamePlayer();
         int index = 0;
+        System.out.println("Parties size: " + parties);
         while (parties.size() > 1) {
             // get the first unit of the party
             int indexA = index % parties.size();
             int indexB = (index + 1) % parties.size();
+            System.out.println("IndexA: " + indexA);
+            System.out.println("IndexB: " + indexB);
+            System.out.println("Parties size: " + parties.size());
             ArrayList<Unit> unitsA = parties.get(indexA);
             ArrayList<Unit> unitsB = parties.get(indexB);
             Unit unitA = unitsA.get(0);

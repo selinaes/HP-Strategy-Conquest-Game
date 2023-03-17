@@ -63,4 +63,8 @@ public class BasicUnit implements Unit {
     public void setDead() {
         this.isAlive = false;
     }
+
+    public int getId() {
+        return id;
+    }
 }

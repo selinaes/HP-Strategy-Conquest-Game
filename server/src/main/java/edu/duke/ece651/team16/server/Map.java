@@ -109,6 +109,24 @@ public class Map {
     return dukemap;
   }
 
+  public HashMap<String, List<Territory>> createTestMap() {
+    this.numPlayer = 4;
+    HashMap<String, List<Territory>> testMap = new HashMap<String, List<Territory>>();
+    Territory red = new Territory("R");
+    Territory blue = new Territory("B");
+    Territory yellow = new Territory("Y");
+    Territory green = new Territory("G");
+    red.setNeighbors(Arrays.asList(blue, yellow, green));
+    blue.setNeighbors(Arrays.asList(yellow, green));
+    yellow.setNeighbors(Arrays.asList(green));
+    testMap.put("red", new ArrayList<>(Arrays.asList(red)));
+    testMap.put("blue", new ArrayList<>(Arrays.asList(blue)));
+    testMap.put("yellow", new ArrayList<>(Arrays.asList(yellow)));
+    testMap.put("green", new ArrayList<>(Arrays.asList(green)));
+    setMap(testMap);
+    return testMap;
+  }
+
   /**
    * get the color list of the map
    * 
