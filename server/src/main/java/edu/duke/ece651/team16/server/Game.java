@@ -122,23 +122,22 @@ public class Game {
             }
         }
 
+        HashMap<String, ArrayList<HashMap<String, String>>> to_send_initial = formInitialMap();
+        sendInitialMap(connection, to_send_initial);
 
-            HashMap<String, ArrayList<HashMap<String, String>>> to_send_initial = formInitialMap();
-            sendInitialMap(connection, to_send_initial);
+        String color = chooseColor(connection);
+        Player p = new Player(color, connection, defaultMap.getMap().get(color), this.unitsPerPlayer);
+        addPlayer(p);
 
-            String color = chooseColor(connection);
-            Player p = new Player(color, connection, defaultMap.getMap().get(color), this.unitsPerPlayer);
-            addPlayer(p);
-
-            assignUnits(p, connection);
-            while (true) {
-                synchronized (this) {
-                    if (gameState.equals("issueOrder")) {
-                        break;
-                    }
+        assignUnits(p, connection);
+        while (true) {
+            synchronized (this) {
+                if (gameState.equals("issueOrder")) {
+                    break;
                 }
             }
-        
+        }
+
         HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
         sendMap(p, to_send);
         readyPlayer = 0;
@@ -202,7 +201,7 @@ public class Game {
     /**
      * Send Initial Map to client
      * 
-     * @param Connection conn
+     * @param Connection                        conn
      * @param HashMap<String,ArrayList<String>> the map to_send
      */
     public void sendInitialMap(Connection conn, HashMap<String, ArrayList<HashMap<String, String>>> to_send) {
@@ -233,7 +232,6 @@ public class Game {
         }
 
     }
-
 
     /**
      * Prompt the player to choose a color
@@ -326,7 +324,7 @@ public class Game {
     /**
      * Prompt the player to assign all units to territories
      * 
-     * @param Player p
+     * @param Player     p
      * @param Connection connection
      */
     public void assignUnits(Player p, Connection connection) {
@@ -493,10 +491,15 @@ public class Game {
      *
      * @param Player p
      */
-    public void sendLog(Player p, HashMap<String, String> to_send) throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String jsonString = objectMapper.writeValueAsString(to_send);
-        p.getConnection().send(jsonString);
+    public void sendLog(Player p, HashMap<String, String> to_send) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonString = objectMapper.writeValueAsString(to_send);
+            p.getConnection().send(jsonString);
+        } catch (JsonProcessingException e) {
+            System.err.println("Error in sending entry");
+        }
+
     }
 
     /**
@@ -525,7 +528,8 @@ public class Game {
     }
 
     /**
-     * ask the player to enter info for action: Territory from, Territory to, number of units(e.g. T1, T2, 2)
+     * ask the player to enter info for action: Territory from, Territory to, number
+     * of units(e.g. T1, T2, 2)
      * 
      * @param Player p
      * @param String actionname
