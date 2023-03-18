@@ -418,7 +418,9 @@ public class ClientTest {
 
     client.playerChooseWatch();
 
-    // client.playerChooseWatch();
+    client.playerChooseWatch();
+
+    assertTrue(client.ifExit());
   }
 
   @Test
@@ -482,6 +484,38 @@ public class ClientTest {
         .thenReturn("stage Complete")
         .thenReturn(jsonStringLog)
         .thenReturn(jsonString).thenReturn("Game over");
+    socketReceiveField.set(client, mockReader);
+
+    client.run();
+  }
+
+  @Test
+  public void test_runExit() throws IOException, Exception {
+    String jsonString = "{\"name\":[{\"TerritoryName\":\"a\",\"Neighbors\":\"(next to: b)\",\"Unit\":\"1\"}]}";
+    String jsonStringLog = "{\"Entry\":\"You are the blue player, what would you like to do?\"}";
+
+    Socket mSocket = makeSocket();
+    BufferedReader socketReceive = makeMockSocketReader(mSocket);
+    PrintWriter socketSend = makeMockSocketSend(mSocket);
+    String[] inputs = new String[] { "input1", "input2", "e" };
+    String inputString = String.join("\n", inputs) + "\n";
+    InputStream sysIn = new ByteArrayInputStream(inputString.getBytes());
+    BufferedReader inputSource = new BufferedReader(new InputStreamReader(sysIn));
+
+    PrintStream out = makeOut();
+
+    Client client = new Client(inputSource, out, socketReceive, socketSend);
+
+    Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
+    socketReceiveField.setAccessible(true);
+    BufferedReader mockReader = mock(BufferedReader.class);
+    when(mockReader.readLine()).thenReturn("playerChooseNum", "Valid")
+        .thenReturn("stage Complete").thenReturn(
+            jsonString)
+        .thenReturn("playerChooseColor", "Valid")
+        .thenReturn("finished stage").thenReturn("stage Complete").thenReturn(
+            jsonString)
+        .thenReturn("Game continues").thenReturn("Choose watch").thenReturn("Input").thenReturn("Valid");
     socketReceiveField.set(client, mockReader);
 
     client.run();

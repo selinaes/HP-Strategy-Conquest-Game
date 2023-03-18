@@ -23,6 +23,8 @@ public class Client {
     final PrintStream out;
     final BufferedReader inputReader;
 
+    private boolean ifExit;
+
     /**
      * Constructor for Client
      * 
@@ -38,6 +40,7 @@ public class Client {
         this.socketReceive = socketReceive;
         this.socketSend = socketSend;
         this.view = new Views(out);
+        this.ifExit = false;
     }
 
     /**
@@ -60,6 +63,9 @@ public class Client {
         while (msg.equals("Game continues")) {
             out.println("\n\nNew round starts.");
             runWatchOption();
+            if (ifExit) {
+                return;
+            }
             waitEveryoneDone();
             out.println("out of wait");
             view.displayLog(recvMsg());
@@ -70,6 +76,10 @@ public class Client {
         out.println("Game over. Winner is " + msg);
     }
 
+    public boolean ifExit() {
+        return ifExit;
+    }
+
     /**
      * Run watch option in the game for the client
      */
@@ -77,6 +87,9 @@ public class Client {
         String msg2 = recvMsg();
         if (msg2.equals("Choose watch")) {
             playerChooseWatch();
+            if (ifExit) {
+                return;
+            }
         }
         if (!view.isWatch()) {
             playerActionTurn();
@@ -377,7 +390,9 @@ public class Client {
                 if (prompt.equals("Valid")) {
                     // successful choose color
                     if (clientInput.toLowerCase().equals("e")) {
-                        System.exit(0);
+                        // System.exit(0);
+                        this.ifExit = true;
+                        return;
                     } else {
                         view.setWatch();
                         return;
