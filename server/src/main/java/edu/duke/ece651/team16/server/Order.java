@@ -7,10 +7,10 @@ public abstract class Order {
     protected Territory to;
     protected int numUnits;
     protected Player player;
-    protected Map gameMap;
+    protected GameMap gameMap;
     // protected OrderRuleChecker OrderRuleChecker;
 
-    public Order(Territory from, Territory to, int numUnits, Player player, Map gameMap) {
+    public Order(Territory from, Territory to, int numUnits, Player player, GameMap gameMap) {
         this.from = from;
         this.to = to;
         this.numUnits = numUnits;

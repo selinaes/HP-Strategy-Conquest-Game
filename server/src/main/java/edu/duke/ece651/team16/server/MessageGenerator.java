@@ -9,13 +9,6 @@ import java.util.List;
 
 public class MessageGenerator {
 
-
-
-
-    // public void sendInitialMap() {
-
-    // }
-
     /**
      * Form the entry string contains choices of A(ttack), M(ove), D(one)
      * 
@@ -39,13 +32,13 @@ public class MessageGenerator {
      * 
      * @param Player p
      */
-    public void sendEntry(Player p, HashMap<String, String> to_send_entry) {
+    public void sendEntry(Player p) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            // HashMap<String, String> to_send_entry = formEntry(p);
+            HashMap<String, String> to_send_entry = formEntry(p);
             // convert the HashMap to a JSON object
             String jsonString = objectMapper.writeValueAsString(to_send_entry);
-            p.getConnection().send(jsonString);
+            p.getConn().send(jsonString);
         } catch (JsonProcessingException e) {
             System.err.println("Error in sending entry");
         }
@@ -61,7 +54,7 @@ public class MessageGenerator {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonString = objectMapper.writeValueAsString(to_send);
-            p.getConnection().send(jsonString);
+            p.getConn().send(jsonString);
         } catch (JsonProcessingException e) {
             System.err.println("Error in sending entry");
         }
@@ -71,10 +64,10 @@ public class MessageGenerator {
     /**
      * Send Initial Map to client
      * 
-     * @param Connection                        connection
+     * @param Conn                        conn
      * @param HashMap<String,ArrayList<String>> the map to_send
      */
-    public void sendInitialMap(Connection conn, HashMap<String, ArrayList<HashMap<String, String>>> to_send) {
+    public void sendInitialMap(Conn conn, HashMap<String, ArrayList<HashMap<String, String>>> to_send) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             // convert the HashMap to a JSON object
@@ -96,7 +89,7 @@ public class MessageGenerator {
             ObjectMapper objectMapper = new ObjectMapper();
             // convert the HashMap to a JSON object
             String jsonString = objectMapper.writeValueAsString(to_send);
-            player.getConnection().send(jsonString);
+            player.getConn().send(jsonString);
         } catch (JsonProcessingException e) {
             System.err.println("Error in sending map");
         }
@@ -108,7 +101,7 @@ public class MessageGenerator {
      * 
      * @return HashMap<String, ArrayList<HashMap<String, String>>> the map
      */
-    public HashMap<String, ArrayList<HashMap<String, String>>> formInitialMap(Map defaultMap, List<String> colors) {
+    public HashMap<String, ArrayList<HashMap<String, String>>> formInitialMap(GameMap defaultMap, List<String> colors) {
         HashMap<String, ArrayList<HashMap<String, String>>> map = new HashMap<String, ArrayList<HashMap<String, String>>>();
         for (String color : colors) {
             ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();

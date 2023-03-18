@@ -4,7 +4,7 @@ import edu.duke.ece651.team16.server.Order;
 import java.util.*;
 
 public class AttackOrder extends Order {
-    public AttackOrder(Territory from, Territory to, int numUnits, Player player, Map gameMap) {
+    public AttackOrder(Territory from, Territory to, int numUnits, Player player, GameMap gameMap) {
         super(from, to, numUnits, player, gameMap);
     }
 

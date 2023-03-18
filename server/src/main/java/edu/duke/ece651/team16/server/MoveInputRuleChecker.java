@@ -6,7 +6,7 @@ public class MoveInputRuleChecker extends OrderRuleChecker {
     }
 
     @Override
-    public String checkMyRule(Territory from, Territory to, Player player, int numUnits, Map map) {
+    public String checkMyRule(Territory from, Territory to, Player player, int numUnits, GameMap map) {
         if (from.getOwner() != player) {
             return "You do not own the from territory";
         }

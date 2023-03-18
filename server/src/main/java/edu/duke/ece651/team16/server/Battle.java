@@ -88,39 +88,7 @@ public class Battle {
     // return false;
     // }
 
-    /**
-     * Combine units from the same player
-     */
-    // private void combineUnitsFromSamePlayer() {
-    //     System.out.println("\n\n============Before Combine:============");
-    //     System.out.println("Parties has: ");
-    //     for (ArrayList<Unit> p : this.parties) {
-    //         System.out.println("Player " + p.get(0).getOwner().getColor() + "'s Units:");
-    //         for (Unit u : p) {
-    //             System.out.print("Unit id:" + u.getId() + "\n");
-    //         }
-    //         System.out.println();
-    //     }
-    //     HashMap<Player, ArrayList<Unit>> ownerToUnits = new HashMap<>();
-    //     for (ArrayList<Unit> party : this.parties) {
-    //         Player owner = party.get(0).getOwner();
-    //         if (ownerToUnits.containsKey(owner)) {
-    //             ownerToUnits.get(owner).addAll(party);
-    //         } else {
-    //             ownerToUnits.put(owner, new ArrayList<>(party));
-    //         }
-    //     }
-    //     this.parties = new ArrayList<>(ownerToUnits.values());
-    //     System.out.println("\n============After Combine:============");
-    //     System.out.println("Parties has: ");
-    //     for (ArrayList<Unit> p : this.parties) {
-    //         System.out.println("Player " + p.get(0).getOwner().getColor() + "'s Units:");
-    //         for (Unit u : p) {
-    //             System.out.print("Unit id:" + u.getId() + "\n");
-    //         }
-    //         System.out.println();
-    //     }
-    // }
+
 
     /**
      * Form a game log that shows the number of units in each party
