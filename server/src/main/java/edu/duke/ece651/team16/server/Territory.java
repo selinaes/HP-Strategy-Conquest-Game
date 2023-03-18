@@ -74,13 +74,7 @@ public class Territory {
     return gameLog;
   }
 
-  // public void sendLog(Player player, HashMap<String, String> to_send)
-  // throws JsonProcessingException {
-  // ObjectMapper objectMapper = new ObjectMapper();
-  // // convert the HashMap to a JSON object
-  // String jsonString = objectMapper.writeValueAsString(to_send);
-  // player.getConnection().send(jsonString);
-  // }
+
 
   /**
    * // Return units that belong to a certain player and alive
