@@ -67,13 +67,12 @@ public class Client {
             if (msg2.equals("Choose watch")) {
                 playerChooseWatch();
             }
-            // action phas
+            // action phase
             if (!watching) {
                 playerActionTurn();
             } else {
                 playerWatchTurn();
             }
-            // displayMap();
             waitEveryoneDone();
             out.println("out of wait");
             displayLog();
@@ -82,11 +81,6 @@ public class Client {
         }
         // game over
         out.println("Game over. Winner is " + msg);
-
-        // playerActionTurn();
-        // waitEveryoneDone();
-        // displayLog();
-        // displayMap();
     }
 
     /**
@@ -490,7 +484,6 @@ public class Client {
      *
      * @param clientInput the input from client
      */
-
     public boolean checkMoveInputFormat(String clientInput) {
         String[] input = clientInput.split(", ");
         if (input.length != 3) {
@@ -520,8 +513,7 @@ public class Client {
                     } else {
                         watching = true;
                         return;
-                    }
-                    
+                    }      
                 } else {
                     out.println("Invalid choice. Please choose again.");
                     playerChooseWatch();
@@ -533,6 +525,9 @@ public class Client {
         }
     }
 
+    /**
+     * Player watch other players' turn
+     */
     public void playerWatchTurn(){
             out.println("Watching other players' turn. You already lost.");
     }

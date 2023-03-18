@@ -139,6 +139,11 @@ public class Map {
     return dukemap;
   }
 
+
+  /**
+   * Create a test map for testing purposes
+   * @return a test map
+   */
   public HashMap<String, List<Territory>> createTestMap() {
     this.numPlayer = 4;
     HashMap<String, List<Territory>> testMap = new HashMap<String, List<Territory>>();
@@ -166,10 +171,20 @@ public class Map {
     return ColorList;
   }
 
+  /**
+   * get the map
+   * 
+   * @return the map for the game
+   **/
   public HashMap<String, List<Territory>> getMap() {
     return map;
   }
 
+  /*
+    * set the map
+    * 
+    * @param map the map for the game
+    */
   public void setMap(HashMap<String, List<Territory>> map) {
     this.map = map;
   }

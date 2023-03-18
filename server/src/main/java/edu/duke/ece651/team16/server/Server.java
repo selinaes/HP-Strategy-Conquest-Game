@@ -43,8 +43,6 @@ public class Server {
         try {
             return listenSocket.accept();
         } catch (IOException ioe) {
-            // In real code, we would want to be more discriminating here.
-            // Was this a timeout, or some other problem?
             return null;
         }
     }
@@ -58,7 +56,6 @@ public class Server {
             if (client_socket == null) {
                 continue;
             }
-            // numClients++;
             synchronized (this) {
                 numClients++;
             }

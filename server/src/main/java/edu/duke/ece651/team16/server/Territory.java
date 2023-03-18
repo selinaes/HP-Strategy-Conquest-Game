@@ -46,7 +46,6 @@ public class Territory {
    * If there is a battle, add units to the battle to defend the territory
    */
   public void defendHome() {
-    // System.out.println("Player " + owner.getColor() + "'s home unit size is " + this.units.size());
     if (this.units.size() > 0 && !this.battle.checkGroupExisted(units)) {
       battle.addGroup(units);
     }
@@ -59,7 +58,6 @@ public class Territory {
     defendHome();
     String prelog = battle.GameLog();
     Player winner = battle.resolveBattle();
-    // String postlog = battle.GameLog();
     String gameLog = "Battle participants: " + prelog + "\nBattle Winner: " + winner.getColor() + "\n";
     List<Territory> to_add = new ArrayList<>();
     to_add.add(this);
@@ -69,21 +67,12 @@ public class Territory {
     }
     this.owner = winner;
     this.units = battle.getParties().get(0);
-    // System.out.println("After battle " + name + "'s units size is " + units.size());
     battle.clearParty();
     return gameLog;
   }
 
-  // public void sendLog(Player player, HashMap<String, String> to_send)
-  // throws JsonProcessingException {
-  // ObjectMapper objectMapper = new ObjectMapper();
-  // // convert the HashMap to a JSON object
-  // String jsonString = objectMapper.writeValueAsString(to_send);
-  // player.getConnection().send(jsonString);
-  // }
-
   /**
-   * // Return units that belong to a certain player and alive
+   *  Return units that belong to a certain player and alive
    */
   public ArrayList<Unit> getAliveUnitsFor(Player player) {
     ArrayList<Unit> result = new ArrayList<>();
@@ -105,17 +94,10 @@ public class Territory {
    * @param unit
    */
   public void tryAddUnits(ArrayList<Unit> units) {
-    // System.out.println("try add units");
-    // System.out.println("Territory: " + unit.getwhere().getName());
-    // System.out.println("Owner: " + unit.getOwner());
     for (Unit u : units) {
       u.setwhere(this);
       this.units.add(u);
     }
-    // unit.setwhere(this);
-    // this.units.add(unit);
-    // if (unit.getwhere() == null && this.owner == unit.getOwner()){
-
   }
 
   /**
@@ -125,7 +107,6 @@ public class Territory {
     if (units.size() > 0) {
       this.battle.addGroup(units);
     }
-
   }
 
   /**

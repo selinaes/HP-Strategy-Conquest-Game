@@ -6,35 +6,46 @@ public interface Unit {
      */
     public void setwhere(Territory where);
 
-    /*
+    /**
      * Get the territory where the unit is located
+     *
+     * @return get Territory
      */
     public Territory getwhere();
 
-    /*
+    /**
      * Get the owner of the unit
+     *
+     * @return Player player
      */
     public Player getOwner();
 
-    /*
+    /**
      * Get the alive status of the unit
+     * 
+     * * @return boolean isAlive
      */
     public boolean getAlive();
 
-    /*
+    /**
      * Get the attack status of the unit
+     * 
+     * @return boolean isAttacker
      */
     public boolean getisAttacker();
 
-    /*
+    /**
      * Set the attack status of the unit
      */
     public void setisAttacker();
 
-    /*
+    /**
      * Set the unit's alive status
      */
     public void setDead();
 
+    /**
+     * get unit id
+     */
     public int getId();
 }
