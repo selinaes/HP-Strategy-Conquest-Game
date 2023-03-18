@@ -20,6 +20,7 @@ public class Game {
     private int playerLowBound;
     private int playerHighBound;
     private int gameRound;
+    private MessageGenerator messageGenerator;
 
     /**
      * Constructor for Server class that takes in a serverSocket
@@ -39,15 +40,9 @@ public class Game {
         this.playerLowBound = 2;
         this.playerHighBound = 4;
         this.gameRound = 0;
+        this.messageGenerator = new MessageGenerator();
     }
 
-    public void printPlayer() {
-        System.out.println("===Update Player List====");
-        for (Player p : players) {
-            System.out.println("Player is " + p.getColor());
-        }
-        System.out.println("========End=======\n");
-    }
 
     /**
      * the flow of the game, with diffeeent phases
@@ -93,14 +88,10 @@ public class Game {
                 synchronized (this) {
                     players.remove(p);
                     --numPlayer;
-                    System.out.println("Player " + p.getColor() + " exit, now numPlayer is " + numPlayer);
                 }
                 return;
             } else {
                 p.setWatch();
-                // p.getConnection().send("{\"Entry\":\"You are the blue player, what would you like to do?\\n"
-                //         + "M(ove)\\n" + "A(ttack)\\n"
-                //         + "D(one)\\n\"}");
                 notifyAllPlayers(p.getConnection(), "worldWar");
             }
         } 
@@ -108,7 +99,6 @@ public class Game {
             p.getConnection().send("do nothing");
             doAction(p);
         }
-        System.out.println("Round " + this.gameRound + " Line 85 for user " + p.getColor() + "state" + gameState);
 
         while (true) {
             synchronized (this) {
@@ -119,26 +109,20 @@ public class Game {
             }
         }
 
-        System.out.println("Round " + this.gameRound + " Line 93 for user " + p.getColor() + " state " + gameState);
-
         // if all players are ready, then execute world war (the last player who reached
         // here)
         synchronized (this) {
             if (readyPlayer == numPlayer) {
                 to_send_log = worldwar();
-                System.out.println("Round " + this.gameRound + " World war execution user: " + p.getColor());
                 for (Player player : players) {
-                    sendLog(player, to_send_log);
+                    messageGenerator.sendLog(player, to_send_log);
                 }
-                System.out.println("Round " + this.gameRound + " Line 103 for user " + p.getColor());
                 this.gameState = "warEnd";
                 this.gameRound++;
                 this.readyPlayer = 0;
 
             }
         }
-
-        System.out.println("Round " + this.gameRound + " Line 110 for user " + p.getColor());
 
         while (true) {
             synchronized (this) {
@@ -147,16 +131,9 @@ public class Game {
                 }
             }
         }
-        System.out.println("Round " + this.gameRound + " Line 118 for user " + p.getColor());
-        HashMap<String, ArrayList<HashMap<String, String>>> to_send1 = formMap();
-        sendMap(p, to_send1);
+        HashMap<String, ArrayList<HashMap<String, String>>> to_send1 = messageGenerator.formMap(this.players);
+        messageGenerator.sendMap(p, to_send1);
 
-        // after 1 turn, phase go back to issueOrder
-        // if (p.equals(players.get(0))) {
-        // synchronized (this) {
-        // this.gameState = "issueOrder";
-        // }
-        // }
     }
 
     /**
@@ -177,13 +154,12 @@ public class Game {
             }
         }
 
-        HashMap<String, ArrayList<HashMap<String, String>>> to_send_initial = formInitialMap();
-        sendInitialMap(connection, to_send_initial);
+        HashMap<String, ArrayList<HashMap<String, String>>> to_send_initial = messageGenerator.formInitialMap(this.defaultMap, this.colors);
+        messageGenerator.sendInitialMap(connection, to_send_initial);
 
         String color = chooseColor(connection);
         Player p = new Player(color, connection, defaultMap.getMap().get(color), this.unitsPerPlayer);
         addPlayer(p);
-        System.out.println("Player " + p.getColor() + " added");
 
         assignUnits(p, connection);
         while (true) {
@@ -194,9 +170,8 @@ public class Game {
             }
         }
 
-        HashMap<String, ArrayList<HashMap<String, String>>> to_send = formMap();
-        sendMap(p, to_send);
-        // readyPlayer = 0;
+        HashMap<String, ArrayList<HashMap<String, String>>> to_send = messageGenerator.formMap(this.players);
+        messageGenerator.sendMap(p, to_send);
         return p;
     }
 
@@ -207,88 +182,8 @@ public class Game {
      */
     public void addPlayer(Player p) {
         players.add(p);
-        printPlayer();
     }
 
-    /**
-     * Form a hashmap playerName: player's territoriesName and corresponding
-     * neighbors
-     * HashMap<String, ArrayList<HashMap<String, String>>>
-     * [playerName: [{{"TerritoryName1": string},{"Neighbors": [, , , ]}, {"Unit":
-     * int}}, {TerritoryName2: {"Neighbors": [, , , ]}, {"Unit": int}}]]
-     * 
-     * @return HashMap<String, ArrayList<String>> the map
-     */
-    public HashMap<String, ArrayList<HashMap<String, String>>> formMap() {
-        HashMap<String, ArrayList<HashMap<String, String>>> map = new HashMap<String, ArrayList<HashMap<String, String>>>();
-        for (Player p : players) {
-            ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-            for (Territory t : p.getTerritories()) {
-                HashMap<String, String> entryMap = new HashMap<String, String>();
-                // entryMap.put("PlayerName", p.getName());
-                entryMap.put("TerritoryName", t.getName());
-                entryMap.put("Neighbors", t.getNeighborsNames());
-                entryMap.put("Unit", t.getUnitsString());
-                list.add(entryMap);
-            }
-            map.put(p.getColor(), list);
-        }
-        return map;
-    }
-
-    /**
-     * form the initial map to send to client
-     * 
-     */
-    public HashMap<String, ArrayList<HashMap<String, String>>> formInitialMap() {
-        HashMap<String, ArrayList<HashMap<String, String>>> map = new HashMap<String, ArrayList<HashMap<String, String>>>();
-        for (String color : colors) {
-            ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-            for (Territory t : defaultMap.getMap().get(color)) {
-                HashMap<String, String> entryMap = new HashMap<String, String>();
-                entryMap.put("TerritoryName", t.getName());
-                entryMap.put("Neighbors", t.getNeighborsNames());
-                list.add(entryMap);
-            }
-            map.put(color, list);
-        }
-        return map;
-    }
-
-    /**
-     * Send Initial Map to client
-     * 
-     * @param Connection                        connection
-     * @param HashMap<String,ArrayList<String>> the map to_send
-     */
-    public void sendInitialMap(Connection conn, HashMap<String, ArrayList<HashMap<String, String>>> to_send) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            // convert the HashMap to a JSON object
-            String jsonString = objectMapper.writeValueAsString(to_send);
-            conn.send(jsonString);
-        } catch (JsonProcessingException e) {
-            System.err.println("Error in sending map");
-        }
-    }
-
-    /**
-     * Send a hashmap to client
-     * 
-     * @param player                            to be sent to
-     * @param HashMap<String,ArrayList<String>> the map to_send
-     */
-    public void sendMap(Player player, HashMap<String, ArrayList<HashMap<String, String>>> to_send) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            // convert the HashMap to a JSON object
-            String jsonString = objectMapper.writeValueAsString(to_send);
-            player.getConnection().send(jsonString);
-        } catch (JsonProcessingException e) {
-            System.err.println("Error in sending map");
-        }
-
-    }
 
     /**
      * Prompt the player to choose a color
@@ -305,7 +200,6 @@ public class Game {
                 "Please enter a color you want to choose. Current available colors are: " + colorList);
         String chosencolor = connection.recv();
         chosencolor = chosencolor.toLowerCase();
-        System.out.println(chosencolor);
         int colorindex = colors.indexOf(chosencolor);
         if (colorindex == -1) {
             connection.send("Invalid color");
@@ -532,67 +426,6 @@ public class Game {
         this.numPlayer = num;
     }
 
-    /**
-     * Form the entry string contains choices of A(ttack), M(ove), D(one)
-     * 
-     * @param Player p
-     * @return HashMap<String, String>
-     */
-    public HashMap<String, String> formEntry(Player p) {
-        StringBuilder entry = new StringBuilder("");
-        String header = "You are the " + p.getColor() + " player, what would you like to do?\n";
-        entry.append(header);
-        String body = "M(ove)\n" + "A(ttack)\n" + "D(one)\n";
-        entry.append(body);
-        HashMap<String, String> entryMap = new HashMap<String, String>();
-        entryMap.put("Entry", entry.toString());
-        return entryMap;
-    }
-
-    public HashMap<String, String> formExitWatch(Player p) {
-        StringBuilder entry = new StringBuilder("");
-        String header = "You are the " + p.getColor() + " player, you have lost the game, what would you like to do?\n";
-        entry.append(header);
-        String body = "W(atch)\n" + "E(xit )\n";
-        entry.append(body);
-        HashMap<String, String> entryMap = new HashMap<String, String>();
-        entryMap.put("Entry", entry.toString());
-        return entryMap;
-    }
-
-    /**
-     * Send the entry string to the player
-     * 
-     * @param Player p
-     */
-    public void sendEntry(Player p) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            HashMap<String, String> to_send_entry = formEntry(p);
-            // convert the HashMap to a JSON object
-            String jsonString = objectMapper.writeValueAsString(to_send_entry);
-            p.getConnection().send(jsonString);
-        } catch (JsonProcessingException e) {
-            System.err.println("Error in sending entry");
-        }
-
-    }
-
-    /**
-     * Send the entry string to the player
-     *
-     * @param Player p
-     */
-    public void sendLog(Player p, HashMap<String, String> to_send) {
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonString = objectMapper.writeValueAsString(to_send);
-            p.getConnection().send(jsonString);
-        } catch (JsonProcessingException e) {
-            System.err.println("Error in sending entry");
-        }
-
-    }
 
     /**
      * Do Action phase of the game
@@ -602,7 +435,7 @@ public class Game {
      */
     public boolean doAction(Player p) {
         // choose action step. Client side checked. No reprompt
-        sendEntry(p);
+        messageGenerator.sendEntry(p);
         String action = p.getConnection().recv().toLowerCase();
         // perform action, invalid reprompt
         boolean done = false;
