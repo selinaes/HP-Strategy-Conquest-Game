@@ -93,7 +93,6 @@ public class Game {
                     return;
                 }
 
-
             } else {
                 p.setWatch();
             }
@@ -124,8 +123,8 @@ public class Game {
                     sendLog(player, to_send_log);
                 }
                 System.out.println("Round " + this.gameRound + " Line 103 for user " + p.getColor());
+            }
         }
-
 
         System.out.println("Round " + this.gameRound + " Line 110 for user " + p.getColor());
 
