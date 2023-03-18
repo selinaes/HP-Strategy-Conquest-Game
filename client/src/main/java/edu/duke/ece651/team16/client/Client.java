@@ -24,6 +24,8 @@ public class Client {
     final PrintStream out;
     final BufferedReader inputReader;
 
+    private boolean watching;
+
     /**
      * Constructor for Client
      * 
@@ -39,6 +41,7 @@ public class Client {
         this.inputReader = inputSource;
         socketReceive = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         socketSend = new PrintWriter(clientSocket.getOutputStream(), true);
+        watching = false;
     }
 
     /**
@@ -64,8 +67,12 @@ public class Client {
             if (msg2.equals("Choose watch")) {
                 playerChooseWatch();
             }
-            // action phase
-            playerActionTurn();
+            // action phas
+            if (!watching) {
+                playerActionTurn();
+            } else {
+                playerWatchTurn();
+            }
             // displayMap();
             waitEveryoneDone();
             out.println("out of wait");
@@ -508,10 +515,13 @@ public class Client {
                 prompt = recvMsg();
                 if (prompt.equals("Valid")) {
                     // successful choose color
-                    if (clientInput.equals("e")) {
+                    if (clientInput.toLowerCase().equals("e")) {
                         System.exit(0);
+                    } else {
+                        watching = true;
+                        return;
                     }
-                    return;
+                    
                 } else {
                     out.println("Invalid choice. Please choose again.");
                     playerChooseWatch();
@@ -521,6 +531,10 @@ public class Client {
                 out.println(e.getMessage());
             }
         }
+    }
+
+    public void playerWatchTurn(){
+            out.println("Watching other players' turn. You already lost.");
     }
 
 }

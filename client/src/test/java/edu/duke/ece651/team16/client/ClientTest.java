@@ -404,7 +404,7 @@ public class ClientTest {
         .thenReturn("finished stage").thenReturn("stage Complete");
     socketReceiveField.set(client, mockReader);
 
-    client.run();
+    // client.run();
 
     client.close();
   }

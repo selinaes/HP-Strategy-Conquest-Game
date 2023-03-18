@@ -61,6 +61,9 @@ public class Game {
             this.readyPlayer = 0;
         }
         while (findWinner() == null) {
+            if (!players.contains(p)){
+                return; // player exit
+            }
             p.getConnection().send("Game continues");
             doActionPhase(p);
 
@@ -78,25 +81,30 @@ public class Game {
      * @param Player p: the player
      */
     public void doActionPhase(Player p) {
-
         HashMap<String, String> to_send_log = new HashMap<>();
         if (p.getisWatch()) {
             // send done
             p.getConnection().send("watching");
             notifyAllPlayers(p.getConnection(), "worldWar");
-        } else if (p.checkLose()) {
+        } 
+        else if (p.checkLose()) {
             p.getConnection().send("Choose watch");
-            if (ifChooseWatch(p.getConnection()) == "e") {
+            if (ifChooseWatch(p.getConnection()).equals("e")) {
                 synchronized (this) {
                     players.remove(p);
                     --numPlayer;
-                    return;
+                    System.out.println("Player " + p.getColor() + " exit, now numPlayer is " + numPlayer);
                 }
-
+                return;
             } else {
                 p.setWatch();
+                // p.getConnection().send("{\"Entry\":\"You are the blue player, what would you like to do?\\n"
+                //         + "M(ove)\\n" + "A(ttack)\\n"
+                //         + "D(one)\\n\"}");
+                notifyAllPlayers(p.getConnection(), "worldWar");
             }
-        } else {
+        } 
+        else {
             p.getConnection().send("do nothing");
             doAction(p);
         }
@@ -123,6 +131,10 @@ public class Game {
                     sendLog(player, to_send_log);
                 }
                 System.out.println("Round " + this.gameRound + " Line 103 for user " + p.getColor());
+                this.gameState = "warEnd";
+                this.gameRound++;
+                this.readyPlayer = 0;
+
             }
         }
 
@@ -293,6 +305,7 @@ public class Game {
                 "Please enter a color you want to choose. Current available colors are: " + colorList);
         String chosencolor = connection.recv();
         chosencolor = chosencolor.toLowerCase();
+        System.out.println(chosencolor);
         int colorindex = colors.indexOf(chosencolor);
         if (colorindex == -1) {
             connection.send("Invalid color");
@@ -311,9 +324,10 @@ public class Game {
      * @return string chosen by player
      **/
     public String ifChooseWatch(Connection connection) {
-        connection.send("If you want to watch game, Please enter: w; --- If you want to exit, Please enter: e");
+        connection.send("If you want to watch game, Please enter: w; If you want to exit, Please enter: e");
         String chooseWatch = connection.recv();
         chooseWatch = chooseWatch.toLowerCase();
+        System.out.println(chooseWatch);
         if (!chooseWatch.equals("w") && !chooseWatch.equals("e")) {
             connection.send("Invalid choice");
             return ifChooseWatch(connection);
@@ -428,6 +442,8 @@ public class Game {
         synchronized (this) {
             ++this.readyPlayer;
             if (readyPlayer == numPlayer) {
+                System.out.println("All players ready, readyPlayer: " + readyPlayer + " Entering: "
+                        + newStage);
                 for (Connection c : allConnections) {
                     c.send("stage Complete");
                 }
