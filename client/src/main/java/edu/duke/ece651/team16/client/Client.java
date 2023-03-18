@@ -59,6 +59,11 @@ public class Client {
         String msg = recvMsg();
         while (msg.equals("Game continues")) {
             out.println("\n\nNew round starts.");
+
+            String msg2 = recvMsg();
+            if (msg2.equals("Choose watch")) {
+                playerChooseWatch();
+            }
             // action phase
             playerActionTurn();
             // displayMap();
@@ -489,6 +494,33 @@ public class Client {
             return false;
         }
         return true;
+    }
+
+    public void playerChooseWatch() throws IOException {
+        // receive color choosing prompt from server
+        String prompt = recvMsg();
+        String clientInput = "";
+        while (true) {
+            try {
+                clientInput = readClientInput(prompt);
+                sendResponse(clientInput);
+                // see if selection is valid
+                prompt = recvMsg();
+                if (prompt.equals("Valid")) {
+                    // successful choose color
+                    if (clientInput.equals("e")) {
+                        System.exit(0);
+                    }
+                    return;
+                } else {
+                    out.println("Invalid choice. Please choose again.");
+                    playerChooseWatch();
+                    return;
+                }
+            } catch (EOFException e) {
+                out.println(e.getMessage());
+            }
+        }
     }
 
 }
