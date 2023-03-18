@@ -17,6 +17,8 @@ public class Views {
 
     /**
      * Constructor for Views
+     * 
+     * @param out
      */
     public Views(PrintStream out) {
         this.watch = false;
@@ -24,27 +26,29 @@ public class Views {
         this.out = out;
     }
 
-    public PrintStream getInitialMap(String jsonString) throws IOException {
-        displayInitialMap(jsonString);
-        return out;
+    /**
+     * Set the watch status for one player in the game
+     */
+    public void setWatch() {
+        this.watch = true;
     }
 
-    public PrintStream getMap(String jsonString) throws IOException {
-        displayMap(jsonString);
-        return out;
-    }
-
-    public PrintStream getLog(String jsonString) throws IOException {
-        displayLog(jsonString);
-        return out;
+    /**
+     * Get the watch status for one player in the game
+     * 
+     * @return boolean of watch
+     */
+    public boolean isWatch() {
+        return watch;
     }
 
     /**
      * Display the initial map to the player
      * 
+     * @param jsonString
      * @throws IOException
      */
-    private void displayInitialMap(String jsonString) throws IOException {
+    public void displayInitialMap(String jsonString) throws IOException {
         // convert jsonString to jsonobject
         HashMap<String, ArrayList<HashMap<String, String>>> input_map;
         try {
@@ -75,6 +79,7 @@ public class Views {
     /**
      * Display actions for player
      * 
+     * @param to_display
      * @throws IOException
      * @return String of actions
      */
@@ -93,9 +98,10 @@ public class Views {
     /**
      * Display map
      * 
+     * @param jsonString
      * @throws IOException
      */
-    private void displayMap(String jsonString) throws IOException {
+    public void displayMap(String jsonString) throws IOException {
         // convert jsonString to jsonobject
         HashMap<String, ArrayList<HashMap<String, String>>> input_map;
         try {
@@ -123,11 +129,12 @@ public class Views {
     }
 
     /**
-     * Display map
-     *
+     * Display log of the game in one turn
+     * 
+     * @param jsonString
      * @throws IOException
      */
-    private void displayLog(String jsonString) throws IOException {
+    public void displayLog(String jsonString) throws IOException {
         // convert jsonString to jsonobject
         HashMap<String, String> input_Log;
         try {

@@ -554,6 +554,7 @@ public class Game {
             HashMap<String, String> to_send_entry = formEntry(p);
             // convert the HashMap to a JSON object
             String jsonString = objectMapper.writeValueAsString(to_send_entry);
+            System.out.println(jsonString);
             p.getConnection().send(jsonString);
         } catch (JsonProcessingException e) {
             System.err.println("Error in sending entry");
@@ -687,8 +688,6 @@ public class Game {
                                                                                // ConcurrentModificationException
             for (Territory territory : territoriesCopy) {
                 if (territory.existsBattle()) {
-                    // System.out.println("Player " + p.getColor() + " turn and " +
-                    // territory.getName() + " in battle");
                     String battleLog = territory.doBattle();
                     worldLog.put(territory.getName(), battleLog);
                 }
