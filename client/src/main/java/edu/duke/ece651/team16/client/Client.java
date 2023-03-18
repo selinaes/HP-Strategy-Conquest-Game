@@ -25,6 +25,7 @@ public class Client {
     final BufferedReader inputReader;
 
     private boolean watching;
+    private Views view;
 
     /**
      * Constructor for Client
@@ -42,6 +43,7 @@ public class Client {
         socketReceive = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         socketSend = new PrintWriter(clientSocket.getOutputStream(), true);
         watching = false;
+        this.view = new Views(out);
     }
 
     /**
@@ -53,42 +55,62 @@ public class Client {
         // placment phase
         playerChooseNum();
         waitEveryoneDone();
-        displayInitialMap();
+        view.getInitialMap(recvMsg());
+        // displayInitialMap();
         playerChooseColor();
         playerAssignAllUnits();
         waitEveryoneDone();
-        displayMap();
+        // displayMap();
+        view.getMap(recvMsg());
 
         String msg = recvMsg();
         while (msg.equals("Game continues")) {
             out.println("\n\nNew round starts.");
 
-            String msg2 = recvMsg();
-            if (msg2.equals("Choose watch")) {
-                playerChooseWatch();
-            }
-            // action phase
-            if (!watching) {
-                playerActionTurn();
-            } else {
-                playerWatchTurn();
-            }
+            // String msg2 = recvMsg();
+            // if (msg2.equals("Choose watch")) {
+            // playerChooseWatch();
+            // }
+            // // action phase
+            // if (!watching) {
+            // playerActionTurn();
+            // } else {
+            // playerWatchTurn();
+            // }
+            runWatchOption();
             waitEveryoneDone();
             out.println("out of wait");
-            displayLog();
-            displayMap();
+            // displayLog();
+            // displayMap();
+            view.getLog(recvMsg());
+            view.getMap(recvMsg());
             msg = recvMsg();
         }
         // game over
         out.println("Game over. Winner is " + msg);
     }
 
+    public void runWatchOption() throws IOException {
+        // placment phase
+        String msg2 = recvMsg();
+        if (msg2.equals("Choose watch")) {
+            playerChooseWatch();
+        }
+        // action phase
+        if (!watching) {
+            playerActionTurn();
+        } else {
+            view.playerWatchTurn();
+        }
+
+    }
+
     /**
-     * Receive message from server
      * 
-     * @return message
-     * @throws IOException
+     * Receive message
+     * from server**@return message*@throws IOException
      */
+
     public String recvMsg() throws IOException {
         boolean received = false;
         String msg = null;
@@ -199,127 +221,6 @@ public class Client {
     }
 
     /**
-     * Display the initial map to the player
-     * 
-     * @throws IOException
-     */
-    public void displayInitialMap() throws IOException {
-        String jsonString = recvMsg();
-
-        // convert jsonString to jsonobject
-        ObjectMapper objectMapper = new ObjectMapper();
-        HashMap<String, ArrayList<HashMap<String, String>>> input_map;
-        try {
-            input_map = objectMapper.readValue(jsonString, HashMap.class);
-        } catch (JsonProcessingException e) {
-            System.out.println("Failed to convert json string to json object.");
-            return;
-        }
-        // Player name is the input_map key
-        // ArrayList<HashMap<String, String>> is the value of the key
-        for (Map.Entry<String, ArrayList<HashMap<String, String>>> entry : input_map.entrySet()) {
-            String color = entry.getKey();
-            out.println();
-            String title = color + " player will have these territories: ";
-            out.println(title);
-            String seperation = String.join("", Collections.nCopies(title.length(), "-"));
-            out.println(seperation);
-            ArrayList<HashMap<String, String>> playerAsset = entry.getValue();
-            for (HashMap<String, String> asset : playerAsset) {
-                String territory = asset.get("TerritoryName");
-                String neighbors = asset.get("Neighbors");
-                out.println(territory + " " + neighbors);
-            }
-            out.println();
-        }
-    }
-
-    /**
-     * Display actions for player
-     * 
-     * @throws IOException
-     * @return String of actions
-     */
-    public String displayEntry() throws IOException {
-        String to_display = recvMsg();
-
-        // convert jsonString to jsonobject
-        ObjectMapper objectMapper = new ObjectMapper();
-        HashMap<String, String> input_entry;
-        try {
-            input_entry = objectMapper.readValue(to_display, HashMap.class);
-        } catch (JsonProcessingException e) {
-            System.out.println("Failed to convert json string to json object.");
-            return "";
-        }
-        String entry_display = input_entry.get("Entry");
-        return entry_display;
-    }
-
-    /**
-     * Display map
-     * 
-     * @throws IOException
-     */
-    public void displayMap() throws IOException {
-        String jsonString = recvMsg();
-        // convert jsonString to jsonobject
-        ObjectMapper objectMapper = new ObjectMapper();
-        HashMap<String, ArrayList<HashMap<String, String>>> input_map;
-        try {
-            input_map = objectMapper.readValue(jsonString, HashMap.class);
-        } catch (JsonProcessingException e) {
-            System.out.println("Failed to convert json string to json object.");
-            return;
-        }
-        // Player name is the input_map key
-        // ArrayList<HashMap<String, String>> is the value of the key
-        for (Map.Entry<String, ArrayList<HashMap<String, String>>> entry : input_map.entrySet()) {
-            String playername = entry.getKey();
-            String title = playername + " player: ";
-            out.println(title);
-            String seperation = String.join("", Collections.nCopies(title.length(), "-"));
-            out.println(seperation);
-            ArrayList<HashMap<String, String>> playerAsset = entry.getValue();
-            for (HashMap<String, String> asset : playerAsset) {
-                String territory = asset.get("TerritoryName");
-                String neighbors = asset.get("Neighbors");
-                String units = asset.get("Unit");
-                out.println(units + " in " + territory + " " + neighbors);
-            }
-        }
-    }
-
-    /**
-     * Display map
-     *
-     * @throws IOException
-     */
-    public void displayLog() throws IOException {
-        String jsonString = recvMsg();
-        // convert jsonString to jsonobject
-        ObjectMapper objectMapper = new ObjectMapper();
-        HashMap<String, String> input_Log;
-        try {
-            input_Log = objectMapper.readValue(jsonString, HashMap.class);
-        } catch (JsonProcessingException e) {
-            System.out.println("Failed to convert json string to json object.");
-            return;
-        }
-        // Player name is the input_map key
-        // ArrayList<HashMap<String, String>> is the value of the key
-        for (Map.Entry<String, String> entry : input_Log.entrySet()) {
-            String territoryName = entry.getKey();
-            String title = "War Log in " + territoryName + ": ";
-            out.println(title);
-            String seperation = String.join("", Collections.nCopies(title.length(),
-                    "-"));
-            out.println(seperation);
-            out.println(entry.getValue());
-        }
-    }
-
-    /**
      * Player choose playerNum and send to server
      * 
      * @throws IOException
@@ -338,7 +239,6 @@ public class Client {
                 sendResponse(clientInput);
                 prompt = recvMsg();
                 if (prompt.equals("Valid")) {
-
                     String playerNum = clientInput;
                     out.println("Successfully choose number of players: " + playerNum);
                     return;
@@ -385,7 +285,6 @@ public class Client {
                     return false;
                 } else {
                     out.println("Fails to assign unit");
-                    // prompt = recvMsg();
                     return playerAssignUnit();
                 }
             } catch (EOFException e) {
@@ -419,7 +318,8 @@ public class Client {
         while (true) {
             // back and forth until done, n times
             // choose action step. Client side check until valid, then send
-            String choices = displayEntry();
+            String choices = view.displayEntry(recvMsg());
+
             clientInput = readClientInput(choices).toLowerCase();
             while (!clientInput.equals("m") && !clientInput.equals("a") && !clientInput.equals("d")) {
                 out.println("Invalid action");
@@ -513,7 +413,7 @@ public class Client {
                     } else {
                         watching = true;
                         return;
-                    }      
+                    }
                 } else {
                     out.println("Invalid choice. Please choose again.");
                     playerChooseWatch();
@@ -525,11 +425,136 @@ public class Client {
         }
     }
 
-    /**
-     * Player watch other players' turn
-     */
-    public void playerWatchTurn(){
-            out.println("Watching other players' turn. You already lost.");
-    }
+    // /**
+    // * Player watch other players' turn
+    // */
+    // public void playerWatchTurn() {
+    // out.println("Watching other players' turn. You already lost.");
+    // }
+
+    // /**
+    // * Display the initial map to the player
+    // *
+    // * @throws IOException
+    // */
+    // public void displayInitialMap() throws IOException {
+    // String jsonString = recvMsg();
+
+    // // convert jsonString to jsonobject
+    // ObjectMapper objectMapper = new ObjectMapper();
+    // HashMap<String, ArrayList<HashMap<String, String>>> input_map;
+    // try {
+    // input_map = objectMapper.readValue(jsonString, HashMap.class);
+    // } catch (JsonProcessingException e) {
+    // System.out.println("Failed to convert json string to json object.");
+    // return;
+    // }
+    // // Player name is the input_map key
+    // // ArrayList<HashMap<String, String>> is the value of the key
+    // for (Map.Entry<String, ArrayList<HashMap<String, String>>> entry :
+    // input_map.entrySet()) {
+    // String color = entry.getKey();
+    // out.println();
+    // String title = color + " player will have these territories: ";
+    // out.println(title);
+    // String seperation = String.join("", Collections.nCopies(title.length(),
+    // "-"));
+    // out.println(seperation);
+    // ArrayList<HashMap<String, String>> playerAsset = entry.getValue();
+    // for (HashMap<String, String> asset : playerAsset) {
+    // String territory = asset.get("TerritoryName");
+    // String neighbors = asset.get("Neighbors");
+    // out.println(territory + " " + neighbors);
+    // }
+    // out.println();
+    // }
+    // }
+
+    // /**
+    // * Display actions for player
+    // *
+    // * @throws IOException
+    // * @return String of actions
+    // */
+    // public String displayEntry() throws IOException {
+    // String to_display = recvMsg();
+
+    // // convert jsonString to jsonobject
+    // ObjectMapper objectMapper = new ObjectMapper();
+    // HashMap<String, String> input_entry;
+    // try {
+    // input_entry = objectMapper.readValue(to_display, HashMap.class);
+    // } catch (JsonProcessingException e) {
+    // System.out.println("Failed to convert json string to json object.");
+    // return "";
+    // }
+    // String entry_display = input_entry.get("Entry");
+    // return entry_display;
+    // }
+
+    // /**
+    // * Display map
+    // *
+    // * @throws IOException
+    // */
+    // public void displayMap() throws IOException {
+    // String jsonString = recvMsg();
+    // // convert jsonString to jsonobject
+    // ObjectMapper objectMapper = new ObjectMapper();
+    // HashMap<String, ArrayList<HashMap<String, String>>> input_map;
+    // try {
+    // input_map = objectMapper.readValue(jsonString, HashMap.class);
+    // } catch (JsonProcessingException e) {
+    // System.out.println("Failed to convert json string to json object.");
+    // return;
+    // }
+    // // Player name is the input_map key
+    // // ArrayList<HashMap<String, String>> is the value of the key
+    // for (Map.Entry<String, ArrayList<HashMap<String, String>>> entry :
+    // input_map.entrySet()) {
+    // String playername = entry.getKey();
+    // String title = playername + " player: ";
+    // out.println(title);
+    // String seperation = String.join("", Collections.nCopies(title.length(),
+    // "-"));
+    // out.println(seperation);
+    // ArrayList<HashMap<String, String>> playerAsset = entry.getValue();
+    // for (HashMap<String, String> asset : playerAsset) {
+    // String territory = asset.get("TerritoryName");
+    // String neighbors = asset.get("Neighbors");
+    // String units = asset.get("Unit");
+    // out.println(units + " in " + territory + " " + neighbors);
+    // }
+    // }
+    // }
+
+    // /**
+    // * Display map
+    // *
+    // * @throws IOException
+    // */
+    // public void displayLog() throws IOException {
+    // String jsonString = recvMsg();
+    // // convert jsonString to jsonobject
+    // ObjectMapper objectMapper = new ObjectMapper();
+    // HashMap<String, String> input_Log;
+    // try {
+    // input_Log = objectMapper.readValue(jsonString, HashMap.class);
+    // } catch (JsonProcessingException e) {
+    // System.out.println("Failed to convert json string to json object.");
+    // return;
+    // }
+    // // Player name is the input_map key
+    // // ArrayList<HashMap<String, String>> is the value of the key
+    // for (Map.Entry<String, String> entry : input_Log.entrySet()) {
+    // String territoryName = entry.getKey();
+    // String title = "War Log in " + territoryName + ": ";
+    // out.println(title);
+    // String seperation = String.join("", Collections.nCopies(title.length(),
+    // "-"));
+    // out.println(seperation);
+    // out.println(entry.getValue());
+    // }
+    // }
 
 }

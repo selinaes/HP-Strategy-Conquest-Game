@@ -56,10 +56,9 @@ public class Connection {
         if (ans != null) {
           received = true;
         }
-      }
-      catch (IOException e) {
+      } catch (IOException e) {
         System.out.println("Failed to receive message.");
-        System.exit(1);
+        // System.exit(1);
       }
     }
     return ans;

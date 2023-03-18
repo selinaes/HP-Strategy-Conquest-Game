@@ -2,6 +2,7 @@ package edu.duke.ece651.team16.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -9,21 +10,11 @@ import org.junit.jupiter.api.Test;
 
 public class ViewsTest {
   @Test
-  public void test_displaymap() {
-    // make a sample hashmap of territories
-    HashMap<String, ArrayList<String>> map = new HashMap<String, ArrayList<String>>();
-    ArrayList<String> list = new ArrayList<String>();
-    list.add("Oz");
-    list.add("Narnia");
-    map.put("Green xx", list);
-
-    Views v = new Views();
-    String mapdisplay = v.displayMap(map);
-    String expected = "Green xx player: \n" +
-        "-----------------\n" +
-        "Oz\n" +
-        "Narnia\n\n";
-    assertEquals(mapdisplay, expected);
+  public void test_displayInitialMap() throws IOException, Exception {
+    View view = new View(out);
+    assertThrows(IOException.class, () -> view.displayInitialMap("Not Valid"));
+    String jsonString = "{\"name\":[{\"TerritoryName\":\"Baldwin Auditorium\",\"Neighbors\":\"(next to: Brodie Recreational Center, Smith Warehouse, Duke Chapel)\"}]}";
+    view.displayInitialMap(jsonString);
   }
 
 }

@@ -42,14 +42,14 @@ public class Game {
     }
 
     // /**
-    //  * Used to debug players inside the game
-    //  */
+    // * Used to debug players inside the game
+    // */
     // public void printPlayer() {
-    //     System.out.println("===Update Player List====");
-    //     for (Player p : players) {
-    //         System.out.println("Player is " + p.getColor());
-    //     }
-    //     System.out.println("========End=======\n");
+    // System.out.println("===Update Player List====");
+    // for (Player p : players) {
+    // System.out.println("Player is " + p.getColor());
+    // }
+    // System.out.println("========End=======\n");
     // }
 
     /**
@@ -76,7 +76,11 @@ public class Game {
         p.getConnection().send(winner.getColor());
     }
 
-    // watch determination for the start of action phase
+    /**
+     * Check if player wants to watch after lose
+     * 
+     * @return Player: the player who wants to watch
+     */
     public void issueOrderOrWatch(Player p) {
         if (p.getisWatch()) {
             // send done
@@ -414,8 +418,9 @@ public class Game {
         synchronized (this) {
             ++this.readyPlayer;
             if (readyPlayer == numPlayer) {
-                // System.out.println("All players ready, readyPlayer: " + readyPlayer + " Entering: "
-                //         + newStage);
+                // System.out.println("All players ready, readyPlayer: " + readyPlayer + "
+                // Entering: "
+                // + newStage);
                 for (Connection c : allConnections) {
                     c.send("stage Complete");
                 }
@@ -682,7 +687,8 @@ public class Game {
                                                                                // ConcurrentModificationException
             for (Territory territory : territoriesCopy) {
                 if (territory.existsBattle()) {
-                    // System.out.println("Player " + p.getColor() + " turn and " + territory.getName() + " in battle");
+                    // System.out.println("Player " + p.getColor() + " turn and " +
+                    // territory.getName() + " in battle");
                     String battleLog = territory.doBattle();
                     worldLog.put(territory.getName(), battleLog);
                 }

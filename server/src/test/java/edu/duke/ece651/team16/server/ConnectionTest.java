@@ -15,11 +15,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
-
-
-
-
 public class ConnectionTest {
 
   private Socket makeMockSocket() throws IOException {
@@ -32,7 +27,6 @@ public class ConnectionTest {
     return mockSocket;
   }
 
-
   private BufferedReader makeBufferedReader(String input) throws IOException {
     BufferedReader mockReader = mock(BufferedReader.class);
     when(mockReader.readLine()).thenReturn(input);
@@ -40,10 +34,10 @@ public class ConnectionTest {
   }
 
   @Test
-  public void testSend() throws Exception{
+  public void testSend() throws Exception {
     // Create a mock Socket
     Socket mockSocket = makeMockSocket();
-    
+
     // Create a mock Connection
     Connection Connection = new Connection(mockSocket);
 
@@ -70,7 +64,8 @@ public class ConnectionTest {
     field2.setAccessible(true);
     field2.set(Connection2, null);
 
-    // Set the standard error stream to a PrintStream that writes to a ByteArrayOutputStream
+    // Set the standard error stream to a PrintStream that writes to a
+    // ByteArrayOutputStream
     ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     PrintStream errStream = new PrintStream(outContent, true, "UTF-8");
     System.setErr(errStream);
@@ -79,11 +74,10 @@ public class ConnectionTest {
     Connection2.close();
 
     System.setErr(System.err);
-    
+
     String expectedOutput = "Failed to send message: out is null.\n";
     assertEquals(expectedOutput, outContent.toString());
   }
-
 
   @Test
   public void test_recv() throws IOException, Exception {
@@ -99,7 +93,6 @@ public class ConnectionTest {
     assertEquals("test message", result);
     connection.close();
 
-
     BufferedReader mockReader2 = mock(BufferedReader.class);
     Connection connection2 = new Connection(mockSocket);
     Field field2 = connection2.getClass().getDeclaredField("in");
@@ -107,7 +100,7 @@ public class ConnectionTest {
     field2.set(connection2, mockReader2);
 
     when(mockReader2.readLine()).thenReturn(null).thenThrow(new IOException()).thenReturn("String");
-    
+
     connection2.recv();
     connection2.close();
   }

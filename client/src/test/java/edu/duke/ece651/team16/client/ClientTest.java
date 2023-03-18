@@ -145,53 +145,57 @@ public class ClientTest {
     client.close();
   }
 
-  @Test
-  public void test_displayMap() throws IOException, Exception {
-    Socket mockSocket = makeMockSocket();
-    BufferedReader inputSource = makeInputSource("input");
-    PrintStream out = makeOut();
-    Client client = new Client(mockSocket, inputSource, out);
+  // @Test
+  // public void test_displayMap() throws IOException, Exception {
+  // Socket mockSocket = makeMockSocket();
+  // BufferedReader inputSource = makeInputSource("input");
+  // PrintStream out = makeOut();
+  // Client client = new Client(mockSocket, inputSource, out);
 
-    Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
-    socketReceiveField.setAccessible(true);
-    BufferedReader mockReader = mock(BufferedReader.class);
-    when(mockReader.readLine()).thenReturn("Valid");
-    socketReceiveField.set(client, mockReader);
+  // Field socketReceiveField =
+  // client.getClass().getDeclaredField("socketReceive");
+  // socketReceiveField.setAccessible(true);
+  // BufferedReader mockReader = mock(BufferedReader.class);
+  // when(mockReader.readLine()).thenReturn("Valid");
+  // socketReceiveField.set(client, mockReader);
 
-    client.displayMap();
+  // client.displayMap();
 
-    String jsonString = "{\"name\":[{\"TerritoryName\":\"Baldwin Auditorium\",\"Neighbors\":\"(next to: Brodie Recreational Center, Smith Warehouse, Duke Chapel)\",\"Unit\":\"1\"}]}";
-    when(mockReader.readLine()).thenReturn(jsonString);
-    socketReceiveField.set(client, mockReader);
+  // String jsonString = "{\"name\":[{\"TerritoryName\":\"Baldwin
+  // Auditorium\",\"Neighbors\":\"(next to: Brodie Recreational Center, Smith
+  // Warehouse, Duke Chapel)\",\"Unit\":\"1\"}]}";
+  // when(mockReader.readLine()).thenReturn(jsonString);
+  // socketReceiveField.set(client, mockReader);
 
-    client.displayMap();
+  // client.displayMap();
 
-    client.close();
-  }
+  // client.close();
+  // }
 
-  @Test
-  public void test_displayEntry() throws IOException, Exception {
-    Socket mockSocket = makeMockSocket();
-    BufferedReader inputSource = makeInputSource("input");
-    PrintStream out = makeOut();
-    Client client = new Client(mockSocket, inputSource, out);
+  // @Test
+  // public void test_displayEntry() throws IOException, Exception {
+  // Socket mockSocket = makeMockSocket();
+  // BufferedReader inputSource = makeInputSource("input");
+  // PrintStream out = makeOut();
+  // Client client = new Client(mockSocket, inputSource, out);
 
-    Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
-    socketReceiveField.setAccessible(true);
-    BufferedReader mockReader = mock(BufferedReader.class);
+  // Field socketReceiveField =
+  // client.getClass().getDeclaredField("socketReceive");
+  // socketReceiveField.setAccessible(true);
+  // BufferedReader mockReader = mock(BufferedReader.class);
 
-    String jsonString = "{\"Entry\":\"a\"}";
-    when(mockReader.readLine()).thenReturn(jsonString);
-    socketReceiveField.set(client, mockReader);
+  // String jsonString = "{\"Entry\":\"a\"}";
+  // when(mockReader.readLine()).thenReturn(jsonString);
+  // socketReceiveField.set(client, mockReader);
 
-    client.displayEntry();
+  // client.displayEntry();
 
-    when(mockReader.readLine()).thenReturn("Valid");
-    socketReceiveField.set(client, mockReader);
-    client.displayEntry();
+  // when(mockReader.readLine()).thenReturn("Valid");
+  // socketReceiveField.set(client, mockReader);
+  // client.displayEntry();
 
-    client.close();
-  }
+  // client.close();
+  // }
 
   @Test
   public void test_playerChooseNumber() throws IOException, Exception {
@@ -241,7 +245,7 @@ public class ClientTest {
   public void test_waitEveryoneDone() throws IOException, Exception {
     Socket mockSocket = makeMockSocket();
     BufferedReader inputSource = mock(BufferedReader.class);
-    
+
     PrintStream out = makeOut();
 
     Client client = new Client(mockSocket, inputSource, out);
@@ -255,30 +259,33 @@ public class ClientTest {
     client.close();
   }
 
-  @Test
-  public void test_displayInitialMap() throws IOException, Exception {
-    Socket mockSocket = makeMockSocket();
-    BufferedReader inputSource = mock(BufferedReader.class);
-    PrintStream out = makeOut();
+  // @Test
+  // public void test_displayInitialMap() throws IOException, Exception {
+  // Socket mockSocket = makeMockSocket();
+  // BufferedReader inputSource = mock(BufferedReader.class);
+  // PrintStream out = makeOut();
 
-    Client client = new Client(mockSocket, inputSource, out);
+  // Client client = new Client(mockSocket, inputSource, out);
 
-    Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
-    socketReceiveField.setAccessible(true);
-    BufferedReader mockReader = mock(BufferedReader.class);
-    when(mockReader.readLine()).thenReturn("Valid");
-    socketReceiveField.set(client, mockReader);
+  // Field socketReceiveField =
+  // client.getClass().getDeclaredField("socketReceive");
+  // socketReceiveField.setAccessible(true);
+  // BufferedReader mockReader = mock(BufferedReader.class);
+  // when(mockReader.readLine()).thenReturn("Valid");
+  // socketReceiveField.set(client, mockReader);
 
-    client.displayInitialMap();
+  // client.displayInitialMap();
 
-    String jsonString = "{\"name\":[{\"TerritoryName\":\"Baldwin Auditorium\",\"Neighbors\":\"(next to: Brodie Recreational Center, Smith Warehouse, Duke Chapel)\"}]}";
-    when(mockReader.readLine()).thenReturn(jsonString);
-    socketReceiveField.set(client, mockReader);
+  // String jsonString = "{\"name\":[{\"TerritoryName\":\"Baldwin
+  // Auditorium\",\"Neighbors\":\"(next to: Brodie Recreational Center, Smith
+  // Warehouse, Duke Chapel)\"}]}";
+  // when(mockReader.readLine()).thenReturn(jsonString);
+  // socketReceiveField.set(client, mockReader);
 
-    client.displayInitialMap();
+  // client.displayInitialMap();
 
-    client.close();
-  }
+  // client.close();
+  // }
 
   @Test
   public void test_playerAssignUnits() throws IOException, Exception {
