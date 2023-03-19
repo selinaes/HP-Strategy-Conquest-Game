@@ -15,11 +15,11 @@ public class AttackOrderTest {
     t1.setNeighbors(new ArrayList<Territory>(Arrays.asList(t2)));
     List<Territory> Territories = new ArrayList<Territory>();
     Territories.add(t1);
-    Connection connection = mock(Connection.class);
+    Conn connection = mock(Conn.class);
     Player p1 = new Player("red", connection, Territories, 1);
     Unit u = new BasicUnit(p1, t1, false, 1);
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
-    Map map = new Map(1);
+    GameMap map = new GameMap(1);
     AttackOrder at = new AttackOrder(t1, t2, 1, p1, map);
     assertEquals(null, at.tryAction());
   }
@@ -32,11 +32,11 @@ public class AttackOrderTest {
     List<Territory> Territories = new ArrayList<Territory>();
     Territories.add(t1);
     Territories.add(t2);
-    Connection connection = mock(Connection.class);
+    Conn connection = mock(Conn.class);
     Player p1 = new Player("red", connection, Territories, 1);
     Unit u = new BasicUnit(p1, t1, false, 1);
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
-    Map map = new Map(1);
+    GameMap map = new GameMap(1);
     AttackOrder at = new AttackOrder(t1, t2, 1, p1, map);
     assertEquals("You do own the to territory", at.tryAction());
   }

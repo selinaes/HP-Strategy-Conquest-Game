@@ -95,11 +95,10 @@ public class Game {
             doAction(p);
         }
 
-    // synchronize check state
-    public void checkState(String state) {
         while (true) {
             synchronized (this) {
-                if (gameState.equals(state)) {
+                if (gameState.equals("worldWar")) {
+                    ++readyPlayer;
                     break;
                 }
             }

@@ -16,11 +16,11 @@ public class AttackInputRuleCheckerTest {
     List<Territory> Territories = new ArrayList<Territory>();
     // Territories.add(t1);
     Territories.add(t2);
-    Conn connection = mock(Connection.class);
+    Conn connection = mock(Conn.class);
     Player p1 = new Player("red", connection, Territories, 1);
     Unit u = new BasicUnit(p1, t1, false, 1);
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
-    Map map = new Map(1);
+    GameMap map = new GameMap(1);
     AttackInputRuleChecker checker = new AttackInputRuleChecker(null);
     assertEquals("You do not own the from territory", checker.checkMyRule(t1, t2, p1, 1, map));
   }
@@ -33,11 +33,11 @@ public class AttackInputRuleCheckerTest {
     List<Territory> Territories = new ArrayList<Territory>();
     Territories.add(t1);
     Territories.add(t2);
-    Connection connection = mock(Connection.class);
+    Conn connection = mock(Conn.class);
     Player p1 = new Player("red", connection, Territories, 1);
     Unit u = new BasicUnit(p1, t1, false, 1);
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
-    Map map = new Map(1);
+    GameMap map = new GameMap(1);
     AttackInputRuleChecker checker = new AttackInputRuleChecker(null);
     assertEquals("You do own the to territory", checker.checkMyRule(t1, t2, p1, 1, map));
   }
@@ -49,11 +49,11 @@ public class AttackInputRuleCheckerTest {
     t1.setNeighbors(new ArrayList<Territory>(Arrays.asList(t2)));
     List<Territory> Territories = new ArrayList<Territory>();
     Territories.add(t1);
-    Connection connection = mock(Connection.class);
+    Conn connection = mock(Conn.class);
     Player p1 = new Player("red", connection, Territories, 1);
     Unit u = new BasicUnit(p1, t1, false, 1);
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
-    Map map = new Map(1);
+    GameMap map = new GameMap(1);
     AttackInputRuleChecker checker = new AttackInputRuleChecker(null);
     assertEquals("You do not have enough alive units in the from territory", checker.checkMyRule(t1, t2, p1, 5, map));
   }
@@ -65,11 +65,11 @@ public class AttackInputRuleCheckerTest {
     t1.setNeighbors(new ArrayList<Territory>(Arrays.asList(t2)));
     List<Territory> Territories = new ArrayList<Territory>();
     Territories.add(t1);
-    Connection connection = mock(Connection.class);
+    Conn connection = mock(Conn.class);
     Player p1 = new Player("red", connection, Territories, 1);
     Unit u = new BasicUnit(p1, t1, false, 1);
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
-    Map map = new Map(1);
+    GameMap map = new GameMap(1);
     AttackInputRuleChecker checker = new AttackInputRuleChecker(null);
     assertEquals(null, checker.checkMyRule(t1, t2, p1, 1, map));
   }

@@ -17,11 +17,11 @@ public class MoveOrderTest {
     List<Territory> Territories = new ArrayList<Territory>();
     Territories.add(t1);
     Territories.add(t2);
-    Connection connection = mock(Connection.class);
+    Conn connection = mock(Conn.class);
     Player p1 = new Player("red", connection, Territories, 1);
     Unit u = new BasicUnit(p1, t1, false, 1);
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
-    Map map = new Map(1);
+    GameMap map = new GameMap(1);
     MoveOrder mo = new MoveOrder(t1, t2, 1, p1, map);
     assertEquals(null, mo.tryAction());
   }
@@ -33,9 +33,9 @@ public class MoveOrderTest {
     List<Territory> Territories = new ArrayList<Territory>();
     Territories.add(t1);
     Territories.add(t2);
-    Connection connection = mock(Connection.class);
+    Conn connection = mock(Conn.class);
     Player p1 = new Player("red", connection, Territories, 1);
-    Map map = new Map(1);
+    GameMap map = new GameMap(1);
     MoveOrder mo = new MoveOrder(t1, t2, 1, p1, map);
     mo.getPlayer();
     assertEquals("You do not have enough alive units in the from territory", mo.tryAction());

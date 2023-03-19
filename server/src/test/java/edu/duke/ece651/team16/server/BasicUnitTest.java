@@ -11,7 +11,7 @@ import java.util.List;
 public class BasicUnitTest {
   @Test
   public void testSetWhere() {
-    Connection c1 = mock(Connection.class);
+    Conn c1 = mock(Conn.class);
     // when(c1.getSocket()).thenReturn(s1);
 
     // create a list for territories
@@ -29,7 +29,7 @@ public class BasicUnitTest {
 
   @Test
   public void testGetWhere() {
-    Connection c1 = mock(Connection.class);
+    Conn c1 = mock(Conn.class);
     // when(c1.getSocket()).thenReturn(s1);
 
     // create a list for territories
@@ -45,7 +45,7 @@ public class BasicUnitTest {
 
   @Test
   public void testGetOwner() {
-    Connection c1 = mock(Connection.class);
+    Conn c1 = mock(Conn.class);
     // when(c1.getSocket()).thenReturn(s1);
 
     // create a list for territories
@@ -61,7 +61,7 @@ public class BasicUnitTest {
 
   @Test
   public void testGetAlive() {
-    Connection c1 = mock(Connection.class);
+    Conn c1 = mock(Conn.class);
     // create a list for territories
     List<Territory> list = new ArrayList<Territory>();
     Player p = new Player("blue", c1, list, 2);

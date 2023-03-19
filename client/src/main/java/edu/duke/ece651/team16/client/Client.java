@@ -73,7 +73,18 @@ public class Client {
             msg = recvMsg();
         }
         // game over
+        // String gameOverMessage = 
+        // "   ____      _      __  __  U _____ u    U _____ u _   _    ____    ____\n"+     
+        // "U /\"___|uU  /\"\  uU|\' \/ \'|u\| ___\"|/    \| ___\"|/| \ |\"|  |  _\"\  / __\"| u\n"+  
+        // "\| |  _ / \/ _ \/ \| |\/| |/ |  _|\"       |  _|\" <|  \| |>/| | | |<\___ \/\n"+ 
+        // " | |_| |  / ___ \  | |  | |  | |___       | |___ U| |\  |uU| |_| |\u___) |\n"+ 
+        // " \____| /_/   \_\ |_|  |_|  |_____|      |_____| |_| \_|  |____/ u|____/>> \n"+ 
+        // "  _)(|_   \\    >><<,-,,-.   <<   >>      <<   >> ||   \\,-.|||_    )(  (__)\n"+
+        // " (__)__) (__)  (__)(./  \.) (__) (__)    (__) (__)(_\")  (_/(__)_)  (__)    \n";
+        
+
         out.println("Game over. Winner is " + msg);
+        // out.println(gameOverMessage);
     }
 
     public boolean ifExit() {
@@ -249,7 +260,7 @@ public class Client {
                 clientInput = readClientInput(prompt);
                 sendResponse(clientInput);
                 prompt = recvMsg();
-                if (prompt.equals("finished placement")) {
+                if (prompt.equals("finished stage")) {
                     out.println("Finished Placement. Please wait for other players to place units.");
                     return true;
                 } else if (prompt.equals("Valid territory name")) {

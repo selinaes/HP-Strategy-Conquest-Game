@@ -39,27 +39,27 @@ public class ConnectionTest {
     Socket mockSocket = makeMockSocket();
 
     // Create a mock Connection
-    Connection Connection = new Connection(mockSocket);
+    Conn conn = new Conn(mockSocket);
 
     // Create a mock PrintWriter
     PrintWriter mockPrintWriter = mock(PrintWriter.class);
 
     // Modify Field of mockConnection
-    Field field = Connection.getClass().getDeclaredField("out");
+    Field field = conn.getClass().getDeclaredField("out");
     field.setAccessible(true);
-    field.set(Connection, mockPrintWriter);
+    field.set(conn, mockPrintWriter);
 
     // Define input message
     String msg = "Hello, world!";
 
     // Call send method with input message
-    Connection.send(msg);
-    Connection.close();
+    conn.send(msg);
+    conn.close();
 
     // Verify that the mock PrintWriter was called with the input message
     verify(mockPrintWriter).println(msg);
 
-    Connection Connection2 = new Connection(mockSocket);
+    Conn Connection2 = new Conn(mockSocket);
     Field field2 = Connection2.getClass().getDeclaredField("out");
     field2.setAccessible(true);
     field2.set(Connection2, null);
@@ -84,7 +84,7 @@ public class ConnectionTest {
     Socket mockSocket = makeMockSocket();
     BufferedReader mockReader = makeBufferedReader("test message");
 
-    Connection connection = new Connection(mockSocket);
+    Conn connection = new Conn(mockSocket);
     Field inField = connection.getClass().getDeclaredField("in");
     inField.setAccessible(true);
     inField.set(connection, mockReader);
@@ -94,7 +94,7 @@ public class ConnectionTest {
     connection.close();
 
     BufferedReader mockReader2 = mock(BufferedReader.class);
-    Connection connection2 = new Connection(mockSocket);
+    Conn connection2 = new Conn(mockSocket);
     Field field2 = connection2.getClass().getDeclaredField("in");
     field2.setAccessible(true);
     field2.set(connection2, mockReader2);
@@ -111,7 +111,7 @@ public class ConnectionTest {
 
     doThrow(new IOException()).when(mockSocket).close();
 
-    Connection connection = new Connection(mockSocket);
+    Conn connection = new Conn(mockSocket);
     connection.close();
   }
 
@@ -123,7 +123,7 @@ public class ConnectionTest {
     when(mockSocket.getInputStream()).thenThrow(new IOException()).thenReturn(mockInputStream);
     when(mockSocket.getOutputStream()).thenReturn(mockOutputStream);
 
-    Connection connection = new Connection(mockSocket);
+    Conn connection = new Conn(mockSocket);
     connection.close();
   }
 
