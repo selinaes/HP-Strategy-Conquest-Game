@@ -13,7 +13,7 @@ import static org.mockito.Mockito.when;
 public class PlayerTest {
   @Test
   public void test_addTerritory() throws IOException {
-    Connection c1 = mock(Connection.class);
+    Conn c1 = mock(Conn.class);
     // when(c1.getSocket()).thenReturn(s1);
 
     // create a list for territories
@@ -33,7 +33,7 @@ public class PlayerTest {
 
   @Test
   public void test_getColor() throws IOException {
-    Connection c1 = mock(Connection.class);
+    Conn c1 = mock(Conn.class);
     List<Territory> list = new ArrayList<Territory>();
     Player p = new Player("blue", c1, list, 2);
     assertEquals(p.getColor(), "blue");
@@ -41,15 +41,15 @@ public class PlayerTest {
 
   @Test
   public void test_getConnection() {
-    Connection c1 = mock(Connection.class);
+    Conn c1 = mock(Conn.class);
     List<Territory> list = new ArrayList<Territory>();
     Player p = new Player("blue", c1, list, 2);
-    assertEquals(p.getConnection(), c1);
+    assertEquals(p.getConn(), c1);
   }
 
   @Test
   public void test_units() {
-    Connection c1 = mock(Connection.class);
+    Conn c1 = mock(Conn.class);
     List<Territory> list = new ArrayList<Territory>();
     Player p = new Player("blue", c1, list, 2);
     assertEquals(2, p.unplacedUnits());
@@ -57,7 +57,7 @@ public class PlayerTest {
 
   @Test
   public void test_TerritoryNames() {
-    Connection c1 = mock(Connection.class);
+    Conn c1 = mock(Conn.class);
     List<Territory> list = new ArrayList<Territory>();
     list.add(new Territory("A"));
     list.add(new Territory("B"));
@@ -70,7 +70,7 @@ public class PlayerTest {
 
   @Test
   public void test_placeUnit() {
-    Connection c1 = mock(Connection.class);
+    Conn c1 = mock(Conn.class);
     List<Territory> list = new ArrayList<Territory>();
     list.add(new Territory("A"));
     Player p = new Player("blue", c1, list, 2);
@@ -81,7 +81,7 @@ public class PlayerTest {
 
   @Test
   public void test_placeUnit1() {
-    Connection c1 = mock(Connection.class);
+    Conn c1 = mock(Conn.class);
     List<Territory> list = new ArrayList<Territory>();
     Territory t1 = new Territory("A");
     list.add(t1);
@@ -102,7 +102,7 @@ public class PlayerTest {
 
   @Test
   public void testFindNextUnplacedUnits() {
-    Connection c1 = mock(Connection.class);
+    Conn c1 = mock(Conn.class);
     List<Territory> list = new ArrayList<Territory>();
     Territory territory = new Territory("A");
     list.add(territory);
