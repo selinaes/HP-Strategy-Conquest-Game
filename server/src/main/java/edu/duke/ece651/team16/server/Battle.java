@@ -17,8 +17,7 @@ public class Battle {
 
     /*
      * Add a group of units to the battle
-     * 
-     * @param playerColor
+     * If the group is from the same player, then combine them
      * 
      * @param units
      */
@@ -71,25 +70,6 @@ public class Battle {
         return false;
     }
 
-    // /*
-    // * Check if the party is alive
-    // *
-    // * @param playerColor
-    // *
-    // * @return boolean
-    // */
-    // public boolean checkPartyAlive(String playerName) {
-    // for (Unit unit : parties.get(playerName)) {
-    // if (unit.getAlive()) {
-    // return true;
-    // }
-    // }
-    // parties.remove(playerName);
-    // return false;
-    // }
-
-
-
     /**
      * Form a game log that shows the number of units in each party
      * 
@@ -105,6 +85,11 @@ public class Battle {
         return log;
     }
 
+    /*
+        * Resolve the battle
+        * 
+        * @return Player the winner of the battle
+        */
     public void clearParty() {
         this.parties = new ArrayList<ArrayList<Unit>>();
     }
@@ -117,9 +102,6 @@ public class Battle {
             // get the first unit of the party
             int indexA = index % parties.size();
             int indexB = (index + 1) % parties.size();
-            // System.out.println("IndexA: " + indexA);
-            // System.out.println("IndexB: " + indexB);
-            // System.out.println("Parties size: " + parties.size());
             ArrayList<Unit> unitsA = parties.get(indexA);
             ArrayList<Unit> unitsB = parties.get(indexB);
             Unit unitA = unitsA.get(0);

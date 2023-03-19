@@ -44,7 +44,7 @@ public class Game {
     }
 
     /**
-     * the flow of the game, with diffeeent phases
+     * Multithreaded main flow of the game, with different phases
      * 
      * @param ServerSocket serverSocket: the server socket
      * @param int          numClients: the number of clients
@@ -69,10 +69,9 @@ public class Game {
     }
 
     /**
+     * Check if player wants to watch after lose
      * 
-     * the action phase of the game
-     *
-     * @param Player p: the player
+     * @return Player: the player who wants to watch
      */
     public void doActionPhase(Player p) {
         if (p.getisWatch()) {
@@ -96,10 +95,11 @@ public class Game {
             doAction(p);
         }
 
+    // synchronize check state
+    public void checkState(String state) {
         while (true) {
             synchronized (this) {
-                if (gameState.equals("worldWar")) {
-                    ++readyPlayer;
+                if (gameState.equals(state)) {
                     break;
                 }
             }
@@ -116,7 +116,6 @@ public class Game {
                 this.gameState = "warEnd";
                 this.gameRound++;
                 this.readyPlayer = 0;
-
             }
         }
 
@@ -314,7 +313,6 @@ public class Game {
             if (!isValidUnitNumber(p, territoryName, num, conn)) {
                 return;
             }
-
             int numOfUnits = Integer.parseInt(num);
             p.placeUnitsSameTerritory(territoryName, numOfUnits);
         }
@@ -522,6 +520,8 @@ public class Game {
 
     /**
      * After one turn of moving and attacking, resolve battle for each territory
+     *
+     * @return HashMap<String, String> worldLog the log of the world war
      */
     public HashMap<String, String> worldwar() {
         HashMap<String, String> worldLog = new HashMap<>();
@@ -530,7 +530,6 @@ public class Game {
                                                                                // ConcurrentModificationException
             for (Territory territory : territoriesCopy) {
                 if (territory.existsBattle()) {
-                    System.out.println("Player " + p.getColor() + " turn and " + territory.getName() + " in battle");
                     String battleLog = territory.doBattle();
                     worldLog.put(territory.getName(), battleLog);
                 }
@@ -540,6 +539,9 @@ public class Game {
         return worldLog;
     }
 
+    /**
+     * Generate new unit for each player
+     */
     public void generateUnit() {
         for (Player p : players) {
             p.generateNewUnit();
@@ -563,5 +565,4 @@ public class Game {
         }
         return null;
     }
-
 }

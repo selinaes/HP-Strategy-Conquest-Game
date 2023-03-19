@@ -30,25 +30,27 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 public class GameTest {
   // @Test
   // public void testSendInitialMapJsonProcessingException() throws Exception {
-  //   // Create a mock Connection & HashMap object
-  //   Connection connMock = mock(Connection.class);
-  //   HashMap<String, ArrayList<HashMap<String, String>>> mockMap = new HashMap<>();
+  // // Create a mock Connection & HashMap object
+  // Connection connMock = mock(Connection.class);
+  // HashMap<String, ArrayList<HashMap<String, String>>> mockMap = new
+  // HashMap<>();
 
-  //   // Mock the ObjectMapper class
-  //   ObjectMapper objectMapperMock = PowerMockito.mock(ObjectMapper.class);
-  //   PowerMockito.mock(ObjectMapper.class);
-  //   PowerMockito.whenNew(ObjectMapper.class).withNoArguments().thenReturn(objectMapperMock);
-  //   PowerMockito.when(objectMapperMock.writeValueAsString(mockMap)).thenThrow(new JsonProcessingException("test", null, null));
+  // // Mock the ObjectMapper class
+  // ObjectMapper objectMapperMock = PowerMockito.mock(ObjectMapper.class);
+  // PowerMockito.mock(ObjectMapper.class);
+  // PowerMockito.whenNew(ObjectMapper.class).withNoArguments().thenReturn(objectMapperMock);
+  // PowerMockito.when(objectMapperMock.writeValueAsString(mockMap)).thenThrow(new
+  // JsonProcessingException("test", null, null));
 
-  //   Game game = new Game(2);
+  // Game game = new Game(2);
 
-  //   try {
-  //     game.sendInitialMap(connMock, mockMap);
-  //   } catch (JsonProcessingException e) {
-  //     // Verify that the JsonProcessingException was thrown
-  //     assertEquals(JsonProcessingException.class, e.getClass());
-  //     throw e;
-  //   }
+  // try {
+  // game.sendInitialMap(connMock, mockMap);
+  // } catch (JsonProcessingException e) {
+  // // Verify that the JsonProcessingException was thrown
+  // assertEquals(JsonProcessingException.class, e.getClass());
+  // throw e;
+  // }
   // }
 
   @Test
@@ -165,7 +167,7 @@ public class GameTest {
     assertEquals(color, "red");
     verify(connectionMock)
         .send(
-            "Please enter a color you want to choose. Current available colors are: red blue ");
+            "Please enter a color you want to choose. Current available colors are: red blue yellow green ");
     verify(connectionMock).recv();
     verify(connectionMock).send("Valid");
     verifyNoMoreInteractions(connectionMock);
@@ -178,7 +180,7 @@ public class GameTest {
     when(connectionMock.recv()).thenReturn("0", "red");
     String color = game.chooseColor(connectionMock);
     verify(connectionMock, times(2))
-        .send("Please enter a color you want to choose. Current available colors are: red blue ");
+        .send("Please enter a color you want to choose. Current available colors are: red blue yellow green ");
     verify(connectionMock).send("Invalid color");
     verify(connectionMock).send("Valid");
     assertEquals(color, "red");

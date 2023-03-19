@@ -162,7 +162,6 @@ public class Player {
             t.tryAddUnits(newGenerated);// territory add unit
             this.units.add(newUnit);// player's all units + 1 * num(territroy)
         }
-        System.out.println("finish generate");
     }
 
     /**
