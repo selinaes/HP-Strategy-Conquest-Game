@@ -161,18 +161,71 @@ public class TerritoryTest {
   }
 
   @Test
-  public void test_Battle() throws Exception {
-    // Territory territory = new Territory("Gondor");
-    // Field battleField = territory.getClass().getDeclaredField("battle");
-    // battleField.setAccessible(true);
-    // Battle b = new Battle();
-    // Battle b2 = new Battle();
-    // ArrayList<Unit> u = new ArrayList<Unit>();
-    // u.add(mock(Unit.class));
-    // b2.addGroup(u);
-    // battleField.set(territory, b);
-    // territory.doBattle();
-    // battleField.set(territory, b2);
-    // territory.doBattle();
+  public void test_existBattle() {
+
+    Territory territory = new Territory("Gondor");
+    assertFalse(territory.existsBattle());
+
+    Conn c2 = mock(Conn.class);
+    List<Territory> list = new ArrayList<Territory>();
+    list.add(territory);
+    Player player = new Player("red", c2, list, 2);
+
+    Unit unit = new BasicUnit(player, null, true, 1);
+    territory.tryAddUnits(new ArrayList<Unit>(Arrays.asList(unit)));
+    territory.defendHome();
+    assertTrue(territory.existsBattle());
   }
+
+  @Test
+  public void test_DefendHome() {
+    Territory territory1 = new Territory("Gondor");
+    ArrayList<Unit> list = new ArrayList<>();
+    territory1.tryAddAttackers(list);
+    Territory territory = new Territory("Gondor");
+    territory.defendHome();
+    assertEquals(0, territory.getUnits().size());
+    assertFalse(territory.existsBattle());
+  }
+
+  @Test
+  public void testDoBattle() {
+    Territory territory = new Territory("Gondor");
+    assertFalse(territory.existsBattle());
+
+    Conn c2 = mock(Conn.class);
+    List<Territory> list = new ArrayList<Territory>();
+    list.add(territory);
+    Player player = new Player("red", c2, list, 2);
+
+    Unit unit = new BasicUnit(player, null, true, 1);
+    territory.tryAddUnits(new ArrayList<Unit>(Arrays.asList(unit)));
+    String winner = territory.doBattle();
+    assertEquals("Battle participants: Player red has 1 units. \nBattle Winner: red\n", winner);
+  }
+
+  @Test
+  public void testDoBattle1() {
+    Territory territory = new Territory("Gondor");
+    assertFalse(territory.existsBattle());
+    Conn c2 = mock(Conn.class);
+    List<Territory> list = new ArrayList<Territory>();
+    list.add(territory);
+    Player player = new Player("red", c2, list, 2);
+    territory.setOwner(player);
+
+    Territory territory1 = new Territory("Duke");
+    Conn c = mock(Conn.class);
+    List<Territory> list0 = new ArrayList<Territory>();
+    list0.add(territory1);
+    Player player1 = new Player("blue", c2, list, 2);
+
+    Unit unit = new BasicUnit(player1, null, true, 1);
+    territory.tryAddAttackers(new ArrayList<Unit>(Arrays.asList(unit)));
+
+    String winner = territory.doBattle();
+    // assertEquals("Battle participants: Player red has 1 units. \nBattle Winner:
+    // red\n", winner);
+  }
+
 }

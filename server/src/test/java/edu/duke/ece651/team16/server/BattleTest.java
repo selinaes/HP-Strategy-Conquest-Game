@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -89,7 +90,11 @@ public class BattleTest {
     Player p2 = mock(Player.class);
     when(p2.getColor()).thenReturn("p2");
     BasicUnit unit1 = new BasicUnit(p1, mock(Territory.class), true, 0);
+    BasicUnit unit2 = new BasicUnit(p1, mock(Territory.class), true, 0);
+    BasicUnit unit4 = new BasicUnit(p1, mock(Territory.class), true, 0);
     partyA.add(unit1);
+    partyA.add(unit2);
+    partyA.add(unit4);
     battle.addGroup(partyA);
 
     BasicUnit unit3 = new BasicUnit(p2, mock(Territory.class), true, 0);
@@ -112,6 +117,78 @@ public class BattleTest {
     }
 
     // assertEquals(p1, battle.resolveBattle());
+  }
+
+  // @Test
+  // public void testResolveBattle_Equal2() {
+  // Battle battle = new Battle();
+  // Combat c = new Combat();
+  // // c.setSeed(42);
+  // c.setDiceNum(2);
+  // battle.setCombat(c);
+
+  // ArrayList<Unit> partyA = new ArrayList<Unit>();
+  // ArrayList<Unit> partyB = new ArrayList<Unit>();
+  // Player p1 = mock(Player.class);
+  // when(p1.getColor()).thenReturn("p1");
+  // Player p2 = mock(Player.class);
+  // when(p2.getColor()).thenReturn("p2");
+  // BasicUnit unit1 = new BasicUnit(p1, mock(Territory.class), true, 0);
+  // BasicUnit unit2 = new BasicUnit(p1, mock(Territory.class), true, 0);
+  // BasicUnit unit4 = new BasicUnit(p1, mock(Territory.class), true, 0);
+  // partyB.add(unit1);
+  // partyB.add(unit2);
+  // partyB.add(unit4);
+  // battle.addGroup(partyB);
+
+  // BasicUnit unit3 = new BasicUnit(p2, mock(Territory.class), true, 0);
+  // partyA.add(unit3);
+
+  // battle.addGroup(partyA);
+  // int i = 50;
+  // while (i > 0) {
+  // Player winner = battle.resolveBattle();
+  // if (winner.equals(p2)) {
+  // unit1 = new BasicUnit(p1, mock(Territory.class), true, 0);
+  // partyA.add(unit1);
+  // battle.addGroup(partyA);
+  // } else {
+  // unit3 = new BasicUnit(p2, mock(Territory.class), true, 0);
+  // partyB.add(unit3);
+  // battle.addGroup(partyB);
+  // }
+  // --i;
+  // }
+
+  // // assertEquals(p1, battle.resolveBattle());
+  // }
+
+  @Test
+  public void testCheckGroupExisted() {
+    Territory territory = new Territory("Gondor");
+    assertFalse(territory.existsBattle());
+    Conn c2 = mock(Conn.class);
+    List<Territory> list = new ArrayList<Territory>();
+    list.add(territory);
+    Player player1 = new Player("red", c2, list, 2);
+
+    Territory territory1 = new Territory("Duke");
+    Conn c = mock(Conn.class);
+    List<Territory> list0 = new ArrayList<Territory>();
+    list0.add(territory1);
+    Player player2 = new Player("blue", c2, list, 2);
+
+    Unit unit1 = new BasicUnit(player1, null, true, 1);
+    Unit unit2 = new BasicUnit(player2, null, true, 1);
+
+    ArrayList<Unit> units1 = new ArrayList<>();
+    units1.add(unit1);
+    ArrayList<Unit> units2 = new ArrayList<>();
+    units2.add(unit2);
+    Battle battlefield = new Battle();
+    battlefield.addGroup(units1);
+    assertTrue(battlefield.checkGroupExisted(units1));
+    assertFalse(battlefield.checkGroupExisted(units2));
   }
 
 }

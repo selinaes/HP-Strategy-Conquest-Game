@@ -118,6 +118,12 @@ public class PlayerTest {
 
     ArrayList<Unit> unplacedUnits1 = player.findNextUnplacedUnits(1);
     assertEquals(1, unplacedUnits1.size());
+    player.generateNewUnit();
+    assertFalse(player.checkLose());
+    player.removeTerritory(territory);
+    assertTrue(player.checkLose());
+    player.setWatch();
+    assertTrue(player.getisWatch());
   }
 
 }

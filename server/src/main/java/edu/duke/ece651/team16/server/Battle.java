@@ -24,7 +24,7 @@ public class Battle {
     public void addGroup(ArrayList<Unit> units) {
         boolean placed = false;
         for (int i = 0; i < parties.size(); ++i) {
-            if (parties.get(i).get(0).getOwner().equals(units.get(0).getOwner())){         
+            if (parties.get(i).get(0).getOwner().equals(units.get(0).getOwner())) {
                 parties.get(i).addAll(units);
                 // parties.set(i, temp);
                 placed = true;
@@ -34,7 +34,7 @@ public class Battle {
         if (!placed) {
             parties.add(units);
         }
-            
+
     }
 
     /**
@@ -86,10 +86,10 @@ public class Battle {
     }
 
     /*
-        * Resolve the battle
-        * 
-        * @return Player the winner of the battle
-        */
+     * Resolve the battle
+     * 
+     * @return Player the winner of the battle
+     */
     public void clearParty() {
         this.parties = new ArrayList<ArrayList<Unit>>();
     }
@@ -132,4 +132,5 @@ public class Battle {
         }
         return parties.get(0).get(0).getOwner();
     }
+
 }

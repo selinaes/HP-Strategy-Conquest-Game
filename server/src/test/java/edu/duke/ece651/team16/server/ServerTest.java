@@ -44,7 +44,7 @@ public class ServerTest {
         try {
           server.run(); // call the run() method of the Server instance
         } catch (IOException e) {
-
+          // System.out.println(e.getMessage());
         }
       }
     });

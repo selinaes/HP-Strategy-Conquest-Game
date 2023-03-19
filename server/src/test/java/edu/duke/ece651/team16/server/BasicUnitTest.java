@@ -67,7 +67,7 @@ public class BasicUnitTest {
     Player p = new Player("blue", c1, list, 2);
     Territory territory1 = new Territory("Territory 1");
     BasicUnit unit = new BasicUnit(p, territory1, true, 1);
-
+    unit.getId();
     boolean alive = unit.getAlive();
 
     assertEquals(true, alive);
