@@ -1,12 +1,12 @@
 package edu.duke.ece651.team16.server;
 
-import java.io.IOException;
-import java.util.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.net.Socket;
-import java.net.ServerSocket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.function.Supplier;
+
+
 
 public class Game {
     protected List<Player> players;
@@ -21,13 +21,15 @@ public class Game {
     private int playerHighBound;
     private int gameRound;
     private MessageGenerator messageGenerator;
+    private final HashMap<String, Supplier<HashMap<String, List<Territory>>>> mapCreateFns;
+    private String mapName;
 
     /**
      * Constructor for Server class that takes in a serverSocket
      * 
      * @param ServerSocket serverSocket
      */
-    public Game(int unitsPerPlayer) {
+    public Game(int unitsPerPlayer, String mapName) {
         this.numPlayer = 4;
         this.players = new ArrayList<Player>();
         this.defaultMap = new GameMap(numPlayer);
@@ -41,6 +43,18 @@ public class Game {
         this.playerHighBound = 4;
         this.gameRound = 0;
         this.messageGenerator = new MessageGenerator();
+        this.mapCreateFns = new HashMap<>();
+        setupMapCreateFns();
+        this.mapName = mapName;
+    }
+
+    /**
+     * Put the String -> lambda mappings into mapCreateFns
+     */
+    private void setupMapCreateFns() {
+        mapCreateFns.put("Test", () -> defaultMap.createTestMap());
+        mapCreateFns.put("Basic", () -> defaultMap.createBasicMap());
+        mapCreateFns.put("Duke", () -> defaultMap.createDukeMap());
     }
 
     /**
@@ -283,6 +297,7 @@ public class Game {
     public void initializeMap(int numOfPlayers) {
         this.defaultMap = new GameMap(numOfPlayers);
         // defaultMap.createDukeMap();
+        // mapCreateFns.get(mapName).apply();
         defaultMap.createTestMap();
         this.colors = defaultMap.getColorList();
     }
@@ -396,7 +411,7 @@ public class Game {
     private boolean isValidUnitNumber(Player p, String territoryName, String num, Conn conn) {
         try {
             int numOfUnits = Integer.parseInt(num);
-            if (numOfUnits < 0 || numOfUnits > p.unplacedUnits()) {
+            if (numOfUnits <= 0 || numOfUnits > p.unplacedUnits()) {
                 conn.send("Invalid number of units");
                 assignUnits(p, conn);
                 return false;
