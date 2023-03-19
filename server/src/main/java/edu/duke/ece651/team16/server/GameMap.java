@@ -2,7 +2,7 @@ package edu.duke.ece651.team16.server;
 
 import java.util.*;
 
-public class Map {
+public class GameMap {
   private int numPlayer;
   private ArrayList<String> ColorList;
   private HashMap<String, List<Territory>> map;
@@ -12,7 +12,7 @@ public class Map {
    * 
    * @param numPlayer the number of players
    **/
-  public Map(int numPlayer) {
+  public GameMap(int numPlayer) {
     this.numPlayer = numPlayer;
     this.ColorList = new ArrayList<>();
 

@@ -24,7 +24,7 @@ public abstract class OrderRuleChecker {
      * @return null if the order rule is valid, otherwise return the error
      *         message
      */
-    protected abstract String checkMyRule(Territory from, Territory to, Player player, int numUnits, Map map);
+    protected abstract String checkMyRule(Territory from, Territory to, Player player, int numUnits, GameMap map);
 
     /**
      * check if the placement is valid
@@ -36,7 +36,7 @@ public abstract class OrderRuleChecker {
      * @param map      the map of the game
      * @return null if the placement is valid, otherwise return the error message
      */
-    public String checkOrder(Territory from, Territory to, Player player, int numUnits, Map map) {
+    public String checkOrder(Territory from, Territory to, Player player, int numUnits, GameMap map) {
         String result = checkMyRule(from, to, player, numUnits, map);
         if (result != null) {
             return result;

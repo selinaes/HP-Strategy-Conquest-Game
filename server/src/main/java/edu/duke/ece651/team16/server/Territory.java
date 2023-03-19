@@ -71,6 +71,8 @@ public class Territory {
     return gameLog;
   }
 
+
+
   /**
    *  Return units that belong to a certain player and alive
    */

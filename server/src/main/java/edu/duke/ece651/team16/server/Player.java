@@ -8,7 +8,7 @@ public class Player {
     private List<Territory> Territories;
     private ArrayList<Unit> units;
     private String color;
-    private Connection connection;
+    private Conn conn;
     private int numUnits;
     private final AssignUnitRuleChecker placementchecker;
     private boolean isWatch;
@@ -17,11 +17,11 @@ public class Player {
      * Constructor of the player
      * 
      * @param color
-     * @param connection
+     * @param Conn
      */
-    Player(String color, Connection connection, List<Territory> Territories, int numUnits) {
+    Player(String color, Conn conn, List<Territory> Territories, int numUnits) {
         this.color = color;
-        this.connection = connection;
+        this.conn = conn;
         this.Territories = new ArrayList<>();
         addTerritories(Territories);
         this.numUnits = numUnits; // All owned units including dead and unplaced
@@ -143,12 +143,12 @@ public class Player {
     }
 
     /**
-     * get connection of the player
+     * get conn of the player
      * 
-     * @return connection
+     * @return conn
      */
-    public Connection getConnection() {
-        return this.connection;
+    public Conn getConn() {
+        return this.conn;
     }
 
     /**

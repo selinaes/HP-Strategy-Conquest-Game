@@ -61,8 +61,8 @@ public class MovePathRuleCheckerTest {
     Map gameMap = new Map(0);
     gameMap.setMap(map);
 
-    Player player1 = new Player("player1", mock(Connection.class), tPlayer1, 0);
-    Player player2 = new Player("player2", mock(Connection.class), tPlayer2, 0);
+    Player player1 = new Player("player1", mock(Conn.class), tPlayer1, 0);
+    Player player2 = new Player("player2", mock(Conn.class), tPlayer2, 0);
 
     t1.setOwner(player1);
     t2.setOwner(player2);

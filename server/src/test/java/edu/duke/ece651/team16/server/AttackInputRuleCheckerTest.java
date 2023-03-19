@@ -16,7 +16,7 @@ public class AttackInputRuleCheckerTest {
     List<Territory> Territories = new ArrayList<Territory>();
     // Territories.add(t1);
     Territories.add(t2);
-    Connection connection = mock(Connection.class);
+    Conn connection = mock(Connection.class);
     Player p1 = new Player("red", connection, Territories, 1);
     Unit u = new BasicUnit(p1, t1, false, 1);
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));

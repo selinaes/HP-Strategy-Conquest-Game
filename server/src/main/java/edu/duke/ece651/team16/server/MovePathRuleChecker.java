@@ -12,7 +12,7 @@ public class MovePathRuleChecker extends OrderRuleChecker {
     }
 
     @Override
-    public String checkMyRule(Territory from, Territory to, Player player, int numUnits, Map gameMap) {
+    public String checkMyRule(Territory from, Territory to, Player player, int numUnits, GameMap gameMap) {
         // HashMap<String, List<Territory>>
         this.visited = new HashSet<Territory>();
         visited.add(from);

@@ -18,7 +18,7 @@ public class TerritoryTest {
   @Test
   public void test_owner() {
     Territory t1 = new Territory("Gondor");
-    Connection c1 = mock(Connection.class);
+    Conn c1 = mock(Conn.class);
     List<Territory> list = new ArrayList<Territory>();
     Player p1 = new Player("blue", c1, list, 2);
     t1.setOwner(p1);
@@ -62,7 +62,7 @@ public class TerritoryTest {
     Territory territory = new Territory("Gondor");
     ArrayList<Unit> units = territory.getUnits();
     assertEquals(0, units.size());
-    Connection c2 = mock(Connection.class);
+    Conn c2 = mock(Conn.class);
     // when(c1.getSocket()).thenReturn(s1);
 
     // create a list for territories
@@ -81,7 +81,7 @@ public class TerritoryTest {
   public void testTryAddUnits() {
     // Test adding unit to territory without owner
     Territory territory = new Territory("Gondor");
-    Connection c2 = mock(Connection.class);
+    Conn c2 = mock(Conn.class);
     // when(c1.getSocket()).thenReturn(s1);
 
     // create a list for territories
@@ -95,7 +95,7 @@ public class TerritoryTest {
     assertEquals(territory, unit.getwhere());
 
     // Test adding unit to territory with different owner
-    Connection c1 = mock(Connection.class);
+    Conn c1 = mock(Conn.class);
     // when(c1.getSocket()).thenReturn(s1);
 
     // create a list for territories
@@ -118,7 +118,7 @@ public class TerritoryTest {
   public void testGetUnitsString() {
     Territory territory = new Territory("Gondor");
     assertEquals("0 units", territory.getUnitsString());
-    Connection c2 = mock(Connection.class);
+    Conn c2 = mock(Conn.class);
     List<Territory> list = new ArrayList<Territory>();
     list.add(territory);
     Player player = new Player("red", c2, list, 2);
@@ -139,7 +139,7 @@ public class TerritoryTest {
   @Test
   public void testGetAliveUnitsFor() {
     Territory territory = new Territory("Gondor");
-    Connection c2 = mock(Connection.class);
+    Conn c2 = mock(Conn.class);
     List<Territory> list = new ArrayList<Territory>();
     list.add(territory);
     Player player = new Player("red", c2, list, 2);
@@ -153,7 +153,7 @@ public class TerritoryTest {
     assertEquals(2, territory.getAliveUnitsFor(player).size());
 
     // another player
-    Connection c1 = mock(Connection.class);
+    Conn c1 = mock(Conn.class);
     Player player2 = new Player("blue", c1, list, 2);
     Unit unit3 = new BasicUnit(player2, null, false, 3);
     territory.tryAddUnits(new ArrayList<Unit>(Arrays.asList(unit3)));
