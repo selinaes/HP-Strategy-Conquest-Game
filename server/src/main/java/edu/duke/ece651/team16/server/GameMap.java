@@ -163,6 +163,24 @@ public class GameMap {
   }
 
   /**
+   * Create a test map for testing purposes
+   * @return a test map
+   */
+  public HashMap<String, List<Territory>> createTest3Map() {
+    HashMap<String, List<Territory>> test3Map = new HashMap<String, List<Territory>>();
+    Territory red = new Territory("R");
+    Territory blue = new Territory("B");
+    Territory yellow = new Territory("Y");
+    red.setNeighbors(Arrays.asList(blue, yellow));
+    blue.setNeighbors(Arrays.asList(yellow));
+    test3Map.put("red", new ArrayList<>(Arrays.asList(red)));
+    test3Map.put("blue", new ArrayList<>(Arrays.asList(blue)));
+    test3Map.put("yellow", new ArrayList<>(Arrays.asList(yellow)));
+    setMap(test3Map);
+    return test3Map;
+  }
+
+  /**
    * get the color list of the map
    * 
    * @return the color list of the map

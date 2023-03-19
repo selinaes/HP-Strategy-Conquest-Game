@@ -1,27 +1,24 @@
 package edu.duke.ece651.team16.client;
 
-import org.junit.jupiter.api.Test;
-import java.lang.reflect.Field;
-import org.junit.Rule;
 import static org.junit.jupiter.api.Assertions.*;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-import java.io.IOException;
-import java.net.Socket;
 
-import org.mockito.Mockito;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.beans.Transient;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
+import java.net.Socket;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 public class ClientTest {
   private Socket makeSocket() throws IOException {
@@ -209,7 +206,7 @@ public class ClientTest {
 
   @Test
   public void test_playerAssignUnits() throws IOException, Exception {
-    String s1 = "finished placement";
+    String s1 = "finished stage";
     String s2 = "Valid territory name";
     String s3 = "Valid number of units";
     String s4 = "Other";
@@ -259,7 +256,7 @@ public class ClientTest {
 
   @Test
   public void test_playerAssignUnitsException() throws IOException, Exception {
-    String s1 = "finished placement";
+    String s1 = "finished stage";
     String s2 = "Other";
     Socket mSocket = makeSocket();
     BufferedReader socketReceive = makeMockSocketReader(mSocket);

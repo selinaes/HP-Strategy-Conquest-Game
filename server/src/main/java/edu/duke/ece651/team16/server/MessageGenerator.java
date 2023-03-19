@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class MessageGenerator {
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * Form the entry string contains choices of A(ttack), M(ove), D(one)
@@ -26,7 +26,6 @@ public class MessageGenerator {
         return entryMap;
     }
 
-
     /**
      * Send the entry string to the player
      * 
@@ -34,7 +33,6 @@ public class MessageGenerator {
      */
     public void sendEntry(Player p) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             HashMap<String, String> to_send_entry = formEntry(p);
             // convert the HashMap to a JSON object
             String jsonString = objectMapper.writeValueAsString(to_send_entry);
@@ -52,7 +50,6 @@ public class MessageGenerator {
      */
     public void sendLog(Player p, HashMap<String, String> to_send) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             String jsonString = objectMapper.writeValueAsString(to_send);
             p.getConn().send(jsonString);
         } catch (JsonProcessingException e) {
@@ -64,12 +61,11 @@ public class MessageGenerator {
     /**
      * Send Initial Map to client
      * 
-     * @param Conn                        conn
+     * @param Conn                              conn
      * @param HashMap<String,ArrayList<String>> the map to_send
      */
     public void sendInitialMap(Conn conn, HashMap<String, ArrayList<HashMap<String, String>>> to_send) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             // convert the HashMap to a JSON object
             String jsonString = objectMapper.writeValueAsString(to_send);
             conn.send(jsonString);
@@ -86,7 +82,6 @@ public class MessageGenerator {
      */
     public void sendMap(Player player, HashMap<String, ArrayList<HashMap<String, String>>> to_send) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             // convert the HashMap to a JSON object
             String jsonString = objectMapper.writeValueAsString(to_send);
             player.getConn().send(jsonString);

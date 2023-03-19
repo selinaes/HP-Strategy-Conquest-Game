@@ -101,6 +101,14 @@ public class MessageGeneratorTest {
     HashMap<String, ArrayList<HashMap<String, String>>> toSend = new HashMap<>();
     MessageGenerator game = new MessageGenerator();
     game.sendMap(player1, toSend);
+
+    Field objectMapper = game.getClass().getDeclaredField("objectMapper");
+    objectMapper.setAccessible(true);
+    ObjectMapper o = mock(ObjectMapper.class);
+    when(o.writeValueAsString(any())).thenThrow(new JsonProcessingException("Error") {
+    });
+    objectMapper.set(game, o);
+    game.sendMap(player1, toSend);
   }
 
   @Test
@@ -110,7 +118,13 @@ public class MessageGeneratorTest {
     MessageGenerator game = new MessageGenerator();
     game.sendInitialMap(mockConnection, toSend);
 
-    Socket mockSocket = mock(Socket.class);
+    Field objectMapper = game.getClass().getDeclaredField("objectMapper");
+    objectMapper.setAccessible(true);
+    ObjectMapper o = mock(ObjectMapper.class);
+    when(o.writeValueAsString(any())).thenThrow(new JsonProcessingException("Error") {
+    });
+    objectMapper.set(game, o);
+    game.sendInitialMap(mockConnection, toSend);
   }
 
   @Test
@@ -121,6 +135,13 @@ public class MessageGeneratorTest {
     HashMap<String, String> toSend = new HashMap<>();
     MessageGenerator game = new MessageGenerator();
     game.sendLog(player1, toSend);
+    Field objectMapper = game.getClass().getDeclaredField("objectMapper");
+    objectMapper.setAccessible(true);
+    ObjectMapper o = mock(ObjectMapper.class);
+    when(o.writeValueAsString(any())).thenThrow(new JsonProcessingException("Error") {
+    });
+    objectMapper.set(game, o);
+    game.sendLog(player1, toSend);
   }
 
   @Test
@@ -128,8 +149,14 @@ public class MessageGeneratorTest {
     Player player1 = mock(Player.class);
     Conn mockConnection = mock(Conn.class);
     doReturn(mockConnection).when(player1).getConn();
-    HashMap<String, String> toSend = new HashMap<>();
     MessageGenerator game = new MessageGenerator();
+    game.sendEntry(player1);
+    Field objectMapper = game.getClass().getDeclaredField("objectMapper");
+    objectMapper.setAccessible(true);
+    ObjectMapper o = mock(ObjectMapper.class);
+    when(o.writeValueAsString(any())).thenThrow(new JsonProcessingException("Error") {
+    });
+    objectMapper.set(game, o);
     game.sendEntry(player1);
   }
 

@@ -1,4 +1,4 @@
-package edu.duke.ece651.team16.server;
+AApackage edu.duke.ece651.team16.server;
 
 import java.net.Socket;
 import java.util.ArrayList;
@@ -65,11 +65,14 @@ public class Game {
      * @param int          numClients: the number of clients
      */
     public void gameFlow(Socket client_socket, int numClients) {
+        System.out.println("GameFlow starts" + numClients);
         Player p = doPlacementPhase(client_socket, numClients);
+        System.out.println("PlacementPhase ends" + numClients);
         synchronized (this) {
             this.readyPlayer = 0;
         }
         while (findWinner() == null) {
+            System.out.println("New round" + numClients);
             if (!players.contains(p)) {
                 return; // player exit
             }
@@ -77,9 +80,11 @@ public class Game {
             doActionPhase(p);
 
         }
+        System.out.println("Has winner" + numClients);
         Player winner = findWinner();
         // notify this player of winner!
         p.getConn().send(winner.getColor());
+        // doActionPhase(p);
     }
 
     /**
@@ -152,8 +157,10 @@ public class Game {
      */
     public Player doPlacementPhase(Socket client_socket, int numClients) {
         Conn conn = new Conn(client_socket);
+        System.out.println("doPlacementPhase Conn initiated" + numClients);
         allConnections.add(conn);
         chooseNumOfPlayers(conn, numClients);// gameState = setNumPlayer
+        System.out.println("doPlacementPhase chooseNumOfPlayers End" + numClients);
         while (true) {
             synchronized (this) {
                 if (gameState.equals("setPlayerColor")) {
@@ -166,10 +173,13 @@ public class Game {
         messageGenerator.sendInitialMap(conn, to_send_initial);
 
         String color = chooseColor(conn);
+        System.out.println("doPlacementPhase chooseColor End" + numClients);
         Player p = new Player(color, conn, defaultMap.getMap().get(color), this.unitsPerPlayer);
         addPlayer(p);
+        System.out.println("doPlacementPhase addPlayer End" + numClients);
 
         assignUnits(p, conn);
+        System.out.println("doPlacementPhase assignUnits End" + numClients);
         while (true) {
             synchronized (this) {
                 if (gameState.equals("placementEnd")) {
@@ -228,6 +238,7 @@ public class Game {
         conn.send("If you want to watch game, Please enter: w; If you want to exit, Please enter: e");
         String chooseWatch = conn.recv();
         chooseWatch = chooseWatch.toLowerCase();
+        System.out.println(chooseWatch);
         if (!chooseWatch.equals("w") && !chooseWatch.equals("e")) {
             conn.send("Invalid choice");
             return ifChooseWatch(conn);
@@ -343,8 +354,8 @@ public class Game {
         synchronized (this) {
             ++this.readyPlayer;
             if (readyPlayer == numPlayer) {
-                // System.out.println("All players ready, readyPlayer: " + readyPlayer + " Entering: "
-                        // + newStage);
+                System.out.println("All players ready, readyPlayer: " + readyPlayer + " Entering: "
+                        + newStage);
                 for (Conn c : allConnections) {
                     c.send("stage Complete");
                 }

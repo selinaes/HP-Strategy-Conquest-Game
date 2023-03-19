@@ -42,7 +42,6 @@ public class TerritoryTest {
     String neighName = "(next to: Mordor, Narnia)";
     assertEquals(neighName, t1.getNeighborsNames());
     assertNotEquals(null, t1.getNeighborsNames());
-
   }
 
   // add test for equals() return false
@@ -205,27 +204,46 @@ public class TerritoryTest {
   }
 
   @Test
+  public void testDoBattle2() {
+    Territory territory = new Territory("Gondor");
+    assertFalse(territory.existsBattle());
+
+    Conn c2 = mock(Conn.class);
+    List<Territory> list = new ArrayList<Territory>();
+    list.add(territory);
+    Player player = new Player("red", c2, list, 2);
+
+    Unit unit = new BasicUnit(player, null, true, 1);
+    territory.tryAddUnits(new ArrayList<Unit>(Arrays.asList(unit)));
+    String winner = territory.doBattle();
+    assertEquals("Battle participants: Player red has 1 units. \nBattle Winner: red\n", winner);
+  }
+
+  @Test
   public void testDoBattle1() {
     Territory territory = new Territory("Gondor");
     assertFalse(territory.existsBattle());
     Conn c2 = mock(Conn.class);
     List<Territory> list = new ArrayList<Territory>();
     list.add(territory);
-    Player player = new Player("red", c2, list, 2);
+    Player player = new Player("red", c2, list, 1);
     territory.setOwner(player);
 
     Territory territory1 = new Territory("Duke");
     Conn c = mock(Conn.class);
     List<Territory> list0 = new ArrayList<Territory>();
     list0.add(territory1);
-    Player player1 = new Player("blue", c2, list, 2);
+    Player player1 = new Player("blue", c, list0, 5);
 
     Unit unit = new BasicUnit(player1, null, true, 1);
     territory.tryAddAttackers(new ArrayList<Unit>(Arrays.asList(unit)));
-
+    territory.tryAddAttackers(new ArrayList<Unit>(Arrays.asList(new BasicUnit(player1, null, true, 2))));
+    territory.tryAddAttackers(new ArrayList<Unit>(Arrays.asList(new BasicUnit(player1, null, true, 3))));
+    territory.tryAddAttackers(new ArrayList<Unit>(Arrays.asList(new BasicUnit(player1, null, true, 4))));
+    territory.tryAddAttackers(new ArrayList<Unit>(Arrays.asList(new BasicUnit(player1, null, true, 5))));
+    territory.toString();
     String winner = territory.doBattle();
     // assertEquals("Battle participants: Player red has 1 units. \nBattle Winner:
     // red\n", winner);
   }
-
 }

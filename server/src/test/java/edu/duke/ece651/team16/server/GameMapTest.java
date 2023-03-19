@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-public class MapTest {
+public class GameMapTest {
     @Test
     public void test_getColorList() {
         GameMap m1 = new GameMap(2);
@@ -61,6 +61,8 @@ public class MapTest {
         m2.createTestMap();
         GameMap m3 = new GameMap(3);
         m3.createTestMap();
+        GameMap m5 = new GameMap(3);
+        m3.createTest3Map();
         GameMap m4 = new GameMap(4);
         m4.createTestMap();
     }

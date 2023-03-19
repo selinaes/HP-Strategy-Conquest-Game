@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ConnectionTest {
+public class ConnTest {
 
   private Socket makeMockSocket() throws IOException {
     Socket mockSocket = mock(Socket.class);
