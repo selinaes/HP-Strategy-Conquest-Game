@@ -9,8 +9,8 @@ import java.net.ServerSocket;
 public class App {
 
   public static void main(String[] args) throws IOException {
-    // Set the port number to 1234
-    int port = 1234;
+    // Set the port number to 1651
+    int port = 1651;
 
     // Create a new instance of the Server class and pass in the port number
     ServerSocket listenSocket = null;
