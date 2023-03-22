@@ -16,7 +16,6 @@ public class App {
   public static void main(String[] args) throws IOException {
     int port = 1651;
     String ip = "vcm-32174.vm.duke.edu";
-    
     Socket clientSocket = null;
     try {
       clientSocket = new Socket(ip, port);
