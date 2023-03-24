@@ -29,7 +29,7 @@ public class Server {
         BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(32);
         this.threadPool = new ThreadPoolExecutor(4, 16, 5, TimeUnit.SECONDS, workQueue);
         // this.game = new Game(5);
-        this.game = new Game(5, "Test3");
+        this.game = new Game(5, "Duke");
         this.numClients = 0;
     }
 
@@ -51,7 +51,6 @@ public class Server {
      * run server to receive client's message
      */
     public void run() throws IOException, JsonProcessingException {
-        System.out.println("real Server is running");
         while (!Thread.currentThread().isInterrupted()) {
             final Socket client_socket = acceptOrNull();
             if (client_socket == null) {
