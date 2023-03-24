@@ -8,29 +8,25 @@ import java.net.ServerSocket;
 
 public class App {
   private final int port;
-  private ServerSocket listenSocket;
-  private Server server;
 
   public App(int port) {
     this.port = port;
   }
 
-  public void createServerSocket() throws IOException {
-    this.listenSocket = new ServerSocket(port);
-  }
-
-  public void createServer() {
-    this.server = new Server(listenSocket);
-  }
-
-  public void runServer() throws IOException {
+  public void runServer() {
     // Create a new instance of the Server class and pass in the port number
+    ServerSocket listenSocket = null;
     try {
+      listenSocket = new ServerSocket(port);
+      Server server = new Server(listenSocket);
       server.run();
     } catch (IOException e) {
-      System.out.println("Server run failed with IOException.");
+      System.out.println("Failed to initialize Connection.");
+      e.printStackTrace();
     } finally {
-      listenSocket.close();
+      if (listenSocket != null) {
+        listenSocket.close();
+      }
     }
   }
 
@@ -38,8 +34,6 @@ public class App {
     // Set the port number to 1651
     App app = new App(1651);
     // int port = 1651;
-    app.createServerSocket();
-    app.createServer();
     app.runServer();
   }
 

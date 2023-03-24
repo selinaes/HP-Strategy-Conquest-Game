@@ -51,6 +51,7 @@ public class Server {
      * run server to receive client's message
      */
     public void run() throws IOException, JsonProcessingException {
+        System.out.println("real Server is running");
         while (!Thread.currentThread().isInterrupted()) {
             final Socket client_socket = acceptOrNull();
             if (client_socket == null) {
