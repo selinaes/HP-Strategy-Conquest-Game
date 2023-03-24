@@ -67,7 +67,7 @@ public class Client {
                 return;
             }
             waitEveryoneDone();
-            out.println("out of wait");
+            // out.println("out of wait");
             view.displayLog(recvMsg());
             view.displayMap(recvMsg());
             msg = recvMsg();
@@ -169,7 +169,7 @@ public class Client {
      * @throws IOException
      */
     public void waitEveryoneDone() throws IOException {
-        out.println("wait everyone done");
+        // out.println("wait everyone done");
         String prompt = recvMsg();
         boolean done = false;
         while (!done) {

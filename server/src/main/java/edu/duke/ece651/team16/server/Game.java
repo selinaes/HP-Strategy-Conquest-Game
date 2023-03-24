@@ -225,7 +225,7 @@ public class Game {
      * @return string chosen by player
      **/
     public String ifChooseWatch(Conn conn) {
-        conn.send("If you want to watch game, Please enter: w; If you want to exit, Please enter: e");
+        conn.send("You Lost all Territories. If you want to watch game, Please enter: w; If you want to exit, Please enter: e");
         String chooseWatch = conn.recv();
         chooseWatch = chooseWatch.toLowerCase();
         if (!chooseWatch.equals("w") && !chooseWatch.equals("e")) {
