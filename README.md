@@ -12,6 +12,7 @@
   - [Requirements](#Requirements)
 - [Design Overview](#Design-Overview)
   - [UML Diagram](#UML-Diagram)
+  - [UI Design](#UI-Design)
 - [Implementation](#Implementation)
 
 ## Schedule
@@ -201,6 +202,9 @@ Some important details:
 | Combat | determineWin(Unit unit1, Unit unit2)| |
 | Battle | resolveBattle(): vector<string Name, Unit[] units[]>| Battling in a circle list|
 
+### UI Design
+<video src="Resources/RiskGameUIDesign.mp4" width="600px">
+
 ## Implementation
 Duke Map
 ```mermaid
@@ -283,5 +287,4 @@ flowchart LR
    jbDuke --- dukeLemur
 ```
 
-
-
+<img src="Resources/DukeMap_init.png" width="600px">
