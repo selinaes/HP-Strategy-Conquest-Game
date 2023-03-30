@@ -11,7 +11,7 @@ public class AttackInputRuleChecker extends OrderRuleChecker {
             return "You do not own the from territory";
         }
         if (to.getOwner() == player) {
-            return "You do own the to territory";
+            return "You can not attack your own territory";
         }
         if (from.getAliveUnitsFor(player).size() < numUnits) {
             // check units alive & owner is player

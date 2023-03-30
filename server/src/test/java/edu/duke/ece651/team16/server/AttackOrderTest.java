@@ -38,7 +38,7 @@ public class AttackOrderTest {
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
     GameMap map = new GameMap(1);
     AttackOrder at = new AttackOrder(t1, t2, 1, p1, map);
-    assertEquals("You do own the to territory", at.tryAction());
+    assertEquals("You can not attack your own territory", at.tryAction());
   }
 
 }

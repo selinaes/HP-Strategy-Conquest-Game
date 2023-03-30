@@ -19,7 +19,7 @@ public class MessageGenerator {
         StringBuilder entry = new StringBuilder("");
         String header = "You are the " + p.getColor() + " player, what would you like to do?\n";
         entry.append(header);
-        String body = "M(ove)\n" + "A(ttack)\n" + "D(one)\n";
+        String body = "M(ove)\n" + "A(ttack)\n" + "R(esearch)\n" + "U(pgrade)\n" + "D(one)\n";
         entry.append(body);
         HashMap<String, String> entryMap = new HashMap<String, String>();
         entryMap.put("Entry", entry.toString());

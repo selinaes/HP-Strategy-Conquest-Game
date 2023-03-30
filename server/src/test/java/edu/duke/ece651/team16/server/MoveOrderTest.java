@@ -37,8 +37,7 @@ public class MoveOrderTest {
     Player p1 = new Player("red", connection, Territories, 1);
     GameMap map = new GameMap(1);
     MoveOrder mo = new MoveOrder(t1, t2, 1, p1, map);
-    mo.getPlayer();
-    assertEquals("You do not have enough alive units in the from territory", mo.tryAction());
+    assertEquals("You do not have enough alive units in the from territory", p1.tryAction());
   }
 
 }

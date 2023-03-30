@@ -9,7 +9,6 @@ public abstract class OrderRuleChecker {
      * @param next the next checker in the chain
      */
     public OrderRuleChecker(OrderRuleChecker next) {
-
         this.next = next;
     }
 

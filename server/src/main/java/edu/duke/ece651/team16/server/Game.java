@@ -447,7 +447,7 @@ public class Game {
         // perform action, invalid reprompt
         boolean done = false;
         while (!done) {
-            if (action.equals("m") || action.equals("a")) { // move or attack
+            if (action.equals("m") || action.equals("a") || action.equals("r") || action.equals("u")) { // move or attack
                 doOneAction(p, action);
             } else { // done
                 done = true;
@@ -487,6 +487,14 @@ public class Game {
         }
         if (actionName.equals("m")) {
             Order order = new MoveOrder(fromTerritory, toTerritory, num, p, currentMap);
+            return order;
+        }
+        else if(actionName.equals("r")) {
+            Order order = new ResearchOrder(p); // PLACEHOLDER, NEED CHANGE
+            return order;
+        }
+        else if(actionName.equals("u")){
+            Order order = new UpgradeOrder(p, fromTerritory, 0, 0, 0); // PLACEHOLDER, NEED CHANGE
             return order;
         }
         return (new AttackOrder(fromTerritory, toTerritory, num, p, currentMap));

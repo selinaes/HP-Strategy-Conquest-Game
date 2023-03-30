@@ -26,8 +26,8 @@ public class Territory {
     this.neighborDistance = new HashMap<>();
     this.units = new ArrayList<>();
     this.battle = new Battle();
-    this.foodRate = 2;
-    this.techRate = 2;
+    this.foodRate = 5;
+    this.techRate = 5;
   }
 
 
@@ -258,6 +258,9 @@ public class Territory {
     return neighborDistance;
   }
 
+  public int getDistance(Territory neighbor) {
+    return neighborDistance.get(neighbor);
+  }
 
   /**
    * add neighbor

@@ -39,7 +39,7 @@ public class AttackInputRuleCheckerTest {
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
     GameMap map = new GameMap(1);
     AttackInputRuleChecker checker = new AttackInputRuleChecker(null);
-    assertEquals("You do own the to territory", checker.checkMyRule(t1, t2, p1, 1, map));
+    assertEquals("You can not attack your own territory", checker.checkMyRule(t1, t2, p1, 1, map));
   }
 
   @Test

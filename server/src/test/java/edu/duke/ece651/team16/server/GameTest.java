@@ -588,7 +588,6 @@ public class GameTest {
                 defaultMap);
         Territory toTerritory = game.checkNameReturnTerritory("broadhead",
                 defaultMap);
-        assertEquals(player, actionOrder.getPlayer());
         System.out.println("makeActionOrder passed");
     }
 

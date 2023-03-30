@@ -308,7 +308,7 @@ public class Client {
             String choices = view.displayEntry(recvMsg());
 
             clientInput = readClientInput(choices).toLowerCase();
-            while (!clientInput.equals("m") && !clientInput.equals("a") && !clientInput.equals("d")) {
+            while (!clientInput.equals("m") && !clientInput.equals("a") && !clientInput.equals("r") && !clientInput.equals("u") && !clientInput.equals("d")) {
                 out.println("Invalid action");
                 out.println(choices);
                 clientInput = readClientInput(choices).toLowerCase();

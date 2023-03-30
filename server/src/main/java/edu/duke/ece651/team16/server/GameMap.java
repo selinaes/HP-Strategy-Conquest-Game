@@ -24,6 +24,25 @@ public class GameMap {
   }
 
   /**
+   * get TerritoryList
+   * 
+   * @return a list of territories
+   **/
+  public ArrayList<Territory> getTerritoryList() {
+    System.out.println(map);
+    ArrayList<Territory> territoryList = new ArrayList<>();
+    System.out.println(this.ColorList);
+    for (String c: this.map.keySet()){
+      for (Territory t: this.map.get(c)) {
+        // System.out.println("In getTerritoryList" + t);
+        territoryList.add(t);
+      }
+    }
+    // System.out.println("In gameMap" + territoryList);
+    return territoryList;
+  }
+
+  /**
    * create a basic map with two territories and two players
    * 
    * @return a map with two territories
@@ -175,6 +194,7 @@ public class GameMap {
     return testMap;
   }
 
+  
   /**
    * Create a test map for testing purposes
    * @return a test map

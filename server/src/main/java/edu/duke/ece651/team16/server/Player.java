@@ -37,16 +37,6 @@ public class Player {
         this.techResource = 0;
     }
 
-    // add food resource
-    public void addFood(int amount) {
-        this.foodResource += amount;
-    }
-
-    // add tech resource
-    public void addTech(int amount) {
-        this.techResource += amount;
-    }
-
 
     /**
      * get the number of units of the player remaining
@@ -196,23 +186,40 @@ public class Player {
 
     /**
      * get if player's watching
+     * @return isWatch
      */
     public boolean getisWatch() {
         return this.isWatch;
     }
 
     /**
-     * update the player's food resource(both positive and negative)
+     * get the player's food resource
+     * @return foodResource
      */
-    public void updateFoodResource(int amount) {
-        this.foodResource += amount;
+    public int getFoodResource() {
+        return this.foodResource;
     }
 
     /**
-     * update the player's tech resource(both positive and negative)
+     * get the player's tech resource
+     * @return techResource
      */
-    public void updateTechResource(int amount) {
-        this.techResource += amount;
+    public int getTechResource() {
+        return this.techResource;
+    }
+
+    /**
+     * remove the player's food resource(both positive and negative)
+     */
+    public void removeFoodResource(int amount) {
+        this.foodResource -= amount;
+    }
+
+    /**
+     * remove the player's tech resource(both positive and negative)
+     */
+    public void removeTechResource(int amount) {
+        this.techResource -= amount;
     }
 
     /**
