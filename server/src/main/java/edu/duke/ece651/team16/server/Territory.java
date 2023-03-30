@@ -3,13 +3,17 @@ package edu.duke.ece651.team16.server;
 import java.util.List;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Territory {
   private String name;
   private List<Territory> neighbors;
+  private HashMap<Territory, Integer> neighborDistance;
   private Player owner;
   private ArrayList<Unit> units;
   private Battle battle;
+  private int foodRate; // how many food to produce each round in this territory
+  private int techRate; // how many tech to produce each round in this territory
 
   /**
    * constructs Territory class with name
@@ -19,8 +23,32 @@ public class Territory {
   public Territory(String name) {
     this.name = name;
     this.neighbors = new ArrayList<>();
+    this.neighborDistance = new HashMap<>();
     this.units = new ArrayList<>();
     this.battle = new Battle();
+    this.foodRate = 2;
+    this.techRate = 2;
+  }
+
+
+  // set food rate
+  public void setFoodRate(int foodRate) {
+    this.foodRate = foodRate;
+  }
+
+  // set tech rate
+  public void setTechRate(int techRate) {
+    this.techRate = techRate;
+  }
+  
+  // get food rate
+  public int getFoodRate() {
+    return this.foodRate;
+  }
+
+  // get tech rate
+  public int getTechRate() {
+    return this.techRate;
   }
 
   /*
@@ -70,8 +98,6 @@ public class Territory {
     battle.clearParty();
     return gameLog;
   }
-
-
 
   /**
    *  Return units that belong to a certain player and alive
@@ -183,13 +209,26 @@ public class Territory {
     String result = "";
     result += "(next to: ";
     for (Territory t : neighbors) {
-      result += t.getName() + ", ";
+      result += t.getName() + ": ";
+      result += neighborDistance.get(t) + ", ";
     }
     result = result.substring(0, result.length() - 2);
     result += ")";
+
     return result;
   }
 
+  /**
+   * Get Display info about food and tech rate
+   * 
+   * @return to_display 
+   */
+  public String territoryInfo() {
+    String result = "";
+    result += "Food Rate: " + this.foodRate + ", Tech Rate: "
+        + this.techRate + " ";
+    return result;
+  }
   /**
    * set neighbors for both territories
    * 
@@ -201,6 +240,24 @@ public class Territory {
       t.addNeighbor(this);
     }
   }
+
+  /*
+   * set distance for both territories
+   */
+  public void setDistance(List<Territory> neighbors, List<Integer> distance) {
+    for (int i = 0; i < neighbors.size(); i++) {
+      neighborDistance.put(neighbors.get(i), distance.get(i));
+      neighbors.get(i).getDistanceMap().put(this, distance.get(i));
+    }
+  }
+
+  /*
+   * get distance map
+   */
+  public HashMap<Territory, Integer> getDistanceMap() {
+    return neighborDistance;
+  }
+
 
   /**
    * add neighbor

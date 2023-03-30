@@ -70,7 +70,8 @@ public class Views {
             for (HashMap<String, String> asset : playerAsset) {
                 String territory = asset.get("TerritoryName");
                 String neighbors = asset.get("Neighbors");
-                out.println(territory + " " + neighbors);
+                String resources = asset.get("Rate");
+                out.println(territory + " " + neighbors + " " + resources);
             }
             out.println();
         }
@@ -119,12 +120,16 @@ public class Views {
             String seperation = String.join("", Collections.nCopies(title.length(), "-"));
             out.println(seperation);
             ArrayList<HashMap<String, String>> playerAsset = entry.getValue();
+            String playerResources = "";
             for (HashMap<String, String> asset : playerAsset) {
                 String territory = asset.get("TerritoryName");
                 String neighbors = asset.get("Neighbors");
                 String units = asset.get("Unit");
-                out.println(units + " in " + territory + " " + neighbors);
+                String rates = asset.get("Rate");
+                playerResources = asset.get("Resource");
+                out.println(units + " in " + territory + " " + neighbors + " " + rates);
             }
+            out.println("Player Resources: " + playerResources);
         }
     }
 

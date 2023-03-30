@@ -12,6 +12,8 @@ public class Player {
     private int numUnits;
     private final AssignUnitRuleChecker placementchecker;
     private boolean isWatch;
+    private int foodResource;
+    private int techResource;
 
     /**
      * Constructor of the player
@@ -31,7 +33,20 @@ public class Player {
             this.units.add(new BasicUnit(this, null, false, i));
         }
         this.isWatch = false;
+        this.foodResource = 0;
+        this.techResource = 0;
     }
+
+    // add food resource
+    public void addFood(int amount) {
+        this.foodResource += amount;
+    }
+
+    // add tech resource
+    public void addTech(int amount) {
+        this.techResource += amount;
+    }
+
 
     /**
      * get the number of units of the player remaining
@@ -110,15 +125,11 @@ public class Player {
         }
     }
 
-    // public void checkOwnedTerritories() {
-    // for (Territory t : Territories) {
-    // if (!t.getOwner().equals(this)) {
-    // Territories.remove(t);
-    // }
-    // }
-
-    // }
-
+    /**
+     * Remove the territories
+     * 
+     * @param territory
+     */
     public void removeTerritory(Territory t) {
         Territories.remove(t);
     }
@@ -176,11 +187,51 @@ public class Player {
         return false;
     }
 
+    /**
+     * set the player to be a watcher
+     */
     public void setWatch() {
         this.isWatch = true;
     }
 
+    /**
+     * get if player's watching
+     */
     public boolean getisWatch() {
         return this.isWatch;
     }
+
+    /**
+     * update the player's food resource(both positive and negative)
+     */
+    public void updateFoodResource(int amount) {
+        this.foodResource += amount;
+    }
+
+    /**
+     * update the player's tech resource(both positive and negative)
+     */
+    public void updateTechResource(int amount) {
+        this.techResource += amount;
+    }
+
+    /**
+     * add the player's food+tech resources per turn
+     */
+    public void newResourcePerTurn() {
+        for (int i = 0; i < Territories.size(); i++) {
+            this.foodResource += Territories.get(i).getFoodRate();
+            this.techResource += Territories.get(i).getTechRate();
+        }
+    }
+
+    /**
+     * display the player's food resource + tech resource
+     */
+
+    public String displayResource() {
+        return "(Food: " + this.foodResource + " Tech: " + this.techResource + ")";
+    }
+    
+
 }

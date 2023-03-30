@@ -96,14 +96,15 @@ public class MessageGenerator {
      * 
      * @return HashMap<String, ArrayList<HashMap<String, String>>> the map
      */
-    public HashMap<String, ArrayList<HashMap<String, String>>> formInitialMap(GameMap defaultMap, List<String> colors) {
+    public HashMap<String, ArrayList<HashMap<String, String>>> formInitialMap(GameMap currentMap, List<String> colors) {
         HashMap<String, ArrayList<HashMap<String, String>>> map = new HashMap<String, ArrayList<HashMap<String, String>>>();
         for (String color : colors) {
             ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-            for (Territory t : defaultMap.getMap().get(color)) {
+            for (Territory t : currentMap.getMap().get(color)) {
                 HashMap<String, String> entryMap = new HashMap<String, String>();
                 entryMap.put("TerritoryName", t.getName());
                 entryMap.put("Neighbors", t.getNeighborsNames());
+                entryMap.put("Rate", t.territoryInfo());
                 list.add(entryMap);
             }
             map.put(color, list);
@@ -130,6 +131,8 @@ public class MessageGenerator {
                 entryMap.put("TerritoryName", t.getName());
                 entryMap.put("Neighbors", t.getNeighborsNames());
                 entryMap.put("Unit", t.getUnitsString());
+                entryMap.put("Rate", t.territoryInfo());
+                entryMap.put("Resource", p.displayResource());
                 list.add(entryMap);
             }
             map.put(p.getColor(), list);

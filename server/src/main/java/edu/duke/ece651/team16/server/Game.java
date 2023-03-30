@@ -12,7 +12,7 @@ public class Game {
     protected List<Player> players;
     private int numPlayer;
     private List<String> colors;
-    private GameMap defaultMap;
+    private GameMap currentMap;
     private List<Conn> allConnections;
     private String gameState; // setNumPlayer, setPlayerColor, setUnits, placementEnd, worldWar, warEnd
     private int readyPlayer;
@@ -32,9 +32,9 @@ public class Game {
     public Game(int unitsPerPlayer, String mapName) {
         this.numPlayer = 4;
         this.players = new ArrayList<Player>();
-        this.defaultMap = new GameMap(numPlayer);
-        defaultMap.createBasicMap();
-        this.colors = defaultMap.getColorList();
+        this.currentMap = new GameMap(numPlayer);
+        currentMap.createBasicMap();
+        this.colors = currentMap.getColorList();
         this.allConnections = new ArrayList<Conn>();
         this.gameState = "setNumPlayer";
         this.unitsPerPlayer = unitsPerPlayer;
@@ -52,10 +52,10 @@ public class Game {
      * Put the String -> lambda mappings into mapCreateFns
      */
     private void setupMapCreateFns() {
-        mapCreateFns.put("Test", () -> defaultMap.createTestMap());
-        mapCreateFns.put("Test3", () -> defaultMap.createTest3Map());
-        mapCreateFns.put("Basic", () -> defaultMap.createBasicMap());
-        mapCreateFns.put("Duke", () -> defaultMap.createDukeMap());
+        mapCreateFns.put("Test", () -> currentMap.createTestMap());
+        mapCreateFns.put("Test3", () -> currentMap.createTest3Map());
+        mapCreateFns.put("Basic", () -> currentMap.createBasicMap());
+        mapCreateFns.put("Duke", () -> currentMap.createDukeMap());
     }
 
     /**
@@ -162,11 +162,12 @@ public class Game {
             }
         }
 
-        HashMap<String, ArrayList<HashMap<String, String>>> to_send_initial = messageGenerator.formInitialMap(this.defaultMap, this.colors);
+        HashMap<String, ArrayList<HashMap<String, String>>> to_send_initial = messageGenerator.formInitialMap(this.currentMap, this.colors);
         messageGenerator.sendInitialMap(conn, to_send_initial);
 
         String color = chooseColor(conn);
-        Player p = new Player(color, conn, defaultMap.getMap().get(color), this.unitsPerPlayer);
+        Player p = new Player(color, conn, currentMap.getMap().get(color), this.unitsPerPlayer);
+        p.newResourcePerTurn(); // initial resource generation
         addPlayer(p);
 
         assignUnits(p, conn);
@@ -293,12 +294,12 @@ public class Game {
      * @param int numOfPlayers
      */
     public void initializeMap(int numOfPlayers) {
-        this.defaultMap = new GameMap(numOfPlayers);
-        // defaultMap.createDukeMap();
-        // defaultMap.createTestMap();
+        this.currentMap = new GameMap(numOfPlayers);
+        // currentMap.createDukeMap();
+        // currentMap.createTestMap();
         mapCreateFns.get(mapName).get();
         // mapCreateFns.get(mapName).apply();
-        this.colors = defaultMap.getColorList();
+        this.colors = currentMap.getColorList();
     }
 
     /**
@@ -477,18 +478,18 @@ public class Game {
         int num = Integer.parseInt(input[2]);
 
         // get Territory
-        Territory fromTerritory = checkNameReturnTerritory(from, defaultMap);
-        Territory toTerritory = checkNameReturnTerritory(to, defaultMap);
+        Territory fromTerritory = checkNameReturnTerritory(from, currentMap);
+        Territory toTerritory = checkNameReturnTerritory(to, currentMap);
 
         if (fromTerritory == null || toTerritory == null) {
             p.getConn().send("Invalid Territory Name");
             return makeActionOrder(p, actionName);
         }
         if (actionName.equals("m")) {
-            Order order = new MoveOrder(fromTerritory, toTerritory, num, p, defaultMap);
+            Order order = new MoveOrder(fromTerritory, toTerritory, num, p, currentMap);
             return order;
         }
-        return (new AttackOrder(fromTerritory, toTerritory, num, p, defaultMap));
+        return (new AttackOrder(fromTerritory, toTerritory, num, p, currentMap));
 
     }
 
@@ -549,6 +550,7 @@ public class Game {
             }
         }
         generateUnit();
+        produceResources();
         return worldLog;
     }
 
@@ -558,6 +560,13 @@ public class Game {
     public void generateUnit() {
         for (Player p : players) {
             p.generateNewUnit();
+        }
+    }
+
+    // produce food and technology resources based on rates in each territory for each player
+    public void produceResources() {
+        for (Player p : players) {
+            p.newResourcePerTurn();
         }
     }
 
