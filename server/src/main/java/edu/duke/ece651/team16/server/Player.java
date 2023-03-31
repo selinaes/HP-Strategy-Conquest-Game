@@ -257,13 +257,10 @@ public class Player {
     }
 
     public void updateTechLevel() {
-        System.out.println("Tech Level: " + this.techLevel);
         if (this.techLevel == 5 && this.delayedTech == 0) {
             this.delayedTech = 1;
-            System.out.println("equals 5");
         } else if (this.techLevel < 5) {
             this.techLevel++;
-            System.out.println("less than 5");
         }
     }
 

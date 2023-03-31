@@ -504,7 +504,6 @@ public class Game {
     }
 
     public Order makeResearchOrder(Player p) {
-        System.out.println("Round " + this.gameRound + " make research order");
         p.getConn().send("Please notice you can perform research only once each turn.");
         Order order = new ResearchOrder(p);
         return order;
@@ -595,7 +594,7 @@ public class Game {
     // produce food and technology resources based on rates in each territory for
     // each player
     public void produceResources() {
-        System.out.println("Round " + this.gameRound + " produce resources");
+        // System.out.println("Round " + this.gameRound + " produce resources");
         for (Player p : players) {
             p.newResourcePerTurn();
         }
