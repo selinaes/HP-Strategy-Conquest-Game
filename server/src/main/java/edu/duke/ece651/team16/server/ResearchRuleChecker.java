@@ -8,7 +8,8 @@ public class ResearchRuleChecker {
         if (player.getHasResearched() == true) {
             return "You have already researched in this turn.";
         }
-        if (player.getTechLevel() == maxLevel) {
+        if (player.getTechLevel() == maxLevel
+                || (player.getTechLevel() == maxLevel - 1 && player.getDelayedTech() > 0)) {
             return "You have already reached the max research level.";
         }
         return null;

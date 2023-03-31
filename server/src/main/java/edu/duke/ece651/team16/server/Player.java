@@ -16,6 +16,7 @@ public class Player {
     private int techResource;
     private int techLevel;
     private boolean hasResearched;
+    private int delayedTech;
 
     /**
      * Constructor of the player
@@ -36,6 +37,7 @@ public class Player {
         }
         this.isWatch = false;
         this.foodResource = 0;
+        this.delayedTech = 0;
         this.techResource = 0;
         this.techLevel = 1;
         this.hasResearched = false;
@@ -255,7 +257,14 @@ public class Player {
     }
 
     public void updateTechLevel() {
-        this.techLevel++;
+        System.out.println("Tech Level: " + this.techLevel);
+        if (this.techLevel == 5 && this.delayedTech == 0) {
+            this.delayedTech = 1;
+            System.out.println("equals 5");
+        } else if (this.techLevel < 5) {
+            this.techLevel++;
+            System.out.println("less than 5");
+        }
     }
 
     /**
@@ -265,5 +274,16 @@ public class Player {
      */
     public int getTechLevel() {
         return this.techLevel;
+    }
+
+    public void resetDelay() {
+        if (this.delayedTech == 1) {
+            this.techLevel++;
+            this.delayedTech = 0;
+        }
+    }
+
+    public int getDelayedTech() {
+        return this.delayedTech;
     }
 }

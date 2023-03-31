@@ -37,9 +37,14 @@ public class ResearchOrder implements Order {
     public String tryAction() {
         ResearchRuleChecker checker = new ResearchRuleChecker();
         String result = checker.checkMyRule(player, researchCostTable.size() + 1);
+        System.out.println(player.getTechLevel());
+        System.out.println("result: " + result);
         if (result == null) {
             int cost = researchCostTable.get(player.getTechLevel());
             if (player.getTechResource() < cost) {
+                System.out.println("12345");
+                System.out.println("Not enough tech resource. Need " + cost + " tech resource, but only have "
+                        + player.getTechResource() + ".");
                 return "Not enough tech resource. Need " + cost + " tech resource, but only have "
                         + player.getTechResource() + ".";
             }
