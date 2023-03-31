@@ -132,7 +132,7 @@ public class MessageGenerator {
                 entryMap.put("Neighbors", t.getNeighborsNames());
                 entryMap.put("Unit", t.getUnitsString());
                 entryMap.put("Rate", t.territoryInfo());
-                entryMap.put("Resource", p.displayResource());
+                entryMap.put("Resource", p.displayResourceLevel());
                 list.add(entryMap);
             }
             map.put(p.getColor(), list);

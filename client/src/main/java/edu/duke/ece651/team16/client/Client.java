@@ -73,15 +73,13 @@ public class Client {
             msg = recvMsg();
         }
         // game over
-        String gameOverMessage = 
-        "   ____      _      __  __  U _____ u    U _____ u _   _    ____    ____\n"+     
-        "U /\"___|uU  /\"\\  uU|\' \\/ \'|u\\| ___\"|/    \\| ___\"|/| \\ |\"|  |  _\"\\  / __\"| u\n"+  
-        "\\| |  _ / \\/ _ \\/ \\| |\\/| |/ |  _|\"       |  _|\" <|  \\| |>/| | | |<\\___ \\/\n"+ 
-        " | |_| |  / ___ \\  | |  | |  | |___       | |___ U| |\\  |uU| |_| |\\u___) |\n"+ 
-        "  \\____| /_/   \\_\\ |_|  |_|  |_____|      |_____| |_| \\_|  |____/ u|____/>> \n"+ 
-        "   _)(|_   \\    >><<,-,,-.   <<   >>      <<   >> ||   \\,-.|||_    )(  (__)\n"+
-        " (__)__) (__)  (__)(./  \\.) (__) (__)    (__) (__)(_\")  (_/(__)_)  (__)    \n";
-        
+        String gameOverMessage = "   ____      _      __  __  U _____ u    U _____ u _   _    ____    ____\n" +
+                "U /\"___|uU  /\"\\  uU|\' \\/ \'|u\\| ___\"|/    \\| ___\"|/| \\ |\"|  |  _\"\\  / __\"| u\n" +
+                "\\| |  _ / \\/ _ \\/ \\| |\\/| |/ |  _|\"       |  _|\" <|  \\| |>/| | | |<\\___ \\/\n" +
+                " | |_| |  / ___ \\  | |  | |  | |___       | |___ U| |\\  |uU| |_| |\\u___) |\n" +
+                "  \\____| /_/   \\_\\ |_|  |_|  |_____|      |_____| |_| \\_|  |____/ u|____/>> \n" +
+                "   _)(|_   \\    >><<,-,,-.   <<   >>      <<   >> ||   \\,-.|||_    )(  (__)\n" +
+                " (__)__) (__)  (__)(./  \\.) (__) (__)    (__) (__)(_\")  (_/(__)_)  (__)    \n";
 
         // out.println("Game over. Winner is " + msg);
         out.println(gameOverMessage);
@@ -306,11 +304,12 @@ public class Client {
             // back and forth until done, n times
             // choose action step. Client side check until valid, then send
             String choices = view.displayEntry(recvMsg());
-
+            // out.println(choices);
             clientInput = readClientInput(choices).toLowerCase();
-            while (!clientInput.equals("m") && !clientInput.equals("a") && !clientInput.equals("r") && !clientInput.equals("u") && !clientInput.equals("d")) {
+            while (!clientInput.equals("m") && !clientInput.equals("a") && !clientInput.equals("r")
+                    && !clientInput.equals("u") && !clientInput.equals("d")) {
                 out.println("Invalid action");
-                out.println(choices);
+                // out.println(choices);
                 clientInput = readClientInput(choices).toLowerCase();
             }
             sendResponse(clientInput);
@@ -338,6 +337,16 @@ public class Client {
         String prompt = recvMsg(); // "Please enter <Territor ......"
         while (true) {
             try {
+                if (prompt.equals("Please notice you can perform research only once each turn.")) {
+                    prompt = recvMsg();
+                    if (prompt.equals("Valid")) {
+                        out.println("Execute Action Successfully");
+                    } else {
+                        out.println(prompt);
+                        // playerActionTurn();
+                    }
+                    return;
+                }
                 // inside client, check correct method, send response, then re-receive
                 boolean correctFormat = false;
                 while (!correctFormat) {
@@ -353,9 +362,15 @@ public class Client {
                 if (prompt.equals("Valid")) {
                     out.println("Execute Action Successfully");
                     return;
+                } else if (prompt.equals("Invalid Territory Name")) {
+                    out.println(prompt);
+                    // playerActionTurn();
+                    return;
                 } else {
                     out.println(prompt);
-                    playerOneAction();
+                    // playerActionTurn();
+                    // out.println(prompt);
+                    // playerOneAction();
                     return;
                 }
             } catch (EOFException e) {

@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Supplier;
 
-
-
 public class Game {
     protected List<Player> players;
     private int numPlayer;
@@ -106,6 +104,7 @@ public class Game {
             }
         } else {
             p.getConn().send("do nothing");
+            p.updateResearchRound(false);
             doAction(p);
         }
 
@@ -162,7 +161,8 @@ public class Game {
             }
         }
 
-        HashMap<String, ArrayList<HashMap<String, String>>> to_send_initial = messageGenerator.formInitialMap(this.currentMap, this.colors);
+        HashMap<String, ArrayList<HashMap<String, String>>> to_send_initial = messageGenerator
+                .formInitialMap(this.currentMap, this.colors);
         messageGenerator.sendInitialMap(conn, to_send_initial);
 
         String color = chooseColor(conn);
@@ -226,7 +226,8 @@ public class Game {
      * @return string chosen by player
      **/
     public String ifChooseWatch(Conn conn) {
-        conn.send("You Lost all Territories. If you want to watch game, Please enter: w; If you want to exit, Please enter: e");
+        conn.send(
+                "You Lost all Territories. If you want to watch game, Please enter: w; If you want to exit, Please enter: e");
         String chooseWatch = conn.recv();
         chooseWatch = chooseWatch.toLowerCase();
         if (!chooseWatch.equals("w") && !chooseWatch.equals("e")) {
@@ -344,8 +345,9 @@ public class Game {
         synchronized (this) {
             ++this.readyPlayer;
             if (readyPlayer == numPlayer) {
-                // System.out.println("All players ready, readyPlayer: " + readyPlayer + " Entering: "
-                        // + newStage);
+                // System.out.println("All players ready, readyPlayer: " + readyPlayer + "
+                // Entering: "
+                // + newStage);
                 for (Conn c : allConnections) {
                     c.send("stage Complete");
                 }
@@ -447,8 +449,11 @@ public class Game {
         // perform action, invalid reprompt
         boolean done = false;
         while (!done) {
-            if (action.equals("m") || action.equals("a") || action.equals("r") || action.equals("u")) { // move or attack
-                doOneAction(p, action);
+            if (action.equals("m") || action.equals("a") || action.equals("r") || action.equals("u")) {
+                if (doOneAction(p, action) == false) {
+                    // doAction(p);
+                    return doAction(p);
+                }
             } else { // done
                 done = true;
                 notifyAllPlayers(p.getConn(), "worldWar");
@@ -467,7 +472,7 @@ public class Game {
      * @param String actionname
      * @return Order
      */
-    public Order makeActionOrder(Player p, String actionName) {
+    public Order makeMoveAttackOrder(Player p, String actionName) {
         p.getConn().send(
                 "Please enter in the following format: Territory from, Territory to, number of units(e.g. T1, T2, 2)");
         String actionInput = p.getConn().recv(); // e.g. T1, T2, 2
@@ -483,22 +488,24 @@ public class Game {
 
         if (fromTerritory == null || toTerritory == null) {
             p.getConn().send("Invalid Territory Name");
-            return makeActionOrder(p, actionName);
+            // return makeActionOrder(p, actionName);
+            return null;
         }
         if (actionName.equals("m")) {
             Order order = new MoveOrder(fromTerritory, toTerritory, num, p, currentMap);
             return order;
-        }
-        else if(actionName.equals("r")) {
-            Order order = new ResearchOrder(p); // PLACEHOLDER, NEED CHANGE
-            return order;
-        }
-        else if(actionName.equals("u")){
+        } else if (actionName.equals("u")) {
             Order order = new UpgradeOrder(p, fromTerritory, 0, 0, 0); // PLACEHOLDER, NEED CHANGE
             return order;
         }
         return (new AttackOrder(fromTerritory, toTerritory, num, p, currentMap));
 
+    }
+
+    public Order makeResearchOrder(Player p) {
+        p.getConn().send("Please notice you can perform research only once each turn.");
+        Order order = new ResearchOrder(p);
+        return order;
     }
 
     /**
@@ -507,8 +514,18 @@ public class Game {
      * @param Player p
      * @param String actionName
      */
-    public void doOneAction(Player p, String actionName) {
-        Order order = makeActionOrder(p, actionName);
+    public boolean doOneAction(Player p, String actionName) {
+        Order order = null;
+        if (actionName.equals("m") || actionName.equals("a")) {
+            order = makeMoveAttackOrder(p, actionName);
+        } else if (actionName.equals("r")) {
+            order = makeResearchOrder(p);
+        }
+
+        if (order == null) {
+
+            return false;
+        }
         String tryAction = order.tryAction();
         if (tryAction == null) { // valid
             p.getConn().send("Valid");
@@ -516,9 +533,11 @@ public class Game {
         // if invalid, send("reason"), then recurse doOneMove()
         else {
             p.getConn().send(tryAction);
-            doOneAction(p, actionName);
-            return;
+            return false;
+            // p.getConn().send(tryAction);
+            // doOneAction(p, actionName);
         }
+        return true;
     }
 
     /**
@@ -571,7 +590,8 @@ public class Game {
         }
     }
 
-    // produce food and technology resources based on rates in each territory for each player
+    // produce food and technology resources based on rates in each territory for
+    // each player
     public void produceResources() {
         for (Player p : players) {
             p.newResourcePerTurn();

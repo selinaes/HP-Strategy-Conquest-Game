@@ -14,6 +14,8 @@ public class Player {
     private boolean isWatch;
     private int foodResource;
     private int techResource;
+    private int techLevel;
+    private boolean hasResearched;
 
     /**
      * Constructor of the player
@@ -35,8 +37,17 @@ public class Player {
         this.isWatch = false;
         this.foodResource = 0;
         this.techResource = 0;
+        this.techLevel = 1;
+        this.hasResearched = false;
     }
 
+    public void updateResearchRound(boolean status) {
+        this.hasResearched = status;
+    }
+
+    public boolean getHasResearched() {
+        return this.hasResearched;
+    }
 
     /**
      * get the number of units of the player remaining
@@ -186,6 +197,7 @@ public class Player {
 
     /**
      * get if player's watching
+     * 
      * @return isWatch
      */
     public boolean getisWatch() {
@@ -194,6 +206,7 @@ public class Player {
 
     /**
      * get the player's food resource
+     * 
      * @return foodResource
      */
     public int getFoodResource() {
@@ -202,6 +215,7 @@ public class Player {
 
     /**
      * get the player's tech resource
+     * 
      * @return techResource
      */
     public int getTechResource() {
@@ -236,9 +250,20 @@ public class Player {
      * display the player's food resource + tech resource
      */
 
-    public String displayResource() {
-        return "(Food: " + this.foodResource + " Tech: " + this.techResource + ")";
+    public String displayResourceLevel() {
+        return "(Food: " + this.foodResource + " Tech: " + this.techResource + " Tech Level: " + this.techLevel + ")";
     }
-    
 
+    public void updateTechLevel() {
+        this.techLevel++;
+    }
+
+    /**
+     * get the player's tech level
+     * 
+     * @return techLevel
+     */
+    public int getTechLevel() {
+        return this.techLevel;
+    }
 }
