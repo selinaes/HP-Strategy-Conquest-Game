@@ -58,6 +58,8 @@ classDiagram
     
     AttackOrder --|> Order
     MoveOrder --|> Order
+    ResearchOrder --|> Order
+    UpgradeOrder --|> Order
 
     Territory "1" --* "0..1" Battle
     Battle --* Combat
@@ -212,6 +214,10 @@ class Player {
     - int numUnits
     - AssignUnitRuleChecker placementchecker
     - boolean isWatch
+    - int foodResource
+    - int techResource
+    - int techLevel
+    - boolean hasResearched
     + unplacedUnits(): int
     + findNextUnplacedUnits(int amount): ArrayList<Unit>
     + placeUnitsSameTerritory(String t_name, int num): String
@@ -225,6 +231,16 @@ class Player {
     + checkLose(): boolean
     + setWatch(): void
     + getisWatch(): boolean
+    + getFoodResource(): int
+    + getTechResource(): int
+    + removeFoodResource(int amount): void
+    + removeTechResource(int amount): void
+    + newResourcePerTurn(): void
+    + displayResourceLevel(): String
+    + updateTechLevel(): void
+    + getTechLevel(): int
+    + updateResearchRound(boolean status): void
+    + getHasResearched(): boolean
 }
 
 class Conn {
@@ -264,6 +280,9 @@ class Territory {
     - ArrayList<Unit> units
     - Player owner
     - Battle battle
+    - HashMap<Territory, Integer> neighborDistance
+    - int foodRate
+    - int techRate
     + getUnits(): ArrayList<Unit>
     + existsBattle(): boolean
     + defendHome(): void
@@ -281,11 +300,15 @@ class Territory {
     + territoryInfo(): String
     + setNeighbors(List<Territory> neighbors): void
     - addNeighbor(Territory neighbor): void
+    + setFoodRate(int foodRate): void
+    + setTechRate(int techRate): void
+    + getFoodRate(): void
+    + getTechRate(): void
+    + setDistance(List<Territory> neighbors, List<Integer> distance): void
+    + getDistanceMap(): HashMap<Territory, Integer>
+    + getDistance(Territory neighbor): int
 }
 
-class AssignUnitRuleChecker{
-    + checkMyRule(String territory_name, Player player, int amount): String
-}
 
 class Combat{
     - int seed
@@ -309,27 +332,59 @@ class Battle{
 }
 
 class Order {
+    <<interface>>
+    + tryAction(): String
+}
+
+class MoveOrder{
     - Territory from
     - Territory to 
     - int numUnits
     - Player player
     - GameMap gameMap
     + getPlayer(): Player
-    + tryAction(): String
-}
-
-class MoveOrder{
-    + tryMove(): boolean
+    + moveCost(int distance): int
 }
 
 class AttackOrder{
-    + tryAttack(): boolean
+    - Territory from
+    - Territory to 
+    - int numUnits
+    - Player player
+    - GameMap gameMap
+    + attackCost(): int
 }
 
+class ResearchOrder{
+    - Player player
+    + HashMap<Integer, Integer> researchCostTable
+    - initializeTable(): void
+}
+
+class UpgradeOrder {
+    - Player player
+    - Territory belonging
+    - int numUnits
+    - int initialLevel
+    - int upgradeAmount
+}
+
+class AssignUnitRuleChecker{
+    + checkMyRule(String territory_name, Player player, int amount): String
+}
+
+class ResearchRuleChecker {
+    + checkMyRule(Player player, int maxLevel): String
+}
+
+class UpgradeRuleChecker {
+    + checkMyRule(): String
+}
 
 class OrderRuleChecker {
-    -RuleChecker<T> next
-    + checkMyRule(): String
+    - OrderRuleChecker next
+    + checkMyRule(Territory from, Territory to, Player player, int numUnits, GameMap map): String
+    + checkOrder(Territory from, Territory to, Player player, int numUnits, GameMap map): String
 }
 
 class MoveInputRuleChecker{
@@ -339,6 +394,9 @@ class MoveInputRuleChecker{
 class MovePathRuleChecker{
     + checkMyRule(): String
     + dfs(Territory current, Territory destination, Player player, HashMap<String, List<Territory>> gameMap, HashSet<Territory> visited): boolean
+    + dijkstraAlgorithm(Territory source, Territory destination, GameMap gameMap): int
+    + getMinimumDistanceTerritory(Set<Territory> unsettledTerritories, Map<Territory, Integer> shortestDistances): Territory
+    + relaxNeighbors(Territory territory, Map<Territory, Integer> shortestDistances, Set<Territory> unsettledTerritories): void
 }
 
 class AttackInputRuleChecker{
@@ -348,6 +406,7 @@ class AttackInputRuleChecker{
 class AttackAdjacentRuleChecker{
     + checkMyRule(): String
 }
+
 
 ```
 ### UML Description
