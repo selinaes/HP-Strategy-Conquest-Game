@@ -9,8 +9,8 @@ public class CombatTest {
 
   @Test
   public void testDetermineWin() {
-    BasicUnit attacker = mock(BasicUnit.class);
-    BasicUnit defender = mock(BasicUnit.class);
+    AdvancedUnit attacker = mock(AdvancedUnit.class);
+    AdvancedUnit defender = mock(AdvancedUnit.class);
     when(attacker.getisAttacker()).thenReturn(true);
     when(defender.getisAttacker()).thenReturn(false);
     Combat c1 = new Combat();
@@ -23,8 +23,8 @@ public class CombatTest {
 
   @Test
   public void testDetermineWin_DefenderWins() {
-    BasicUnit attacker = mock(BasicUnit.class);
-    BasicUnit defender = mock(BasicUnit.class);
+    AdvancedUnit attacker = mock(AdvancedUnit.class);
+    AdvancedUnit defender = mock(AdvancedUnit.class);
     when(attacker.getisAttacker()).thenReturn(true);
     when(defender.getisAttacker()).thenReturn(false);
     Combat c = new Combat();
@@ -35,8 +35,8 @@ public class CombatTest {
 
   @Test
   public void testDetermineWin_TieAndBothAttackers() {
-    BasicUnit attacker1 = mock(BasicUnit.class);
-    BasicUnit attacker2 = mock(BasicUnit.class);
+    AdvancedUnit attacker1 = mock(AdvancedUnit.class);
+    AdvancedUnit attacker2 = mock(AdvancedUnit.class);
     when(attacker1.getisAttacker()).thenReturn(true);
     when(attacker2.getisAttacker()).thenReturn(true);
     Combat c = new Combat();
@@ -47,8 +47,8 @@ public class CombatTest {
 
   @Test
   public void testDetermineWin_TieAndAIsNotAttacker() {
-    BasicUnit defender = mock(BasicUnit.class);
-    BasicUnit attacker = mock(BasicUnit.class);
+    AdvancedUnit defender = mock(AdvancedUnit.class);
+    AdvancedUnit attacker = mock(AdvancedUnit.class);
     when(attacker.getisAttacker()).thenReturn(true);
     when(defender.getisAttacker()).thenReturn(false);
     Combat c = new Combat();
@@ -59,8 +59,8 @@ public class CombatTest {
 
   @Test
   public void testDetermineWin2() {
-    BasicUnit defender = mock(BasicUnit.class);
-    BasicUnit attacker = mock(BasicUnit.class);
+    AdvancedUnit defender = mock(AdvancedUnit.class);
+    AdvancedUnit attacker = mock(AdvancedUnit.class);
     when(attacker.getisAttacker()).thenReturn(true);
     when(defender.getisAttacker()).thenReturn(false);
     Combat c = new Combat();
@@ -71,8 +71,8 @@ public class CombatTest {
 
   @Test
   public void testDetermineWin3() {
-    BasicUnit defender = mock(BasicUnit.class);
-    BasicUnit attacker = mock(BasicUnit.class);
+    AdvancedUnit defender = mock(AdvancedUnit.class);
+    AdvancedUnit attacker = mock(AdvancedUnit.class);
     when(attacker.getisAttacker()).thenReturn(true);
     when(defender.getisAttacker()).thenReturn(false);
     Combat c = new Combat();

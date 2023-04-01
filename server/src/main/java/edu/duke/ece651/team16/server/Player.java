@@ -33,7 +33,7 @@ public class Player {
         this.units = new ArrayList<>();
         this.placementchecker = new AssignUnitRuleChecker();
         for (int i = 0; i < numUnits; i++) {
-            this.units.add(new BasicUnit(this, null, false, i));
+            this.units.add(new AdvancedUnit(this, null, false, i));
         }
         this.isWatch = false;
         this.foodResource = 0;
@@ -170,7 +170,7 @@ public class Player {
      */
     public void generateNewUnit() {
         for (Territory t : Territories) {
-            Unit newUnit = new BasicUnit(this, t, false, numUnits++);
+            Unit newUnit = new AdvancedUnit(this, t, false, numUnits++);
             ArrayList<Unit> newGenerated = new ArrayList<>();
             newGenerated.add(newUnit);
             t.tryAddUnits(newGenerated);// territory add unit
@@ -250,12 +250,15 @@ public class Player {
 
     /**
      * display the player's food resource + tech resource
+     * @return the string
      */
-
     public String displayResourceLevel() {
         return "(Food: " + this.foodResource + " Tech: " + this.techResource + " Tech Level: " + this.techLevel + ")";
     }
 
+    /**
+     * update the player's tech level
+     */
     public void updateTechLevel() {
         if (this.techLevel == 5 && this.delayedTech == 0) {
             this.delayedTech = 1;
@@ -273,6 +276,9 @@ public class Player {
         return this.techLevel;
     }
 
+    /**
+     * reset the player's delayed tech
+     */
     public void resetDelay() {
         if (this.delayedTech == 1) {
             this.techLevel++;
@@ -280,6 +286,11 @@ public class Player {
         }
     }
 
+    /**
+     * get the player's delayed tech
+     * 
+     * @return delayedTech
+     */
     public int getDelayedTech() {
         return this.delayedTech;
     }

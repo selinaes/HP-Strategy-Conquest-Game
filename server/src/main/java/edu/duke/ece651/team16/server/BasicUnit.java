@@ -1,12 +1,19 @@
 package edu.duke.ece651.team16.server;
 
-public class BasicUnit implements Unit {
+public abstract class BasicUnit implements Unit {
     private Player owner;
     private Territory where;
     private boolean isAttacker;
     private int id;
     private boolean isAlive;
 
+    /*
+     * Constructor for BasicUnit
+     * @param owner the owner of the unit
+     * @param where the territory where the unit is located
+     * @param isAttacker the attack status of the unit
+     * @param id the id of the unit
+     */
     public BasicUnit(Player owner, Territory where, boolean isAttacker, int id) {
         this.owner = owner;
         this.where = where;
@@ -17,6 +24,7 @@ public class BasicUnit implements Unit {
 
     /*
      * Set the territory where the unit is located
+     * @param where the territory where the unit is located
      */
     public void setwhere(Territory where) {
         this.where = where;
@@ -24,6 +32,7 @@ public class BasicUnit implements Unit {
 
     /*
      * Get the territory where the unit is located
+     * @return the territory where the unit is located
      */
     public Territory getwhere() {
         return this.where;
@@ -31,6 +40,7 @@ public class BasicUnit implements Unit {
 
     /*
      * Get the owner of the unit
+     * @return the owner of the unit
      */
     public Player getOwner() {
         return this.owner;
@@ -38,13 +48,15 @@ public class BasicUnit implements Unit {
 
     /*
      * Get alive status of the unit
+     * @return isAlive of the unit
      */
     public boolean getAlive() {
         return this.isAlive;
     }
 
     /*
-     * Set attacker status of the unit
+     * Get attacker status of the unit
+     * @return isAttacker of the unit
      */
     public boolean getisAttacker() {
         return this.isAttacker;
@@ -64,7 +76,43 @@ public class BasicUnit implements Unit {
         this.isAlive = false;
     }
 
+    /*
+     * Get the id of the unit
+     * @return the id of the unit
+     */
     public int getId() {
         return id;
+    }
+
+    /*
+     * Get the name of the unit
+     * @return the name of the unit
+     */
+    public String getName() {
+        return "BasicUnit";
+    }
+
+    /*
+     * Get the level of the unit
+     * @return the level of the unit
+     */
+    public int getLevel() {
+        return 0;
+    }
+
+    /*
+     * Get the attack power of the unit
+     * @return the attack power of the unit
+     */
+    public int getBonus() {
+        return 0;
+    }
+
+    /*
+     * upgrade the unit(do nothing)
+     * @param amount the amount of upgrade
+     */
+    public void upgrade(int amount) {
+        return;
     }
 }

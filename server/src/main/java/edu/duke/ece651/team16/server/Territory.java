@@ -12,8 +12,8 @@ public class Territory {
   private Player owner;
   private ArrayList<Unit> units;
   private Battle battle;
-  private int foodRate; // how many food to produce each round in this territory
-  private int techRate; // how many tech to produce each round in this territory
+  private int foodRate; // how much food to produce each round in this territory
+  private int techRate; // how much tech to produce each round in this territory
 
   /**
    * constructs Territory class with name
@@ -31,28 +31,45 @@ public class Territory {
   }
 
 
-  // set food rate
+  /**
+   * set food rate
+   * 
+   * @param foodRate
+   */
   public void setFoodRate(int foodRate) {
     this.foodRate = foodRate;
   }
 
-  // set tech rate
+  /**
+   * set tech rate
+   * 
+   * @param techRate
+   */
   public void setTechRate(int techRate) {
     this.techRate = techRate;
   }
   
-  // get food rate
+  /**
+   * get food rate
+   * 
+   * @return foodRate
+   */
   public int getFoodRate() {
     return this.foodRate;
   }
 
-  // get tech rate
+  /**
+   * get tech rate
+   * 
+   * @return techRate
+   */
   public int getTechRate() {
     return this.techRate;
   }
 
   /*
    * Return the units in the territory
+   * @return units
    */
 
   public ArrayList<Unit> getUnits() {
@@ -60,7 +77,7 @@ public class Territory {
   }
 
   /**
-   * 
+   * check if battle exists
    * @return if battle exists
    */
   public boolean existsBattle() {
@@ -81,6 +98,7 @@ public class Territory {
 
   /**
    * Resolve battle phase for one territory
+    * @return game log
    */
   public String doBattle() {
     defendHome();
@@ -101,6 +119,8 @@ public class Territory {
 
   /**
    *  Return units that belong to a certain player and alive
+   * @param player
+   * @return units
    */
   public ArrayList<Unit> getAliveUnitsFor(Player player) {
     ArrayList<Unit> result = new ArrayList<>();
@@ -158,6 +178,7 @@ public class Territory {
 
   /*
    * Get the number of units in the territory
+  * @return units in string
    */
   public String getUnitsString() {
     String result = Integer.toString(this.units.size()) + " units";
@@ -299,4 +320,18 @@ public class Territory {
     return "Territory{name='" + name + "'}";
   }
 
+  /**
+   * get units by level
+   * 
+   * @return units
+   */
+  public ArrayList<Unit> getUnitsByLevel(int level) {
+    ArrayList<Unit> result = new ArrayList<>();
+    for (Unit u : this.units) {
+      if (u.getLevel() == level) {
+        result.add(u);
+      }
+    }
+    return result;
+  }
 }

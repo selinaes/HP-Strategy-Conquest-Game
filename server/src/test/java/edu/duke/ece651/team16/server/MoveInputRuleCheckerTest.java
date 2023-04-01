@@ -17,7 +17,7 @@ public class MoveInputRuleCheckerTest {
         Territories.add(t2);
         Conn connection = mock(Conn.class);
         Player p1 = new Player("red", connection, Territories, 1);
-        Unit u = new BasicUnit(p1, t1, false, 1);
+        Unit u = new AdvancedUnit(p1, t1, false, 1);
         t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
         GameMap map = new GameMap(1);
         MoveInputRuleChecker checker = new MoveInputRuleChecker(null);
@@ -34,7 +34,7 @@ public class MoveInputRuleCheckerTest {
         // Territories.add(t2);
         Conn connection = mock(Conn.class);
         Player p1 = new Player("red", connection, Territories, 1);
-        Unit u = new BasicUnit(p1, t1, false, 1);
+        Unit u = new AdvancedUnit(p1, t1, false, 1);
         t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
         GameMap map = new GameMap(1);
         MoveInputRuleChecker checker = new MoveInputRuleChecker(null);

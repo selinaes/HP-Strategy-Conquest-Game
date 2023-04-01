@@ -495,12 +495,32 @@ public class Game {
         if (actionName.equals("m")) {
             Order order = new MoveOrder(fromTerritory, toTerritory, num, p, currentMap);
             return order;
-        } else if (actionName.equals("u")) {
-            Order order = new UpgradeOrder(p, fromTerritory, 0, 0, 0); // PLACEHOLDER, NEED CHANGE
-            return order;
         }
+        // } else if (actionName.equals("u")) {
+        //     Order order = new UpgradeOrder(p, fromTerritory, 0, 0, 0); // PLACEHOLDER, NEED CHANGE
+        //     return order;
+        // }
         return (new AttackOrder(fromTerritory, toTerritory, num, p, currentMap));
 
+    }
+    
+    public Order makeUpgradeOrder(Player p) {
+        p.getConn().send(
+                "Please enter in the following format: Territory source, Number units, Units starting Level, Upgrade how many levels(e.g. T1, 4, 2, 1)");
+        String actionInput = p.getConn().recv(); // e.g. source, unitsNum, initalLevel, upgradeAmount
+        String[] input = actionInput.split(", ");
+        // parse actionInput
+        String territory = input[0];
+        int numUnits = Integer.parseInt(input[1]);
+        int initialLevel = Integer.parseInt(input[2]);
+        int upgradeAmount = Integer.parseInt(input[3]);
+        Territory belonging = checkNameReturnTerritory(territory, currentMap);
+        if (belonging == null) {
+            p.getConn().send("Invalid Territory Name");
+            return null;
+        }
+        Order upgradeOrder = new UpgradeOrder(p, belonging, numUnits, initialLevel, upgradeAmount);
+        return upgradeOrder;
     }
 
     public Order makeResearchOrder(Player p) {
@@ -521,10 +541,10 @@ public class Game {
             order = makeMoveAttackOrder(p, actionName);
         } else if (actionName.equals("r")) {
             order = makeResearchOrder(p);
+        } else if (actionName.equals("u")){
+            order = makeUpgradeOrder(p);
         }
-
         if (order == null) {
-
             return false;
         }
         String tryAction = order.tryAction();

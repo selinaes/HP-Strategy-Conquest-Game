@@ -17,7 +17,7 @@ public class AttackOrderTest {
     Territories.add(t1);
     Conn connection = mock(Conn.class);
     Player p1 = new Player("red", connection, Territories, 1);
-    Unit u = new BasicUnit(p1, t1, false, 1);
+    Unit u = new AdvancedUnit(p1, t1, false, 1);
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
     GameMap map = new GameMap(1);
     AttackOrder at = new AttackOrder(t1, t2, 1, p1, map);
@@ -34,7 +34,7 @@ public class AttackOrderTest {
     Territories.add(t2);
     Conn connection = mock(Conn.class);
     Player p1 = new Player("red", connection, Territories, 1);
-    Unit u = new BasicUnit(p1, t1, false, 1);
+    Unit u = new AdvancedUnit(p1, t1, false, 1);
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
     GameMap map = new GameMap(1);
     AttackOrder at = new AttackOrder(t1, t2, 1, p1, map);
