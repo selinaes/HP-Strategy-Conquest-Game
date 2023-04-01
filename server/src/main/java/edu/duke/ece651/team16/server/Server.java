@@ -9,14 +9,16 @@ import java.net.ServerSocket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-
+import java.util.HashMap;
 // import com.worklight.server.util.JSONUtils;
 
 public class Server {
     private ServerSocket listenSocket;
     ThreadPoolExecutor threadPool;
-    private Game game;
+    // private Game game;
     private int numClients;
+    private HashMap<String, Game> gameList; // <gameRoomID, Game>
+    private HashMap<String, Integer> gameClients; // <gameRoomID, numClients>
 
     /**
      * Constructor for Server class that takes in a serverSocket
@@ -27,9 +29,11 @@ public class Server {
 
         this.listenSocket = serverSocket;
         BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(32);
-        this.threadPool = new ThreadPoolExecutor(4, 16, 5, TimeUnit.SECONDS, workQueue);
-        this.game = new Game(24, "Duke");
-        this.numClients = 0;
+        this.threadPool = new ThreadPoolExecutor(16, 16, 5, TimeUnit.SECONDS, workQueue);
+        // this.game = new Game(24, "Duke");
+        this.numClients = 0; // now used to debug, # of clients connected
+        this.gameList = new HashMap<>();
+        this.gameClients = new HashMap<>();
     }
 
     /**
@@ -67,7 +71,34 @@ public class Server {
                     try {
                         try {
                             System.out.println("Client connected" + numClients);
-                            game.gameFlow(client_socket, numClients);
+                            // check gameRoom ID
+                            Conn conn = new Conn(client_socket);
+
+                            while (true) {
+                                conn.send("Welcome to the game! Please enter a room ID:");
+                                // enter game.gameFlow with specific room ID
+                                String roomID = conn.recv();
+                                // new game
+                                if (!gameList.containsKey(roomID)) {
+                                    gameList.put(roomID, new Game(24, "Duke"));
+                                    gameClients.put(roomID, 1);
+                                    conn.send("Room created.");
+                                    gameList.get(roomID).gameFlow(conn, 1);
+                                    break;
+                                }
+                                // if game already exists
+                                else {
+                                    gameClients.put(roomID, gameClients.get(roomID) + 1);
+                                    if (!gameList.get(roomID).getGameState().equals("setNumPlayer")) {
+                                        conn.send("Room exceeded player number, game already started.");
+                                        continue;
+                                    }
+                                    conn.send("Room joined.");
+                                    gameList.get(roomID).gameFlow(conn, 2);
+                                    break;
+                                }
+                            }
+
                         } finally {
                             client_socket.close();
                         }

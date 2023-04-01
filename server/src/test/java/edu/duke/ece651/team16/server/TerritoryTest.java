@@ -145,18 +145,18 @@ public class TerritoryTest {
 
     Unit unit = new AdvancedUnit(player, null, true, 1);
     territory.tryAddUnits(new ArrayList<Unit>(Arrays.asList(unit)));
-    assertEquals(1, territory.getAliveUnitsFor(player).size());
+    assertEquals(1, territory.getAliveUnitsFor(player, 0).size());
 
     Unit unit2 = new AdvancedUnit(player, null, true, 2);
     territory.tryAddUnits(new ArrayList<Unit>(Arrays.asList(unit2)));
-    assertEquals(2, territory.getAliveUnitsFor(player).size());
+    assertEquals(2, territory.getAliveUnitsFor(player, 0).size());
 
     // another player
     Conn c1 = mock(Conn.class);
     Player player2 = new Player("blue", c1, list, 2);
     Unit unit3 = new AdvancedUnit(player2, null, false, 3);
     territory.tryAddUnits(new ArrayList<Unit>(Arrays.asList(unit3)));
-    assertEquals(2, territory.getAliveUnitsFor(player).size());
+    assertEquals(2, territory.getAliveUnitsFor(player, 0).size());
   }
 
   @Test

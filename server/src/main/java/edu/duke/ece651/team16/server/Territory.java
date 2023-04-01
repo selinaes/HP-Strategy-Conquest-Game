@@ -118,13 +118,13 @@ public class Territory {
   }
 
   /**
-   *  Return units that belong to a certain player and alive
+   *  Return units that are certain level belong to a certain player and alive
    * @param player
    * @return units
    */
-  public ArrayList<Unit> getAliveUnitsFor(Player player) {
+  public ArrayList<Unit> getAliveUnitsFor(Player player, int level) {
     ArrayList<Unit> result = new ArrayList<>();
-    for (Unit u : this.units) {
+    for (Unit u : this.getUnitsByLevel(level)) {
       if (u.getOwner() == player && u.getAlive() == true) {
         result.add(u);
       }
@@ -164,9 +164,9 @@ public class Territory {
    * @param player the player who owns the units
    * @return the removed units
    */
-  public ArrayList<Unit> tryRemoveUnits(int num, Player player) {
+  public ArrayList<Unit> tryRemoveUnits(int num, Player player, int level) {
     ArrayList<Unit> result = new ArrayList<>();
-    ArrayList<Unit> aliveUnitForP = this.getAliveUnitsFor(player);
+    ArrayList<Unit> aliveUnitForP = this.getAliveUnitsFor(player, level);
     for (int i = 0; i < num; i++) {
       Unit u = aliveUnitForP.get(i);
       u.setwhere(null);
@@ -178,11 +178,16 @@ public class Territory {
 
   /*
    * Get the number of units in the territory
-  * @return units in string
+   * @return units in string
    */
   public String getUnitsString() {
-    String result = Integer.toString(this.units.size()) + " units";
-    return result;
+    StringBuilder result = new StringBuilder();
+    result.append("(");
+    for (int i = 0; i < 7; i++) {
+      result.append(String.valueOf(this.getUnitsByLevel(i).size()) + "," );
+    }
+    result.append(")");
+    return result.toString();
   }
 
   /**

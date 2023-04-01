@@ -50,6 +50,7 @@ public class Client {
      */
     public void run() throws IOException {
         // placment phase
+        playerChooseRoom();
         playerChooseNum();
         waitEveryoneDone();
         view.displayInitialMap(recvMsg());
@@ -218,8 +219,8 @@ public class Client {
     public void playerChooseNum() throws IOException {
         String clientInput = "";
         String prompt = recvMsg();
-        if (prompt.equals("Not the first player. Please wait for the first player to set player number.")) {
-            out.println(prompt);
+        if (prompt.equals("finished stage")) {
+            out.println("Not the first player. Please wait for the first player to set player number.");
             return;
         }
         while (true) {
@@ -228,7 +229,8 @@ public class Client {
                 sendResponse(clientInput);
                 prompt = recvMsg();
                 if (prompt.equals("Valid")) {
-                    out.println("Successfully choose number of players: " + clientInput);
+                    out.println("Successfully choose number of players: " + clientInput
+                            + ". Please wait for other players to join.");
                     return;
                 } else {
                     out.println("Invalid number of players.");
@@ -392,22 +394,27 @@ public class Client {
      */
     public boolean checkMoveInputFormat(String clientInput) {
         String[] input = clientInput.split(", ");
-        if (input.length != 3) {
+        if (input.length != 4) {
             return false;
         }
         String unitNum = input[2];
         if (!unitNum.matches("[0-9]+")) {
             return false;
         }
+        unitNum = input[3];
+        if (!unitNum.matches("[0-9]+")) {
+            return false;
+        }
         return true;
     }
 
-    /* 
-        * Check if the upgrade input format is correct
-        *
-        * @param clientInput the input from client
-        * @return if upgrade input format is valid
-        */
+    /*
+     * Check if the upgrade input format is correct
+     *
+     * @param clientInput the input from client
+     * 
+     * @return if upgrade input format is valid
+     */
     public boolean checkUpgradeInputFormat(String clientInput) {
         String[] input = clientInput.split(", ");
         if (input.length != 4) {
@@ -457,6 +464,27 @@ public class Client {
                 out.println(e.getMessage());
             }
         }
+    }
+
+    public void playerChooseRoom() throws IOException {
+        String prompt;
+        String clientInput;
+        while (true) {
+            prompt = recvMsg();
+            clientInput = "";
+            try {
+                clientInput = readClientInput(prompt);
+                sendResponse(clientInput);
+                String ifEnter = recvMsg();
+                out.println(ifEnter);
+                if (!ifEnter.equals("Room exceeded player number, game already started.")){
+                    break;
+                }
+            } catch (EOFException e) {
+                out.println(e.getMessage());
+            }
+        }
+
     }
 
 }
