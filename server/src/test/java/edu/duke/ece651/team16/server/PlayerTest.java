@@ -87,8 +87,6 @@ public class PlayerTest {
     list.add(t1);
     Player p = new Player("blue", c1, list, 2);
 
-    // t1.addUnit(new BasicUnit(player, null, true, 2));
-
     Territory t2 = new Territory("B");
     assertEquals("You do not own this territory", p.placeUnitsSameTerritory("B",
         2));

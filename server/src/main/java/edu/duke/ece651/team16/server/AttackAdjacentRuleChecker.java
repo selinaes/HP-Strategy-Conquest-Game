@@ -8,7 +8,7 @@ public class AttackAdjacentRuleChecker extends OrderRuleChecker {
     }
 
     @Override
-    public String checkMyRule(Territory from, Territory to, Player player, int numUnits, GameMap gameMap) {
+    public String checkMyRule(Territory from, Territory to, Player player, int numUnits, GameMap gameMap, int level) {
         if (from.getNeighbors().contains(to)) {
             return null;
         } else {

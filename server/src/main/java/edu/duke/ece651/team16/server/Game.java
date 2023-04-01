@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public class Game {
+    private final Object lock = new Object();
     protected List<Player> players;
     private int numPlayer;
     private List<String> colors;
@@ -56,14 +57,19 @@ public class Game {
         mapCreateFns.put("Duke", () -> currentMap.createDukeMap());
     }
 
+    // getter for status
+    public String getGameState() {
+        return this.gameState;
+    }
+
     /**
      * Multithreaded main flow of the game, with different phases
      * 
      * @param ServerSocket serverSocket: the server socket
      * @param int          numClients: the number of clients
      */
-    public void gameFlow(Socket client_socket, int numClients) {
-        Player p = doPlacementPhase(client_socket, numClients);
+    public void gameFlow(Conn clientConn, int numClients) {
+        Player p = doPlacementPhase(clientConn, numClients);
         synchronized (this) {
             this.readyPlayer = 0;
         }
@@ -150,8 +156,8 @@ public class Game {
      * @param Socket client_socket: client socket
      * @param int    numClients: number of clients
      */
-    public Player doPlacementPhase(Socket client_socket, int numClients) {
-        Conn conn = new Conn(client_socket);
+    public Player doPlacementPhase(Conn conn, int numClients) {
+        // Conn conn = new Conn(client_socket);
         allConnections.add(conn);
         chooseNumOfPlayers(conn, numClients);// gameState = setNumPlayer
         while (true) {
@@ -247,9 +253,6 @@ public class Game {
      * @param int  numClients
      */
     public void chooseNumOfPlayers(Conn conn, int numClients) {
-        // synchronized (this) {
-        // this.gameState = "setNumPlayer";
-        // }
         if (numClients == 1) {
             conn.send(
                     "You are the first player! Please set the number of players in this game(Valid player number: 2-4): ");
@@ -269,16 +272,25 @@ public class Game {
                 return;
             }
 
-            for (Conn c : allConnections) {
-                c.send("stage Complete");
-            }
-            synchronized (this) {
-                this.gameState = "setPlayerColor"; // now out of setNumPlayer stage
+            // for (Conn c : allConnections) {
+            //     c.send("stage Complete");
+            // }
+            notifyAllPlayers(conn, "setPlayerColor");
+            // synchronized (this) {
+            //     this.gameState = "setPlayerColor"; // now out of setNumPlayer stage
+            //     initializeMap(this.numPlayer);
+            // }
+        } else {
+            // conn.send("Not the first player. Please wait for the first player to set player number and all players to join.");
+            notifyAllPlayers(conn, "setPlayerColor");
+        }
+
+        synchronized (this) {
+            if (gameState.equals("setPlayerColor") ) {
                 initializeMap(this.numPlayer);
             }
-        } else {
-            conn.send("Not the first player. Please wait for the first player to set player number.");
         }
+
     }
 
     /**
@@ -346,9 +358,7 @@ public class Game {
         synchronized (this) {
             ++this.readyPlayer;
             if (readyPlayer == numPlayer) {
-                // System.out.println("All players ready, readyPlayer: " + readyPlayer + "
-                // Entering: "
-                // + newStage);
+                // System.out.println("All players ready, readyPlayer: " + readyPlayer + "Entering: " + newStage);
                 for (Conn c : allConnections) {
                     c.send("stage Complete");
                 }
@@ -475,13 +485,14 @@ public class Game {
      */
     public Order makeMoveAttackOrder(Player p, String actionName) {
         p.getConn().send(
-                "Please enter in the following format: Territory from, Territory to, number of units(e.g. T1, T2, 2)");
-        String actionInput = p.getConn().recv(); // e.g. T1, T2, 2
+                "Please enter in the following format: Territory from, Territory to, level of units, number of units(e.g. T1, T2, 0, 2)");
+        String actionInput = p.getConn().recv(); // e.g. T1, T2, 0, 2
         String[] input = actionInput.split(", ");
         // parse actionInput
         String from = input[0];
         String to = input[1];
-        int num = Integer.parseInt(input[2]);
+        int level = Integer.parseInt(input[2]);
+        int num = Integer.parseInt(input[3]);
 
         // get Territory
         Territory fromTerritory = checkNameReturnTerritory(from, currentMap);
@@ -493,14 +504,34 @@ public class Game {
             return null;
         }
         if (actionName.equals("m")) {
-            Order order = new MoveOrder(fromTerritory, toTerritory, num, p, currentMap);
-            return order;
-        } else if (actionName.equals("u")) {
-            Order order = new UpgradeOrder(p, fromTerritory, 0, 0, 0); // PLACEHOLDER, NEED CHANGE
+            Order order = new MoveOrder(fromTerritory, toTerritory, num, p, currentMap, level);
             return order;
         }
-        return (new AttackOrder(fromTerritory, toTerritory, num, p, currentMap));
+        // } else if (actionName.equals("u")) {
+        //     Order order = new UpgradeOrder(p, fromTerritory, 0, 0, 0); // PLACEHOLDER, NEED CHANGE
+        //     return order;
+        // }
+        return (new AttackOrder(fromTerritory, toTerritory, num, p, currentMap, level));
 
+    }
+    
+    public Order makeUpgradeOrder(Player p) {
+        p.getConn().send(
+                "Please enter in the following format: Territory source, Number units, Units starting Level, Upgrade how many levels(e.g. T1, 4, 2, 1)");
+        String actionInput = p.getConn().recv(); // e.g. source, unitsNum, initalLevel, upgradeAmount
+        String[] input = actionInput.split(", ");
+        // parse actionInput
+        String territory = input[0];
+        int numUnits = Integer.parseInt(input[1]);
+        int initialLevel = Integer.parseInt(input[2]);
+        int upgradeAmount = Integer.parseInt(input[3]);
+        Territory belonging = checkNameReturnTerritory(territory, currentMap);
+        if (belonging == null) {
+            p.getConn().send("Invalid Territory Name");
+            return null;
+        }
+        Order upgradeOrder = new UpgradeOrder(p, belonging, numUnits, initialLevel, upgradeAmount);
+        return upgradeOrder;
     }
 
     public Order makeResearchOrder(Player p) {
@@ -521,10 +552,10 @@ public class Game {
             order = makeMoveAttackOrder(p, actionName);
         } else if (actionName.equals("r")) {
             order = makeResearchOrder(p);
+        } else if (actionName.equals("u")){
+            order = makeUpgradeOrder(p);
         }
-
         if (order == null) {
-
             return false;
         }
         String tryAction = order.tryAction();

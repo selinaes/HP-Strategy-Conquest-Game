@@ -48,4 +48,25 @@ public interface Unit {
      * get unit id
      */
     public int getId();
+
+    /**
+     * get unit type
+     */
+    public String getName();
+
+    /**
+     * get unit level
+     */
+    public int getLevel();
+
+    /**
+     * get unit bonus
+     */
+    public int getBonus();
+
+    /**
+     * upgrade
+     */
+    public void upgrade(int upgradeAmount);
+
 }

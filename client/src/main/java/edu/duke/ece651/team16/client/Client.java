@@ -50,6 +50,7 @@ public class Client {
      */
     public void run() throws IOException {
         // placment phase
+        playerChooseRoom();
         playerChooseNum();
         waitEveryoneDone();
         view.displayInitialMap(recvMsg());
@@ -218,8 +219,8 @@ public class Client {
     public void playerChooseNum() throws IOException {
         String clientInput = "";
         String prompt = recvMsg();
-        if (prompt.equals("Not the first player. Please wait for the first player to set player number.")) {
-            out.println(prompt);
+        if (prompt.equals("finished stage")) {
+            out.println("Not the first player. Please wait for the first player to set player number.");
             return;
         }
         while (true) {
@@ -228,7 +229,8 @@ public class Client {
                 sendResponse(clientInput);
                 prompt = recvMsg();
                 if (prompt.equals("Valid")) {
-                    out.println("Successfully choose number of players: " + clientInput);
+                    out.println("Successfully choose number of players: " + clientInput
+                            + ". Please wait for other players to join.");
                     return;
                 } else {
                     out.println("Invalid number of players.");
@@ -337,6 +339,7 @@ public class Client {
         String prompt = recvMsg(); // "Please enter <Territor ......"
         while (true) {
             try {
+                // research
                 if (prompt.equals("Please notice you can perform research only once each turn.")) {
                     prompt = recvMsg();
                     if (prompt.equals("Valid")) {
@@ -347,13 +350,18 @@ public class Client {
                     }
                     return;
                 }
-                // inside client, check correct method, send response, then re-receive
+                // move + attack + upgrade
                 boolean correctFormat = false;
                 while (!correctFormat) {
                     clientInput = readClientInput(prompt);
-                    if (checkMoveInputFormat(clientInput)) {
-                        correctFormat = true;
-                    } else {
+                    // upgrade
+                    if (prompt.equals(
+                            "Please enter in the following format: Territory source, Number units, Units starting Level, Upgrade how many levels(e.g. T1, 4, 2, 1)")) {
+                        correctFormat = checkUpgradeInputFormat(clientInput);
+                    } else { // move + attack
+                        correctFormat = checkMoveInputFormat(clientInput);
+                    }
+                    if (!correctFormat) {
                         out.println("Wrong Format");
                     }
                 }
@@ -364,16 +372,14 @@ public class Client {
                     return;
                 } else if (prompt.equals("Invalid Territory Name")) {
                     out.println(prompt);
-                    // playerActionTurn();
                     return;
                 } else {
                     out.println(prompt);
-                    // playerActionTurn();
-                    // out.println(prompt);
-                    // playerOneAction();
                     return;
                 }
-            } catch (EOFException e) {
+            } catch (
+
+            EOFException e) {
                 out.println(e.getMessage());
             }
         }
@@ -388,11 +394,36 @@ public class Client {
      */
     public boolean checkMoveInputFormat(String clientInput) {
         String[] input = clientInput.split(", ");
-        if (input.length != 3) {
+        if (input.length != 4) {
             return false;
         }
         String unitNum = input[2];
         if (!unitNum.matches("[0-9]+")) {
+            return false;
+        }
+        unitNum = input[3];
+        if (!unitNum.matches("[0-9]+")) {
+            return false;
+        }
+        return true;
+    }
+
+    /*
+     * Check if the upgrade input format is correct
+     *
+     * @param clientInput the input from client
+     * 
+     * @return if upgrade input format is valid
+     */
+    public boolean checkUpgradeInputFormat(String clientInput) {
+        String[] input = clientInput.split(", ");
+        if (input.length != 4) {
+            return false;
+        }
+        String unitNum = input[1];
+        String unitLevel = input[2];
+        String upgradeLevel = input[3];
+        if (!unitNum.matches("[0-9]+") || !unitLevel.matches("[0-9]+") || !upgradeLevel.matches("[0-9]+")) {
             return false;
         }
         return true;
@@ -433,6 +464,27 @@ public class Client {
                 out.println(e.getMessage());
             }
         }
+    }
+
+    public void playerChooseRoom() throws IOException {
+        String prompt;
+        String clientInput;
+        while (true) {
+            prompt = recvMsg();
+            clientInput = "";
+            try {
+                clientInput = readClientInput(prompt);
+                sendResponse(clientInput);
+                String ifEnter = recvMsg();
+                out.println(ifEnter);
+                if (!ifEnter.equals("Room exceeded player number, game already started.")){
+                    break;
+                }
+            } catch (EOFException e) {
+                out.println(e.getMessage());
+            }
+        }
+
     }
 
 }

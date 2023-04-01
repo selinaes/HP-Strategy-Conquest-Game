@@ -9,6 +9,7 @@ public class AttackOrder implements Order {
     protected int numUnits;
     protected Player player;
     protected GameMap gameMap;
+    protected int level;
 
     /*
      * constructor for AttackOrder
@@ -23,12 +24,13 @@ public class AttackOrder implements Order {
      * 
      * @param gameMap the gameMap
      */
-    public AttackOrder(Territory from, Territory to, int numUnits, Player player, GameMap gameMap) {
+    public AttackOrder(Territory from, Territory to, int numUnits, Player player, GameMap gameMap, int level) {
         this.from = from;
         this.to = to;
         this.numUnits = numUnits;
         this.player = player;
         this.gameMap = gameMap;
+        this.level = level;
     }
 
     /**
@@ -39,17 +41,17 @@ public class AttackOrder implements Order {
     @Override
     public String tryAction() {
         OrderRuleChecker checker = new AttackInputRuleChecker(new AttackAdjacentRuleChecker(null));
-        String attackProblem = checker.checkOrder(from, to, player, numUnits, gameMap);
+        String attackProblem = checker.checkOrder(from, to, player, numUnits, gameMap, level);
         if (attackProblem == null) {
-            // remove units from fromTerritory
-            ArrayList<Unit> attackUnits = from.tryRemoveUnits(numUnits, player);
-            // add units to parties, wait for battle
-            to.tryAddAttackers(attackUnits);
             int cost = attackCost();
             if(cost > player.getFoodResource()) {
                 return "Not enough food resource to attack. Need " + cost + " food resources, but only have " + player.getFoodResource() + ".";
             }
             player.removeFoodResource(cost);
+            // remove units from fromTerritory
+            ArrayList<Unit> attackUnits = from.tryRemoveUnits(numUnits, player, level);
+            // add units to parties, wait for battle
+            to.tryAddAttackers(attackUnits);
             return null;
         }
         return attackProblem;

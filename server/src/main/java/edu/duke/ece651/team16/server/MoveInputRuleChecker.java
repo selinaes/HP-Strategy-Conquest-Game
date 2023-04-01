@@ -6,16 +6,16 @@ public class MoveInputRuleChecker extends OrderRuleChecker {
     }
 
     @Override
-    public String checkMyRule(Territory from, Territory to, Player player, int numUnits, GameMap map) {
+    public String checkMyRule(Territory from, Territory to, Player player, int numUnits, GameMap map, int level) {
         if (from.getOwner() != player) {
             return "You do not own the from territory";
         }
         if (to.getOwner() != player) {
             return "You do not own the to territory";
         }
-        if (from.getAliveUnitsFor(player).size() < numUnits) {
+        if (from.getAliveUnitsFor(player, level).size() < numUnits) {
             // check units alive & owner is player
-            return "You do not have enough alive units in the from territory";
+            return "You do not have enough alive units of this level in the from territory";
         }
         return null;
     }

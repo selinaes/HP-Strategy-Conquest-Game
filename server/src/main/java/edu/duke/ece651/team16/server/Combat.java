@@ -53,8 +53,8 @@ public class Combat {
      * @return the winner of the combat
      */
     public Unit determineWin(Unit A, Unit B) {
-        int resA = rollDice();
-        int resB = rollDice();
+        int resA = rollDice() + A.getBonus();
+        int resB = rollDice() + B.getBonus();
         // Tied and both units are attackers
         if (resA == resB && A.getisAttacker() && B.getisAttacker()) {
             return null;

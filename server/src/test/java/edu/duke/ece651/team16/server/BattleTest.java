@@ -18,7 +18,7 @@ public class BattleTest {
     ArrayList<Unit> units = new ArrayList<Unit>();
     Player p1 = mock(Player.class);
     when(p1.getColor()).thenReturn("p1");
-    BasicUnit unit = new BasicUnit(p1, mock(Territory.class), true, 0);
+    AdvancedUnit unit = new AdvancedUnit(p1, mock(Territory.class), true, 0);
     units.add(unit);
     battle.addGroup(units);
     assertEquals(1, battle.getParties().size());
@@ -27,7 +27,7 @@ public class BattleTest {
   private ArrayList<Unit> makeParty(int num, Player p) {
     ArrayList<Unit> party = new ArrayList<Unit>();
     for (int i = 0; i < num; i++) {
-      BasicUnit unit = new BasicUnit(p, mock(Territory.class), true, 0);
+      AdvancedUnit unit = new AdvancedUnit(p, mock(Territory.class), true, 0);
       party.add(unit);
     }
     return party;
@@ -112,8 +112,8 @@ public class BattleTest {
     list0.add(territory1);
     Player player2 = new Player("blue", c2, list, 2);
 
-    Unit unit1 = new BasicUnit(player1, null, true, 1);
-    Unit unit2 = new BasicUnit(player2, null, true, 1);
+    Unit unit1 = new AdvancedUnit(player1, null, true, 1);
+    Unit unit2 = new AdvancedUnit(player2, null, true, 1);
 
     ArrayList<Unit> units1 = new ArrayList<>();
     units1.add(unit1);

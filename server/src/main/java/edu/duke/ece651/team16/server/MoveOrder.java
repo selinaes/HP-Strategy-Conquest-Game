@@ -7,6 +7,7 @@ public class MoveOrder implements Order {
     protected int numUnits;
     protected Player player;
     protected GameMap gameMap;
+    protected int level;
 
     /**
      * Constructor for MoveOrder
@@ -17,12 +18,13 @@ public class MoveOrder implements Order {
      * @param player   the player
      * @param gameMap  the game map
      */
-    public MoveOrder(Territory from, Territory to, int numUnits, Player player, GameMap gameMap) {
+    public MoveOrder(Territory from, Territory to, int numUnits, Player player, GameMap gameMap, int level) {
         this.from = from;
         this.to = to;
         this.numUnits = numUnits;
         this.player = player;
         this.gameMap = gameMap;
+        this.level = level;
     }
 
     /**
@@ -34,10 +36,10 @@ public class MoveOrder implements Order {
     public String tryAction() {
         MovePathRuleChecker pathchecker = new MovePathRuleChecker(null);
         OrderRuleChecker checker = new MoveInputRuleChecker(pathchecker);
-        String moveProblem = checker.checkOrder(from, to, player, numUnits, gameMap);
+        String moveProblem = checker.checkOrder(from, to, player, numUnits, gameMap, level);
         if (moveProblem == null) {
             // remove units from fromTerritory
-            ArrayList<Unit> moveUnits = from.tryRemoveUnits(numUnits, player);
+            ArrayList<Unit> moveUnits = from.tryRemoveUnits(numUnits, player, level);
             // add units to toTerritory
             to.tryAddUnits(moveUnits);
             // subtract food resource
