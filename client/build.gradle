@@ -9,11 +9,39 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application.
     id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.13'
+}
+
+javafx {
+    version = "19.0.2.1"
+    modules = [ 'javafx.controls', 'javafx.fxml','javafx.media'  ]
+}
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+    // jcenter()
 }
 
 application {
     // Define the main class for the application.
     mainClassName = 'edu.duke.ece651.team16.client.App'
+}
+
+dependencies {
+    // compile 'com.github.almasb:fxgl:17.3'
+    testImplementation "org.testfx:testfx-core:4.0.16-alpha"
+    testImplementation "org.testfx:testfx-junit5:4.0.16-alpha"
+    testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.1'
+
+
+    testImplementation 'org.testfx:openjfx-monocle:jdk-12.0.1+2'
+}
+
+clover {
+    compiler {
+        additionalArgs = '-g:lines,source,vars'
+    }
 }
 
 run{
