@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- <?import com.gluonhq.charm.glisten.control.Icon?> -->
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="mainRoot" prefHeight="767.0" prefWidth="1243.0" stylesheets="@/ui/styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team16.controller.JoinRoomController">
+   <children>
+      <ImageView fitHeight="780.0" fitWidth="1280.0">
+         <image>
+            <Image url="@../img/battle.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="692.0" fitWidth="1211.0" layoutX="39.0" layoutY="38.0">
+         <image>
+            <Image url="@../img/backgrounds/Almanac_ZombieBack.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="191.0" layoutY="260.0" text="Room ID:" textFill="#083983">
+         <font>
+            <Font name="System Bold" size="36.0" />
+         </font>
+      </Label>
+      <Button fx:id="joinRoom" layoutX="223.0" layoutY="567.0" mnemonicParsing="false" onAction="#joinRoom" styleClass="button-unable" text="Join Room">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Button>
+      <ImageView layoutX="865.0" layoutY="102.0" rotate="11.3">
+         <image>
+            <Image url="@../img/riskLogo.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="back" layoutX="1049.0" layoutY="602.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="97.0" styleClass="button-able" text="Back">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Button>
+      <TextField fx:id="roomIDField" layoutX="341.0" layoutY="261.0" prefHeight="45.0" prefWidth="232.0" promptText="Enter your Room ID">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </TextField>
+      <ChoiceBox fx:id="chooseNum" layoutX="863.0" layoutY="394.0" prefWidth="150.0" />
+      <Label fx:id="prompt" layoutX="185.0" layoutY="380.0" text="First player should choose player number:" textFill="#083983">
+         <font>
+            <Font name="System Bold" size="36.0" />
+         </font>
+      </Label>
+      <Button fx:id="searchRoom" layoutX="640.0" layoutY="261.0" mnemonicParsing="false" onAction="#searchRoom" styleClass="button-able" text="Search Room">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

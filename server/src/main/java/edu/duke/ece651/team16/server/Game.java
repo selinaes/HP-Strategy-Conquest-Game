@@ -273,20 +273,21 @@ public class Game {
             }
 
             // for (Conn c : allConnections) {
-            //     c.send("stage Complete");
+            // c.send("stage Complete");
             // }
             notifyAllPlayers(conn, "setPlayerColor");
             // synchronized (this) {
-            //     this.gameState = "setPlayerColor"; // now out of setNumPlayer stage
-            //     initializeMap(this.numPlayer);
+            // this.gameState = "setPlayerColor"; // now out of setNumPlayer stage
+            // initializeMap(this.numPlayer);
             // }
         } else {
-            // conn.send("Not the first player. Please wait for the first player to set player number and all players to join.");
+            // conn.send("Not the first player. Please wait for the first player to set
+            // player number and all players to join.");
             notifyAllPlayers(conn, "setPlayerColor");
         }
 
         synchronized (this) {
-            if (gameState.equals("setPlayerColor") ) {
+            if (gameState.equals("setPlayerColor")) {
                 initializeMap(this.numPlayer);
             }
         }
@@ -358,7 +359,8 @@ public class Game {
         synchronized (this) {
             ++this.readyPlayer;
             if (readyPlayer == numPlayer) {
-                // System.out.println("All players ready, readyPlayer: " + readyPlayer + "Entering: " + newStage);
+                // System.out.println("All players ready, readyPlayer: " + readyPlayer +
+                // "Entering: " + newStage);
                 for (Conn c : allConnections) {
                     c.send("stage Complete");
                 }
@@ -508,13 +510,14 @@ public class Game {
             return order;
         }
         // } else if (actionName.equals("u")) {
-        //     Order order = new UpgradeOrder(p, fromTerritory, 0, 0, 0); // PLACEHOLDER, NEED CHANGE
-        //     return order;
+        // Order order = new UpgradeOrder(p, fromTerritory, 0, 0, 0); // PLACEHOLDER,
+        // NEED CHANGE
+        // return order;
         // }
         return (new AttackOrder(fromTerritory, toTerritory, num, p, currentMap, level));
 
     }
-    
+
     public Order makeUpgradeOrder(Player p) {
         p.getConn().send(
                 "Please enter in the following format: Territory source, Number units, Units starting Level, Upgrade how many levels(e.g. T1, 4, 2, 1)");
@@ -552,7 +555,7 @@ public class Game {
             order = makeMoveAttackOrder(p, actionName);
         } else if (actionName.equals("r")) {
             order = makeResearchOrder(p);
-        } else if (actionName.equals("u")){
+        } else if (actionName.equals("u")) {
             order = makeUpgradeOrder(p);
         }
         if (order == null) {

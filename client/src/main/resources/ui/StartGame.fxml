@@ -11,7 +11,7 @@
 <?import javafx.scene.media.MediaPlayer?>
 <?import javafx.scene.media.MediaView?>
 
-<AnchorPane fx:id="mainRoot" prefHeight="767.0" prefWidth="1243.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team16.controller.StartGame" stylesheets="@/ui/styles.css">
+<AnchorPane fx:id="mainRoot" prefHeight="767.0" prefWidth="1243.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team16.controller.StartGameController" stylesheets="@/ui/styles.css">
    <children>
       <ImageView fitHeight="780.0" fitWidth="1280.0">
          <image>
@@ -24,11 +24,6 @@
          </image>
       </ImageView>
       <Button fx:id="newGame" prefHeight="50.0" prefWidth="130.0" layoutX="99.0" layoutY="255.0" mnemonicParsing="false" onAction="#newGame" text="New Game" styleClass="button-able">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Button>
-      <Button fx:id="joinGame" prefHeight="50.0" prefWidth="130.0" layoutX="197.0" layoutY="425.0" mnemonicParsing="false" onAction="#joinGame" text="Join Game" styleClass="button-able">
          <font>
             <Font size="36.0" />
          </font>

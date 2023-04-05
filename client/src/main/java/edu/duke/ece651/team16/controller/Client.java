@@ -210,7 +210,7 @@ public class Client {
     public void playerChooseNum(String num) throws IOException {
         // useless in gui: follow
         String prompt = recvMsg();
-        if (prompt.equals("Not the first player. Please wait for the first player to set player number.")) {
+        if (prompt.equals("finished stage")) {
             out.println(prompt);
             return;
         }
@@ -263,7 +263,7 @@ public class Client {
      * 
      * @throws IOException
      */
-    public boolean playerOneAction(ArrayList<String> clientInput) throws IOException {
+    public String playerOneAction(ArrayList<String> clientInput) throws IOException {
         recvMsg();// String choices = view.displayEntry(recvMsg()); old version
         sendResponse(clientInput.get(0)); // send order (a or m)
         if (clientInput.get(0).equals("d")) {
@@ -271,24 +271,25 @@ public class Client {
             if (msg.equals("finished stage")) {
                 out.println("Finished 1 Turn of orders. Please wait for other players to issue orders.");
             }
-            return true;
+            return "Valid";
         }
 
         String prompt = recvMsg(); // "Please enter <Territor ......"
 
         try {
             sendResponse(clientInput.get(1));
-            prompt = recvMsg();
-            if (prompt.equals("Valid")) {
-                out.println("Execute Action Successfully");
-                return true;
-            } else {
-                return false;
-            }
+            prompt = recvMsg(); // Valid, or respective error message, from serverside "tryAction" result
+            return prompt;
+            // if (prompt.equals("Valid")) {
+            // out.println("Execute Action Successfully");
+            // return true;
+            // } else {
+            // return false;
+            // }
         } catch (EOFException e) {
             out.println(e.getMessage());
         }
-        return false;
+        return "Invalid";
     }
 
     /**
@@ -341,5 +342,18 @@ public class Client {
 
     public void setClientSocket(Socket socket) {
         this.clientSocket = socket;
+    }
+
+    public String playerChooseRoom(String roomID) throws IOException {
+        try {
+            sendResponse(roomID); // send roomId
+            String ifEnter = recvMsg(); // Room created, or "Room joined." or "Room exceeded player number, game already
+                                        // started"
+            out.println(ifEnter);
+            return ifEnter;
+        } catch (EOFException e) {
+            out.println(e.getMessage());
+        }
+        return "";
     }
 }

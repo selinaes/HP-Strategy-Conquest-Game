@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="territoryRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="1280.0" stylesheets="@/ui/styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team16.controller.GamePlayController">
+   <children>
+      <ScrollPane prefHeight="781.0" prefWidth="1283.0">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <ImageView fitHeight="812.0" fitWidth="1337.0">
+                     <image>
+                        <Image url="@../img/backgrounds/map.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="mapImage" fitHeight="793.0" fitWidth="1445.0" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/territory/dukeMap/dukeMapWithName.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+        </content>
+      </ScrollPane>
+      <ToolBar fx:id="toolBar" layoutX="549.0" layoutY="14.0" prefHeight="77.0" prefWidth="700.0" styleClass="tool-bar">
+        <items>
+          <Button fx:id="rule" mnemonicParsing="false" prefHeight="70.0" prefWidth="124.0" text="Game Rule">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="units" mnemonicParsing="false" prefHeight="70.0" prefWidth="87.0" text="Units">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="move" mnemonicParsing="false" onAction="#onMoveButton" prefHeight="70.0" prefWidth="103.0" text="Move">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="attack" mnemonicParsing="false" onAction="#onAttackButton" prefHeight="70.0" prefWidth="98.0" text="Attack">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="research" mnemonicParsing="false" prefHeight="70.0" prefWidth="120.0" text="Research">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="upgrade" mnemonicParsing="false" prefHeight="70.0" prefWidth="121.0" text="Upgrade">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+        </items>
+      </ToolBar>
+      <ScrollPane fx:id="scrollPane_TerritoryInfo" layoutX="2.0" layoutY="679.0" opacity="0.63" prefHeight="103.0" prefWidth="431.0">
+         <content>
+          <TextArea fx:id="history" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="531.0" />
+         </content>
+      </ScrollPane>
+      <GridPane fx:id="territroyGrid" layoutX="468.0" layoutY="620.0" prefHeight="100.0" prefWidth="699.0">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="10" />
+            <ColumnConstraints percentWidth="11" />
+            <ColumnConstraints percentWidth="14" />
+            <ColumnConstraints percentWidth="17" />
+            <ColumnConstraints percentWidth="17" />
+            <ColumnConstraints percentWidth="31" />
+        </columnConstraints>
+         <rowConstraints>
+        <RowConstraints percentHeight="25" />
+        <RowConstraints percentHeight="25" />
+        <RowConstraints percentHeight="25" />
+        <RowConstraints percentHeight="25" />
+    </rowConstraints> 
+         <children>
+            <Button fx:id="smith" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Smith" />
+            <Button fx:id="bryan" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Bryan" GridPane.rowIndex="1" />
+            <Button fx:id="fuqua" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Fuqua" GridPane.rowIndex="2" />
+            <Button fx:id="brodie" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Brodie" GridPane.rowIndex="3" />
+            <Button fx:id="levine" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Levine" GridPane.columnIndex="1" />
+            <Button fx:id="wallace" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Wallace" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button fx:id="perkins" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Perkins" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Button fx:id="baldwin" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Baldwin" GridPane.columnIndex="2" />
+            <Button fx:id="fitzpatrick" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Fitzpatrick" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Button fx:id="penn" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Penn Pavili" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Button fx:id="studentWellness" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Student Wellness Center" GridPane.columnIndex="5" />
+            <Button fx:id="dukeLaw" mnemonicParsing="false" onAction="#onTerritoryButton" prefWidth="182.0" styleClass="expandable, button-able" text="Duke University School of Law" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+            <Button fx:id="wilson" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Wilson Recreation Center" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+            <Button fx:id="jbDuke" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="JB Duke Hotel" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <Button fx:id="dukeForest" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Duke Forest" GridPane.columnIndex="3" />
+            <Button fx:id="dukeLemur" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Duke Lemur" GridPane.columnIndex="4" />
+            <Button fx:id="scienceGarage" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Science Garage" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+            <Button fx:id="bookStore" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="University Book Store" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+            <Button fx:id="cameron" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Cameron" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Button fx:id="broadhead" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Broadhead" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Button fx:id="dukeGarden" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Duke Garden" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Button fx:id="nasher" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Nasher Museum" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+            <Button fx:id="dukeHospital" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Duke Hosptial" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <Button fx:id="dukeChapel" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Duke Chapel" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+         </children>
+      </GridPane>
+      <ScrollPane layoutX="14.0" layoutY="14.0" opacity="0.7" prefHeight="181.0" prefWidth="532.0">
+        <content>
+          <TextArea fx:id="textArea" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="531.0" />
+        </content>
+      </ScrollPane>
+      <GridPane fx:id="assignUnits_GridPane" layoutX="384.0" layoutY="94.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="244.5118408203125" minWidth="10.0" />
+            <ColumnConstraints />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+            <RowConstraints />
+        </rowConstraints>
+         <children>
+            <Button fx:id="assignUnits" mnemonicParsing="false" styleClass="expandable, button-able" text="Commit" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+         </children>
+      </GridPane>
+      <Button fx:id="finish" layoutX="1175.0" layoutY="680.0" mnemonicParsing="false" onAction="#onFinishButton" prefHeight="100.0" prefWidth="100.0" styleClass="button-finish" text="Finish" />
+      <ImageView fx:id="battleTime" fitHeight="799.0" fitWidth="1288.0">
+         <image>
+            <Image url="@../img/backgrounds/battleTime.jpeg" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
