@@ -16,6 +16,9 @@ import java.io.EOFException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 
+import javafx.application.Platform;
+import static javafx.application.Platform.runLater;
+
 public class StartGameController {
     @FXML
     private AnchorPane mainRoot;
@@ -49,6 +52,10 @@ public class StartGameController {
 
         mainRoot.getChildren().setAll(pane);
 
+        Platform.runLater(() -> {
+            AlertBox alert = new AlertBox();
+            alert.displayImageAlert("Welcome!", "/img/texts/welcome.png");// welcome
+        });
     }
 
     /**

@@ -19,7 +19,7 @@
             <Image url="@../img/texts/choosePlayer.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="green" layoutX="722.0" layoutY="318.0" onMouseClicked="#onImageClicked" userData="green">
+      <ImageView fx:id="green" layoutX="945.0" layoutY="318.0" onMouseClicked="#onImageClicked" userData="green">
          <image>
             <Image url="@../img/green.png" />
          </image>
@@ -34,7 +34,7 @@
             <Image url="@../img/blue.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="yellow" layoutX="945.0" layoutY="318.0" onMouseClicked="#onImageClicked" userData="yellow">
+      <ImageView fx:id="yellow" layoutX="722.0" layoutY="318.0" onMouseClicked="#onImageClicked" userData="yellow">
          <image>
             <Image url="@../img/yellow.png" />
          </image>

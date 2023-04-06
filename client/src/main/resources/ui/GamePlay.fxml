@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.ToolBar?>
@@ -32,14 +33,9 @@
             </AnchorPane>
         </content>
       </ScrollPane>
-      <ToolBar fx:id="toolBar" layoutX="549.0" layoutY="14.0" prefHeight="77.0" prefWidth="700.0" styleClass="tool-bar">
+      <ToolBar fx:id="toolBar" layoutX="640.0" layoutY="14.0" prefHeight="81.0" prefWidth="609.0" styleClass="tool-bar">
         <items>
           <Button fx:id="rule" mnemonicParsing="false" prefHeight="70.0" prefWidth="124.0" text="Game Rule">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Button>
-            <Button fx:id="units" mnemonicParsing="false" prefHeight="70.0" prefWidth="87.0" text="Units">
                <font>
                   <Font size="18.0" />
                </font>
@@ -54,7 +50,7 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button fx:id="research" mnemonicParsing="false" prefHeight="70.0" prefWidth="120.0" text="Research">
+            <Button fx:id="research" mnemonicParsing="false" onAction="#onResearchButton" prefHeight="70.0" prefWidth="120.0" text="Research">
                <font>
                   <Font size="18.0" />
                </font>
@@ -66,9 +62,9 @@
             </Button>
         </items>
       </ToolBar>
-      <ScrollPane fx:id="scrollPane_TerritoryInfo" layoutX="2.0" layoutY="679.0" opacity="0.63" prefHeight="103.0" prefWidth="431.0">
+      <ScrollPane fx:id="scrollPane_TerritoryInfo" layoutX="14.0" layoutY="14.0" opacity="0.63" prefHeight="204.0" prefWidth="609.0">
          <content>
-          <TextArea fx:id="history" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="531.0" />
+          <TextArea fx:id="history" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="608.0" />
          </content>
       </ScrollPane>
       <GridPane fx:id="territroyGrid" layoutX="468.0" layoutY="620.0" prefHeight="100.0" prefWidth="699.0">
@@ -113,11 +109,16 @@
             <Button fx:id="dukeChapel" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="expandable, button-able" text="Duke Chapel" GridPane.columnIndex="3" GridPane.rowIndex="1" />
          </children>
       </GridPane>
-      <ScrollPane layoutX="14.0" layoutY="14.0" opacity="0.7" prefHeight="181.0" prefWidth="532.0">
+      <ScrollPane layoutX="2.0" layoutY="614.0" opacity="0.7" prefHeight="168.0" prefWidth="462.0">
         <content>
-          <TextArea fx:id="textArea" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="531.0" />
+          <TextArea fx:id="textArea" minHeight="0.0" minWidth="0.0" prefHeight="166.0" prefWidth="461.0" />
         </content>
       </ScrollPane>
+      <ImageView fx:id="blackBackground" fitHeight="531.0" fitWidth="829.0" layoutX="214.0" layoutY="41.0" opacity="0.4" visible="false">
+         <image>
+            <Image url="@../img/backgrounds/black.jpg" />
+         </image>
+      </ImageView>
       <GridPane fx:id="assignUnits_GridPane" layoutX="384.0" layoutY="94.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="244.5118408203125" minWidth="10.0" />
@@ -128,13 +129,14 @@
             <RowConstraints />
         </rowConstraints>
          <children>
-            <Button fx:id="assignUnits" mnemonicParsing="false" styleClass="expandable, button-able" text="Commit" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button fx:id="assignUnits" mnemonicParsing="false" styleClass="expandable, button-able" text="Commit" GridPane.rowIndex="1" />
+            <Label text="sum" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
       <Button fx:id="finish" layoutX="1175.0" layoutY="680.0" mnemonicParsing="false" onAction="#onFinishButton" prefHeight="100.0" prefWidth="100.0" styleClass="button-finish" text="Finish" />
-      <ImageView fx:id="battleTime" fitHeight="799.0" fitWidth="1288.0">
+      <ImageView fx:id="battleTime" fitHeight="799.0" fitWidth="1288.0" visible="false">
          <image>
-            <Image url="@../img/backgrounds/battleTime.jpeg" />
+            <Image url="@../img/backgrounds/waiting4.png" />
          </image>
       </ImageView>
    </children>

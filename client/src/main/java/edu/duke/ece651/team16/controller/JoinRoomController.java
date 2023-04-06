@@ -40,14 +40,13 @@ public class JoinRoomController {
 
     private Client client;
     private boolean isGuest;
+    private AlertBox alert = new AlertBox();
 
     @FXML
     public void initialize() throws Exception {
         createClient();
         // show alert
-        AlertBox alert = new AlertBox();
         String msg = client.recvMsg();
-        alert.showAlert("Alert", msg);// enter room ID
         chooseNum.getItems().addAll(2, 3, 4);
         chooseNum.setVisible(false);
         prompt.setVisible(false);
@@ -75,7 +74,6 @@ public class JoinRoomController {
             searchRoom.setDisable(true);
         } else {// "Room exceeded player number, game already started"
             // alert
-            AlertBox alert = new AlertBox();
             alert.displayImageAlert("Fail to join room", "/img/texts/capacity.png");
         }
     }
@@ -94,7 +92,6 @@ public class JoinRoomController {
         try {
             if (!isGuest) {
                 if (chooseNum.getValue() == null) { // show alert "Please choose player number"
-                    AlertBox alert = new AlertBox();
                     alert.displayImageAlert("Set player number", "/img/texts/firstPlayer.png");
                     return;
                 } else { // first player already set the playerNum
@@ -116,6 +113,16 @@ public class JoinRoomController {
         Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    public void backRoom(ActionEvent ae) throws Exception {
+        Socket clientSocket = client.getClientSocket();
+        clientSocket.close();
+        URL xmlResource = getClass().getResource("/ui/StartGame.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(xmlResource); // Create a new FXMLLoader
+        AnchorPane pane = fxmlLoader.load(); // Load the FXML file
+        mainRoot.getChildren().setAll(pane);
     }
 
     /**

@@ -138,7 +138,7 @@ public class Views {
      * @param jsonString
      * @throws IOException
      */
-    public void displayLog(String jsonString) throws IOException {
+    public String displayLog(String jsonString) throws IOException {
         log = jsonString;
         // convert jsonString to jsonobject
         HashMap<String, String> input_Log;
@@ -146,19 +146,20 @@ public class Views {
             input_Log = objectMapper.readValue(jsonString, HashMap.class);
         } catch (JsonProcessingException e) {
             System.out.println("Failed to convert json string to json object.");
-            return;
+            return "exception";
         }
         // Player name is the input_map key
         // ArrayList<HashMap<String, String>> is the value of the key
+        StringBuilder log = new StringBuilder();
         for (Map.Entry<String, String> entry : input_Log.entrySet()) {
             String territoryName = entry.getKey();
             String title = "War Log in " + territoryName + ": ";
-            out.println(title);
             String seperation = String.join("", Collections.nCopies(title.length(),
                     "-"));
-            out.println(seperation);
-            out.println(entry.getValue());
+            String value = entry.getValue();
+            log.append(title + "\n" + value + "\n");
         }
+        return log.toString();
     }
 
     /**

@@ -30,7 +30,6 @@ public class Territory {
     this.techRate = 5;
   }
 
-
   /**
    * set food rate
    * 
@@ -48,7 +47,7 @@ public class Territory {
   public void setTechRate(int techRate) {
     this.techRate = techRate;
   }
-  
+
   /**
    * get food rate
    * 
@@ -69,6 +68,7 @@ public class Territory {
 
   /*
    * Return the units in the territory
+   * 
    * @return units
    */
 
@@ -78,6 +78,7 @@ public class Territory {
 
   /**
    * check if battle exists
+   * 
    * @return if battle exists
    */
   public boolean existsBattle() {
@@ -98,7 +99,8 @@ public class Territory {
 
   /**
    * Resolve battle phase for one territory
-    * @return game log
+   * 
+   * @return game log
    */
   public String doBattle() {
     defendHome();
@@ -118,7 +120,8 @@ public class Territory {
   }
 
   /**
-   *  Return units that are certain level belong to a certain player and alive
+   * Return units that are certain level belong to a certain player and alive
+   * 
    * @param player
    * @return units
    */
@@ -178,15 +181,14 @@ public class Territory {
 
   /*
    * Get the number of units in the territory
+   * 
    * @return units in string
    */
   public String getUnitsString() {
     StringBuilder result = new StringBuilder();
-    result.append("(");
     for (int i = 0; i < 7; i++) {
-      result.append(String.valueOf(this.getUnitsByLevel(i).size()) + "," );
+      result.append(String.valueOf(this.getUnitsByLevel(i).size()) + ",");
     }
-    result.append(")");
     return result.toString();
   }
 
@@ -247,7 +249,7 @@ public class Territory {
   /**
    * Get Display info about food and tech rate
    * 
-   * @return to_display 
+   * @return to_display
    */
   public String territoryInfo() {
     String result = "";
@@ -255,13 +257,14 @@ public class Territory {
         + this.techRate + " ";
     return result;
   }
+
   /**
    * set neighbors for both territories
    * 
    * @param neighbors to be set
    */
   public void setNeighbors(List<Territory> neighbors) {
-    for(Territory t: neighbors){
+    for (Territory t : neighbors) {
       addNeighbor(t);
       t.addNeighbor(this);
     }

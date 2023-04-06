@@ -12,6 +12,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 public class AlertBox {
+    /*
+     * displays image alert
+     * 
+     * @param title title of the alert
+     * 
+     * @param imageUrl url of the image
+     */
     public void displayImageAlert(String title, String imageUrl) {
         Stage imageWindow = new Stage();
         imageWindow.initModality(Modality.APPLICATION_MODAL);
@@ -28,6 +35,13 @@ public class AlertBox {
         imageWindow.showAndWait();
     }
 
+    /*
+     * displays text alert
+     * 
+     * @param title title of the alert
+     * 
+     * @param message message of the alert
+     */
     public void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);

@@ -1,5 +1,6 @@
 package edu.duke.ece651.team16.controller;
 
+import java.io.IOException;
 import java.net.URL;
 
 import edu.duke.ece651.team16.controller.Client;
@@ -15,6 +16,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+
+import javafx.application.Platform;
+import static javafx.application.Platform.runLater;
 
 public class ChooseGroupController {
     private Client client;
@@ -57,7 +61,7 @@ public class ChooseGroupController {
      *                   file for the game play screen.
      */
     @FXML
-    private void onImageClicked(MouseEvent event) throws Exception {
+    private void onImageClicked(MouseEvent event) throws Exception, IOException {
         // Get the ImageView object that was clicked
         ImageView imageView = (ImageView) event.getSource();
         // get the color choice associated with it
@@ -80,6 +84,13 @@ public class ChooseGroupController {
                 gamePlayController.setinitMapParser(mapParser);
                 // Display the game play screen
                 chooseGroupRoot.getChildren().setAll(pane);
+
+                // Show an alert to the user after the new page is shown
+                Platform.runLater(() -> {
+                    AlertBox alert = new AlertBox();
+                    alert.showAlert("Please assign your initial units.",
+                            "Please assign your initial units. The sum of units assigned can not exceed 24.");
+                });
             } catch (Exception e) {
                 e.printStackTrace();
             }

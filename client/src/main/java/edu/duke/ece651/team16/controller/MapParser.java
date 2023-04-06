@@ -42,19 +42,25 @@ public class MapParser {
         return ans;
     }
 
-    public List<String> getTerritoryInfo(String territoryName) {
-        List<String> ans = new ArrayList<>();
+    /**
+     * Get the territory info of a given territory
+     * 
+     * @param territoryName
+     * @return a hashmap with key: playername, units, neighbors
+     */
+    public HashMap<String, String> getTerritoryInfo(String territoryName) {
+        HashMap<String, String> ans = new HashMap<>();
         for (Map.Entry<String, ArrayList<HashMap<String, String>>> entry : myMap.entrySet()) {
             String playername = entry.getKey();
             ArrayList<HashMap<String, String>> playerAsset = entry.getValue();
             for (HashMap<String, String> asset : playerAsset) {
                 String territory = asset.get("TerritoryName");
-                String neighbors = asset.get("Neighbors");
-                String units = asset.get("Unit");
                 if (territory.equals(territoryName)) {
-                    ans.add(playername);
-                    ans.add(units);
-                    ans.add(neighbors);
+                    ans.put("Player", playername);
+                    ans.put("Unit", asset.get("Unit"));
+                    ans.put("Neighbors", asset.get("Neighbors"));
+                    ans.put("Rate", asset.get("Rate"));
+                    ans.put("Resource", asset.get("Resource"));
                 }
             }
         }
@@ -85,7 +91,7 @@ public class MapParser {
         }
     }
 
-    public void updateUnitsInTerritory(int num, String territoryName) {
+    public void updateUnitsInTerritory(String formattedUnits, String territoryName) {
         List<String> ans = new ArrayList<>();
         for (Map.Entry<String, ArrayList<HashMap<String, String>>> entry : myMap.entrySet()) {
             String playername = entry.getKey();
@@ -93,7 +99,7 @@ public class MapParser {
             for (HashMap<String, String> asset : playerAsset) {
                 String territory = asset.get("TerritoryName");
                 if (territory.equals(territoryName)) {
-                    asset.put("Unit", String.valueOf(num) + " units");
+                    asset.put("Unit", formattedUnits);
                 }
             }
         }

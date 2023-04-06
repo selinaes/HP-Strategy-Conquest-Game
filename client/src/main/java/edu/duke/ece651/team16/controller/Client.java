@@ -273,19 +273,14 @@ public class Client {
             }
             return "Valid";
         }
-
         String prompt = recvMsg(); // "Please enter <Territor ......"
-
         try {
-            sendResponse(clientInput.get(1));
+            if (clientInput.get(0).equals("a") || clientInput.get(0).equals("m")) {
+                sendResponse(clientInput.get(1));
+            }
+            // research
             prompt = recvMsg(); // Valid, or respective error message, from serverside "tryAction" result
             return prompt;
-            // if (prompt.equals("Valid")) {
-            // out.println("Execute Action Successfully");
-            // return true;
-            // } else {
-            // return false;
-            // }
         } catch (EOFException e) {
             out.println(e.getMessage());
         }
