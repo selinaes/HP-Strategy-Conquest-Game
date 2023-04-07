@@ -34,7 +34,7 @@ public class App extends Application {
   public void start(Stage stage) {
     try {
       addMusic();
-      URL xmlResource = getClass().getResource("/ui/StartGame.fxml");
+      URL xmlResource = getClass().getResource("/ui/login.fxml");
       AnchorPane gp = FXMLLoader.load(xmlResource);
 
       CustomTab presetTab = new CustomTab(1, gp);
@@ -75,7 +75,7 @@ public class App extends Application {
       Button addButton = new Button("+");
       addButton.setOnAction(e -> {
         try {
-          URL xmlResource = getClass().getResource("/ui/StartGame.fxml");
+          URL xmlResource = getClass().getResource("/ui/login.fxml");
           AnchorPane gp = FXMLLoader.load(xmlResource);
           CustomTab newTab = new CustomTab(++count, gp);
           ((TabPane) this.getTabPane()).getTabs().add(newTab);

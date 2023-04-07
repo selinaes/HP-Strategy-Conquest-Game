@@ -28,6 +28,7 @@ public class StartGameController {
     private Button joinGame;
     @FXML
     private Button exitGame;
+    private Client client;
 
     /**
      * 
@@ -49,13 +50,10 @@ public class StartGameController {
         URL xmlResource = getClass().getResource("/ui/JoinGame.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(xmlResource); // Create a new FXMLLoader
         AnchorPane pane = fxmlLoader.load(); // Load the FXML file
+        JoinRoomController joinRoomController = fxmlLoader.getController();
+        joinRoomController.setClient(client);
 
         mainRoot.getChildren().setAll(pane);
-
-        Platform.runLater(() -> {
-            AlertBox alert = new AlertBox();
-            alert.displayImageAlert("Welcome!", "/img/texts/welcome.png");// welcome
-        });
     }
 
     /**
@@ -68,5 +66,9 @@ public class StartGameController {
     @FXML
     public void exitGame(ActionEvent ae) {
         System.exit(0);
+    }
+
+    public void setClient(Client c) {
+        this.client = c;
     }
 }
