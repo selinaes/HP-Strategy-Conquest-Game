@@ -229,9 +229,12 @@ public class GamePlayController {
                 int unitnum = getUnitNum(territoryInfo.get("Unit"));
                 if (unitnum > 0) { // can upgrade
                     oneOrderContent = btn.getId(); // oneOrderContent= [T1] source, unitNum, initialLevel, upgradeAmount
+                    System.out.println("One Order Content: " + oneOrderContent);
                     setMyTerritoryDisable(false);
                     currTerritoryUnits = getUnitNumArray(territoryInfo.get("Unit"));
+                    System.out.println("Before onUpgradeUnits");
                     onUpgradeUnits();
+                    System.out.println("After onUpgradeUnits");
                     finish.setDisable(false);
                     research.setDisable(false);
                     attack.setDisable(false);
@@ -430,11 +433,13 @@ public class GamePlayController {
                 String problem = client.playerOneAction(myOrder);
                 if (!problem.equals("Valid")) {
                     alert.showAlert("Invalid Action", problem);
-                    history.appendText("Successful research\n");
                 }
                 // remove tech resource
-                myOrder.clear();
-
+                else {
+                    history.appendText("Successful research\n");
+                    mapParser.setMap(client.recvMsg());
+                    myOrder.clear();
+                }
             }
         }
     }
@@ -456,7 +461,6 @@ public class GamePlayController {
                 numUnits = Integer.parseInt(res.get(0));
                 initialLevel = Integer.parseInt(res.get(1));
                 upgradeAmount = Integer.parseInt(res.get(2));
-
                 if (numUnits > 0 && numUnits <= currTerritoryUnits.get(initialLevel)) {
                     break;
                 }
@@ -466,25 +470,27 @@ public class GamePlayController {
         }
         oneOrderContent += ", " + String.valueOf(numUnits) + ", " + String.valueOf(initialLevel) + ", "
                 + String.valueOf(upgradeAmount);
-
         // Add the upgrade order to the list of orders
         myOrder.add(oneOrderContent);
+        System.out.println("myOrder:" + myOrder);
 
         String problem = client.playerOneAction(myOrder);
+        System.out.println("After client player one action:" + problem);
         if (!problem.equals("Valid")) {
             alert.showAlert("Invalid Action", problem);
         } else {
-            currTerritoryUnits.set(initialLevel, currTerritoryUnits.get(initialLevel) - numUnits);
-            currTerritoryUnits.set(initialLevel + upgradeAmount,
-                    currTerritoryUnits.get(initialLevel + upgradeAmount) + numUnits);
+            // currTerritoryUnits.set(initialLevel, currTerritoryUnits.get(initialLevel) -
+            // numUnits);
+            // currTerritoryUnits.set(initialLevel + upgradeAmount,
+            // currTerritoryUnits.get(initialLevel + upgradeAmount) + numUnits);
             String[] parts = oneOrderContent.split(",");
             String terr = parts[0].trim();
-            mapParser.updateUnitsInTerritory(formatUnitsInfo(currTerritoryUnits), terr);
-            
+            // mapParser.updateUnitsInTerritory(formatUnitsInfo(currTerritoryUnits), terr);
+            int finallevel = initialLevel + upgradeAmount;
             history.appendText("Upgrade at " + parts[0].trim() + " for number of " + parts[1].trim()
-                    + " units. Upgrade from initial level of " + parts[3].trim()
-                    + "to level of " + parts[1].trim() + parts[2].trim() + ".\n");
-
+                    + " units. Upgrade from initial level of " + parts[2].trim()
+                    + " to level of " + finallevel + ".\n");
+            mapParser.setMap(client.recvMsg());
         }
         // Reset the attack and move button text and clear the current order
         upgrade.setText("Upgrade");
@@ -527,10 +533,10 @@ public class GamePlayController {
         if (!problem.equals("Valid")) {// display an alert if it's not valid
             alert.showAlert("Invalid Action", problem);
         } else {// update the number of units in the selected territory and clear the order
-            currTerritoryUnits.set(level, currTerritoryUnits.get(level) - numUnits);
+            // currTerritoryUnits.set(level, currTerritoryUnits.get(level) - numUnits);
             String[] parts = oneOrderContent.split(",");
             String terr = parts[0].trim();
-            mapParser.updateUnitsInTerritory(formatUnitsInfo(currTerritoryUnits), terr);
+            // mapParser.updateUnitsInTerritory(formatUnitsInfo(currTerritoryUnits), terr);
             // If the order is an attack, display the attack details in the history
             if (myOrder.get(0).equals("a")) {
                 history.appendText("Attack from " + parts[0].trim() + " to " + parts[1].trim() + " with " + parts[3]
@@ -540,6 +546,7 @@ public class GamePlayController {
                 history.appendText("Move from " + parts[0].trim() + " to " + parts[1].trim() + " with " + parts[3]
                         .trim() + " units(" + parts[2].trim() + " level).\n");
             }
+            mapParser.setMap(client.recvMsg());
         }
         // Reset the attack and move button text and clear the current order
         attack.setText("Attack");
@@ -567,16 +574,23 @@ public class GamePlayController {
                         new Label("# levels to Upgrade: "), textField3));
 
         // show the dialog and wait for the user response
+        System.out.println("Before showAndWait");
         Optional<String> result = dialog.showAndWait();
+        System.out.println("After showAndWait");
 
         // check if the user clicked OK and retrieve the input values
         ArrayList<String> res = new ArrayList<>();
+        System.out.println("Before if");
         if (result.isPresent()) {
             res.add(textField1.getText());
+            System.out.println(textField1.getText());
             res.add(textField2.getText());
+            System.out.println(textField2.getText());
             res.add(textField3.getText());
+            System.out.println(textField3.getText());
             // process the input values here
         }
+        System.out.println(res);
         return res;
     }
 
@@ -709,7 +723,7 @@ public class GamePlayController {
      */
     private void onInitAssignUnits(ActionEvent event) {
         int sum = getSpinnerSum();
-        System.out.println("onInitAssignUnits, sum is "+sum+", maxunits is "+maxUnits);
+        System.out.println("onInitAssignUnits, sum is " + sum + ", maxunits is " + maxUnits);
         if (sum > maxUnits) {
             alert.showAlert("Invalid input", "Total units assigned exceeds the maximum allowed");
         } else {

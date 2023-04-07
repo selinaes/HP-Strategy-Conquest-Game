@@ -240,10 +240,10 @@ public class Client {
             return;
         }
         try {
-            System.out.println("input is: " + input);
+            System.out.println("input: " + input);
             sendResponse(input);
             prompt = recvMsg();
-            System.out.println("Ans of input: " + prompt);
+            System.out.println("Ans: " + prompt);
             // if (prompt.equals("finished stage")) {
             // out.println("Finished Placement. Please wait for other players to place
             // units.");
@@ -275,7 +275,7 @@ public class Client {
         }
         String prompt = recvMsg(); // "Please enter <Territor ......"
         try {
-            if (clientInput.get(0).equals("a") || clientInput.get(0).equals("m")) {
+            if (clientInput.get(0).equals("a") || clientInput.get(0).equals("m") || clientInput.get(0).equals("u")) {
                 sendResponse(clientInput.get(1));
             }
             // research

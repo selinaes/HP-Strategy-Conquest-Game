@@ -288,8 +288,6 @@ public class Game {
             notifyAllPlayers(conn, "setPlayerColor");
         }
 
-        
-
     }
 
     /**
@@ -562,6 +560,8 @@ public class Game {
         String tryAction = order.tryAction();
         if (tryAction == null) { // valid
             p.getConn().send("Valid");
+            HashMap<String, ArrayList<HashMap<String, String>>> to_send = messageGenerator.formMap(players);
+            messageGenerator.sendMap(p, to_send);
         }
         // if invalid, send("reason"), then recurse doOneMove()
         else {
