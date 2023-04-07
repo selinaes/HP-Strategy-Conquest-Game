@@ -23,7 +23,7 @@
             <Image url="@../img/riskLogo.png" />
          </image>
       </ImageView>
-      <Button fx:id="newGame" prefHeight="50.0" prefWidth="130.0" layoutX="99.0" layoutY="255.0" mnemonicParsing="false" onAction="#newGame" text="New Game" styleClass="button-able">
+      <Button fx:id="newGame" prefHeight="50.0" prefWidth="130.0" layoutX="130.0" layoutY="255.0" mnemonicParsing="false" onAction="#newGame" text="New Game" styleClass="button-able">
          <font>
             <Font size="36.0" />
          </font>

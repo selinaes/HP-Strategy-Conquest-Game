@@ -22,7 +22,7 @@
             <Image url="@../img/riskLogo.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="532.0" fitWidth="692.0" layoutX="288.0" layoutY="152.0">
+      <ImageView opacity="0.8" fitHeight="532.0" fitWidth="692.0" layoutX="288.0" layoutY="152.0">
          <image>
             <Image url="@../img/backgrounds/rule.png" />
          </image>
