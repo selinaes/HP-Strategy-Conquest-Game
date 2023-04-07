@@ -13,6 +13,7 @@ import java.net.Socket;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import java.net.URL;
@@ -21,6 +22,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.geometry.Pos;
+import javafx.scene.layout.HBox;
 
 public class App extends Application {
   public static MediaPlayer mediaPlayer;
@@ -29,9 +34,14 @@ public class App extends Application {
   public void start(Stage stage) {
     try {
       addMusic();
-      URL xmlResource = getClass().getResource("/ui/StartGame.fxml");
+      URL xmlResource = getClass().getResource("/ui/login.fxml");
       AnchorPane gp = FXMLLoader.load(xmlResource);
-      Scene scene = new Scene(gp);
+
+      CustomTab presetTab = new CustomTab(1, gp);
+      TabPane tabPane = new TabPane();
+      tabPane.getTabs().add(presetTab);
+
+      Scene scene = new Scene(tabPane);
       stage.setScene(scene);
       stage.show();
     } catch (IOException e) {
@@ -52,34 +62,34 @@ public class App extends Application {
   public static void main(String[] args) {
     launch(args);
   }
+
+  private static class CustomTab extends Tab {
+    private int tabNumber;
+    private static int count = 1;
+
+    public CustomTab(int tabNumber, AnchorPane content) {
+      super();
+      this.tabNumber = tabNumber;
+      this.setContent(content);
+      Label label = new Label("Risk Game " + tabNumber);
+      Button addButton = new Button("+");
+      addButton.setOnAction(e -> {
+        try {
+          URL xmlResource = getClass().getResource("/ui/login.fxml");
+          AnchorPane gp = FXMLLoader.load(xmlResource);
+          CustomTab newTab = new CustomTab(++count, gp);
+          ((TabPane) this.getTabPane()).getTabs().add(newTab);
+          ((TabPane) this.getTabPane()).getSelectionModel().select(newTab);
+          addButton.setVisible(false);
+        } catch (IOException ex) {
+          ex.printStackTrace();
+        }
+      });
+
+      HBox hbox = new HBox(label, addButton);
+      hbox.setAlignment(Pos.CENTER_RIGHT);
+      hbox.setSpacing(10);
+      this.setGraphic(hbox);
+    }
+  }
 }
-
-// public class App {
-// public static Client client;
-
-// public static void main(String[] args) throws IOException {
-// int port = 1651;
-// // String ip = "vcm-32174.vm.duke.edu";
-// String ip = "127.0.0.1";
-// Socket clientSocket = null;
-// try {
-// clientSocket = new Socket(ip, port);
-// PrintStream out = System.out;
-// BufferedReader inputReader = new BufferedReader(new
-// InputStreamReader(System.in));
-// BufferedReader socketReceive = new BufferedReader(new
-// InputStreamReader(clientSocket.getInputStream()));
-// PrintWriter socketSend = new PrintWriter(clientSocket.getOutputStream(),
-// true);
-// Client client = new Client(inputReader, out, socketReceive, socketSend);
-// client.run();
-// } catch (IOException e) {
-// System.out.println("Failed to initialize Connection.");
-// System.exit(1);
-// } finally {
-// if (clientSocket != null) {
-// clientSocket.close();
-// }
-// }
-// }
-// }

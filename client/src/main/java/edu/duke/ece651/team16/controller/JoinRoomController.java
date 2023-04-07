@@ -42,11 +42,12 @@ public class JoinRoomController {
     private boolean isGuest;
     private AlertBox alert = new AlertBox();
 
+    public void setClient(Client c) {
+        this.client = c;
+    }
+
     @FXML
     public void initialize() throws Exception {
-        createClient();
-        // show alert
-        String msg = client.recvMsg();
         chooseNum.getItems().addAll(2, 3, 4);
         chooseNum.setVisible(false);
         prompt.setVisible(false);
@@ -123,29 +124,5 @@ public class JoinRoomController {
         FXMLLoader fxmlLoader = new FXMLLoader(xmlResource); // Create a new FXMLLoader
         AnchorPane pane = fxmlLoader.load(); // Load the FXML file
         mainRoot.getChildren().setAll(pane);
-    }
-
-    /**
-     * make a client
-     * 
-     * @return client
-     */
-    private void createClient() throws Exception {
-        try {
-            int port = 1651;
-            String ip = "127.0.0.1";
-            Socket clientSocket = null;
-
-            clientSocket = new Socket(ip, port);
-            PrintStream out = System.out;
-            BufferedReader inputReader = new BufferedReader(new InputStreamReader(System.in));
-            BufferedReader socketReceive = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            PrintWriter socketSend = new PrintWriter(clientSocket.getOutputStream(),
-                    true);
-            client = new Client(inputReader, out, socketReceive, socketSend);
-            client.setClientSocket(clientSocket);// add socket to client
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
