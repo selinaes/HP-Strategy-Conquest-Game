@@ -11,5 +11,7 @@ public enum Status {
     ATTACK_TO,
     ATTACK_Units,
 
+    UPGRADE_AT,
+
     FINISH
 }

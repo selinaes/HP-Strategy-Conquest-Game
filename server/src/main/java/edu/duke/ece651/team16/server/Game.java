@@ -160,9 +160,11 @@ public class Game {
         // Conn conn = new Conn(client_socket);
         allConnections.add(conn);
         chooseNumOfPlayers(conn, numClients);// gameState = setNumPlayer
+
         while (true) {
             synchronized (this) {
                 if (gameState.equals("setPlayerColor")) {
+                    initializeMap(this.numPlayer);
                     break;
                 }
             }
@@ -286,11 +288,7 @@ public class Game {
             notifyAllPlayers(conn, "setPlayerColor");
         }
 
-        synchronized (this) {
-            if (gameState.equals("setPlayerColor")) {
-                initializeMap(this.numPlayer);
-            }
-        }
+        
 
     }
 

@@ -36,6 +36,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
+
+import org.w3c.dom.Text;
+
 import java.net.URL;
 import java.net.Socket;
 import java.util.HashMap;
@@ -94,7 +97,7 @@ public class GamePlayController {
     private AlertBox alert = new AlertBox();
 
     private LinkedHashMap<String, String> myTerritory;
-    private int maxUnits = 50;
+    private int maxUnits = 24;
 
     // private int myUnits = 0;
     private ArrayList<Integer> currTerritoryUnits = new ArrayList<>();
@@ -222,6 +225,21 @@ public class GamePlayController {
                 attack.setDisable(false);
                 upgrade.setDisable(false);
                 playerStatus = Status.DEFAULT;
+            } else if (playerStatus == Status.UPGRADE_AT) { // upgrade
+                int unitnum = getUnitNum(territoryInfo.get("Unit"));
+                if (unitnum > 0) { // can upgrade
+                    oneOrderContent = btn.getId(); // oneOrderContent= [T1] source, unitNum, initialLevel, upgradeAmount
+                    setMyTerritoryDisable(false);
+                    currTerritoryUnits = getUnitNumArray(territoryInfo.get("Unit"));
+                    onUpgradeUnits();
+                    finish.setDisable(false);
+                    research.setDisable(false);
+                    attack.setDisable(false);
+                    move.setDisable(false);
+                    playerStatus = Status.DEFAULT;
+                } else { // cannot upgrade, no unit
+                    alert.showAlert("Alert", "This territory has 0 avaliable unit.");
+                }
             }
         } else {
             throw new IllegalArgumentException("Invalid source " + source +
@@ -360,6 +378,37 @@ public class GamePlayController {
         }
     }
 
+    /*
+     * This method is called when a Upgrade button is clicked. It set
+     */
+    @FXML
+    public void onUpgradeButton(ActionEvent ae) throws Exception {
+        Object source = ae.getSource();
+        if (source instanceof Button) {
+            Button btn = (Button) source;
+            if (btn.getText().equals("Upgrade")) {
+                finish.setDisable(true);
+                research.setDisable(true);
+                attack.setDisable(true);
+                move.setDisable(true);
+                btn.setText("Cancel");
+                myOrder.clear();
+                myOrder.add("u"); // add upgrade order
+                playerStatus = Status.UPGRADE_AT;
+                setEnemyTerritoryDisable(true);
+            } else { // cancel
+                finish.setDisable(false);
+                research.setDisable(false);
+                attack.setDisable(false);
+                move.setDisable(false);
+                btn.setText("Upgrade");
+                myOrder.clear();
+                playerStatus = Status.DEFAULT;
+                setEnemyTerritoryDisable(false);
+            }
+        }
+    }
+
     /**
      * This method is called when a Research button is clicked. It set
      * the user's status to be RESEARCH, and make enemy territory button be
@@ -390,6 +439,58 @@ public class GamePlayController {
         }
     }
 
+    /*
+     * This method is called when player is selecting the
+     */
+    @FXML
+    private void onUpgradeUnits() throws Exception {
+
+        int numUnits = 0;
+        int initialLevel = 0;
+        int upgradeAmount = 0;
+
+        // Loop until the player enters a valid number of units to assign
+        while (true) {
+            ArrayList<String> res = setUpgradeInfo();
+            try {// If the player enters a value, try to parse it as an integer
+                numUnits = Integer.parseInt(res.get(0));
+                initialLevel = Integer.parseInt(res.get(1));
+                upgradeAmount = Integer.parseInt(res.get(2));
+
+                if (numUnits > 0 && numUnits <= currTerritoryUnits.get(initialLevel)) {
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                // handle invalid input
+            }
+        }
+        oneOrderContent += ", " + String.valueOf(numUnits) + ", " + String.valueOf(initialLevel) + ", "
+                + String.valueOf(upgradeAmount);
+
+        // Add the upgrade order to the list of orders
+        myOrder.add(oneOrderContent);
+
+        String problem = client.playerOneAction(myOrder);
+        if (!problem.equals("Valid")) {
+            alert.showAlert("Invalid Action", problem);
+        } else {
+            currTerritoryUnits.set(initialLevel, currTerritoryUnits.get(initialLevel) - numUnits);
+            currTerritoryUnits.set(initialLevel + upgradeAmount,
+                    currTerritoryUnits.get(initialLevel + upgradeAmount) + numUnits);
+            String[] parts = oneOrderContent.split(",");
+            String terr = parts[0].trim();
+            mapParser.updateUnitsInTerritory(formatUnitsInfo(currTerritoryUnits), terr);
+            
+            history.appendText("Upgrade at " + parts[0].trim() + " for number of " + parts[1].trim()
+                    + " units. Upgrade from initial level of " + parts[3].trim()
+                    + "to level of " + parts[1].trim() + parts[2].trim() + ".\n");
+
+        }
+        // Reset the attack and move button text and clear the current order
+        upgrade.setText("Upgrade");
+        myOrder.clear();
+    }
+
     /**
      * This method is called when the player is selecting the number of units when
      * attack or move
@@ -409,9 +510,9 @@ public class GamePlayController {
                 level = Integer.parseInt(res.get(0));
                 numUnits = Integer.parseInt(res.get(1));
                 if (numUnits > 0 && numUnits <= currTerritoryUnits.get(level)) {
-                    currTerritoryUnits.set(level, currTerritoryUnits.get(level) - numUnits);
                     break;
                 }
+
             } catch (NumberFormatException e) {
                 // handle invalid input
             }
@@ -422,33 +523,61 @@ public class GamePlayController {
                                                                                    // numUnits]
         myOrder.add(oneOrderContent);
 
-        // If the order is an attack, display the attack details in the history
-        if (myOrder.get(0).equals("a")) {
-            String[] parts = oneOrderContent.split(",");
-            history.appendText("Attack from " + parts[0].trim() + " to " + parts[1].trim() + " with " + parts[3]
-                    .trim() + " units(" + parts[2].trim() + " level).\n");
-        } // If the order is a move, display the move details in the history
-        else if (myOrder.get(0).equals("m")) {
-            String[] parts = oneOrderContent.split(",");
-            history.appendText("Move from " + parts[0].trim() + " to " + parts[1].trim() + " with " + parts[3]
-                    .trim() + " units(" + parts[2].trim() + " level).\n");
-        }
         String problem = client.playerOneAction(myOrder);
         if (!problem.equals("Valid")) {// display an alert if it's not valid
             alert.showAlert("Invalid Action", problem);
-            // String promt = "1. Attack: you can only attack the territory next to your
-            // territory.\n 2. Move: you can only move to the territory you can reach to.";
-            // showAlert("Unvalid Territory", "The territories you choose are unvalid \n
-            // please check:\n" + promt);
         } else {// update the number of units in the selected territory and clear the order
+            currTerritoryUnits.set(level, currTerritoryUnits.get(level) - numUnits);
             String[] parts = oneOrderContent.split(",");
             String terr = parts[0].trim();
             mapParser.updateUnitsInTerritory(formatUnitsInfo(currTerritoryUnits), terr);
+            // If the order is an attack, display the attack details in the history
+            if (myOrder.get(0).equals("a")) {
+                history.appendText("Attack from " + parts[0].trim() + " to " + parts[1].trim() + " with " + parts[3]
+                        .trim() + " units(" + parts[2].trim() + " level).\n");
+            } // If the order is a move, display the move details in the history
+            else if (myOrder.get(0).equals("m")) {
+                history.appendText("Move from " + parts[0].trim() + " to " + parts[1].trim() + " with " + parts[3]
+                        .trim() + " units(" + parts[2].trim() + " level).\n");
+            }
         }
         // Reset the attack and move button text and clear the current order
         attack.setText("Attack");
         move.setText("Move");
         myOrder.clear();
+    }
+
+    /*
+     * This method is called when the player is selecting the number of units when
+     * upgrade, also initial level, and upgrade amount
+     */
+    private ArrayList<String> setUpgradeInfo() {
+        // create the text input fields, level, intiial, amount
+        TextField textField1 = new TextField();
+        TextField textField2 = new TextField();
+        TextField textField3 = new TextField();
+
+        // create the dialog and set the content
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setHeaderText(null);
+        dialog.setTitle("Enter Upgrade UnitNumber, Initial Level, # levels to Upgrade");
+        dialog.getDialogPane()
+                .setContent(new VBox(10, new Label("Upgrade UnitNumber: "), textField1, new Label("Initial Level: "),
+                        textField2,
+                        new Label("# levels to Upgrade: "), textField3));
+
+        // show the dialog and wait for the user response
+        Optional<String> result = dialog.showAndWait();
+
+        // check if the user clicked OK and retrieve the input values
+        ArrayList<String> res = new ArrayList<>();
+        if (result.isPresent()) {
+            res.add(textField1.getText());
+            res.add(textField2.getText());
+            res.add(textField3.getText());
+            // process the input values here
+        }
+        return res;
     }
 
     private ArrayList<String> setLevelsOfUnits() {
@@ -580,6 +709,7 @@ public class GamePlayController {
      */
     private void onInitAssignUnits(ActionEvent event) {
         int sum = getSpinnerSum();
+        System.out.println("onInitAssignUnits, sum is "+sum+", maxunits is "+maxUnits);
         if (sum > maxUnits) {
             alert.showAlert("Invalid input", "Total units assigned exceeds the maximum allowed");
         } else {
@@ -723,7 +853,7 @@ public class GamePlayController {
         int i = 0;
         try {
             for (String key : myTerritory.keySet()) {
-                System.out.println("i is: " + i);
+                // System.out.println("i is: " + i);
                 myTerritory.put(key, unit.get(i));
                 // server set that we can not input 0 as unit number
                 if (!unit.get(i).equals("0")) {

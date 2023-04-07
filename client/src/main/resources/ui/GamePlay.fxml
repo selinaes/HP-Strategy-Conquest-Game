@@ -55,7 +55,7 @@
                   <Font size="18.0" />
                </font>
             </Button>
-            <Button fx:id="upgrade" mnemonicParsing="false" prefHeight="70.0" prefWidth="121.0" text="Upgrade">
+            <Button fx:id="upgrade" mnemonicParsing="false" onAction="#onUpgradeButton" prefHeight="70.0" prefWidth="121.0" text="Upgrade">
                <font>
                   <Font size="18.0" />
                </font>
