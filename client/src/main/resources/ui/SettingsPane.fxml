@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="your.package.name.SettingsPaneController">
+   <children>
+      <VBox fx:id="settingsBox" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Button fx:id="exitButton" text="Exit" onAction="#handleExit"/>
+            <Button fx:id="toggleMusicButton" text="Turn off music" onAction="#handleMusicToggle"/>
+            <Slider fx:id="volumeSlider" min="0.0" max="1.0" value="0.5" onDragDone="#handleVolumeChange"/>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
