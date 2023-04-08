@@ -49,23 +49,44 @@ public class LoginController {
             alert.showAlert("Error", "Please enter both username and password.");
         } else {
             // Perform login with username and password
+            StringBuilder sb = new StringBuilder();
+            sb.append(user);
+            sb.append(", ");
+            sb.append(pass);
+            String to_send = sb.toString();
 
-            // login
-            String msg = client.recvMsg(); // show alert
-            System.out.println(msg);
-            URL xmlResource = getClass().getResource("/ui/StartGame.fxml");
-            FXMLLoader fxmlLoader = new FXMLLoader(xmlResource); // Create a new FXMLLoader
-            AnchorPane pane = fxmlLoader.load(); // Load the FXML file
-            StartGameController startGameController = fxmlLoader.getController();
-            startGameController.setClient(client);
+            client.sendResponse(to_send);
+            String resp = client.recvMsg(); // server response: "Login successful." or "New account created." or "Wrong
+                                            // password, please try again."
 
-            mainRoot.getChildren().setAll(pane);
-
-            Platform.runLater(() -> {
+            if (resp.equals("Login successful.") || resp.equals("New account created.")) {
+                // login successful
+                enterChooseRoom();
+            } else {
+                // login failed
                 AlertBox alert = new AlertBox();
-                alert.displayImageAlert("Welcome!", "/img/texts/welcome.png");// welcome
-            });
+                alert.showAlert("Error", "Login/Sign up failed.");
+            }
+
         }
+    }
+
+    private void enterChooseRoom() throws Exception {
+        // start game, enter gameID
+        String msg = client.recvMsg(); // show alert
+        System.out.println(msg);
+        URL xmlResource = getClass().getResource("/ui/StartGame.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(xmlResource); // Create a new FXMLLoader
+        AnchorPane pane = fxmlLoader.load(); // Load the FXML file
+        StartGameController startGameController = fxmlLoader.getController();
+        startGameController.setClient(client);
+
+        mainRoot.getChildren().setAll(pane);
+
+        Platform.runLater(() -> {
+            AlertBox alert = new AlertBox();
+            alert.displayImageAlert("Welcome!", "/img/texts/welcome.png");// welcome
+        });
     }
 
     /**
@@ -87,6 +108,10 @@ public class LoginController {
                     true);
             client = new Client(inputReader, out, socketReceive, socketSend);
             client.setClientSocket(clientSocket);// add socket to client
+
+            String msg = client.recvMsg(); // show "Please enter your username and password:"
+            System.out.println(msg);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

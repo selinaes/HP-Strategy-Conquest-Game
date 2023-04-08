@@ -19,6 +19,7 @@ public class Client {
     private BufferedReader socketReceive;
     private PrintWriter socketSend;
     private Views view;
+    private String color;
 
     // system input and output
     final PrintStream out;
@@ -43,6 +44,7 @@ public class Client {
         this.view = new Views(out);
         this.ifExit = false;
         this.clientSocket = null;
+        this.color = null;
     }
 
     /**
@@ -194,12 +196,17 @@ public class Client {
             if (prompt.equals("Valid")) {
                 // successful choose color
                 out.println("Successfully set color: " + color);
+                this.color = color.toLowerCase();
                 return true;
             }
         } catch (EOFException e) {
             out.println(e.getMessage());
         }
         return false;
+    }
+
+    public String getColor() {
+        return this.color;
     }
 
     /**

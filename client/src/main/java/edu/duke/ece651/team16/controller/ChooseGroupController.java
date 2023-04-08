@@ -3,13 +3,11 @@ package edu.duke.ece651.team16.controller;
 import java.io.IOException;
 import java.net.URL;
 
-import edu.duke.ece651.team16.controller.Client;
-import edu.duke.ece651.team16.controller.MapParser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -42,12 +40,34 @@ public class ChooseGroupController {
     @FXML
     private ImageView yellow;
 
+    @FXML
+    public void initialize() {
+        setImageViewProperties(green);
+        setImageViewProperties(red);
+        setImageViewProperties(blue);
+        setImageViewProperties(yellow);
+    }
+
     public void setClient(Client client) {
         this.client = client;
     }
 
     public void setMapParser(MapParser mapParser) {
         this.mapParser = mapParser;
+    }
+
+    private void setImageViewProperties(ImageView imageView) {
+        imageView.setFitWidth(150);
+        imageView.setFitHeight(300);
+
+        imageView.setOnMouseEntered(event -> {
+            imageView.setFitWidth(200);
+            imageView.setFitHeight(400);
+        });
+        imageView.setOnMouseExited(event -> {
+            imageView.setFitWidth(200);
+            imageView.setFitHeight(300);
+        });
     }
 
     /**
