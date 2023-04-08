@@ -4,9 +4,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team16.SettingsPaneController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team16.controller.SettingsPaneController">
    <children>
-      <Button fx:id="settingsButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onHideButton" text="Settings" />
       <VBox fx:id="settingsBox" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <Button fx:id="exitButton" text="Exit" onAction="#handleExit"/>
@@ -14,5 +13,6 @@
             <Slider fx:id="volumeSlider" min="0.0" max="1.0" value="0.5" onDragDone="#handleVolumeChange"/>
          </children>
       </VBox>
+      <Button fx:id="settingsButton" layoutX="80.0" mnemonicParsing="false" onAction="#onHideButton" text="Settings" />
    </children>
 </AnchorPane>
