@@ -26,6 +26,10 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.control.Slider;
+import javafx.geometry.Insets;
+import javafx.stage.Modality;
 
 public class App extends Application {
   public static MediaPlayer mediaPlayer;
@@ -55,7 +59,7 @@ public class App extends Application {
     mediaPlayer.setAutoPlay(true);
     mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
     mediaPlayer.setStartTime(Duration.seconds(0));
-    mediaPlayer.setStopTime(Duration.seconds(50));
+    mediaPlayer.setStopTime(Duration.seconds(84));
     mediaPlayer.play();
   }
 
@@ -72,24 +76,75 @@ public class App extends Application {
       this.tabNumber = tabNumber;
       this.setContent(content);
       Label label = new Label("Risk Game " + tabNumber);
-      Button addButton = new Button("+");
-      addButton.setOnAction(e -> {
+      Button showSettings = new Button("o");
+      showSettings.setOnAction(e -> {
+        createDialog();
+      });
+      if (tabNumber == 1) {
+        HBox hbox = new HBox(showSettings, label);
+        hbox.setAlignment(Pos.CENTER_RIGHT);
+        hbox.setSpacing(10);
+        hbox.setPadding(new Insets(10, 10, 10, 10));
+        this.setGraphic(hbox);
+      } else {
+        HBox hbox = new HBox(label);
+        hbox.setAlignment(Pos.CENTER_RIGHT);
+        hbox.setSpacing(10);
+        hbox.setPadding(new Insets(10, 10, 10, 10));
+        this.setGraphic(hbox);
+      }
+    }
+
+    private void createDialog() {
+      Stage dialog = new Stage();
+      dialog.initModality(Modality.APPLICATION_MODAL);
+      // dialog.initOwner(this.getScene().getWindow());
+      dialog.setTitle("Settings");
+
+      Button addPage = new Button("Add Tab");
+      Button turnOff = new Button("Turn off music");
+      Button turnOn = new Button("Turn on music");
+      Slider volumeSlider = new Slider();
+      volumeSlider.setValue(50);
+
+      addPage.setOnAction(e -> {
         try {
           URL xmlResource = getClass().getResource("/ui/login.fxml");
           AnchorPane gp = FXMLLoader.load(xmlResource);
           CustomTab newTab = new CustomTab(++count, gp);
           ((TabPane) this.getTabPane()).getTabs().add(newTab);
           ((TabPane) this.getTabPane()).getSelectionModel().select(newTab);
-          addButton.setVisible(false);
         } catch (IOException ex) {
           ex.printStackTrace();
         }
       });
 
-      HBox hbox = new HBox(addButton, label);
-      hbox.setAlignment(Pos.CENTER_LEFT);
-      hbox.setSpacing(10);
-      this.setGraphic(hbox);
+      turnOff.setOnAction(e -> {
+        mediaPlayer.pause();
+        turnOff.setDisable(true);
+        turnOn.setDisable(false);
+      });
+
+      turnOn.setOnAction(e -> {
+        mediaPlayer.play();
+        turnOn.setDisable(true);
+        turnOff.setDisable(false);
+      });
+
+      volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+        if (mediaPlayer != null) {
+          mediaPlayer.setVolume(volumeSlider.getValue() / 100);
+        }
+      });
+
+      VBox dialogLayout = new VBox(addPage, turnOff, turnOn, volumeSlider);
+      dialogLayout.setSpacing(10);
+      dialogLayout.setAlignment(Pos.BOTTOM_RIGHT);
+      dialogLayout.setPadding(new Insets(10, 10, 10, 10));
+      Scene dialogScene = new Scene(dialogLayout, 150, 150);
+      dialog.setScene(dialogScene);
+      dialog.show();
     }
   }
+
 }
