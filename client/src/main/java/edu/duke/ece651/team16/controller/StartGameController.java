@@ -28,6 +28,7 @@ public class StartGameController {
     private Button joinGame;
     @FXML
     private Button exitGame;
+
     private Client client;
 
     /**
