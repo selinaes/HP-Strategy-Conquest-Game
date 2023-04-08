@@ -86,8 +86,8 @@ public class App extends Application {
         }
       });
 
-      HBox hbox = new HBox(label, addButton);
-      hbox.setAlignment(Pos.CENTER_RIGHT);
+      HBox hbox = new HBox(addButton, label);
+      hbox.setAlignment(Pos.CENTER_LEFT);
       hbox.setSpacing(10);
       this.setGraphic(hbox);
     }

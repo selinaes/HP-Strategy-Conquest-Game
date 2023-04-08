@@ -19,6 +19,7 @@ public class Server {
     private int numClients;
     private HashMap<String, Game> gameList; // <gameRoomID, Game>
     private HashMap<String, Integer> gameClients; // <gameRoomID, numClients>
+    private HashMap<String, String> accounts;
 
     /**
      * Constructor for Server class that takes in a serverSocket
@@ -34,6 +35,7 @@ public class Server {
         this.numClients = 0; // now used to debug, # of clients connected
         this.gameList = new HashMap<>();
         this.gameClients = new HashMap<>();
+        this.accounts = new HashMap<>();
     }
 
     /**
@@ -73,6 +75,32 @@ public class Server {
                             System.out.println("Client connected" + numClients);
                             // check gameRoom ID
                             Conn conn = new Conn(client_socket);
+
+                            // login, save password + username
+                            while (true) {
+                                conn.send("Please enter your username and password:");
+                                String userAndPw = conn.recv();
+                                String[] userAndPwArr = userAndPw.split(", ");
+                                String username = userAndPwArr[0];
+                                String password = userAndPwArr[1];
+
+                                synchronized (this) {
+                                    if (accounts.containsKey(username)) {
+                                        if (accounts.get(username).equals(password)) {
+                                            conn.send("Login successful.");
+                                            break;
+                                        } else {
+                                            conn.send("Wrong password, please try again.");
+                                            continue;
+                                        }
+                                    } else {
+                                        accounts.put(username, password);
+                                        conn.send("New account created.");
+                                        break;
+                                    }
+                                }
+
+                            }
 
                             while (true) {
                                 conn.send("Welcome to the game! Please enter a room ID:");

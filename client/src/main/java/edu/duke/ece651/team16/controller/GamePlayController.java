@@ -62,6 +62,8 @@ public class GamePlayController {
     private Button upgrade;
 
     @FXML
+    private Button watchUpdate;
+    @FXML
     private TextArea textArea;
 
     @FXML
@@ -105,6 +107,8 @@ public class GamePlayController {
     @FXML
     public void initialize() {
         // at Assign Units Phase
+        watchUpdate.setVisible(false);
+        watchUpdate.setDisable(true);
         blackBackground.setVisible(true);
         battleTime.setVisible(false); // image for acting battle is not visible
         toolBar.setDisable(true); // ToolBar for orders is not visible
@@ -250,6 +254,32 @@ public class GamePlayController {
         }
     }
 
+    // add a button to get the game information
+    @FXML
+    public void watchGameInfo(ActionEvent event) throws IOException {
+        try {
+            client.waitEveryoneDone();
+            history.appendText("====================New Round=======================\n");
+            String msg = client.recvMsg();// receive war log
+            Views view = new Views(System.out);
+            history.appendText(view.displayLog(msg));
+            msg = client.recvMsg();// receive map
+            mapParser.setMap(msg);
+            setMapParser();
+
+            msg = client.recvMsg(); // receive "Game continous or Winner"
+            if (msg.equals("Game continues")) {
+                msg = client.recvMsg(); // watching
+            } else {
+                history.appendText("Winner is " + msg + "!");
+                alert.displayImageAlert("Game Finish", "/img/texts/youlose.png");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * This method is called when a Finish button is clicked.
      * It sends the player's order list to the server.
@@ -294,9 +324,15 @@ public class GamePlayController {
                     ChooseWatch();
                 }
             } else {
-                alert.displayImageAlert("Game Finish", "/img/texts/youwin.png");
-                Socket clientSocket = client.getClientSocket();
-                clientSocket.close();
+                if (msg.equals(client.getColor())) { // if winner is self
+                    alert.displayImageAlert("Game Finish", "/img/texts/youwin.png");
+                    Socket clientSocket = client.getClientSocket();
+                    clientSocket.close();
+                } else {
+                    history.appendText("Winner is " + msg + "!");
+                    alert.displayImageAlert("Game Finish", "/img/texts/youlose.png");
+                }
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -763,8 +799,11 @@ public class GamePlayController {
             if (result.get() == watch) {
                 finish.setDisable(true);
                 toolBar.setDisable(true);
+                watchUpdate.setVisible(true);
+                watchUpdate.setDisable(false);
                 try {
                     client.playerChooseWatch("w");
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -832,7 +871,7 @@ public class GamePlayController {
 
         // assignUnits_GridPane.autosize();
         assignUnits_GridPane.setHgap(10);
-        assignUnits_GridPane.setVgap(15);
+        assignUnits_GridPane.setVgap(18);
     }
 
     private int getSpinnerSum() {
