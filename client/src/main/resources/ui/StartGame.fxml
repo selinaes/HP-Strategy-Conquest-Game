@@ -35,6 +35,5 @@
             <Font size="36.0" />
          </font>
       </Button>
-      <fx:include source="SettingsPane.fxml" />
    </children>
 </AnchorPane>
