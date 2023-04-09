@@ -20,10 +20,20 @@ public class MapParser {
         this.myMap = getMapObject(m);
     }
 
+    /**
+     * Set the player for the game
+     * 
+     * @param p
+     */
     public void setPlayer(String p) {
         player = p;
     }
 
+    /**
+     * Set the Map for the game
+     * 
+     * @param m
+     */
     public void setMap(String m) {
         myMap = getMapObject(m);
     }
@@ -73,6 +83,11 @@ public class MapParser {
         return ans;
     }
 
+    /**
+     * Get the territory info of a given player
+     * 
+     * @return a list of territory names
+     */
     public List<String> getMyTerritory() {
         List<String> ans = new ArrayList<>();
         for (Map.Entry<String, ArrayList<HashMap<String, String>>> entry : myMap.entrySet()) {
@@ -88,6 +103,12 @@ public class MapParser {
         return ans;
     }
 
+    /**
+     * Get the map object from a json string
+     * 
+     * @param map
+     * @return HashMap<String, ArrayList<HashMap<String, String>>> mapObject
+     */
     private HashMap<String, ArrayList<HashMap<String, String>>> getMapObject(String map) {
         try {
             return objectMapper.readValue(map, HashMap.class);
@@ -97,6 +118,12 @@ public class MapParser {
         }
     }
 
+    /**
+     * Update the units info of a given territory
+     * 
+     * @param formattedUnits
+     * @param territoryName
+     */
     public void updateUnitsInTerritory(String formattedUnits, String territoryName) {
         List<String> ans = new ArrayList<>();
         for (Map.Entry<String, ArrayList<HashMap<String, String>>> entry : myMap.entrySet()) {
