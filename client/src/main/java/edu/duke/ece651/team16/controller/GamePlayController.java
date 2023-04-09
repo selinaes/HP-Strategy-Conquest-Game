@@ -59,33 +59,24 @@ public class GamePlayController {
     private Button research;
     @FXML
     private Button upgrade;
-
     @FXML
     private Button watchUpdate;
     @FXML
     private TextArea textArea;
-
     @FXML
     private TextArea history;
-
     @FXML
     private GridPane assignUnits_GridPane;
-
     @FXML
     private Button assignUnits;
-
     @FXML
     private ImageView mapImage;
-
     @FXML
     private ImageView blackBackground;
-
     @FXML
     private GridPane territroyGrid;
-
     @FXML
     private Button finish;
-
     @FXML
     private ImageView battleTime;
 
@@ -100,7 +91,6 @@ public class GamePlayController {
     private LinkedHashMap<String, String> myTerritory;
     private int maxUnits = 24;
 
-    // private int myUnits = 0;
     private ArrayList<Integer> currTerritoryUnits = new ArrayList<>();
     private GamePlayDisplay gamePlayDisplay = new GamePlayDisplay();
 
@@ -209,69 +199,6 @@ public class GamePlayController {
         }
     }
 
-    @FXML
-    public void onTerritoryButton2(ActionEvent ae) throws Exception {
-        Object source = ae.getSource();
-        if (source instanceof Button) {
-            Button btn = (Button) source;
-            showTerritoryInfo(btn.getId());
-            HashMap<String, String> territoryInfo = mapParser.getTerritoryInfo(btn.getId());
-            if (playerStatus == Status.ATTACK_FROM) {
-                int unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"));
-                if (unitnum > 0) {// initiate attack
-                    oneOrderContent = btn.getId();
-                    setEnemyTerritoryDisable(false);
-                    setMyTerritoryDisable(true);
-                    playerStatus = Status.ATTACK_TO;
-                    currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"));
-                } else {
-                    alert.showAlert("Alert", "This territory has 0 avaliable unit.");
-                }
-            } else if (playerStatus == Status.ATTACK_TO) {// finish initiating attack
-                oneOrderContent += ", " + btn.getId() + ", ";
-                setMyTerritoryDisable(false);
-                playerStatus = Status.ATTACK_Units;
-                onAttackMoveUnits();
-                setButtonsDisabled(false, finish, research, move, upgrade);
-                playerStatus = Status.DEFAULT;
-            } else if (playerStatus == Status.MOVE_FROM) {
-                int unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"));
-                if (unitnum > 0) {// initiate move
-                    oneOrderContent = btn.getId(); // oneOrderContent=[T1]
-                    playerStatus = Status.MOVE_TO;
-                    currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"));
-                } else {
-                    alert.showAlert("Alert", "This territory has 0 avaliable unit.");
-                }
-            } else if (playerStatus == Status.MOVE_TO) {// finish initiating move
-                oneOrderContent += ", " + btn.getId() + ", "; // oneOrderContent=[T1, T2, ]
-                setEnemyTerritoryDisable(false);
-                playerStatus = Status.MOVE_Units;
-                onAttackMoveUnits();// oneOrderContent=[T1, T2, level, units]
-                setButtonsDisabled(false, finish, research, attack, upgrade);
-                playerStatus = Status.DEFAULT;
-            } else if (playerStatus == Status.UPGRADE_AT) { // upgrade
-                int unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"));
-                if (unitnum > 0) { // can upgrade
-                    oneOrderContent = btn.getId(); // oneOrderContent= [T1] source, unitNum, initialLevel, upgradeAmount
-                    System.out.println("One Order Content: " + oneOrderContent);
-                    setMyTerritoryDisable(false);
-                    currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"));
-                    System.out.println("Before onUpgradeUnits");
-                    onUpgradeUnits();
-                    System.out.println("After onUpgradeUnits");
-                    setButtonsDisabled(false, finish, research, attack, move);
-                    playerStatus = Status.DEFAULT;
-                } else { // cannot upgrade, no unit
-                    alert.showAlert("Alert", "This territory has 0 avaliable unit.");
-                }
-            }
-        } else {
-            throw new IllegalArgumentException("Invalid source " + source +
-                    " for ActionEvent");
-        }
-    }
-
     // add a button to get the game information
     @FXML
     public void onWatchGameInfo(ActionEvent event) throws IOException {
@@ -281,8 +208,7 @@ public class GamePlayController {
             String msg = client.recvMsg();// receive war log
             Views view = new Views(System.out);
             history.appendText(view.displayLog(msg));
-            msg = client.recvMsg();// receive map
-            mapParser.setMap(msg);
+            mapParser.setMap(client.recvMsg());// receive map
             setMapParser();
 
             msg = client.recvMsg(); // receive "Game continous or Winner"
@@ -496,7 +422,7 @@ public class GamePlayController {
 
         // Loop until the player enters a valid number of units to assign
         while (true) {
-            ArrayList<String> res = setUpgradeInfo();
+            ArrayList<String> res = gamePlayDisplay.setUpgradeInfo();
             try {// If the player enters a value, try to parse it as an integer
                 numUnits = Integer.parseInt(res.get(0));
                 initialLevel = Integer.parseInt(res.get(1));
@@ -551,7 +477,7 @@ public class GamePlayController {
 
         // Loop until the player enters a valid number of units to assign
         while (true) {
-            ArrayList<String> res = setLevelsOfUnits();
+            ArrayList<String> res = gamePlayDisplay.setLevelsOfUnits();
             try {// If the player enters a value, try to parse it as an integer
                 level = Integer.parseInt(res.get(0));
                 numUnits = Integer.parseInt(res.get(1));
@@ -563,8 +489,7 @@ public class GamePlayController {
                 // handle invalid input
             }
         }
-        // Add the number of units assigned to the current order content and the overall
-        // order
+        // Add the number of units assigned to the current order content and the order
         oneOrderContent += String.valueOf(level) + ", " + String.valueOf(numUnits);// oneOrderContent=[T1, T2, level,
                                                                                    // numUnits]
         myOrder.add(oneOrderContent);
@@ -592,71 +517,6 @@ public class GamePlayController {
         attack.setText("Attack");
         move.setText("Move");
         myOrder.clear();
-    }
-
-    /*
-     * This method is called when the player is selecting the number of units when
-     * upgrade, also initial level, and upgrade amount
-     */
-    private ArrayList<String> setUpgradeInfo() {
-        // create the text input fields, level, intiial, amount
-        TextField textField1 = new TextField();
-        TextField textField2 = new TextField();
-        TextField textField3 = new TextField();
-
-        // create the dialog and set the content
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setHeaderText(null);
-        dialog.setTitle("Enter Upgrade UnitNumber, Initial Level, # levels to Upgrade");
-        dialog.getDialogPane()
-                .setContent(new VBox(10, new Label("Upgrade UnitNumber: "), textField1, new Label("Initial Level: "),
-                        textField2,
-                        new Label("# levels to Upgrade: "), textField3));
-
-        // show the dialog and wait for the user response
-        System.out.println("Before showAndWait");
-        Optional<String> result = dialog.showAndWait();
-        System.out.println("After showAndWait");
-
-        // check if the user clicked OK and retrieve the input values
-        ArrayList<String> res = new ArrayList<>();
-        System.out.println("Before if");
-        if (result.isPresent()) {
-            res.add(textField1.getText());
-            System.out.println(textField1.getText());
-            res.add(textField2.getText());
-            System.out.println(textField2.getText());
-            res.add(textField3.getText());
-            System.out.println(textField3.getText());
-            // process the input values here
-        }
-        System.out.println(res);
-        return res;
-    }
-
-    private ArrayList<String> setLevelsOfUnits() {
-        // create the text input fields
-        TextField textField1 = new TextField();
-        TextField textField2 = new TextField();
-
-        // create the dialog and set the content
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setHeaderText(null);
-        dialog.setTitle("Enter Units Level and Number");
-        dialog.getDialogPane()
-                .setContent(new VBox(10, new Label("level : "), textField1, new Label("Number: "), textField2));
-
-        // show the dialog and wait for the user response
-        Optional<String> result = dialog.showAndWait();
-
-        // check if the user clicked OK and retrieve the input values
-        ArrayList<String> res = new ArrayList<>();
-        if (result.isPresent()) {
-            res.add(textField1.getText());
-            res.add(textField2.getText());
-            // process the input values here
-        }
-        return res;
     }
 
     private void showTerritoryInfo(String terrirtoryName) {

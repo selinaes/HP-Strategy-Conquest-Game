@@ -45,68 +45,68 @@ public class GamePlayDisplay {
         return unitNumArray;
     }
 
-    // public ArrayList<String> setUpgradeInfo() {
-    // // create the text input fields, level, intiial, amount
-    // TextField textField1 = new TextField();
-    // TextField textField2 = new TextField();
-    // TextField textField3 = new TextField();
+    public ArrayList<String> setUpgradeInfo() {
+        // create the text input fields, level, intiial, amount
+        TextField textField1 = new TextField();
+        TextField textField2 = new TextField();
+        TextField textField3 = new TextField();
 
-    // // create the dialog and set the content
-    // TextInputDialog dialog = new TextInputDialog();
-    // dialog.setHeaderText(null);
-    // dialog.setTitle("Enter Upgrade UnitNumber, Initial Level, # levels to
-    // Upgrade");
-    // dialog.getDialogPane()
-    // .setContent(new VBox(10, new Label("Upgrade UnitNumber: "), textField1, new
-    // Label("Initial Level: "),
-    // textField2,
-    // new Label("# levels to Upgrade: "), textField3));
+        // create the dialog and set the content
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setHeaderText(null);
+        dialog.setTitle("Enter Upgrade UnitNumber, Initial Level, # levels to Upgrade");
+        dialog.getDialogPane()
+                .setContent(new VBox(10, new Label("Upgrade UnitNumber: "), textField1, new Label("Initial Level: "),
+                        textField2,
+                        new Label("# levels to Upgrade: "), textField3));
 
-    // // show the dialog and wait for the user response
-    // System.out.println("Before showAndWait");
-    // Optional<String> result = dialog.showAndWait();
-    // System.out.println("After showAndWait");
+        // show the dialog and wait for the user response
+        System.out.println("Before showAndWait");
+        Optional<String> result = dialog.showAndWait();
+        System.out.println("After showAndWait");
 
-    // // check if the user clicked OK and retrieve the input values
-    // ArrayList<String> res = new ArrayList<>();
-    // System.out.println("Before if");
-    // if (result.isPresent()) {
-    // res.add(textField1.getText());
-    // System.out.println(textField1.getText());
-    // res.add(textField2.getText());
-    // System.out.println(textField2.getText());
-    // res.add(textField3.getText());
-    // System.out.println(textField3.getText());
-    // // process the input values here
-    // }
-    // System.out.println(res);
-    // return res;
-    // }
+        // check if the user clicked OK and retrieve the input values
+        ArrayList<String> res = new ArrayList<>();
+        System.out.println("Before if");
+        if (result.isPresent()) {
+            res.add(textField1.getText());
+            System.out.println(textField1.getText());
+            res.add(textField2.getText());
+            System.out.println(textField2.getText());
+            res.add(textField3.getText());
+            System.out.println(textField3.getText());
+            // process the input values here
+        }
+        System.out.println(res);
+        return res;
+    }
 
-    // private ArrayList<String> setLevelsOfUnits() {
-    // // create the text input fields
-    // TextField textField1 = new TextField();
-    // TextField textField2 = new TextField();
+    /**
+     * This is a dialog box for move and attack units
+     * 
+     * @return the user response
+     */
+    public ArrayList<String> setLevelsOfUnits() {
+        // create the text input fields
+        TextField textField1 = new TextField();
+        TextField textField2 = new TextField();
 
-    // // create the dialog and set the content
-    // TextInputDialog dialog = new TextInputDialog();
-    // dialog.setHeaderText(null);
-    // dialog.setTitle("Enter Units Level and Number");
-    // dialog.getDialogPane()
-    // .setContent(new VBox(10, new Label("level : "), textField1, new
-    // Label("Number: "), textField2));
+        // create the dialog and set the content
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setHeaderText(null);
+        dialog.setTitle("Enter Units Level and Number");
+        dialog.getDialogPane()
+                .setContent(new VBox(10, new Label("level : "), textField1, new Label("Number: "), textField2));
 
-    // // show the dialog and wait for the user response
-    // Optional<String> result = dialog.showAndWait();
+        Optional<String> result = dialog.showAndWait();
 
-    // // check if the user clicked OK and retrieve the input values
-    // ArrayList<String> res = new ArrayList<>();
-    // if (result.isPresent()) {
-    // res.add(textField1.getText());
-    // res.add(textField2.getText());
-    // // process the input values here
-    // }
-    // return res;
-    // }
+        // check if the user clicked OK and retrieve the input values
+        ArrayList<String> res = new ArrayList<>();
+        if (result.isPresent()) {
+            res.add(textField1.getText());
+            res.add(textField2.getText());
+        }
+        return res;
+    }
 
 }
