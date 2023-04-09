@@ -35,11 +35,22 @@ public class LoginController {
 
     private Client client;
 
+    /**
+     * Function to initialize the login page
+     * 
+     * @throws Exception
+     */
     @FXML
     public void initialize() throws Exception {
         createClient();
     }
 
+    /**
+     * Function to handle login button
+     * 
+     * @param ae
+     * @throws Exception
+     */
     @FXML
     public void onLoginButton(ActionEvent ae) throws Exception {
         String user = username.getText();
@@ -71,6 +82,11 @@ public class LoginController {
         }
     }
 
+    /**
+     * Function to enter choose room
+     * 
+     * @throws Exception
+     */
     private void enterChooseRoom() throws Exception {
         // start game, enter gameID
         String msg = client.recvMsg(); // show alert
@@ -90,7 +106,7 @@ public class LoginController {
     }
 
     /**
-     * make a client
+     * make a client and connect to server
      * 
      * @return client
      */
