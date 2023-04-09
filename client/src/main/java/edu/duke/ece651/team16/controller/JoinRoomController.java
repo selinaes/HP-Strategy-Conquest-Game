@@ -55,6 +55,12 @@ public class JoinRoomController {
         isGuest = true;
     }
 
+    /**
+     * Function to search room for the p
+     * 
+     * @param ae
+     * @throws Exception
+     */
     @FXML
     public void searchRoom(ActionEvent ae) throws Exception {
         String roomID = roomIDField.getText();
@@ -116,6 +122,12 @@ public class JoinRoomController {
         }
     }
 
+    /**
+     * Function to go back to the start game page.
+     * 
+     * @param ae The ActionEvent object representing the button click event.
+     * @throws Exception if there is any exception while performing socket
+     */
     @FXML
     public void backRoom(ActionEvent ae) throws Exception {
         Socket clientSocket = client.getClientSocket();

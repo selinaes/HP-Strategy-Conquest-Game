@@ -48,14 +48,29 @@ public class ChooseGroupController {
         setImageViewProperties(yellow);
     }
 
+    /**
+     * Set the client for the controller.
+     * 
+     * @param client
+     */
     public void setClient(Client client) {
         this.client = client;
     }
 
+    /**
+     * Set the map parser for the controller.
+     * 
+     * @param mapParser
+     */
     public void setMapParser(MapParser mapParser) {
         this.mapParser = mapParser;
     }
 
+    /**
+     * Set the image view properties for the color images.
+     * 
+     * @param imageView
+     */
     private void setImageViewProperties(ImageView imageView) {
         imageView.setFitWidth(150);
         imageView.setFitHeight(300);

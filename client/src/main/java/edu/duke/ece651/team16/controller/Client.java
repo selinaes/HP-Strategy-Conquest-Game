@@ -47,6 +47,11 @@ public class Client {
         this.color = null;
     }
 
+    /**
+     * Get the if player exit
+     * 
+     * @return boolean ifExit
+     */
     public boolean ifExit() {
         return ifExit;
     }
@@ -161,6 +166,11 @@ public class Client {
         return false;
     }
 
+    /**
+     * Get player color
+     * 
+     * @return color
+     */
     public String getColor() {
         return this.color;
     }
@@ -283,14 +293,32 @@ public class Client {
         }
     }
 
+    /**
+     * Get client socket
+     * 
+     * @return clientSocket
+     */
+
     public Socket getClientSocket() {
         return this.clientSocket;
     }
 
+    /**
+     * Set client socket
+     * 
+     * @param socket
+     */
     public void setClientSocket(Socket socket) {
         this.clientSocket = socket;
     }
 
+    /**
+     * Player choose room and send to server
+     * 
+     * @param roomID
+     * @return ifEnter
+     * @throws IOException
+     */
     public String playerChooseRoom(String roomID) throws IOException {
         try {
             sendResponse(roomID); // send roomId
