@@ -505,15 +505,17 @@ public class Game {
             Order order = new MoveOrder(fromTerritory, toTerritory, num, p, currentMap, level);
             return order;
         }
-        // } else if (actionName.equals("u")) {
-        // Order order = new UpgradeOrder(p, fromTerritory, 0, 0, 0); // PLACEHOLDER,
-        // NEED CHANGE
-        // return order;
-        // }
         return (new AttackOrder(fromTerritory, toTerritory, num, p, currentMap, level));
 
     }
 
+    /**
+     * make upgrade order which contains: Territory from, Number units, Units
+     * starting Level, Upgrade how many levels of units
+     * 
+     * @param Player p
+     * @return Order
+     */
     public Order makeUpgradeOrder(Player p) {
         p.getConn().send(
                 "Please enter in the following format: Territory source, Number units, Units starting Level, Upgrade how many levels(e.g. T1, 4, 2, 1)");
@@ -533,6 +535,12 @@ public class Game {
         return upgradeOrder;
     }
 
+    /**
+     * make research order
+     * 
+     * @param Player p
+     * @return Order
+     */
     public Order makeResearchOrder(Player p) {
         p.getConn().send("Please notice you can perform research only once each turn.");
         Order order = new ResearchOrder(p);

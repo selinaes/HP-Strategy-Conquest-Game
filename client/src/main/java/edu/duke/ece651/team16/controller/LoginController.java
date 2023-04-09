@@ -46,6 +46,13 @@ public class LoginController {
     }
 
     /**
+     * return client
+     */
+    public Client getClient() {
+        return client;
+    }
+
+    /**
      * Function to handle login button
      * 
      * @param ae
@@ -100,8 +107,10 @@ public class LoginController {
         mainRoot.getChildren().setAll(pane);
 
         Platform.runLater(() -> {
-            AlertBox alert = new AlertBox();
-            alert.displayImageAlert("Welcome!", "/img/texts/welcome.png");// welcome
+            // AlertBox alert = new AlertBox();
+            // alert.displayImageAlert("Welcome!", "/img/texts/welcome.png");// welcome
+            PopupBox popup = new PopupBox(mainRoot);
+            popup.display("/img/texts/welcome.png");
         });
     }
 

@@ -92,12 +92,24 @@ public class App extends Application {
       this.tabNumber = tabNumber;
       this.setContent(content);
       Label label = new Label("Risk Game " + tabNumber);
-      Button showSettings = new Button("o");
+      Button addTab = new Button("Add Tab");
+      Button showSettings = new Button("Settings");
+      addTab.setOnAction(e -> {
+        try {
+          URL xmlResource = getClass().getResource("/ui/login.fxml");
+          AnchorPane gp = FXMLLoader.load(xmlResource);
+          CustomTab newTab = new CustomTab(++count, gp);
+          ((TabPane) this.getTabPane()).getTabs().add(newTab);
+          ((TabPane) this.getTabPane()).getSelectionModel().select(newTab);
+        } catch (IOException ex) {
+          ex.printStackTrace();
+        }
+      });
       showSettings.setOnAction(e -> {
         createDialog();
       });
       if (tabNumber == 1) {
-        HBox hbox = new HBox(showSettings, label);
+        HBox hbox = new HBox(addTab, showSettings, label);
         hbox.setAlignment(Pos.CENTER_RIGHT);
         hbox.setSpacing(10);
         hbox.setPadding(new Insets(10, 10, 10, 10));
@@ -120,23 +132,10 @@ public class App extends Application {
       // dialog.initOwner(this.getScene().getWindow());
       dialog.setTitle("Settings");
 
-      Button addPage = new Button("Add Tab");
       Button turnOff = new Button("Turn off music");
       Button turnOn = new Button("Turn on music");
       Slider volumeSlider = new Slider();
       volumeSlider.setValue(50);
-
-      addPage.setOnAction(e -> {
-        try {
-          URL xmlResource = getClass().getResource("/ui/login.fxml");
-          AnchorPane gp = FXMLLoader.load(xmlResource);
-          CustomTab newTab = new CustomTab(++count, gp);
-          ((TabPane) this.getTabPane()).getTabs().add(newTab);
-          ((TabPane) this.getTabPane()).getSelectionModel().select(newTab);
-        } catch (IOException ex) {
-          ex.printStackTrace();
-        }
-      });
 
       turnOff.setOnAction(e -> {
         mediaPlayer.pause();
@@ -156,7 +155,7 @@ public class App extends Application {
         }
       });
 
-      VBox dialogLayout = new VBox(addPage, turnOff, turnOn, volumeSlider);
+      VBox dialogLayout = new VBox(turnOff, turnOn, volumeSlider);
       dialogLayout.setSpacing(10);
       dialogLayout.setAlignment(Pos.BOTTOM_RIGHT);
       dialogLayout.setPadding(new Insets(10, 10, 10, 10));

@@ -16,7 +16,6 @@ public class WaitingRoomController {
     private Client client;
     @FXML
     private AnchorPane waitingRoot;
-
     @FXML
     private Button nextWaiting;
 

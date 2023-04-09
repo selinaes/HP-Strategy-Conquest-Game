@@ -35,9 +35,7 @@ public class StartGameController {
      * 
      * This method is called when the user clicks on the "New Game" button in the
      * main menu. It establishes a connection to the server, sets up a client
-     * object,and loads the CreateRoom.fxml file using JavaFX's FXMLLoader. It then
-     * sets the loaded AnchorPane as the root node of the main scene and sets the
-     * client object to the corresponding controller instance.
+     * object,and loads the CreateRoom.fxml file using JavaFX's FXMLLoader.
      * 
      * @param ae The action event triggered by clicking on the "New Game" button.
      * @throws Exception   if an exception occurs during the socket creation,
@@ -47,13 +45,11 @@ public class StartGameController {
      */
     @FXML
     public void newGame(ActionEvent ae) throws Exception, IOException {
-
         URL xmlResource = getClass().getResource("/ui/JoinGame.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(xmlResource); // Create a new FXMLLoader
         AnchorPane pane = fxmlLoader.load(); // Load the FXML file
         JoinRoomController joinRoomController = fxmlLoader.getController();
         joinRoomController.setClient(client);
-
         mainRoot.getChildren().setAll(pane);
     }
 

@@ -4,13 +4,23 @@ import java.util.*;
 
 public class MovePathRuleChecker extends OrderRuleChecker {
     private HashSet<Territory> visited;
-    // private int minDistance;
 
     public MovePathRuleChecker(OrderRuleChecker next) {
         super(next);
     }
 
-    @Override   
+    /**
+     * check if one placement rule is valid
+     * 
+     * @param from     the territory to move from
+     * @param to       the territory to move to
+     * @param player   the player who is moving the unit
+     * @param numUnits the number of units to be moved
+     * @param map      the map of the game
+     * @return null if the order rule is valid, otherwise return the error
+     *         message
+     */
+    @Override
     public String checkMyRule(Territory from, Territory to, Player player, int numUnits, GameMap gameMap, int level) {
         // HashMap<String, List<Territory>>
         this.visited = new HashSet<Territory>();
@@ -23,12 +33,21 @@ public class MovePathRuleChecker extends OrderRuleChecker {
         }
     }
 
+    /**
+     * Use dfs to check if there is a valid path from source to destination
+     * 
+     * @param current     the current territory
+     * @param destination the destination territory
+     * @param player      the player who is moving the unit
+     * @param gameMap     the map of the game
+     * @param visited     the territories that have been visited
+     * @return true if there is a valid path, otherwise return false
+     */
     private boolean dfs(Territory current, Territory destination, Player player,
             HashMap<String, List<Territory>> gameMap, HashSet<Territory> visited) {
         if (current == destination) {
             return true;
         }
-
         List<Territory> neighbors = current.getNeighbors();
         for (Territory neighbor : neighbors) {
             // System.out.println(player.getColor());
@@ -40,7 +59,6 @@ public class MovePathRuleChecker extends OrderRuleChecker {
                         return true;
                     }
                 }
-
             }
         }
         return false;
@@ -55,7 +73,6 @@ public class MovePathRuleChecker extends OrderRuleChecker {
      * @param gameMap
      * @return the shortest distance between source and destination
      */
-
     public static int dijkstraAlgorithm(Territory source, Territory destination, GameMap gameMap) {
         Set<Territory> settledTerritories = new HashSet<>();
         Set<Territory> unsettledTerritories = new HashSet<>();

@@ -1,10 +1,25 @@
 package edu.duke.ece651.team16.server;
 
 public class AttackInputRuleChecker extends OrderRuleChecker {
+    /**
+     * Constructor for AttackInputRuleChecker
+     * class is used to check if the attack input is valid
+     */
     public AttackInputRuleChecker(OrderRuleChecker next) {
         super(next);
     }
 
+    /**
+     * check if one attack input is valid
+     * 
+     * @param from     the territory to move from
+     * @param to       the territory to move to
+     * @param player   the player who is moving the unit
+     * @param numUnits the number of units to be moved
+     * @param map      the map of the game
+     * @return null if the order rule is valid, otherwise return the error
+     *         message
+     */
     @Override
     public String checkMyRule(Territory from, Territory to, Player player, int numUnits, GameMap map, int level) {
         if (from.getOwner() != player) {

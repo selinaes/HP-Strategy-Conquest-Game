@@ -1,5 +1,7 @@
 package edu.duke.ece651.team16.server;
+
 import java.util.ArrayList;
+
 public class MoveOrder implements Order {
 
     protected Territory from;
@@ -46,15 +48,19 @@ public class MoveOrder implements Order {
             int distance = pathchecker.dijkstraAlgorithm(from, to, gameMap);
             // int stub_distance = 5;
             int cost = moveCost(distance);
-            if(player.getFoodResource() < cost)
-                return "Not enough food resource. Need " + cost + " food resources, but only have " + player.getFoodResource() + " food resource.";
+            if (player.getFoodResource() < cost)
+                return "Not enough food resource. Need " + cost + " food resources, but only have "
+                        + player.getFoodResource() + " food resource.";
             player.removeFoodResource(cost);
             return null;
         }
         return moveProblem;
     }
 
-    public int moveCost(int distance){
+    /**
+     * Calculate the cost of moving
+     */
+    public int moveCost(int distance) {
         int C = 1;
         return C * numUnits * distance;
     }

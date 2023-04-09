@@ -67,7 +67,7 @@
           <TextArea fx:id="history" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="608.0" />
          </content>
       </ScrollPane>
-      <GridPane fx:id="territroyGrid" layoutX="468.0" layoutY="620.0" prefHeight="100.0" prefWidth="699.0">
+      <GridPane fx:id="territoryGrid" layoutX="468.0" layoutY="620.0" prefHeight="100.0" prefWidth="699.0">
         <columnConstraints>
             <ColumnConstraints percentWidth="10" />
             <ColumnConstraints percentWidth="11" />
@@ -114,25 +114,6 @@
           <TextArea fx:id="textArea" minHeight="0.0" minWidth="0.0" prefHeight="166.0" prefWidth="461.0" />
         </content>
       </ScrollPane>
-      <ImageView fx:id="blackBackground" fitHeight="531.0" fitWidth="829.0" layoutX="214.0" layoutY="41.0" opacity="0.4" visible="false">
-         <image>
-            <Image url="@../img/backgrounds/black.jpg" />
-         </image>
-      </ImageView>
-      <GridPane fx:id="assignUnits_GridPane" layoutX="384.0" layoutY="94.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="244.5118408203125" minWidth="10.0" />
-            <ColumnConstraints />
-        </columnConstraints>
-        <rowConstraints>
-            <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-            <RowConstraints />
-        </rowConstraints>
-         <children>
-            <Button fx:id="assignUnits" mnemonicParsing="false" styleClass="expandable, button-able" text="Commit" GridPane.rowIndex="1" />
-            <Label text="sum" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-         </children>
-      </GridPane>
       <Button fx:id="finish" layoutX="1175.0" layoutY="680.0" mnemonicParsing="false" onAction="#onFinishButton" prefHeight="100.0" prefWidth="100.0" styleClass="button-finish" text="Finish" />
       <ImageView fx:id="battleTime" fitHeight="799.0" fitWidth="1288.0" visible="false">
          <image>
@@ -140,5 +121,6 @@
          </image>
       </ImageView>
       <Button fx:id="watchUpdate" layoutX="520.0" layoutY="170.0" onAction="#onWatchGameInfo"  styleClass="button-able" text="Follow Game"/>
+      <Button fx:id="exitGame" layoutX="1200.0" mnemonicParsing="false" onAction="#onExitButton" styleClass="button-able" text="Exit"/>
    </children>
 </AnchorPane>

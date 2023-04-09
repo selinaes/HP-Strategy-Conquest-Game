@@ -44,8 +44,9 @@ public class AttackOrder implements Order {
         String attackProblem = checker.checkOrder(from, to, player, numUnits, gameMap, level);
         if (attackProblem == null) {
             int cost = attackCost();
-            if(cost > player.getFoodResource()) {
-                return "Not enough food resource to attack. Need " + cost + " food resources, but only have " + player.getFoodResource() + ".";
+            if (cost > player.getFoodResource()) {
+                return "Not enough food resource to attack. Need " + cost + " food resources, but only have "
+                        + player.getFoodResource() + ".";
             }
             player.removeFoodResource(cost);
             // remove units from fromTerritory
@@ -57,6 +58,11 @@ public class AttackOrder implements Order {
         return attackProblem;
     }
 
+    /**
+     * calculate the cost of the attack
+     * 
+     * @return null if the attack is valid, otherwise return the error message
+     */
     public int attackCost() {
         int C = 8;
         return C * numUnits;

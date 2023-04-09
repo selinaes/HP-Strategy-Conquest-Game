@@ -27,7 +27,6 @@ public class Server {
      * @param ServerSocket serverSocket
      */
     public Server(ServerSocket serverSocket) {
-
         this.listenSocket = serverSocket;
         BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(32);
         this.threadPool = new ThreadPoolExecutor(16, 16, 5, TimeUnit.SECONDS, workQueue);

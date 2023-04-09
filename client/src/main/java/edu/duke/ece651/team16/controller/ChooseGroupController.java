@@ -109,21 +109,26 @@ public class ChooseGroupController {
         // with an error message if it is not
         if (valid) {
             try {
-                URL xmlResource = getClass().getResource("/ui/GamePlay.fxml");
+                URL xmlResource = getClass().getResource("/ui/InitGamePlay.fxml");
                 FXMLLoader fxmlLoader = new FXMLLoader(xmlResource); // Create a new FXMLLoader
                 AnchorPane pane = fxmlLoader.load(); // Load the FXML file
 
-                GamePlayController gamePlayController = fxmlLoader.getController();
-                gamePlayController.setClient(client);
+                InitGamePlayController initgamePlayController = fxmlLoader.getController();
+                initgamePlayController.setClient(client);
                 mapParser.setPlayer(text);
-                gamePlayController.setinitMapParser(mapParser);
+                initgamePlayController.setinitMapParser(mapParser);
                 // Display the game play screen
                 chooseGroupRoot.getChildren().setAll(pane);
 
                 // Show an alert to the user after the new page is shown
                 Platform.runLater(() -> {
-                    AlertBox alert = new AlertBox();
-                    alert.showAlert("Please assign your initial units.",
+                    // AlertBox alert = new AlertBox();
+                    // alert.showAlert("Please assign your initial units.",
+                    // "Please assign your initial units. The sum of units assigned can not exceed
+                    // 24.");
+
+                    PopupBox popup = new PopupBox(chooseGroupRoot);
+                    popup.displayText("Please assign your initial units.",
                             "Please assign your initial units. The sum of units assigned can not exceed 24.");
                 });
             } catch (Exception e) {

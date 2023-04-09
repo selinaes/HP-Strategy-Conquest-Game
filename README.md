@@ -3,17 +3,22 @@
 ![pipeline](https://gitlab.oit.duke.edu/zf70/Risk_Game/badges/main/pipeline.svg)
 ![coverage](https://gitlab.oit.duke.edu/zf70/Risk_Game/badges/main/coverage.svg?job=test)
 
-## Coverage
-[Detailed coverage](https://zf70.pages.oit.duke.edu/Risk_Game/dashboard.html)
-
 # Table of Contents
+- [Coverage](#Coverage)
 - [Schedule](#Schedule)
-- [Review](#Review)
-  - [Requirements](#Requirements)
+- [Requirements](#Requirements)
+- [Game Detail](#Game-Detail)
+  - [Duke Map](#Duke-Map)
+  - [Map initialization](#Map-initialization)
+  - [Unit initialization](#Unit-initialization)
+  - [Resource and Tech Level initialization](#Resource-and-Tech-Level-initialization)
+  - [Action Costs](#Action-Costs)
 - [Design Overview](#Design-Overview)
   - [UML Diagram](#UML-Diagram)
-  - [UI Design](#UI-Design)
-- [Implementation](#Implementation)
+  - [UI Prototype](#UI-Prototype)
+
+## Coverage
+[Detailed coverage](https://zf70.pages.oit.duke.edu/Risk_Game/dashboard.html)
 
 ## Schedule
 * Evolution 1: 2/24 - 3/24
@@ -22,18 +27,132 @@
 
 [Project Mamagement Sheet](https://docs.google.com/spreadsheets/d/1B2cUguqBPXm3IJBRU1WRPnoBng4p8AiTouAkxmXUhYg/edit#gid=0)
 
-## Review
+## Requirements
+[Evolution1](prj1.pdf)
+Evolution2
 
-### Requirements
-See requirements in [prj1.pdf](prj1.pdf)
+## Game Detail
+### Duke Map
+<img src="Resources/DukeMap_init.png" width="600px">
+
+```mermaid
+flowchart LR
+    baldwin[Baldwin Auditorium]
+    smith[Smith Warehouse]
+    bryan[Bryan Center]
+    wilson[Wilson Recreation Center]
+ 
+   cameron[Cameron Indoor Stadium]
+  
+ 
+ 
+    fuqua[The Fuqua School of Business]
+    bookStore[University Book Store]
+    wallace[Wallace Wade Stadium]
+  
+    dukeLemur[Duke Lemur Center]
+    smith[Smith Warehouse]
+    studentWellness[Student Wellness Center]
+
+   dukeLaw[Duke University School of Law]
+   fitzpatrick[Fitzpatrick Center]
+   jbDuke[JB Duke Hotel]
+   levine[Levine Science Research Center]
+   
+   penn[Penn Pavilion]
+   scienceGarage[Science Garage]
+
+
+   dukeForest[Duke Forest]
+    baldwin --- brodie
+    baldwin --- smith
+
+    brodie[Brodie Recreational Center]
+    smith --- brodie
+
+    dukeChapel[Duke Chapel]
+    dukeChapel --- baldwin
+
+    perkins[Perkins Library]
+    broadhead[Broadhead Center]
+
+    broadhead --- dukeChapel
+    dukeChapel --- perkins
+
+    nasher[Nasher Museum of Art]
+    dukeGarden[Duke Garden]
+
+    dukeGarden --- dukeChapel
+    dukeGarden --- nasher
+    broadhead --- dukeGarden
+
+    perkins --- fitzpatrick
+    fitzpatrick --- levine
+
+    dukeHospital[Duke Hospital]
+
+    dukeHospital --- levine
+    dukeHospital --- dukeGarden
+
+    bryan --- broadhead
+    penn --- bookStore
+    penn --- studentWellness
+    studentWellness --- dukeLaw
+    bookStore --- bryan
+
+    dukeLaw --- fuqua
+    fuqua --- jbDuke
+
+    wilson --- cameron
+    wilson --- wallace
+    dukeLaw --- wilson
+    cameron --- wallace
+
+
+
+    jbDuke --- dukeForest
+   jbDuke --- scienceGarage
+   jbDuke --- dukeLemur
+```
+
+### Map initialization
+The duke map is initialized with 24 territories. This game supports 2-4 players. For 2 players, each player will have 12 territories, and can choose from colors: red, blue. For 3 players, each player will have 8 territories, and can choose from colors: red, blue, yellow. For 4 players, each player will have 6 territories, and can choose from colors: red, blue, yellow, green. For each pair of adjacent territories, the distance between them is 5.
+
+### Unit initialization
+The player each has 24 Freshman units(level 0) at the start of the game to assign to their territories. There is a total of 7 level of units: Freshman(level 0), Sophomore(level 1), Junior(level 2), Senior(level 3), Master(level 4), phD(level 5), Professor(level 6). Each territory will generate 1 Freshman unit(level 0) at the beginning of a new turn.
+
+### Resource and Tech Level initialization
+Each territory produces 5 food resources and 5 tech resources per turn. Each player starts with a tech level 1, and can upgrade per turn till tech level 6.
+
+### Action Costs
+Attack and move actions cost food resources.
+* Attack cost = 8 * numUnits
+* Move cost =  distance * numUnits
+
+Research and upgrade actions cost tech resources.
+* Research Cost Table
+
+| Upgrade Level | Cost |
+| ------------- | ---- |
+|     1->2      |  20  |
+|     2->3      |  40  |
+|     3->4      |  80  |
+|     4->5      |  160 |
+|     5->6      |  320 |
+
+* Upgrade Cost+Bonus Table
+
+| Cost (Total) | Bonus | Tech Level Required |
+| ------------ | ----- | ------------------- |
+|     0(0)     |   0   |   Units Start Here  |
+|     3(3)     |   1   |          1          |
+|     8(11)    |   3   |          2          |
+|    19(30)    |   5   |          3          |
+|    25(55)    |   8   |          4          |
+|    35(90)    |   11  |          5          |
+|    50(140)   |   15  |          6          |
 
 ## Design Overview
-
-MoveInputChecker and AttackInputChecker should:
-- check units > 0 
-- check source territory is yours.
-- check destinination territory is yours.
-
 ### UML Diagram
 ```mermaid
 classDiagram
@@ -188,103 +307,7 @@ class AttackAdjacentChecker{
     #checkMyRule():
 }
 ```
-### UML Description
-Some important details:
 
-| Class  | Method | Description |
-| ------------- | ------------- | ------------- |
-| Server | doPlacementPhase() | 1. assign territories into N groups and through recv() get player's choice of color. <br />2. assign each player the same number of units |
-|^      | doOrderPhase() | game main phase: order, order, order..... |
-|^      | doOrderTurn() | 1. Move + Attack <br />2. after completing all actions, add 1 unit to each territory |
-| Player | updateUnits() | update units in territory |
-| Territory | ongoingBattle(): Battle | SingleTon pattern |
-| ^         | getBattle(): Battle | If Battle exists, return Battle, otherwise, create it |
-| Combat | determineWin(Unit unit1, Unit unit2)| |
-| Battle | resolveBattle(): vector<string Name, Unit[] units[]>| Battling in a circle list|
-
-### UI Design
+### UI Prototype
 <video src="Resources/RiskGameUIDesign.mp4" width="600px">
 
-## Implementation
-Duke Map
-```mermaid
-flowchart LR
-    baldwin[Baldwin Auditorium]
-    smith[Smith Warehouse]
-    bryan[Bryan Center]
-    wilson[Wilson Recreation Center]
- 
-   cameron[Cameron Indoor Stadium]
-  
- 
- 
-    fuqua[The Fuqua School of Business]
-    bookStore[University Book Store]
-    wallace[Wallace Wade Stadium]
-  
-    dukeLemur[Duke Lemur Center]
-    smith[Smith Warehouse]
-    studentWellness[Student Wellness Center]
-
-   dukeLaw[Duke University School of Law]
-   fitzpatrick[Fitzpatrick Center]
-   jbDuke[JB Duke Hotel]
-   levine[Levine Science Research Center]
-   
-   penn[Penn Pavilion]
-   scienceGarage[Science Garage]
-
-
-   dukeForest[Duke Forest]
-    baldwin --- brodie
-    baldwin --- smith
-
-    brodie[Brodie Recreational Center]
-    smith --- brodie
-
-    dukeChapel[Duke Chapel]
-    dukeChapel --- baldwin
-
-    perkins[Perkins Library]
-    broadhead[Broadhead Center]
-
-    broadhead --- dukeChapel
-    dukeChapel --- perkins
-
-    nasher[Nasher Museum of Art]
-    dukeGarden[Duke Garden]
-
-    dukeGarden --- dukeChapel
-    dukeGarden --- nasher
-    broadhead --- dukeGarden
-
-    perkins --- fitzpatrick
-    fitzpatrick --- levine
-
-    dukeHospital[Duke Hospital]
-
-    dukeHospital --- levine
-    dukeHospital --- dukeGarden
-
-    bryan --- broadhead
-    penn --- bookStore
-    penn --- studentWellness
-    studentWellness --- dukeLaw
-    bookStore --- bryan
-
-    dukeLaw --- fuqua
-    fuqua --- jbDuke
-
-    wilson --- cameron
-    wilson --- wallace
-    dukeLaw --- wilson
-    cameron --- wallace
-
-
-
-    jbDuke --- dukeForest
-   jbDuke --- scienceGarage
-   jbDuke --- dukeLemur
-```
-
-<img src="Resources/DukeMap_init.png" width="600px">

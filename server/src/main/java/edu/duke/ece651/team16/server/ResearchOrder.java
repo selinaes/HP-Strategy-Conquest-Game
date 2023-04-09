@@ -19,6 +19,9 @@ public class ResearchOrder implements Order {
         initializeTable();
     }
 
+    /**
+     * Initialize the research cost table
+     */
     private void initializeTable() {
         // costTable: startLevel, cost
         researchCostTable.put(1, 20);

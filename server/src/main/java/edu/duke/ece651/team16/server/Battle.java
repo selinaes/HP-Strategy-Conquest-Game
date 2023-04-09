@@ -93,10 +93,17 @@ public class Battle {
         this.parties = new ArrayList<ArrayList<Unit>>();
     }
 
+    /**
+     * Find the largest level unit in the party
+     * 
+     * @param party
+     * @return Unit
+     */
     private Unit findLargest(ArrayList<Unit> party) {
         Unit curr_large = party.get(0);
         // int index = 0;
-        if (party.size() == 1) return curr_large;
+        if (party.size() == 1)
+            return curr_large;
         // int curr_min = party.get(0);
         for (int i = 1; i < party.size(); ++i) {
             if (party.get(i).getLevel() > curr_large.getLevel()) {
@@ -106,9 +113,16 @@ public class Battle {
         return curr_large;
     }
 
+    /**
+     * Find the smallest level unit in the party
+     * 
+     * @param party
+     * @return Unit
+     */
     private Unit findSmallest(ArrayList<Unit> party) {
         Unit curr_small = party.get(0);
-        if (party.size() == 1) return curr_small;
+        if (party.size() == 1)
+            return curr_small;
         // int curr_min = party.get(0);
         for (int i = 1; i < party.size(); ++i) {
             if (party.get(i).getLevel() < curr_small.getLevel()) {
@@ -118,7 +132,11 @@ public class Battle {
         return curr_small;
     }
 
-
+    /**
+     * Resolve the battle
+     * 
+     * @return Player the winner of the battle
+     */
     public Player resolveBattle() {
         // combineUnitsFromSamePlayer();
         int index = 0;

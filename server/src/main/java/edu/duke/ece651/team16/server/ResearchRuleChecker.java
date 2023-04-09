@@ -4,6 +4,10 @@ public class ResearchRuleChecker {
     public ResearchRuleChecker() {
     }
 
+    /*
+     * check if the player has already researched in this turn
+     * check if the player has reached the max research level
+     */
     public String checkMyRule(Player player, int maxLevel) {
         if (player.getHasResearched() == true) {
             return "You have already researched in this turn.";
