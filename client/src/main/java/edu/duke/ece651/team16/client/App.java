@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -21,7 +20,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
+// import javafx.util.Duration;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.geometry.Pos;
@@ -53,24 +52,41 @@ public class App extends Application {
     }
   }
 
+  /**
+   * Add music to the game.
+   */
   public void addMusic() {
     Media sound = new Media(getClass().getResource("/audio/Adventure.mp3").toString());
     mediaPlayer = new MediaPlayer(sound);
     mediaPlayer.setAutoPlay(true);
     mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-    mediaPlayer.setStartTime(Duration.seconds(0));
-    mediaPlayer.setStopTime(Duration.seconds(84));
+    mediaPlayer.setStartTime(javafx.util.Duration.seconds(0));
+    mediaPlayer.setStopTime(javafx.util.Duration.seconds(84));
     mediaPlayer.play();
   }
 
+  /**
+   * Launch the application.
+   * 
+   * @param args
+   */
   public static void main(String[] args) {
     launch(args);
   }
 
+  /**
+   * Custom tab class.
+   */
   private static class CustomTab extends Tab {
     private int tabNumber;
     private static int count = 1;
 
+    /**
+     * Constructor for the custom tab.
+     * 
+     * @param tabNumber
+     * @param content
+     */
     public CustomTab(int tabNumber, AnchorPane content) {
       super();
       this.tabNumber = tabNumber;
@@ -95,6 +111,9 @@ public class App extends Application {
       }
     }
 
+    /**
+     * Create the dialog for the settings.
+     */
     private void createDialog() {
       Stage dialog = new Stage();
       dialog.initModality(Modality.APPLICATION_MODAL);

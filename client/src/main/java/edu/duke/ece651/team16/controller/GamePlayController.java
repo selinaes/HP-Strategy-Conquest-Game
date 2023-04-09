@@ -37,11 +37,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
-import org.w3c.dom.Text;
-
 import java.net.URL;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.Arrays;
 
 public class GamePlayController {
     @FXML
@@ -103,6 +102,7 @@ public class GamePlayController {
 
     // private int myUnits = 0;
     private ArrayList<Integer> currTerritoryUnits = new ArrayList<>();
+    private GamePlayDisplay gamePlayDisplay = new GamePlayDisplay();
 
     @FXML
     public void initialize() {
@@ -129,50 +129,6 @@ public class GamePlayController {
     }
 
     /**
-     * This is a private method used to format the units information received from
-     * the server
-     * 
-     * @param unitsInfo The units information received from the server
-     * @return The formatted units information
-     */
-    private String parseUnitsInfo(String unitsInfo) {
-        String[] unitName = { "Freshman", "Sophomore", "Junior", "Senior", "Graduate", "PhD", "Professor" };
-        String[] unitsInfoArray = unitsInfo.split(",");
-        StringBuilder unitsInfoString = new StringBuilder();
-        for (int i = 0; i < 6; i++) {
-            unitsInfoString.append(unitName[i] + ": " + unitsInfoArray[i] + ", ");
-        }
-        unitsInfoString.append(unitName[6] + ": " + unitsInfoArray[6]);
-        return unitsInfoString.toString();
-    }
-
-    private int getUnitNum(String unitsInfo) {
-        int sum = 0;
-        String[] unitsInfoArray = unitsInfo.split(",");
-        for (int i = 0; i < 7; i++) {
-            sum += Integer.parseInt(unitsInfoArray[i]);
-        }
-        return sum;
-    }
-
-    private ArrayList<Integer> getUnitNumArray(String unitsInfo) {
-        ArrayList<Integer> unitNumArray = new ArrayList<>();
-        String[] unitsInfoArray = unitsInfo.split(",");
-        for (int i = 0; i < 7; i++) {
-            unitNumArray.add(Integer.parseInt(unitsInfoArray[i]));
-        }
-        return unitNumArray;
-    }
-
-    private String formatUnitsInfo(ArrayList<Integer> unitNumArray) {
-        StringBuilder unitsInfoString = new StringBuilder();
-        for (int i = 0; i < 7; i++) {
-            unitsInfoString.append(unitNumArray.get(i) + ",");
-        }
-        return unitsInfoString.toString();
-    }
-
-    /**
      * This method is called when a territory button is clicked.
      * It retrieves information about the territory and displays it in the text
      * area. Depending on the player's status, it may also initiate an attack or a
@@ -185,18 +141,89 @@ public class GamePlayController {
     @FXML
     public void onTerritoryButton(ActionEvent ae) throws Exception {
         Object source = ae.getSource();
-        if (source instanceof Button) {
-            Button btn = (Button) source;
-            showTerritoryInfo(btn.getId());
-            HashMap<String, String> territoryInfo = mapParser.getTerritoryInfo(btn.getId());
-            if (playerStatus == Status.ATTACK_FROM) {
-                int unitnum = getUnitNum(territoryInfo.get("Unit"));
+        if (!(source instanceof Button)) {
+            throw new IllegalArgumentException("Invalid source " + source +
+                    " for ActionEvent");
+        }
+        Button btn = (Button) source;
+        showTerritoryInfo(btn.getId());
+        HashMap<String, String> territoryInfo = mapParser.getTerritoryInfo(btn.getId());
+        int unitnum;
+        switch (playerStatus) {
+            case ATTACK_FROM:
+                unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"));
                 if (unitnum > 0) {// initiate attack
                     oneOrderContent = btn.getId();
                     setEnemyTerritoryDisable(false);
                     setMyTerritoryDisable(true);
                     playerStatus = Status.ATTACK_TO;
-                    currTerritoryUnits = getUnitNumArray(territoryInfo.get("Unit"));
+                    currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"));
+                } else {
+                    alert.showAlert("Alert", "This territory has 0 avaliable unit.");
+                }
+                break;
+            case ATTACK_TO:
+                oneOrderContent += ", " + btn.getId() + ", ";
+                setMyTerritoryDisable(false);
+                playerStatus = Status.ATTACK_Units;
+                onAttackMoveUnits();
+                setButtonsDisabled(false, finish, research, move, upgrade);
+                playerStatus = Status.DEFAULT;
+                break;
+            case MOVE_FROM:
+                unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"));
+                if (unitnum > 0) {// initiate move
+                    oneOrderContent = btn.getId(); // oneOrderContent=[T1]
+                    playerStatus = Status.MOVE_TO;
+                    currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"));
+                } else {
+                    alert.showAlert("Alert", "This territory has 0 avaliable unit.");
+                }
+                break;
+            case MOVE_TO:
+                oneOrderContent += ", " + btn.getId() + ", "; // oneOrderContent=[T1, T2, ]
+                setEnemyTerritoryDisable(false);
+                playerStatus = Status.MOVE_Units;
+                onAttackMoveUnits();// oneOrderContent=[T1, T2, level, units]
+                setButtonsDisabled(false, finish, research, attack, upgrade);
+                playerStatus = Status.DEFAULT;
+                break;
+            case UPGRADE_AT:
+                unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"));
+                if (unitnum > 0) { // can upgrade
+                    oneOrderContent = btn.getId(); // oneOrderContent= [T1] source, unitNum, initialLevel, upgradeAmount
+                    System.out.println("One Order Content: " + oneOrderContent);
+                    setMyTerritoryDisable(false);
+                    currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"));
+                    System.out.println("Before onUpgradeUnits");
+                    onUpgradeUnits();
+                    System.out.println("After onUpgradeUnits");
+                    setButtonsDisabled(false, finish, research, attack, move);
+                    playerStatus = Status.DEFAULT;
+                } else { // cannot upgrade, no unit
+                    alert.showAlert("Alert", "This territory has 0 avaliable unit.");
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @FXML
+    public void onTerritoryButton2(ActionEvent ae) throws Exception {
+        Object source = ae.getSource();
+        if (source instanceof Button) {
+            Button btn = (Button) source;
+            showTerritoryInfo(btn.getId());
+            HashMap<String, String> territoryInfo = mapParser.getTerritoryInfo(btn.getId());
+            if (playerStatus == Status.ATTACK_FROM) {
+                int unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"));
+                if (unitnum > 0) {// initiate attack
+                    oneOrderContent = btn.getId();
+                    setEnemyTerritoryDisable(false);
+                    setMyTerritoryDisable(true);
+                    playerStatus = Status.ATTACK_TO;
+                    currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"));
                 } else {
                     alert.showAlert("Alert", "This territory has 0 avaliable unit.");
                 }
@@ -205,17 +232,14 @@ public class GamePlayController {
                 setMyTerritoryDisable(false);
                 playerStatus = Status.ATTACK_Units;
                 onAttackMoveUnits();
-                finish.setDisable(false);
-                research.setDisable(false);
-                move.setDisable(false);
-                upgrade.setDisable(false);
+                setButtonsDisabled(false, finish, research, move, upgrade);
                 playerStatus = Status.DEFAULT;
             } else if (playerStatus == Status.MOVE_FROM) {
-                int unitnum = getUnitNum(territoryInfo.get("Unit"));
+                int unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"));
                 if (unitnum > 0) {// initiate move
                     oneOrderContent = btn.getId(); // oneOrderContent=[T1]
                     playerStatus = Status.MOVE_TO;
-                    currTerritoryUnits = getUnitNumArray(territoryInfo.get("Unit"));
+                    currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"));
                 } else {
                     alert.showAlert("Alert", "This territory has 0 avaliable unit.");
                 }
@@ -224,25 +248,19 @@ public class GamePlayController {
                 setEnemyTerritoryDisable(false);
                 playerStatus = Status.MOVE_Units;
                 onAttackMoveUnits();// oneOrderContent=[T1, T2, level, units]
-                finish.setDisable(false);
-                research.setDisable(false);
-                attack.setDisable(false);
-                upgrade.setDisable(false);
+                setButtonsDisabled(false, finish, research, attack, upgrade);
                 playerStatus = Status.DEFAULT;
             } else if (playerStatus == Status.UPGRADE_AT) { // upgrade
-                int unitnum = getUnitNum(territoryInfo.get("Unit"));
+                int unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"));
                 if (unitnum > 0) { // can upgrade
                     oneOrderContent = btn.getId(); // oneOrderContent= [T1] source, unitNum, initialLevel, upgradeAmount
                     System.out.println("One Order Content: " + oneOrderContent);
                     setMyTerritoryDisable(false);
-                    currTerritoryUnits = getUnitNumArray(territoryInfo.get("Unit"));
+                    currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"));
                     System.out.println("Before onUpgradeUnits");
                     onUpgradeUnits();
                     System.out.println("After onUpgradeUnits");
-                    finish.setDisable(false);
-                    research.setDisable(false);
-                    attack.setDisable(false);
-                    move.setDisable(false);
+                    setButtonsDisabled(false, finish, research, attack, move);
                     playerStatus = Status.DEFAULT;
                 } else { // cannot upgrade, no unit
                     alert.showAlert("Alert", "This territory has 0 avaliable unit.");
@@ -256,7 +274,7 @@ public class GamePlayController {
 
     // add a button to get the game information
     @FXML
-    public void watchGameInfo(ActionEvent event) throws IOException {
+    public void onWatchGameInfo(ActionEvent event) throws IOException {
         try {
             client.waitEveryoneDone();
             history.appendText("====================New Round=======================\n");
@@ -274,7 +292,6 @@ public class GamePlayController {
                 history.appendText("Winner is " + msg + "!");
                 alert.displayImageAlert("Game Finish", "/img/texts/youlose.png");
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -356,20 +373,14 @@ public class GamePlayController {
         if (source instanceof Button) {
             Button btn = (Button) source;
             if (btn.getText().equals("Attack")) {
-                finish.setDisable(true);
-                research.setDisable(true);
-                move.setDisable(true);
-                upgrade.setDisable(true);
+                setButtonsDisabled(true, finish, research, move, upgrade);
                 btn.setText("Cancel");
                 myOrder.clear();
                 playerStatus = Status.ATTACK_FROM;
                 myOrder.add("a");// add attack order
                 setEnemyTerritoryDisable(true);
             } else {
-                finish.setDisable(false);
-                research.setDisable(false);
-                move.setDisable(false);
-                upgrade.setDisable(false);
+                setButtonsDisabled(false, finish, research, move, upgrade);
                 btn.setText("Attack");
                 myOrder.clear();
                 playerStatus = Status.DEFAULT;
@@ -395,20 +406,14 @@ public class GamePlayController {
         if (source instanceof Button) {
             Button btn = (Button) source;
             if (btn.getText().equals("Move")) {
-                finish.setDisable(true);
-                research.setDisable(true);
-                attack.setDisable(true);
-                upgrade.setDisable(true);
+                setButtonsDisabled(true, finish, research, attack, upgrade);
                 btn.setText("Cancel");
                 myOrder.clear();
                 playerStatus = Status.MOVE_FROM;
                 myOrder.add("m");// add attack order
                 setEnemyTerritoryDisable(true);
             } else { // cancel
-                finish.setDisable(false);
-                research.setDisable(false);
-                attack.setDisable(false);
-                upgrade.setDisable(false);
+                setButtonsDisabled(false, finish, research, attack, upgrade);
                 btn.setText("Move");
                 myOrder.clear();
                 playerStatus = Status.DEFAULT;
@@ -426,20 +431,14 @@ public class GamePlayController {
         if (source instanceof Button) {
             Button btn = (Button) source;
             if (btn.getText().equals("Upgrade")) {
-                finish.setDisable(true);
-                research.setDisable(true);
-                attack.setDisable(true);
-                move.setDisable(true);
+                setButtonsDisabled(true, finish, research, attack, move);
                 btn.setText("Cancel");
                 myOrder.clear();
                 myOrder.add("u"); // add upgrade order
                 playerStatus = Status.UPGRADE_AT;
                 setEnemyTerritoryDisable(true);
             } else { // cancel
-                finish.setDisable(false);
-                research.setDisable(false);
-                attack.setDisable(false);
-                move.setDisable(false);
+                setButtonsDisabled(false, finish, research, attack, move);
                 btn.setText("Upgrade");
                 myOrder.clear();
                 playerStatus = Status.DEFAULT;
@@ -480,9 +479,14 @@ public class GamePlayController {
         }
     }
 
+    private void setButtonsDisabled(boolean disabled, Button... buttons) {
+        Arrays.asList(buttons).forEach(btn -> btn.setDisable(disabled));
+    }
+
     /*
      * This method is called when player is selecting the
      */
+
     @FXML
     private void onUpgradeUnits() throws Exception {
 
@@ -660,7 +664,7 @@ public class GamePlayController {
         System.out.println("TerritoryInfo" + territoryInfo);
         textArea.appendText("==================== " + terrirtoryName + " =======================\n");
         textArea.appendText("Player " + territoryInfo.get("Player") + "'s \n");
-        textArea.appendText("Units: " + parseUnitsInfo(territoryInfo.get("Unit")) + "\n");
+        textArea.appendText("Units: " + gamePlayDisplay.parseUnitsInfo(territoryInfo.get("Unit")) + "\n");
         textArea.appendText("Neighbors: " + territoryInfo.get("Neighbors") + "\n");
         textArea.appendText("Rate: " + territoryInfo.get("Rate") + "\n");
         textArea.appendText("Resource: " + territoryInfo.get("Resource") + "\n");
@@ -768,10 +772,8 @@ public class GamePlayController {
             try {
                 client.waitEveryoneDone();
                 mapParser.setMap(client.recvMsg());
-                // receive "Game continous or Winner"
-                System.out.println("Game continous or Winner: " + client.recvMsg());
-                // receive "watching" "Choose watch" "do nothing"
-                System.out.println("watching Choose watch do nothing: " + client.recvMsg());
+                client.recvMsg(); // receive "Game continous or Winner"
+                client.recvMsg(); // receive "watching" "Choose watch" "do nothing"
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -803,11 +805,9 @@ public class GamePlayController {
                 watchUpdate.setDisable(false);
                 try {
                     client.playerChooseWatch("w");
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             } else {
                 try {
                     client.playerChooseWatch("e");

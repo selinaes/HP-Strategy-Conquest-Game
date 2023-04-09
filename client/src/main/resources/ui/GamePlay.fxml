@@ -139,6 +139,6 @@
             <Image url="@../img/backgrounds/waiting4.png" />
          </image>
       </ImageView>
-      <Button fx:id="watchUpdate" layoutX="520.0" layoutY="170.0" onAction="#watchGameInfo"  styleClass="button-able" text="Follow Game"/>
+      <Button fx:id="watchUpdate" layoutX="520.0" layoutY="170.0" onAction="#onWatchGameInfo"  styleClass="button-able" text="Follow Game"/>
    </children>
 </AnchorPane>

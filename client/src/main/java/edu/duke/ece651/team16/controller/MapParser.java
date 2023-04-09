@@ -28,6 +28,12 @@ public class MapParser {
         myMap = getMapObject(m);
     }
 
+    /**
+     * Get the territory info of a given territory
+     * 
+     * @return
+     * @throws IOException
+     */
     public List<String> getMyInitTerritory() throws IOException {
         List<String> ans = new ArrayList<>();
         for (Map.Entry<String, ArrayList<HashMap<String, String>>> entry : myMap.entrySet()) {

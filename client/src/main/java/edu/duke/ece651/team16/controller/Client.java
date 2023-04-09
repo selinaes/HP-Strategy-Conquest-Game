@@ -47,49 +47,6 @@ public class Client {
         this.color = null;
     }
 
-    /**
-     * Run client
-     * 
-     * @throws IOException
-     */
-    public void run() throws IOException {
-        // placment phase
-        // playerChooseNum();
-        // waitEveryoneDone();
-        // view.displayInitialMap(recvMsg());
-        // playerChooseColor();
-        // playerAssignAllUnits();
-        // waitEveryoneDone();
-        // view.displayMap(recvMsg());
-
-        // action phase
-        String msg = recvMsg();
-        while (msg.equals("Game continues")) {
-            out.println("\n\nNew round starts.");
-            runWatchOption();
-            if (ifExit) {
-                return;
-            }
-            waitEveryoneDone();
-            // out.println("out of wait");
-            view.displayLog(recvMsg());
-            view.displayMap(recvMsg());
-            msg = recvMsg();
-        }
-        // game over
-        String gameOverMessage = "   ____      _      __  __  U _____ u    U _____ u _   _    ____    ____\n" +
-                "U /\"___|uU  /\"\\  uU|\' \\/ \'|u\\| ___\"|/    \\| ___\"|/| \\ |\"|  |  _\"\\  / __\"| u\n" +
-                "\\| |  _ / \\/ _ \\/ \\| |\\/| |/ |  _|\"       |  _|\" <|  \\| |>/| | | |<\\___ \\/\n" +
-                " | |_| |  / ___ \\  | |  | |  | |___       | |___ U| |\\  |uU| |_| |\\u___) |\n" +
-                "  \\____| /_/   \\_\\ |_|  |_|  |_____|      |_____| |_| \\_|  |____/ u|____/>> \n" +
-                "   _)(|_   \\    >><<,-,,-.   <<   >>      <<   >> ||   \\,-.|||_    )(  (__)\n" +
-                " (__)__) (__)  (__)(./  \\.) (__) (__)    (__) (__)(_\")  (_/(__)_)  (__)    \n";
-
-        // out.println("Game over. Winner is " + msg);
-        out.println(gameOverMessage);
-        out.println("Winner is " + msg);
-    }
-
     public boolean ifExit() {
         return ifExit;
     }
@@ -171,7 +128,6 @@ public class Client {
      * @throws IOException
      */
     public void waitEveryoneDone() throws IOException {
-        // out.println("wait everyone done");
         String prompt = recvMsg();
         boolean done = false;
         while (!done) {
@@ -241,24 +197,13 @@ public class Client {
      */
     public void playerAssignUnit(String input) throws IOException {
         String prompt = recvMsg();
-        System.out.println("assign units prompt: " + prompt);
         if (prompt.equals("finished stage")) {
             out.println("Finished Placement. Please wait for other players to place units.");
             return;
         }
         try {
-            System.out.println("input: " + input);
             sendResponse(input);
             prompt = recvMsg();
-            System.out.println("Ans: " + prompt);
-            // if (prompt.equals("finished stage")) {
-            // out.println("Finished Placement. Please wait for other players to place
-            // units.");
-            // } else if (prompt.equals("Valid territory name")) {
-            // out.println("Successfully choose territory: " + clientInput);
-            // } else if (prompt.equals("Valid number of units")) {// Valid number of units
-            // out.println("Successfully set unit number: " + clientInput);
-            // }
         } catch (EOFException e) {
             out.println(e.getMessage());
         }

@@ -69,6 +69,11 @@ public class StartGameController {
         System.exit(0);
     }
 
+    /**
+     * Set the client for the controller.
+     * 
+     * @param c
+     */
     public void setClient(Client c) {
         this.client = c;
     }

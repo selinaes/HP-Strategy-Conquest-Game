@@ -20,6 +20,9 @@ public class WaitingRoomController {
     @FXML
     private Button nextWaiting;
 
+    /**
+     * Set the client for the controller.
+     */
     public void setClient(Client client) {
         this.client = client;
     }
