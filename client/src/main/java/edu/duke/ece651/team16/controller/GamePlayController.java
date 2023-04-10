@@ -50,21 +50,21 @@ public class GamePlayController {
     @FXML
     private Button upgrade;
     @FXML
-    private Button watchUpdate;
+    public Button watchUpdate;
     @FXML
-    private Button exitGame;
+    public Button exitGame;
     @FXML
     private TextArea textArea;
     @FXML
     private TextArea history;
     @FXML
-    private ImageView mapImage;
+    public ImageView mapImage;
     @FXML
     private Button finish;
     @FXML
     private GridPane territoryGrid;
     @FXML
-    private ImageView battleTime;
+    public ImageView battleTime;
 
     private Client client;
     private MapParser mapParser;

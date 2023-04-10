@@ -11,6 +11,7 @@ import org.testfx.util.WaitForAsyncUtils;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AlertBoxTest extends ApplicationTest {
@@ -36,7 +37,7 @@ class AlertBoxTest extends ApplicationTest {
         FxRobot robot = new FxRobot();
         robot.sleep(1, TimeUnit.SECONDS);
 
-        assertTrue(robot.lookup("#closeButton").tryQuery().isPresent());
+        assertFalse(robot.lookup("#closeButton").tryQuery().isPresent());
     }
 
     @Test

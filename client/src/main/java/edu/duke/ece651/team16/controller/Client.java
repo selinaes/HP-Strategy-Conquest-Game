@@ -57,25 +57,6 @@ public class Client {
     }
 
     /**
-     * Run watch option in the game for the client
-     */
-    public void runWatchOption() throws IOException {
-        String msg2 = recvMsg();
-        if (msg2.equals("Choose watch")) {
-            // playerChooseWatch();
-            if (ifExit) {
-                return;
-            }
-        }
-        if (!view.isWatch()) {
-            // playerActionTurn();
-        } else {
-            view.playerWatchTurn();
-        }
-
-    }
-
-    /**
      * 
      * Receive message
      * from server**@return message*
@@ -97,24 +78,6 @@ public class Client {
             }
         }
         return msg;
-    }
-
-    /**
-     * Read client input from system input
-     * 
-     * @param prompt: prompt message
-     * @return client input
-     * @throws IOException
-     */
-    public String readClientInput(String prompt) throws IOException {
-        out.println(prompt);
-        String s = null;
-        s = this.inputReader.readLine();
-        if (s == null) {
-            throw new EOFException();
-        }
-        out.println(s);
-        return s;
     }
 
     /**
