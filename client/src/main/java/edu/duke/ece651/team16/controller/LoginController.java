@@ -123,6 +123,7 @@ public class LoginController {
         try {
             int port = 1651;
             String ip = "127.0.0.1";
+            // String ip = "vcm-33174.vm.duke.edu";
             Socket clientSocket = null;
 
             clientSocket = new Socket(ip, port);
