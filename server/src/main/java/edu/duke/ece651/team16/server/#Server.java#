@@ -74,10 +74,8 @@ public class Server {
                             System.out.println("Client connected" + numClients);
                             // check gameRoom ID
                             Conn conn = new Conn(client_socket);
-
                             login(conn);
                             enterGame(conn);
-
                         } finally {
                             client_socket.close();
                         }
@@ -114,10 +112,11 @@ public class Server {
                     break;
                 }
             }
+
         }
     }
 
-    public void enterGame(Conn conn){
+    public void enterGame(Conn conn) {
         while (true) {
             conn.send("Welcome to the game! Please enter a room ID:");
             // enter game.gameFlow with specific room ID

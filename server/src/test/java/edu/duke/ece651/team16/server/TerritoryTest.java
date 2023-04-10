@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import java.lang.reflect.Field;
 import java.lang.annotation.Target;
 import java.util.*;
+import java.util.ArrayList;
 
 public class TerritoryTest {
   @Test
@@ -44,6 +45,23 @@ public class TerritoryTest {
     assertNotEquals(null, t1.getNeighborsNames());
   }
 
+  @Test
+  public void testSetRates() {
+    int expectedFoodRate = 10;
+    int expectedTechRate = 20;
+
+    // Create an instance of the class to be tested
+    Territory terr = new Territory("a");
+
+    // Set the rates
+    terr.setFoodRate(expectedFoodRate);
+    terr.setTechRate(expectedTechRate);
+
+    // Verify that the rates have been set correctly
+    assertEquals(expectedFoodRate, terr.getFoodRate());
+    assertEquals(expectedTechRate, terr.getTechRate());
+  }
+
   // add test for equals() return false
   @Test
   public void test_equals() {
@@ -55,6 +73,40 @@ public class TerritoryTest {
     assertFalse(t1.equals(t3));
     assertTrue(t1.equals(t4));
   }
+
+  @Test
+  public void testGetDistance() {
+    Territory t1 = new Territory("a");
+    Territory t2 = new Territory("b");
+    Integer distance = 5;
+    t1.setNeighbors(List.of(t2));
+    t1.setDistance(List.of(t2), List.of(distance));
+
+    int actualDistance = t1.getDistance(t2);
+
+    assertEquals(distance, actualDistance);
+  }
+
+  @Test
+  public void testTryRemoveUnits() {
+    Territory t = new Territory("test");
+
+    Conn c2 = mock(Conn.class);
+    List<Territory> list = new ArrayList<Territory>();
+    list.add(t);
+    Player p = new Player("red", c2, list, 2);
+
+    Unit u1 = new AdvancedUnit(p, t, false, 0);
+    Unit u2 = new AdvancedUnit(p, t, false, 0);
+    ArrayList l = new ArrayList<>();
+    l.add(u1);
+    l.add(u2);
+    t.tryAddUnits(l);
+    t.tryRemoveUnits(2, p, 0);
+    assertEquals(0, t.getUnits().size());
+  }
+
+
 
   @Test
   public void testGetUnits() {
@@ -124,16 +176,17 @@ public class TerritoryTest {
     // player.addTerritories(territory);
     Unit unit = new AdvancedUnit(player, null, true, 1);
     territory.tryAddUnits(new ArrayList<Unit>(Arrays.asList(unit)));
-    // assertEquals("1 units", territory.getUnitsString());
+    assertEquals("1,0,0,0,0,0,0,", territory.getUnitsString());
 
     Unit unit2 = new AdvancedUnit(player, null, false, 2);
     territory.tryAddUnits(new ArrayList<Unit>(Arrays.asList(unit2)));
-    // assertEquals("2 units", territory.getUnitsString());
+    assertEquals("2,0,0,0,0,0,0,", territory.getUnitsString());
 
     Unit unit3 = new AdvancedUnit(player, null, false, 3);
     territory.tryAddUnits(new ArrayList<Unit>(Arrays.asList(unit3)));
-    // assertEquals("3 units", territory.getUnitsString());
+    assertEquals("3,0,0,0,0,0,0,", territory.getUnitsString());
   }
+
 
   @Test
   public void testGetAliveUnitsFor() {
