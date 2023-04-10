@@ -21,35 +21,36 @@
 
 // public class StartGameControllerTest extends ApplicationTest {
 
-//     private StartGameController startGameController;
-//     private Client client;
+// private StartGameController startGameController;
+// private Client client;
 
-//     @Override
-//     public void start(Stage stage) throws IOException {
-//         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/StartGame.fxml"));
-//         AnchorPane anchorPane = fxmlLoader.load();
-//         startGameController = fxmlLoader.getController();
-//         client = mock(Client.class);
-//         startGameController.setClient(client);
-//         Scene scene = new Scene(anchorPane);
-//         stage.setScene(scene);
-//         stage.show();
-//     }
+// @Override
+// public void start(Stage stage) throws IOException {
+// FXMLLoader fxmlLoader = new
+// FXMLLoader(getClass().getResource("/ui/StartGame.fxml"));
+// AnchorPane anchorPane = fxmlLoader.load();
+// startGameController = fxmlLoader.getController();
+// client = mock(Client.class);
+// startGameController.setClient(client);
+// Scene scene = new Scene(anchorPane);
+// stage.setScene(scene);
+// stage.show();
+// }
 
-//     @Test
-//     public void testNewGameButton() {
-//         Platform.runLater(() -> {
-//             clickOn("#newGame");
-//             verifyThat("#newGame", hasText("New Game"));
-//         });
-//     }
+// @Test
+// public void testNewGameButton() {
+// Platform.runLater(() -> {
+// clickOn("#newGame");
+// verifyThat("#newGame", hasText("New Game"));
+// });
+// }
 
-    // @Test
-    // public void testExitGameButton() {
-    // Platform.runLater(() -> {
-    // clickOn("#exitGame");
-    // // verifyThat(window("Primary Stage"), WindowMatchers.isClosed());
-    // });
-    // }
+// @Test
+// public void testExitGameButton() {
+// Platform.runLater(() -> {
+// clickOn("#exitGame");
+// // verifyThat(window("Primary Stage"), WindowMatchers.isClosed());
+// });
+// }
 
-}
+// }
