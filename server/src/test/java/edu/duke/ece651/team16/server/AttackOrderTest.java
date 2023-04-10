@@ -19,9 +19,11 @@ public class AttackOrderTest {
     Player p1 = new Player("red", connection, Territories, 1);
     Unit u = new AdvancedUnit(p1, t1, false, 1);
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
+    p1.newResourcePerTurn();
+    p1.newResourcePerTurn();
     GameMap map = new GameMap(1);
-    // AttackOrder at = new AttackOrder(t1, t2, 1, p1, map);
-    // assertEquals(null, at.tryAction());
+    AttackOrder at = new AttackOrder(t1, t2, 1, p1, map, 0);
+    assertEquals(null, at.tryAction());
   }
 
   @Test
@@ -37,8 +39,24 @@ public class AttackOrderTest {
     Unit u = new AdvancedUnit(p1, t1, false, 1);
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
     GameMap map = new GameMap(1);
-    // AttackOrder at = new AttackOrder(t1, t2, 1, p1, map);
-    // assertEquals("You can not attack your own territory", at.tryAction());
+    AttackOrder at = new AttackOrder(t1, t2, 1, p1, map, 0);
+    assertEquals("You can not attack your own territory", at.tryAction());
+  }
+
+  @Test
+  public void test_not_enough_resource() {
+    Territory t1 = new Territory("t1");
+    Territory t2 = new Territory("t2");
+    t1.setNeighbors(new ArrayList<Territory>(Arrays.asList(t2)));
+    List<Territory> Territories = new ArrayList<Territory>();
+    Territories.add(t1);
+    Conn connection = mock(Conn.class);
+    Player p1 = new Player("red", connection, Territories, 1);
+    Unit u = new AdvancedUnit(p1, t1, false, 1);
+    t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
+    GameMap map = new GameMap(1);
+    AttackOrder at = new AttackOrder(t1, t2, 1, p1, map, 0);
+    assertEquals("Not enough food resource to attack. Need 8 food resources, but only have 0.", at.tryAction());
   }
 
 }

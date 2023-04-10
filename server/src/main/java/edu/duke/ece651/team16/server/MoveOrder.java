@@ -40,18 +40,18 @@ public class MoveOrder implements Order {
         OrderRuleChecker checker = new MoveInputRuleChecker(pathchecker);
         String moveProblem = checker.checkOrder(from, to, player, numUnits, gameMap, level);
         if (moveProblem == null) {
-            // remove units from fromTerritory
-            ArrayList<Unit> moveUnits = from.tryRemoveUnits(numUnits, player, level);
-            // add units to toTerritory
-            to.tryAddUnits(moveUnits);
-            // subtract food resource
             int distance = pathchecker.dijkstraAlgorithm(from, to, gameMap);
             // int stub_distance = 5;
             int cost = moveCost(distance);
             if (player.getFoodResource() < cost)
                 return "Not enough food resource. Need " + cost + " food resources, but only have "
                         + player.getFoodResource() + " food resource.";
+            // subtract food resource
             player.removeFoodResource(cost);
+            // remove units from fromTerritory
+            ArrayList<Unit> moveUnits = from.tryRemoveUnits(numUnits, player, level);
+            // add units to toTerritory
+            to.tryAddUnits(moveUnits);
             return null;
         }
         return moveProblem;
