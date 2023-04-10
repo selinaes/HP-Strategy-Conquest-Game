@@ -43,7 +43,7 @@ public class AdvancedUnit extends BasicUnit {
 
     /*
      * initialize the bonus table
-     */
+    */
     private void initializeBonusTable() {
         // level, bonus
         levelBonusTable.put(0, 0);

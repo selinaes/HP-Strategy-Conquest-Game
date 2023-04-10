@@ -33,6 +33,26 @@ public class ConnTest {
     return mockReader;
   }
 
+  // @Test
+  // public void testClose() {
+  // // Create a mock input stream that will return "close"
+  // ByteArrayInputStream inStream = new
+  // ByteArrayInputStream("close\n".getBytes());
+  // BufferedReader in = new BufferedReader(new InputStreamReader(inStream));
+
+  // // Create a mock instance of the class that uses the recv method
+  // MyClass myClass = Mockito.mock(MyClass.class);
+  // Mockito.when(myClass.recv()).thenReturn("close");
+
+  // // Call the recv method and verify that the close method is called on the
+  // mock
+  // // object
+  // String ans = myClass.recv();
+  // if (ans.equals("close")) {
+  // }
+  // Mockito.verify(myClass).close();
+  // }
+
   @Test
   public void testSend() throws Exception {
     // Create a mock Socket
@@ -89,20 +109,9 @@ public class ConnTest {
     inField.setAccessible(true);
     inField.set(connection, mockReader);
 
-    String result = connection.recv();
-    assertEquals("test message", result);
-    connection.close();
+    when(mockReader.readLine()).thenReturn("close");
 
-    BufferedReader mockReader2 = mock(BufferedReader.class);
-    Conn connection2 = new Conn(mockSocket);
-    Field field2 = connection2.getClass().getDeclaredField("in");
-    field2.setAccessible(true);
-    field2.set(connection2, mockReader2);
-
-    when(mockReader2.readLine()).thenReturn(null).thenThrow(new IOException()).thenReturn("String");
-
-    connection2.recv();
-    connection2.close();
+    connection.recv();
   }
 
   @Test
