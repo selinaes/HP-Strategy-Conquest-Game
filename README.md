@@ -29,14 +29,14 @@
 
 ## Requirements
 [Evolution1](prj1.pdf)
-[[Evolution2](prj2.pdf)
+[Evolution2](prj2.pdf)
 [Evolution3](prj3.pdf)
 
 ## UX Principles used for Evolution 2
-[Choose Group Page](focal-point.png)
-[Assign Unit Page](figure-ground.png)
-[Two Regions in Game](common-region.png)
-[During Move](focal-figure.png)
+<img src="focal-point.png" width="600px">
+<img src="figure-ground.png" width="600px">
+<img src="common-region.png" width="600px">
+<img src="focal-figure.png" width="600px">
 
 ### 1.Similarity Principle
 In the Choose Group Page, we used 4 chess pieces of different color to represent 4 colors. Because they look similar, users could group them together, and infer that they should select one from the four.
@@ -59,8 +59,6 @@ After starting an action, the buttons in the lower-right corner of the screen is
 ### 4. Common Region Principle
 The upper right corner of a game screen uses 'Common Region Principle' - all major action buttons are enclosed in a region. User would perceive them as grouped together, and easily figure out that these are the major actions they can take.
 
-](prj2.pdf)
-[Evolution3](prj3.pdf)
 
 ## Game Detail
 ### Duke Map
