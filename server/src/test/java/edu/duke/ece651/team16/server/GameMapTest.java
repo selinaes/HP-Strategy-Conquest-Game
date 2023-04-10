@@ -67,18 +67,19 @@ public class GameMapTest {
         m4.createTestMap();
     }
 
-    // @Test
-    // public void testGetTerritoryList() {
-    // GameMap m1 = new GameMap(2);
-    // ArrayList<String> e1 = new ArrayList<String>();
-    // e1.add("red");
-    // e1.add("blue"); // create an instance of the GameMap class
-    // ArrayList<Territory> territoryList = m1.getTerritoryList(); // call the
-    // getTerritoryList() method
-    // assertNotNull(territoryList); // check that the returned list is not null
-    // // assertEquals(42, territoryList.size()); // check that the list contains
-    // the
-    // // expected number of territories
-    // }
+    @Test
+    public void testGetTerritoryList() {
+        GameMap m1 = new GameMap(2);
+        ArrayList<String> e1 = new ArrayList<String>();
+        e1.add("red");
+        e1.add("blue"); // create an instance of the GameMap class
+        m1.createDukeMap(); // call the createBasicMap() method
+        ArrayList<Territory> territoryList = m1.getTerritoryList(); // call the
+        // getTerritoryList() method
+        assertNotNull(territoryList); // check that the returned list is not null
+        // assertEquals(42, territoryList.size()); // check that the list contains
+        // the
+        // expected number of territories
+    }
 
 }

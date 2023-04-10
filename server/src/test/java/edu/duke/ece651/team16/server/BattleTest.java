@@ -125,4 +125,58 @@ public class BattleTest {
     assertFalse(battlefield.checkGroupExisted(units2));
   }
 
+  @Test
+  public void testFindSmallest() {
+    // create an ArrayList of Unit objects to test the method
+    // create an ArrayList of Unit objects to test the method
+    ArrayList<Unit> party = new ArrayList<Unit>();
+    Player p1 = mock(Player.class);
+    when(p1.getColor()).thenReturn("p1");
+    AdvancedUnit unit = new AdvancedUnit(p1, mock(Territory.class), true, 0);
+    AdvancedUnit unit1 = new AdvancedUnit(p1, mock(Territory.class), true, 0);
+    AdvancedUnit unit2 = new AdvancedUnit(p1, mock(Territory.class), true, 0);
+    unit.upgrade(3);
+    unit1.upgrade(2);
+    unit2.upgrade(1);
+
+    party.add(unit);
+    party.add(unit1);
+    party.add(unit2);
+    ArrayList<Unit> units1 = new ArrayList<>();
+    Battle battlefield = new Battle();
+    battlefield.addGroup(units1);
+
+    // create an instance of the Party class and call the findLargest() method
+    // Party testParty = new Party();
+    Unit smallerUnit = battlefield.findSmallest(party);
+  }
+
+  @Test
+  public void testFindLargest() {
+    // create an ArrayList of Unit objects to test the method
+    ArrayList<Unit> party = new ArrayList<Unit>();
+    Player p1 = mock(Player.class);
+    when(p1.getColor()).thenReturn("p1");
+    AdvancedUnit unit = new AdvancedUnit(p1, mock(Territory.class), true, 0);
+    AdvancedUnit unit1 = new AdvancedUnit(p1, mock(Territory.class), true, 0);
+    AdvancedUnit unit2 = new AdvancedUnit(p1, mock(Territory.class), true, 0);
+    unit.upgrade(1);
+    unit1.upgrade(2);
+    unit2.upgrade(3);
+
+    party.add(unit);
+    party.add(unit1);
+    party.add(unit2);
+    ArrayList<Unit> units1 = new ArrayList<>();
+    Battle battlefield = new Battle();
+    battlefield.addGroup(units1);
+
+    // create an instance of the Party class and call the findLargest() method
+    // Party testParty = new Party();
+    Unit largestUnit = battlefield.findLargest(party);
+    Unit smallerUnit = battlefield.findSmallest(party);
+
+    // assertEquals(7, largestUnit.getLevel());
+  }
+
 }

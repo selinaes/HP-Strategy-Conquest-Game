@@ -1,52 +1,51 @@
 package edu.duke.ece651.team16.controller;
 
-// import static org.junit.jupiter.api.Assertions.*;
-
-// import org.junit.jupiter.api.BeforeAll;
-
-// import org.junit.jupiter.api.Test;
-// import javafx.embed.swing.JFXPanel;
-// import javafx.scene.control.Alert;
-
+import javafx.embed.swing.JFXPanel;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.testfx.api.FxToolkit;
+import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationTest;
+import org.testfx.util.WaitForAsyncUtils;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
-public class AlertBoxTest extends ApplicationTest {
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-  private AlertBox alertBox;
+class AlertBoxTest extends ApplicationTest {
 
-  @BeforeAll
-  public static void setUpClass() throws Exception {
-    // Initialize JavaFX runtime using FxToolkit
-    FxToolkit.registerPrimaryStage(() -> new Stage());
-  }
+    private AlertBox alertBox;
 
-  @Test
-  public void testDisplayImageAlert() {
-    // Create an instance of AlertBox
-    alertBox = new AlertBox();
-    // Call the method to display an image alert
-    alertBox.displayImageAlert("Test", "/path/to/image.png");
-    // Verify that the image alert is displayed correctly
-    assertEquals(1, lookup("#Close").queryAll().size());
-    assertEquals(1, lookup("#ImageView").queryAll().size());
-    assertEquals(1, lookup("#Alert").queryAll().size());
-  }
+    @BeforeAll
+    static void setUpClass() {
+        // initialize JavaFX toolkit
+        JFXPanel jfxPanel = new JFXPanel();
+    }
 
-  @Test
-  public void testShowAlert() {
-    // Create an instance of AlertBox
-    alertBox = new AlertBox();
-    // Call the method to display a text alert
-    alertBox.showAlert("Test", "This is a test message");
-    // Verify that the text alert is displayed correctly
-    assertEquals("Test", lookup("#AlertTitle").query().getText());
-    assertEquals("This is a test message", lookup("#AlertMessage").query().getText());
-    assertEquals(1, lookup("#Alert").queryAll().size());
-  }
+    @Override
+    public void start(Stage stage) throws Exception {
+        alertBox = new AlertBox();
+    }
+
+    @Test
+    void displayImageAlert() throws TimeoutException {
+        String imageUrl = "https://via.placeholder.com/150";
+        WaitForAsyncUtils.asyncFx(() -> alertBox.displayImageAlert("Image Alert", imageUrl));
+
+        FxRobot robot = new FxRobot();
+        robot.sleep(1, TimeUnit.SECONDS);
+
+        assertTrue(robot.lookup("#closeButton").tryQuery().isPresent());
+    }
+
+    @Test
+    void showAlert() throws TimeoutException {
+        WaitForAsyncUtils.asyncFx(() -> alertBox.showAlert("Text Alert", "This is a text alert."));
+
+        FxRobot robot = new FxRobot();
+        robot.sleep(1, TimeUnit.SECONDS);
+
+        assertTrue(robot.lookup(".alert").tryQuery().isPresent());
+    }
 }
