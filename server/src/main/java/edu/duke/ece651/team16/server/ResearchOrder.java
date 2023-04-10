@@ -1,5 +1,5 @@
-package edu.duke.ece651.team16.server;
 
+package edu.duke.ece651.team16.server;
 import java.util.ArrayList;
 import java.util.HashMap;
 

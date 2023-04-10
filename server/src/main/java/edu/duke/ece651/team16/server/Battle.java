@@ -99,7 +99,7 @@ public class Battle {
      * @param party
      * @return Unit
      */
-    private Unit findLargest(ArrayList<Unit> party) {
+    public Unit findLargest(ArrayList<Unit> party) {
         Unit curr_large = party.get(0);
         // int index = 0;
         if (party.size() == 1)
@@ -119,7 +119,7 @@ public class Battle {
      * @param party
      * @return Unit
      */
-    private Unit findSmallest(ArrayList<Unit> party) {
+    public Unit findSmallest(ArrayList<Unit> party) {
         Unit curr_small = party.get(0);
         if (party.size() == 1)
             return curr_small;

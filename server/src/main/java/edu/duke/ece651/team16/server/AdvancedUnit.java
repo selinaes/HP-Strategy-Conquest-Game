@@ -10,12 +10,14 @@ public class AdvancedUnit extends BasicUnit {
     public static HashMap<Integer, Integer> levelBonusTable;
 
     /*
-      * Constructor for AdvancedUnit
-      * 
-      * @param owner the owner of the unit
-      * @param where the territory where the unit is
-      * @param isAttacker whether the unit is an attacker
-      */
+     * Constructor for AdvancedUnit
+     * 
+     * @param owner the owner of the unit
+     * 
+     * @param where the territory where the unit is
+     * 
+     * @param isAttacker whether the unit is an attacker
+     */
     public AdvancedUnit(Player owner, Territory where, boolean isAttacker, int id) {
         super(owner, where, isAttacker, id);
         this.bonus = 0;
@@ -43,7 +45,7 @@ public class AdvancedUnit extends BasicUnit {
 
     /*
      * initialize the bonus table
-    */
+     */
     private void initializeBonusTable() {
         // level, bonus
         levelBonusTable.put(0, 0);
@@ -57,6 +59,7 @@ public class AdvancedUnit extends BasicUnit {
 
     /*
      * assume that the player has enough tech resource
+     * 
      * @param upgradeAmount the amount of upgrade
      */
     @Override
@@ -68,6 +71,7 @@ public class AdvancedUnit extends BasicUnit {
 
     /*
      * get the bonus of the unit
+     * 
      * @return the bonus of the unit
      */
     @Override
@@ -77,6 +81,7 @@ public class AdvancedUnit extends BasicUnit {
 
     /*
      * get the level of the unit
+     * 
      * @return the level of the unit
      */
     @Override
@@ -86,6 +91,7 @@ public class AdvancedUnit extends BasicUnit {
 
     /*
      * set the bonus of the unit
+     * 
      * @param bonus the bonus of the unit
      */
     public void setBonus(int bonus) {
@@ -94,6 +100,7 @@ public class AdvancedUnit extends BasicUnit {
 
     /*
      * set the level of the unit
+     * 
      * @param level the level of the unit
      */
 
@@ -103,6 +110,7 @@ public class AdvancedUnit extends BasicUnit {
 
     /*
      * get the name of the unit
+     * 
      * @return the name of the unit
      */
     @Override
@@ -112,6 +120,7 @@ public class AdvancedUnit extends BasicUnit {
 
     /*
      * set the name of the unit
+     * 
      * @param name the name of the unit
      */
     public void setName(String name) {

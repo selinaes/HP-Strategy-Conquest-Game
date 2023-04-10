@@ -21,8 +21,7 @@ public class MoveInputRuleCheckerTest {
         t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
         GameMap map = new GameMap(1);
         MoveInputRuleChecker checker = new MoveInputRuleChecker(null);
-        // assertEquals("You do not own the from territory", checker.checkMyRule(t1, t2,
-        // p1, 1, map));
+        assertEquals("You do not own the from territory", checker.checkMyRule(t1, t2, p1, 1, map, 0));
     }
 
     @Test
@@ -39,7 +38,6 @@ public class MoveInputRuleCheckerTest {
         t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
         GameMap map = new GameMap(1);
         MoveInputRuleChecker checker = new MoveInputRuleChecker(null);
-        // assertEquals("You do not own the to territory", checker.checkMyRule(t1, t2,
-        // p1, 1, map));
+        assertEquals("You do not own the to territory", checker.checkMyRule(t1, t2, p1, 1, map, 0));
     }
 }
