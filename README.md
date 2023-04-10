@@ -185,86 +185,231 @@ Research and upgrade actions cost tech resources.
 ### UML Diagram
 ```mermaid
 classDiagram
-    ServerApp "1" --> "1" Server
-    ClientApp "1" --> "N" Client
-    Server "1" --> "N" Player
-    Server "1" --> "1" RuleChecker
+    ServerApp "1" --* "1" Server
+    ClientApp "1" --* "N" Client
+    Client "1" --* "1" Views
+    Server "1" --* "1" Game
+    Game "1" --* "N" Player
+    Game "1" --* "N" Order
+    Game "1" --* "1" MessageGenerator
+    Game "1" --* "1" GameMap
+    Game "1" --* "N" Conn 
+    Player "1" --> "1" Conn
     Player "1"--> "N" Territory
-    Player "1" --> "N" Order
+    Player "1" --* "1" AssignUnitRuleChecker
+    Player "1" --* "N" Unit
     Territory "1"--> "N" Unit
     Unit <|.. BasicUnit
-    Client "1" --> "1" Connection
-    Server "1"--> "1" Connection
-    Client "1" --> "1" Actions
-    Client "1" --> "1" Views
-    Client "1" --> "1" InputChecker
-    
-    Territory "1" --> "0..1" Battle
-    Battle --> Combat
-    
-    RuleChecker <|-- MoveInputChecker
-    RuleChecker <|-- MovePathChecker
-    RuleChecker <|-- AttackInputChecker
-    RuleChecker <|-- AttackAdjacentChecker
+    AttackOrder --* OrderRuleChecker
+    MoveOrder --* OrderRuleChecker
 
+    
     AttackOrder --|> Order
     MoveOrder --|> Order
+    ResearchOrder --|> Order
+    UpgradeOrder --|> Order
+
+    Territory "1" --* "0..1" Battle
+    Battle --* Combat
     
-    Battle "1" --> "N" AttackOrder
+    OrderRuleChecker <|-- MoveInputRuleChecker
+    OrderRuleChecker <|-- MovePathRuleChecker
+    OrderRuleChecker <|-- AttackInputRuleChecker
+    OrderRuleChecker <|-- AttackAdjacentRuleChecker
+
+
+
+class ClientApp {
+    + main(String[] args): void
+}
 
 class Client {
-    
-}
-
-class Connection {
-    - Socket socket
-    + send(): void
-    + recv(): void
-}
-
-class Actions {
-    - BufferedReader inputReader
+    - BufferedReader socketReceive
+    - PrintWriter socketSend
+    - Views view
     - PrintStream out
-    - Connection conn
-    + selectColor(String prompt): void
-    + distributeUnits(String prompt): void
-    + enterOrder(String prompt): void
-    + loseChoice(String prompt): void
-    + commit(String prompt): void
+    - BufferedReader inputReader
+    - boolean ifExit
+    + run(): void
+    + ifExit(): boolean
+    + runWatchOption(): void
+    + recvMsg(): String
+    + readClientInput(String prompt): String
+    + sendResponse(String response): void
+    + waitEveryoneDone(): void
+    + playerChooseColor(): void
+    + playerChooseNum(): void
+    + playerAssignUnit(): boolean
+    + playerAssignUnits(): void
+    + playerActionTurn(): void
+    + playerOneAction(): void
+    + checkMoveInputFormat(String clientInput): boolean
+    + playerChooseWatch(): void
 }
+
+
 
 class Views {
+    - PrintStream out
     - boolean watch
-    + displayMap(): String
-    + displayChoices(): String
-    + displayWin(): String
-    + displaylost(): String
+    - ObjectMapper objectMapper
+    + setWatch(): void
+    + isWatch(): boolean
+    + displayInitialMap(String jsonString): void
+    + displayEntry(String to_display): String
+    + displayMap(String jsonString): void
+    + displayLog(String jsonString): void
+    + playerWatchTurn(): void
 }
 
-class InputChecker{
-    <<interface>>
-    + checkInput()
+
+class ServerApp {
+    - int port
+    - ServerSocket listenSocket
+    - Server server
+    + createServerSocket(): void
+    + createServer(): void
+    + runServer(): void
+    + main(String[] args): void
 }
+
+
+
 
 class Server {
-    - RuleChecker
-    + doPlacementPhase(): void
-    + doOrderPhase(): void
-    + doOrderTurn(): void
-    + determineWinner(): void
-    + formMap(): void
+    - ServerSocket listenSocket
+    - ThreadPoolExecutor threadPool
+    - Game game
+    - int numClients
+    + Server(ServerSocket: serverSocket)
+    + acceptOrNull(): Socket
+    + run(): void
 }
 
+class MessageGenerator {
+    - ObjectMapper objectMapper
+    + formEntry(Player p): HashMap<String, String>
+    + sendEntry(Player p): void
+    + sendLog(Player p, HashMap<String, String> to_send): void
+    + sendInitialMap(Conn conn, HashMap<String, ArrayList<HashMap<String, String>>> to_send: void
+    + sendMap(Player player, HashMap<String, ArrayList<HashMap<String, String>>> to_send): void
+    + formInitialMap(GameMap currentMap, List<String> colors): HashMap<String, ArrayList<HashMap<String, String>>>
+    + formMap(List<Player> players): HashMap<String, ArrayList<HashMap<String, String>>>
+}
+
+class GameMap{
+    - int numPlayer
+    - ArrayList<String> ColorList
+    - HashMap<String, List<Territory>> map
+    + getTerritoryList(): ArrayList<Territory>
+    + createBasicMap(): HashMap<String, List<Territory>>
+    + createDukeMap(): HashMap<String, List<Territory>>
+    + createTestMap(): HashMap<String, List<Territory>>
+    + createTest3Map(): HashMap<String, List<Territory>>
+    + getColorList(): ArrayList<String>
+    + getMap(): HashMap<String, List<Territory>>
+    + setMap(HashMap<String, List<Territory>> map): void
+}
+
+class Game {
+    - List<Player> players
+    - int numPlayer
+    - List<String> colors
+    - GameMap currentMap
+    - List<Conn> allConnections
+    - String gameState
+    - int readyPlayer
+    - int unitsPerPlayer 
+    - int playerLowBound
+    - int playerHighBound
+    - int gameRound
+    - MessageGenerator messageGenerator
+    - HashMap<String, Supplier<HashMap<String, List<Territory>>>> mapCreateFns
+    - String mapName
+    - setupMapCreateFns(): void
+    + gameFlow(Socket client_socket, int numClients): void
+    + doActionPhase(Player p): void
+    + doPlacementPhase(Socket client_socket, int numClients): Player
+    + addPlayer(Player p): void
+    + chooseColor(Conn conn): String
+    + ifChooseWatch(Conn conn): String
+    + chooseNumOfPlayers(Conn conn, int numClients): void
+    + getNumPlayer(): int
+    + initializeMap(int numOfPlayers): void
+    + assignUnits(Player p, Conn conn): void
+    + notifyAllPlayers(Conn conn, String newStage): void
+    - promptTerritory(Player p, Conn conn): void
+    - isValidTerritory(Player p, String territoryName, Conn conn): boolean
+    - promptUnitNumber(Player p, String territoryName, Conn conn): void
+    - isValidUnitNumber(Player p, String territoryName, String num, Conn conn): boolean
+    + setNumPlayer(int num): void
+    + doAction(Player p): boolean
+    + makeActionOrder(Player p, String actionName): order
+    + doOneAction(Player p, String actionName): void
+    + checkNameReturnTerritory(String territory_name, GameMap map): Territory
+    + worldwar(): HashMap<String, String>
+    + generateUnit(): void
+    + produceResources(): void
+    + findWinner(): Player
+}
+
+
 class Player {
-    - Territory[] Territories
-    - String name
+    - List<Territory> Territories
+    - ArrayList<Unit> units
     - String color
-    - Connection connection
-    + updateTerritories(Territory[]): void
-    + updateUnits(Unit[] unit_in): void
-    + doOnePlacement(Territory): void
-    + doOneOrder(): void
-    + checklost(): boolean
+    - Conn conn
+    - int numUnits
+    - AssignUnitRuleChecker placementchecker
+    - boolean isWatch
+    - int foodResource
+    - int techResource
+    - int techLevel
+    - boolean hasResearched
+    + unplacedUnits(): int
+    + findNextUnplacedUnits(int amount): ArrayList<Unit>
+    + placeUnitsSameTerritory(String t_name, int num): String
+    + getTerritoryNames(): ArrayList<String>
+    + addTerritories(List<Territory> territory): void
+    + removeTerritory(Territory t): void
+    + getTerritories(): List<Territory>
+    + getColor(): String
+    + getConn(): Conn
+    + generateNewUnit(): void
+    + checkLose(): boolean
+    + setWatch(): void
+    + getisWatch(): boolean
+    + getFoodResource(): int
+    + getTechResource(): int
+    + removeFoodResource(int amount): void
+    + removeTechResource(int amount): void
+    + newResourcePerTurn(): void
+    + displayResourceLevel(): String
+    + updateTechLevel(): void
+    + getTechLevel(): int
+    + updateResearchRound(boolean status): void
+    + getHasResearched(): boolean
+}
+
+class Conn {
+    - Socket clientsocket
+    - BufferedReader in
+    - PrintWriter out
+    + send(String msg): void
+    + recv(): String
+    + close(): void
+}
+
+class Unit {
+    <<interface>>
+    + setwhere(Territory where): void
+    + getwhere(): Territory
+    + getOwner(): Player
+    + getAlive(): boolean
+    + getisAttacker(): boolean
+    + setisAttacker(): void
+    + setDead(): void
+    + getId(): void
 }
 
 class BasicUnit {
@@ -272,69 +417,145 @@ class BasicUnit {
     - Territory where
     - boolean isAttacker
     - int id
-    - boolean alive
+    - boolean isAlive
 }
 
-class Unit {
-<<interface>>
 
-}
 
 class Territory {
-    - string name
-    - Territory[] neighbor
-    - Unit[] localBasicUnit
+    - String name
+    - List<Territory> neighbors
+    - ArrayList<Unit> units
     - Player owner
-    - Battle ongingBattle
-    + update(String playerName, Unit[] units): void
-    + getBattle(): Battle
+    - Battle battle
+    - HashMap<Territory, Integer> neighborDistance
+    - int foodRate
+    - int techRate
+    + getUnits(): ArrayList<Unit>
+    + existsBattle(): boolean
+    + defendHome(): void
+    + doBattle(): String
+    + getAliveUnitsFor(Player player): ArrayList<Unit>
+    + tryAddUnits(ArrayList<Unit> units): void
+    + tryAddAttackers(ArrayList<Unit> units): void
+    + tryRemoveUnits(int num, Player player): ArrayList<Unit>
+    + getUnitsString(): String
+    + getOwner(): Player
+    + setOwner(Player owner): void
+    + getName(): String
+    + getNeighbors(): List<Territory>
+    + getNeighborsNames(): String
+    + territoryInfo(): String
+    + setNeighbors(List<Territory> neighbors): void
+    - addNeighbor(Territory neighbor): void
+    + setFoodRate(int foodRate): void
+    + setTechRate(int techRate): void
+    + getFoodRate(): void
+    + getTechRate(): void
+    + setDistance(List<Territory> neighbors, List<Integer> distance): void
+    + getDistanceMap(): HashMap<Territory, Integer>
+    + getDistance(Territory neighbor): int
 }
 
+
 class Combat{
+    - int seed
+    - int diceNum
+    + setSeed(int seed): void
+    + setDiceNum(int diceNum): void
     + rolldice(): int
-    + determineWin(Unit A, Unit B): void
+    + determineWin(Unit A, Unit B): Unit
 }
 
 class Battle{
-    - HashMap~String playername, Unit[]~Parties
-    + resolveBattle(): playername, Units[]
-    + checkPartyAlive(String playername): boolean
-    + addGroup(): void
+    - ArrayList<ArrayList<Unit>> parties
+    - Combat combat
+    + resolveBattle(): Player
+    + addGroup(ArrayList<Unit> units): void
+    + setCombat(Combat combat): void
+    + getParties(): ArrayList<ArrayList<Unit>>
+    + checkGroupExisted(ArrayList<Unit> units): boolean
+    + GameLog(): String
+    + clearParty(): void
 }
 
-class Order{
-    -Territory from
-    -Territory to 
-    -string playerName
+class Order {
+    <<interface>>
+    + tryAction(): String
 }
+
 class MoveOrder{
-    + tryMove(): boolean
+    - Territory from
+    - Territory to 
+    - int numUnits
+    - Player player
+    - GameMap gameMap
+    + getPlayer(): Player
+    + moveCost(int distance): int
 }
 
 class AttackOrder{
-    + tryAttack(): boolean
+    - Territory from
+    - Territory to 
+    - int numUnits
+    - Player player
+    - GameMap gameMap
+    + attackCost(): int
 }
 
-class RuleChecker {
-    -RuleChecker<T> next
-    #checkMyRule()
+class ResearchOrder{
+    - Player player
+    + HashMap<Integer, Integer> researchCostTable
+    - initializeTable(): void
 }
 
-class MoveInputChecker{
-    #checkMyRule():
+class UpgradeOrder {
+    - Player player
+    - Territory belonging
+    - int numUnits
+    - int initialLevel
+    - int upgradeAmount
 }
 
-class MovePathChecker{
-    #checkMyRule():
+class AssignUnitRuleChecker{
+    + checkMyRule(String territory_name, Player player, int amount): String
 }
 
-class AttackInputChecker{
-    #checkMyRule():
+class ResearchRuleChecker {
+    + checkMyRule(Player player, int maxLevel): String
 }
 
-class AttackAdjacentChecker{
-    #checkMyRule():
+class UpgradeRuleChecker {
+    + checkMyRule(): String
 }
+
+class OrderRuleChecker {
+    - OrderRuleChecker next
+    + checkMyRule(Territory from, Territory to, Player player, int numUnits, GameMap map): String
+    + checkOrder(Territory from, Territory to, Player player, int numUnits, GameMap map): String
+}
+
+class MoveInputRuleChecker{
+    + checkMyRule(): String
+}
+
+class MovePathRuleChecker{
+    + checkMyRule(): String
+    + dfs(Territory current, Territory destination, Player player, HashMap<String, List<Territory>> gameMap, HashSet<Territory> visited): boolean
+    + dijkstraAlgorithm(Territory source, Territory destination, GameMap gameMap): int
+    + getMinimumDistanceTerritory(Set<Territory> unsettledTerritories, Map<Territory, Integer> shortestDistances): Territory
+    + relaxNeighbors(Territory territory, Map<Territory, Integer> shortestDistances, Set<Territory> unsettledTerritories): void
+}
+
+class AttackInputRuleChecker{
+    + checkMyRule(): String
+}
+
+class AttackAdjacentRuleChecker{
+    + checkMyRule(): String
+}
+
+
 ```
 
 ### UI Prototype
