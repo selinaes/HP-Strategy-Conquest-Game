@@ -30,6 +30,15 @@ public class MapParser {
     }
 
     /**
+     * Get the player for the game
+     * 
+     * @return
+     */
+    public String getPlayer() {
+        return player;
+    }
+
+    /**
      * Set the Map for the game
      * 
      * @param m

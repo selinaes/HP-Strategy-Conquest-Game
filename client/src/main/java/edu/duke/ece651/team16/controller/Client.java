@@ -129,6 +129,12 @@ public class Client {
         return false;
     }
 
+
+    // set color
+    public void setColor(String color) {
+        this.color = color;
+    }
+
     /**
      * Get player color
      * 

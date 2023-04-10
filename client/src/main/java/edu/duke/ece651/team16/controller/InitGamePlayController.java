@@ -137,8 +137,11 @@ public class InitGamePlayController {
 
             GamePlayController gamePlayController = fxmlLoader.getController();
             gamePlayController.setClient(client);
+            gamePlayController.setColorText(client.getColor());
             gamePlayController.setMapParser(mapParser);
             gamePlayController.setMyTerritory(myTerritory);
+
+        
             // Display the game play screen
             territoryRoot.getChildren().setAll(pane);
         } catch (Exception e) {

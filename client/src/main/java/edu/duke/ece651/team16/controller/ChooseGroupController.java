@@ -116,6 +116,7 @@ public class ChooseGroupController {
                 InitGamePlayController initgamePlayController = fxmlLoader.getController();
                 initgamePlayController.setClient(client);
                 mapParser.setPlayer(text);
+                client.setColor(text);
                 initgamePlayController.setinitMapParser(mapParser);
                 // Display the game play screen
                 chooseGroupRoot.getChildren().setAll(pane);

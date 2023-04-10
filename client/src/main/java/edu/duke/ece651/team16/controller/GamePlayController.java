@@ -12,6 +12,7 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
@@ -65,6 +66,8 @@ public class GamePlayController {
     private GridPane territoryGrid;
     @FXML
     public ImageView battleTime;
+    @FXML
+    public Label color;
 
     private Client client;
     private MapParser mapParser;
@@ -85,8 +88,8 @@ public class GamePlayController {
         // at Assign Units Phase
         exitGame.setVisible(false);
         watchUpdate.setVisible(false);
-        watchUpdate.setDisable(true);
         battleTime.setVisible(false); // image for acting battle is not visible
+        
 
         rule.setOnAction(event -> {
             try {
@@ -99,6 +102,10 @@ public class GamePlayController {
         mapImage.setOnScroll(this::onZoom);
         mapImage.setOnMouseDragged(this::onDrag);
         myOrder = new ArrayList<>();
+    }
+
+    public void setColorText(String which){
+        color.setText("Color: " + which);
     }
 
     /**
@@ -237,6 +244,12 @@ public class GamePlayController {
                 // alert.displayImageAlert("Game Finish", "/img/texts/youlose.png");
                 PopupBox popup = new PopupBox(territoryRoot);
                 popup.display("/img/texts/youlose.png");
+
+                // close socket! Game ends
+                Socket clientSocket = client.getClientSocket();
+                clientSocket.close();
+
+                exitGame.setVisible(true);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -284,10 +297,18 @@ public class GamePlayController {
                     popup.display("/img/texts/youwin.png");
                     Socket clientSocket = client.getClientSocket();
                     clientSocket.close();
+
+                    exitGame.setVisible(true);
                 } else {
                     history.appendText("Winner is " + msg + "!");
                     // alert.displayImageAlert("Game Finish", "/img/texts/youlose.png");
                     popup.display("/img/texts/youlose.png");
+
+                    // close socket! Game ends
+                    Socket clientSocket = client.getClientSocket();
+                    clientSocket.close();
+
+                    exitGame.setVisible(true);
                 }
 
             }
@@ -639,9 +660,9 @@ public class GamePlayController {
      */
     @FXML
     public void onExitButton(ActionEvent ae) throws Exception {
-        Socket clientSocket = client.getClientSocket();
-        clientSocket.close();
-        URL xmlResource = getClass().getResource("/ui/StartGame.fxml");
+        // Socket clientSocket = client.getClientSocket();
+        // clientSocket.close();
+        URL xmlResource = getClass().getResource("/ui/login.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(xmlResource); // Create a new FXMLLoader
         AnchorPane pane = fxmlLoader.load(); // Load the FXML file
         territoryRoot.getChildren().setAll(pane);

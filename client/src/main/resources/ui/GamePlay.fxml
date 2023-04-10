@@ -114,13 +114,18 @@
           <TextArea fx:id="textArea" minHeight="0.0" minWidth="0.0" prefHeight="166.0" prefWidth="461.0" />
         </content>
       </ScrollPane>
+      <Label fx:id="color" layoutX="1175.0" layoutY="630.0" text="My Color: ?" wrapText="true" textFill="#000000">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
       <Button fx:id="finish" layoutX="1175.0" layoutY="680.0" mnemonicParsing="false" onAction="#onFinishButton" prefHeight="100.0" prefWidth="100.0" styleClass="button-finish" text="Finish" />
       <ImageView fx:id="battleTime" fitHeight="799.0" fitWidth="1288.0" visible="false">
          <image>
             <Image url="@../img/backgrounds/waiting4.png" />
          </image>
       </ImageView>
-      <Button fx:id="watchUpdate" layoutX="520.0" layoutY="170.0" onAction="#onWatchGameInfo"  styleClass="button-able" text="Follow Game"/>
-      <Button fx:id="exitGame" layoutX="1200.0" mnemonicParsing="false" onAction="#onExitButton" styleClass="button-able" text="Exit"/>
+      <Button fx:id="watchUpdate" layoutX="500.0" layoutY="165.0" onAction="#onWatchGameInfo"  styleClass="button-able" text="Follow Game"/>
+      <Button fx:id="exitGame" layoutX="555.0" layoutY="17.0" mnemonicParsing="false" onAction="#onExitButton" styleClass="button-able" text="Exit"/>
    </children>
 </AnchorPane>
