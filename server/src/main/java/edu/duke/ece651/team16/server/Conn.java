@@ -55,9 +55,13 @@ public class Conn {
         ans = in.readLine();
         if (ans != null) {
           received = true;
+          if (ans.equals("close")) {
+            this.close();
+          }
         }
       } catch (IOException e) {
         System.out.println("Failed to receive message.");
+        break;
         // System.exit(1);
       }
     }

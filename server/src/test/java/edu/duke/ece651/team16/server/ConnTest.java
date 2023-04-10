@@ -33,6 +33,7 @@ public class ConnTest {
     return mockReader;
   }
 
+
   @Test
   public void testSend() throws Exception {
     // Create a mock Socket
@@ -80,6 +81,21 @@ public class ConnTest {
   }
 
   @Test
+  public void test_close() throws IOException, Exception {
+    Socket mockSocket = makeMockSocket();
+    BufferedReader mockReader = makeBufferedReader("test message");
+
+    Conn connection = new Conn(mockSocket);
+    Field inField = connection.getClass().getDeclaredField("in");
+    inField.setAccessible(true);
+    inField.set(connection, mockReader);
+
+    when(mockReader.readLine()).thenReturn("close");
+
+    connection.recv();
+  }
+
+  @Test
   public void test_recv() throws IOException, Exception {
     Socket mockSocket = makeMockSocket();
     BufferedReader mockReader = makeBufferedReader("test message");
@@ -104,6 +120,7 @@ public class ConnTest {
     connection2.recv();
     connection2.close();
   }
+
 
   @Test
   public void test_socketClose_IOE() throws IOException, Exception {

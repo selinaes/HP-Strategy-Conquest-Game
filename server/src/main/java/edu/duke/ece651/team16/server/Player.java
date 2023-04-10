@@ -12,6 +12,11 @@ public class Player {
     private int numUnits;
     private final AssignUnitRuleChecker placementchecker;
     private boolean isWatch;
+    private int foodResource;
+    private int techResource;
+    private int techLevel;
+    private boolean hasResearched;
+    private int delayedTech;
 
     /**
      * Constructor of the player
@@ -28,9 +33,22 @@ public class Player {
         this.units = new ArrayList<>();
         this.placementchecker = new AssignUnitRuleChecker();
         for (int i = 0; i < numUnits; i++) {
-            this.units.add(new BasicUnit(this, null, false, i));
+            this.units.add(new AdvancedUnit(this, null, false, i));
         }
         this.isWatch = false;
+        this.foodResource = 0;
+        this.delayedTech = 0;
+        this.techResource = 0;
+        this.techLevel = 1;
+        this.hasResearched = false;
+    }
+
+    public void updateResearchRound(boolean status) {
+        this.hasResearched = status;
+    }
+
+    public boolean getHasResearched() {
+        return this.hasResearched;
     }
 
     /**
@@ -110,15 +128,11 @@ public class Player {
         }
     }
 
-    // public void checkOwnedTerritories() {
-    // for (Territory t : Territories) {
-    // if (!t.getOwner().equals(this)) {
-    // Territories.remove(t);
-    // }
-    // }
-
-    // }
-
+    /**
+     * Remove the territories
+     * 
+     * @param territory
+     */
     public void removeTerritory(Territory t) {
         Territories.remove(t);
     }
@@ -156,7 +170,7 @@ public class Player {
      */
     public void generateNewUnit() {
         for (Territory t : Territories) {
-            Unit newUnit = new BasicUnit(this, t, false, numUnits++);
+            Unit newUnit = new AdvancedUnit(this, t, false, numUnits++);
             ArrayList<Unit> newGenerated = new ArrayList<>();
             newGenerated.add(newUnit);
             t.tryAddUnits(newGenerated);// territory add unit
@@ -176,11 +190,108 @@ public class Player {
         return false;
     }
 
+    /**
+     * set the player to be a watcher
+     */
     public void setWatch() {
         this.isWatch = true;
     }
 
+    /**
+     * get if player's watching
+     * 
+     * @return isWatch
+     */
     public boolean getisWatch() {
         return this.isWatch;
+    }
+
+    /**
+     * get the player's food resource
+     * 
+     * @return foodResource
+     */
+    public int getFoodResource() {
+        return this.foodResource;
+    }
+
+    /**
+     * get the player's tech resource
+     * 
+     * @return techResource
+     */
+    public int getTechResource() {
+        return this.techResource;
+    }
+
+    /**
+     * remove the player's food resource(both positive and negative)
+     */
+    public void removeFoodResource(int amount) {
+        this.foodResource -= amount;
+    }
+
+    /**
+     * remove the player's tech resource(both positive and negative)
+     */
+    public void removeTechResource(int amount) {
+        this.techResource -= amount;
+    }
+
+    /**
+     * add the player's food+tech resources per turn
+     */
+    public void newResourcePerTurn() {
+        for (int i = 0; i < Territories.size(); i++) {
+            this.foodResource += Territories.get(i).getFoodRate();
+            this.techResource += Territories.get(i).getTechRate();
+        }
+    }
+
+    /**
+     * display the player's food resource + tech resource
+     * @return the string
+     */
+    public String displayResourceLevel() {
+        return "(Food: " + this.foodResource + " Tech: " + this.techResource + " Tech Level: " + this.techLevel + ")";
+    }
+
+    /**
+     * update the player's tech level
+     */
+    public void updateTechLevel() {
+        if (this.techLevel == 5 && this.delayedTech == 0) {
+            this.delayedTech = 1;
+        } else if (this.techLevel < 5) {
+            this.techLevel++;
+        }
+    }
+
+    /**
+     * get the player's tech level
+     * 
+     * @return techLevel
+     */
+    public int getTechLevel() {
+        return this.techLevel;
+    }
+
+    /**
+     * reset the player's delayed tech
+     */
+    public void resetDelay() {
+        if (this.delayedTech == 1) {
+            this.techLevel++;
+            this.delayedTech = 0;
+        }
+    }
+
+    /**
+     * get the player's delayed tech
+     * 
+     * @return delayedTech
+     */
+    public int getDelayedTech() {
+        return this.delayedTech;
     }
 }

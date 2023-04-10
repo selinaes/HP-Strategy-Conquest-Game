@@ -19,7 +19,7 @@ public class BasicUnitTest {
     Player p = new Player("blue", c1, list, 2);
     Territory territory1 = new Territory("Territory 1");
     Territory territory2 = new Territory("Territory 2");
-    BasicUnit unit = new BasicUnit(p, territory1, true, 1);
+    AdvancedUnit unit = new AdvancedUnit(p, territory1, true, 1);
 
     unit.setwhere(territory2);
     unit.setisAttacker();
@@ -36,7 +36,7 @@ public class BasicUnitTest {
     List<Territory> list = new ArrayList<Territory>();
     Player p = new Player("blue", c1, list, 2);
     Territory territory1 = new Territory("Territory 1");
-    BasicUnit unit = new BasicUnit(p, territory1, true, 1);
+    AdvancedUnit unit = new AdvancedUnit(p, territory1, true, 1);
 
     Territory where = unit.getwhere();
 
@@ -52,7 +52,7 @@ public class BasicUnitTest {
     List<Territory> list = new ArrayList<Territory>();
     Player p = new Player("blue", c1, list, 2);
     Territory territory1 = new Territory("Territory 1");
-    BasicUnit unit = new BasicUnit(p, territory1, true, 1);
+    AdvancedUnit unit = new AdvancedUnit(p, territory1, true, 1);
 
     Player owner = unit.getOwner();
 
@@ -66,11 +66,35 @@ public class BasicUnitTest {
     List<Territory> list = new ArrayList<Territory>();
     Player p = new Player("blue", c1, list, 2);
     Territory territory1 = new Territory("Territory 1");
-    BasicUnit unit = new BasicUnit(p, territory1, true, 1);
+    AdvancedUnit unit = new AdvancedUnit(p, territory1, true, 1);
     unit.getId();
     boolean alive = unit.getAlive();
-
+    unit.setBonus(1);
+    unit.setLevel(1);
+    assertEquals(1, unit.getLevel());
+    unit.setName("kate");
+    assertEquals("kate", unit.getName());
     assertEquals(true, alive);
+  }
+
+
+  public class TestBasicUnit extends BasicUnit {
+    public TestBasicUnit(Player owner, Territory where, boolean isAttacker, int id) {
+      super(owner, where, isAttacker, id);
+    }
+  }
+
+  @Test
+  public void testBasicUnit() {
+    Conn c1 = mock(Conn.class);
+    List<Territory> list = new ArrayList<Territory>();
+    Player p = new Player("blue", c1, list, 2);
+    Territory t1 = new Territory("Territory 1");
+    TestBasicUnit testBasicUnit = new TestBasicUnit(p, t1, true, 1);
+    testBasicUnit.upgrade(1);
+    assertEquals("BasicUnit",testBasicUnit.getName());
+    assertEquals(0,testBasicUnit.getBonus());
+    assertEquals(0,testBasicUnit.getLevel());
   }
 
 }

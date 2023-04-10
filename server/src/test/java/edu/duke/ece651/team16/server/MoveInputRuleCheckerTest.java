@@ -17,11 +17,11 @@ public class MoveInputRuleCheckerTest {
         Territories.add(t2);
         Conn connection = mock(Conn.class);
         Player p1 = new Player("red", connection, Territories, 1);
-        Unit u = new BasicUnit(p1, t1, false, 1);
+        Unit u = new AdvancedUnit(p1, t1, false, 1);
         t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
         GameMap map = new GameMap(1);
         MoveInputRuleChecker checker = new MoveInputRuleChecker(null);
-        assertEquals("You do not own the from territory", checker.checkMyRule(t1, t2, p1, 1, map));
+        assertEquals("You do not own the from territory", checker.checkMyRule(t1, t2, p1, 1, map, 0));
     }
 
     @Test
@@ -34,10 +34,10 @@ public class MoveInputRuleCheckerTest {
         // Territories.add(t2);
         Conn connection = mock(Conn.class);
         Player p1 = new Player("red", connection, Territories, 1);
-        Unit u = new BasicUnit(p1, t1, false, 1);
+        Unit u = new AdvancedUnit(p1, t1, false, 1);
         t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
         GameMap map = new GameMap(1);
         MoveInputRuleChecker checker = new MoveInputRuleChecker(null);
-        assertEquals("You do not own the to territory", checker.checkMyRule(t1, t2, p1, 1, map));
+        assertEquals("You do not own the to territory", checker.checkMyRule(t1, t2, p1, 1, map, 0));
     }
 }

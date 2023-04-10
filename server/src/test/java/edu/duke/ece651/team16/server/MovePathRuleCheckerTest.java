@@ -71,8 +71,8 @@ public class MovePathRuleCheckerTest {
     t5.setOwner(player1);
 
     MovePathRuleChecker movePathRuleChecker = new MovePathRuleChecker(mock(OrderRuleChecker.class));
-    movePathRuleChecker.checkMyRule(t1, t3, player1, 0, gameMap);
-    movePathRuleChecker.checkMyRule(t2, t5, player2, 0, gameMap);
+    assertEquals(null, movePathRuleChecker.checkMyRule(t1, t3, player1, 0, gameMap, 0));
+    assertEquals("No valid path", movePathRuleChecker.checkMyRule(t2, t5, player2, 0, gameMap, 0));
   }
 
 }

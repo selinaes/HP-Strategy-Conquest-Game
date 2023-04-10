@@ -9,7 +9,6 @@ public abstract class OrderRuleChecker {
      * @param next the next checker in the chain
      */
     public OrderRuleChecker(OrderRuleChecker next) {
-
         this.next = next;
     }
 
@@ -24,7 +23,7 @@ public abstract class OrderRuleChecker {
      * @return null if the order rule is valid, otherwise return the error
      *         message
      */
-    protected abstract String checkMyRule(Territory from, Territory to, Player player, int numUnits, GameMap map);
+    protected abstract String checkMyRule(Territory from, Territory to, Player player, int numUnits, GameMap map, int level);
 
     /**
      * check if the placement is valid
@@ -36,13 +35,13 @@ public abstract class OrderRuleChecker {
      * @param map      the map of the game
      * @return null if the placement is valid, otherwise return the error message
      */
-    public String checkOrder(Territory from, Territory to, Player player, int numUnits, GameMap map) {
-        String result = checkMyRule(from, to, player, numUnits, map);
+    public String checkOrder(Territory from, Territory to, Player player, int numUnits, GameMap map, int level) {
+        String result = checkMyRule(from, to, player, numUnits, map, level);
         if (result != null) {
             return result;
         }
         if (next != null) {
-            return next.checkOrder(from, to, player, numUnits, map);
+            return next.checkOrder(from, to, player, numUnits, map, level);
         }
         return null;
     }

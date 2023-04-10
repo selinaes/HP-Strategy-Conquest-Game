@@ -3,13 +3,17 @@ package edu.duke.ece651.team16.server;
 import java.util.List;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Territory {
   private String name;
   private List<Territory> neighbors;
+  private HashMap<Territory, Integer> neighborDistance;
   private Player owner;
   private ArrayList<Unit> units;
   private Battle battle;
+  private int foodRate; // how much food to produce each round in this territory
+  private int techRate; // how much tech to produce each round in this territory
 
   /**
    * constructs Territory class with name
@@ -19,12 +23,53 @@ public class Territory {
   public Territory(String name) {
     this.name = name;
     this.neighbors = new ArrayList<>();
+    this.neighborDistance = new HashMap<>();
     this.units = new ArrayList<>();
     this.battle = new Battle();
+    this.foodRate = 5;
+    this.techRate = 5;
+  }
+
+  /**
+   * set food rate
+   * 
+   * @param foodRate
+   */
+  public void setFoodRate(int foodRate) {
+    this.foodRate = foodRate;
+  }
+
+  /**
+   * set tech rate
+   * 
+   * @param techRate
+   */
+  public void setTechRate(int techRate) {
+    this.techRate = techRate;
+  }
+
+  /**
+   * get food rate
+   * 
+   * @return foodRate
+   */
+  public int getFoodRate() {
+    return this.foodRate;
+  }
+
+  /**
+   * get tech rate
+   * 
+   * @return techRate
+   */
+  public int getTechRate() {
+    return this.techRate;
   }
 
   /*
    * Return the units in the territory
+   * 
+   * @return units
    */
 
   public ArrayList<Unit> getUnits() {
@@ -32,6 +77,7 @@ public class Territory {
   }
 
   /**
+   * check if battle exists
    * 
    * @return if battle exists
    */
@@ -53,6 +99,8 @@ public class Territory {
 
   /**
    * Resolve battle phase for one territory
+   * 
+   * @return game log
    */
   public String doBattle() {
     defendHome();
@@ -71,14 +119,15 @@ public class Territory {
     return gameLog;
   }
 
-
-
   /**
-   *  Return units that belong to a certain player and alive
+   * Return units that are certain level belong to a certain player and alive
+   * 
+   * @param player
+   * @return units
    */
-  public ArrayList<Unit> getAliveUnitsFor(Player player) {
+  public ArrayList<Unit> getAliveUnitsFor(Player player, int level) {
     ArrayList<Unit> result = new ArrayList<>();
-    for (Unit u : this.units) {
+    for (Unit u : this.getUnitsByLevel(level)) {
       if (u.getOwner() == player && u.getAlive() == true) {
         result.add(u);
       }
@@ -118,9 +167,9 @@ public class Territory {
    * @param player the player who owns the units
    * @return the removed units
    */
-  public ArrayList<Unit> tryRemoveUnits(int num, Player player) {
+  public ArrayList<Unit> tryRemoveUnits(int num, Player player, int level) {
     ArrayList<Unit> result = new ArrayList<>();
-    ArrayList<Unit> aliveUnitForP = this.getAliveUnitsFor(player);
+    ArrayList<Unit> aliveUnitForP = this.getAliveUnitsFor(player, level);
     for (int i = 0; i < num; i++) {
       Unit u = aliveUnitForP.get(i);
       u.setwhere(null);
@@ -132,10 +181,15 @@ public class Territory {
 
   /*
    * Get the number of units in the territory
+   * 
+   * @return units in string
    */
   public String getUnitsString() {
-    String result = Integer.toString(this.units.size()) + " units";
-    return result;
+    StringBuilder result = new StringBuilder();
+    for (int i = 0; i < 7; i++) {
+      result.append(String.valueOf(this.getUnitsByLevel(i).size()) + ",");
+    }
+    return result.toString();
   }
 
   /**
@@ -183,10 +237,24 @@ public class Territory {
     String result = "";
     result += "(next to: ";
     for (Territory t : neighbors) {
-      result += t.getName() + ", ";
+      result += t.getName() + ": ";
+      result += neighborDistance.get(t) + ", ";
     }
     result = result.substring(0, result.length() - 2);
     result += ")";
+
+    return result;
+  }
+
+  /**
+   * Get Display info about food and tech rate
+   * 
+   * @return to_display
+   */
+  public String territoryInfo() {
+    String result = "";
+    result += "Food Rate: " + this.foodRate + ", Tech Rate: "
+        + this.techRate + " ";
     return result;
   }
 
@@ -196,10 +264,31 @@ public class Territory {
    * @param neighbors to be set
    */
   public void setNeighbors(List<Territory> neighbors) {
-    for(Territory t: neighbors){
+    for (Territory t : neighbors) {
       addNeighbor(t);
       t.addNeighbor(this);
     }
+  }
+
+  /*
+   * set distance for both territories
+   */
+  public void setDistance(List<Territory> neighbors, List<Integer> distance) {
+    for (int i = 0; i < neighbors.size(); i++) {
+      neighborDistance.put(neighbors.get(i), distance.get(i));
+      neighbors.get(i).getDistanceMap().put(this, distance.get(i));
+    }
+  }
+
+  /*
+   * get distance map
+   */
+  public HashMap<Territory, Integer> getDistanceMap() {
+    return neighborDistance;
+  }
+
+  public int getDistance(Territory neighbor) {
+    return neighborDistance.get(neighbor);
   }
 
   /**
@@ -239,4 +328,18 @@ public class Territory {
     return "Territory{name='" + name + "'}";
   }
 
+  /**
+   * get units by level
+   * 
+   * @return units
+   */
+  public ArrayList<Unit> getUnitsByLevel(int level) {
+    ArrayList<Unit> result = new ArrayList<>();
+    for (Unit u : this.units) {
+      if (u.getLevel() == level) {
+        result.add(u);
+      }
+    }
+    return result;
+  }
 }

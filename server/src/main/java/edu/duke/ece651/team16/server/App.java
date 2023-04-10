@@ -11,18 +11,36 @@ public class App {
   private ServerSocket listenSocket;
   private Server server;
 
+  /*
+   * Constructor for app
+   * 
+   * @param port the port number to listen on
+   */
   public App(int port) {
     this.port = port;
   }
 
+  /*
+   * Create a server socket
+   *
+   * @throws IOException if the server socket cannot be created
+   */
   public void createServerSocket() throws IOException {
     this.listenSocket = new ServerSocket(port);
   }
 
+  /*
+   * Create a server
+   */
   public void createServer() {
     this.server = new Server(listenSocket);
   }
 
+  /*
+   * Run the server
+   *
+   * @throws IOException if the server cannot be run
+   */
   public void runServer() throws IOException {
     // Create a new instance of the Server class and pass in the port number
     try {
@@ -42,5 +60,4 @@ public class App {
     app.createServer();
     app.runServer();
   }
-
 }

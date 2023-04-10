@@ -24,6 +24,25 @@ public class GameMap {
   }
 
   /**
+   * get TerritoryList
+   * 
+   * @return a list of territories
+   **/
+  public ArrayList<Territory> getTerritoryList() {
+    System.out.println(map);
+    ArrayList<Territory> territoryList = new ArrayList<>();
+    System.out.println(this.ColorList);
+    for (String c : this.map.keySet()) {
+      for (Territory t : this.map.get(c)) {
+        // System.out.println("In getTerritoryList" + t);
+        territoryList.add(t);
+      }
+    }
+    // System.out.println("In gameMap" + territoryList);
+    return territoryList;
+  }
+
+  /**
    * create a basic map with two territories and two players
    * 
    * @return a map with two territories
@@ -34,6 +53,7 @@ public class GameMap {
     Territory red = new Territory("A");
     Territory blue = new Territory("B");
     red.setNeighbors(Arrays.asList(blue));
+    red.setDistance(Arrays.asList(blue), Arrays.asList(5));
     ArrayList<Territory> redTerritory = new ArrayList<Territory>();
     ArrayList<Territory> blueTerritory = new ArrayList<Territory>();
     redTerritory.add(red);
@@ -103,17 +123,31 @@ public class GameMap {
     // Territory wilson = new Territory("Wilson Recreation Center");
 
     baldwin.setNeighbors(Arrays.asList(brodie, smith, dukeChapel));
+    baldwin.setDistance(Arrays.asList(brodie, smith, dukeChapel), Arrays.asList(5, 5, 5));
     brodie.setNeighbors(Arrays.asList(smith));
+    brodie.setDistance(Arrays.asList(smith), Arrays.asList(5));
     wilson.setNeighbors(Arrays.asList(cameron, wallace, dukeLaw));
+    wilson.setDistance(Arrays.asList(cameron, wallace, dukeLaw), Arrays.asList(5, 5, 5));
     cameron.setNeighbors(Arrays.asList(wallace, studentWellness));
+    cameron.setDistance(Arrays.asList(wallace, studentWellness), Arrays.asList(5, 5));
     fuqua.setNeighbors(Arrays.asList(dukeLaw, jbDuke));
+    fuqua.setDistance(Arrays.asList(dukeLaw, jbDuke), Arrays.asList(5, 5));
     jbDuke.setNeighbors(Arrays.asList(scienceGarage, dukeForest, dukeLemur));
+    jbDuke.setDistance(Arrays.asList(scienceGarage, dukeForest, dukeLemur), Arrays.asList(5, 5, 5));
     penn.setNeighbors(Arrays.asList(studentWellness, bookStore));
+    penn.setDistance(Arrays.asList(studentWellness, bookStore), Arrays.asList(5, 5));
     bryan.setNeighbors(Arrays.asList(bookStore, broadhead));
+    bryan.setDistance(Arrays.asList(bookStore, broadhead), Arrays.asList(5, 5));
     dukeChapel.setNeighbors(Arrays.asList(broadhead, perkins));
+    dukeChapel.setDistance(Arrays.asList(broadhead, perkins), Arrays.asList(5, 5));
     fitzpatrick.setNeighbors(Arrays.asList(levine, perkins));
+    fitzpatrick.setDistance(Arrays.asList(levine, perkins), Arrays.asList(5, 5));
     dukeHospital.setNeighbors(Arrays.asList(levine, dukeGarden));
+    dukeHospital.setDistance(Arrays.asList(levine, dukeGarden), Arrays.asList(5, 5));
     dukeGarden.setNeighbors(Arrays.asList(dukeChapel, nasher, broadhead));
+    dukeGarden.setDistance(Arrays.asList(dukeChapel, nasher, broadhead), Arrays.asList(5, 5, 5));
+    dukeLaw.setNeighbors(Arrays.asList(studentWellness));
+    dukeLaw.setDistance(Arrays.asList(studentWellness), Arrays.asList(5));
 
     totalTerritory.addAll(Arrays.asList(baldwin, broadhead, brodie, bryan, cameron, dukeChapel, dukeForest,
         dukeGarden, dukeHospital, dukeLemur, dukeLaw, fitzpatrick, jbDuke,
@@ -121,7 +155,8 @@ public class GameMap {
         fuqua, bookStore, wallace, wilson));
 
     HashMap<String, List<Territory>> dukemap = new HashMap<>();
-    // int numTerritories = numPlayer == 2 ? 12 : numPlayer == 3 ? 8 : numPlayer == 4 ? 6 : -1;
+    // int numTerritories = numPlayer == 2 ? 12 : numPlayer == 3 ? 8 : numPlayer ==
+    // 4 ? 6 : -1;
     int numTerritories;
     if (numPlayer < 1 || numPlayer > 24) {
       numTerritories = -1;
@@ -139,9 +174,9 @@ public class GameMap {
     return dukemap;
   }
 
-
   /**
    * Create a test map for testing purposes
+   * 
    * @return a test map
    */
   public HashMap<String, List<Territory>> createTestMap() {
@@ -164,6 +199,7 @@ public class GameMap {
 
   /**
    * Create a test map for testing purposes
+   * 
    * @return a test map
    */
   public HashMap<String, List<Territory>> createTest3Map() {
@@ -172,7 +208,9 @@ public class GameMap {
     Territory blue = new Territory("B");
     Territory yellow = new Territory("Y");
     red.setNeighbors(Arrays.asList(blue, yellow));
+    red.setDistance(Arrays.asList(blue, yellow), Arrays.asList(5, 5));
     blue.setNeighbors(Arrays.asList(yellow));
+    blue.setDistance(Arrays.asList(yellow), Arrays.asList(5));
     test3Map.put("red", new ArrayList<>(Arrays.asList(red)));
     test3Map.put("blue", new ArrayList<>(Arrays.asList(blue)));
     test3Map.put("yellow", new ArrayList<>(Arrays.asList(yellow)));
@@ -199,10 +237,10 @@ public class GameMap {
   }
 
   /*
-    * set the map
-    * 
-    * @param map the map for the game
-    */
+   * set the map
+   * 
+   * @param map the map for the game
+   */
   public void setMap(HashMap<String, List<Territory>> map) {
     this.map = map;
   }

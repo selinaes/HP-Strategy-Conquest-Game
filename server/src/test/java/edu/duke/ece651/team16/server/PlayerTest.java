@@ -87,8 +87,6 @@ public class PlayerTest {
     list.add(t1);
     Player p = new Player("blue", c1, list, 2);
 
-    // t1.addUnit(new BasicUnit(player, null, true, 2));
-
     Territory t2 = new Territory("B");
     assertEquals("You do not own this territory", p.placeUnitsSameTerritory("B",
         2));
@@ -124,6 +122,46 @@ public class PlayerTest {
     assertTrue(player.checkLose());
     player.setWatch();
     assertTrue(player.getisWatch());
+    player.updateResearchRound(false);
+    assertFalse(player.getHasResearched());
+    assertEquals(0, player.getFoodResource());
+    assertEquals(0, player.getTechResource());
+    player.removeFoodResource(0);
+    player.removeTechResource(0);
+    player.displayResourceLevel();
+    player.getTechLevel();
+    player.resetDelay();
+  }
+
+  @Test
+  public void testPlayerRemaining() {
+    Conn c1 = mock(Conn.class);
+    List<Territory> list = new ArrayList<Territory>();
+    Territory territory = new Territory("A");
+    list.add(territory);
+    Player player = new Player("blue", c1, list, 3);
+    int amount = 2;
+    ArrayList<Unit> unplacedUnits = player.findNextUnplacedUnits(amount);
+    assertEquals(amount, unplacedUnits.size());
+
+    for (Unit u : unplacedUnits) {
+      assertNull(u.getwhere());
+    }
+    player.placeUnitsSameTerritory("A", 2);
+
+    ArrayList<Unit> unplacedUnits1 = player.findNextUnplacedUnits(1);
+    assertEquals(1, unplacedUnits1.size());
+    player.getDelayedTech();
+    player.newResourcePerTurn();
+    player.updateTechLevel();
+    player.updateTechLevel();
+    player.updateTechLevel();
+    player.updateTechLevel();
+    player.updateTechLevel();
+
+    player.updateTechLevel();
+    player.resetDelay();
+
   }
 
 }
