@@ -74,11 +74,13 @@ public class JoinRoomController {
             joinRoom.getStyleClass().remove("button-unable");
             joinRoom.getStyleClass().add("button-able");
             searchRoom.setDisable(true);
+            back.setVisible(false);
         } else if (res.equals("Room joined.")) {
             joinRoom.setDisable(false);
             joinRoom.getStyleClass().remove("button-unable");
             joinRoom.getStyleClass().add("button-able");
             searchRoom.setDisable(true);
+            back.setVisible(false);
         } else {// "Room exceeded player number, game already started"
             // alert
             alert.displayImageAlert("Fail to join room", "/img/texts/capacity.png");
@@ -131,10 +133,12 @@ public class JoinRoomController {
     @FXML
     public void backRoom(ActionEvent ae) throws Exception {
         Socket clientSocket = client.getClientSocket();
-        clientSocket.close();
+        // clientSocket.close();
         URL xmlResource = getClass().getResource("/ui/StartGame.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(xmlResource); // Create a new FXMLLoader
         AnchorPane pane = fxmlLoader.load(); // Load the FXML file
+        StartGameController startGameController = fxmlLoader.getController();
+        startGameController.setClient(client);
         mainRoot.getChildren().setAll(pane);
     }
 
