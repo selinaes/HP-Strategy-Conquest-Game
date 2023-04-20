@@ -38,8 +38,10 @@ public class GamePlayController {
     private AnchorPane territoryRoot;
     @FXML
     private ToolBar toolBar;
+    // @FXML
+    // private Button rule;
     @FXML
-    private Button rule;
+    private Button special;
     @FXML
     private Button units;
     @FXML
@@ -89,22 +91,21 @@ public class GamePlayController {
         exitGame.setVisible(false);
         watchUpdate.setVisible(false);
         battleTime.setVisible(false); // image for acting battle is not visible
-        
 
-        rule.setOnAction(event -> {
-            try {
-                showRule(event);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        // rule.setOnAction(event -> {
+        //     try {
+        //         showRule(event);
+        //     } catch (IOException e) {
+        //         e.printStackTrace();
+        //     }
+        // });
         // enable user to zoom or drag map
         mapImage.setOnScroll(this::onZoom);
         mapImage.setOnMouseDragged(this::onDrag);
         myOrder = new ArrayList<>();
     }
 
-    public void setColorText(String which){
+    public void setColorText(String which) {
         color.setText("Color: " + which);
     }
 
@@ -277,6 +278,8 @@ public class GamePlayController {
         // alert.displayImageAlert("New Round", "/img/texts/newround.png");
         PopupBox popup = new PopupBox(territoryRoot);
         popup.display("/img/texts/newround.png");
+        // set special buttons to enable
+        special.setDisable(false);
         try {
             history.appendText("====================New Round=======================\n");
             String msg = client.recvMsg();// receive war log
@@ -314,6 +317,24 @@ public class GamePlayController {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void onSpecialButton(ActionEvent ae) throws Exception {
+        Object source = ae.getSource();
+        if (source instanceof Button) {
+            Button btn = (Button) source;
+            myOrder.clear();
+            myOrder.add("s"); // add special order
+            // roll dice, 1-6
+            // add option to order
+            myOrder.add("1");
+            PopupBox popup = new PopupBox(territoryRoot);
+            popup.displayText("Special Ability", "You used special ability - Double Resource Production - for this turn!");
+            performAction(myOrder);
+            // disable after one use, per turn
+            btn.setDisable(true);
         }
     }
 

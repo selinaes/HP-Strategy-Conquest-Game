@@ -458,9 +458,8 @@ public class Game {
         // perform action, invalid reprompt
         boolean done = false;
         while (!done) {
-            if (action.equals("m") || action.equals("a") || action.equals("r") || action.equals("u")) {
+            if (action.equals("m") || action.equals("a") || action.equals("r") || action.equals("u") || action.equals("s")) {
                 if (doOneAction(p, action) == false) {
-                    // doAction(p);
                     return doAction(p);
                 }
             } else { // done
@@ -472,6 +471,8 @@ public class Game {
         }
         return done;
     }
+
+
 
     /**
      * ask the player to enter info for action: Territory from, Territory to, number
@@ -547,6 +548,13 @@ public class Game {
         return order;
     }
 
+    public Order makeSpecialOrder(Player p){
+        p.getConn().send("Please send over the special option number");
+        String option = p.getConn().recv(); // a number, e.g. 1
+        Order order = new SpecialOrder(p, option);
+        return order;
+    }
+
     /**
      * Do one move in the move phase
      * 
@@ -561,6 +569,8 @@ public class Game {
             order = makeResearchOrder(p);
         } else if (actionName.equals("u")) {
             order = makeUpgradeOrder(p);
+        } else if (actionName.equals("s")){
+            order = makeSpecialOrder(p);
         }
         if (order == null) {
             return false;

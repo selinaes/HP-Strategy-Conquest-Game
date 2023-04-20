@@ -206,7 +206,9 @@ public class Client {
         }
         String prompt = recvMsg(); // "Please enter <Territor ......"
         try {
-            if (clientInput.get(0).equals("a") || clientInput.get(0).equals("m") || clientInput.get(0).equals("u")) {
+            // attack, move, upgrade, special
+            if (clientInput.get(0).equals("a") || clientInput.get(0).equals("m") || 
+            clientInput.get(0).equals("u") || clientInput.get(0).equals("s")) {
                 sendResponse(clientInput.get(1));
             }
             // research
