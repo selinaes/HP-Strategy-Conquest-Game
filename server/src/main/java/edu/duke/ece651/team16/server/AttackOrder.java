@@ -43,6 +43,20 @@ public class AttackOrder implements Order {
         OrderRuleChecker checker = new AttackInputRuleChecker(new AttackAdjacentRuleChecker(null));
         String attackProblem = checker.checkOrder(from, to, player, numUnits, gameMap, level);
         if (attackProblem == null) {
+            if (player.equals(player.getAlly())) { // if attacks ally
+                // return ally units in owners territory to nearest ally territory
+                Arraylist<Territory> myterritory = player.getTerritories();
+                for (Territory mt : myterritory) {
+                    mt.moveAllyUnitsHome();
+                }
+                // return owner units in ally territory to nearest owner territory
+                Arraylist<Territory> allyterritory = player.getAlly().getTerritories();
+                for (Territory at : allyterritory) {
+                    at.moveAllyUnitsHome();
+                }
+                player.setAlly(null);
+                player.getAlly().setAlly(null);
+            }
             int cost = attackCost();
             if (cost > player.getFoodResource()) {
                 return "Not enough food resource to attack. Need " + cost + " food resources, but only have "

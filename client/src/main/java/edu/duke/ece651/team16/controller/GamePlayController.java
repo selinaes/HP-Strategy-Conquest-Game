@@ -89,7 +89,6 @@ public class GamePlayController {
         exitGame.setVisible(false);
         watchUpdate.setVisible(false);
         battleTime.setVisible(false); // image for acting battle is not visible
-        
 
         rule.setOnAction(event -> {
             try {
@@ -104,7 +103,7 @@ public class GamePlayController {
         myOrder = new ArrayList<>();
     }
 
-    public void setColorText(String which){
+    public void setColorText(String which) {
         color.setText("Color: " + which);
     }
 
@@ -646,8 +645,11 @@ public class GamePlayController {
      */
     private void performAction(ArrayList<String> myOrder) throws IOException {
         String problem = client.playerOneAction(myOrder);
-        if (!problem.equals("Valid")) {// display an alert if it's not valid
+        if (!problem.equals("Valid") && !problem.equals("Waiting for Alliance")) {// display an alert if it's not valid
             alert.showAlert("Invalid Action", problem);
+        } else if (problem.equals("Waiting for Alliance")) {
+            String allianceProblem = "Already sent an alliance request, but waiting for the other player's response";
+            alert.showAlert("Waiting for Alliance", allianceProblem);
         } else {// update the number of units in the selected territory and clear the order
             history.appendText(gamePlayDisplay.getActionInfo(myOrder));
             mapParser.setMap(client.recvMsg());

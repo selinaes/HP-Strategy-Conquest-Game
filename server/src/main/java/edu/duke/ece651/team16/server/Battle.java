@@ -24,7 +24,9 @@ public class Battle {
     public void addGroup(ArrayList<Unit> units) {
         boolean placed = false;
         for (int i = 0; i < parties.size(); ++i) {
-            if (parties.get(i).get(0).getOwner().equals(units.get(0).getOwner())) {
+            if (parties.get(i).get(0).getOwner().equals(units.get(0).getOwner())
+                    || parties.get(i).get(0).getOwner().getAlly()
+                            .equals(units.get(0).getOwner())) {
                 parties.get(i).addAll(units);
                 // parties.set(i, temp);
                 placed = true;
@@ -148,7 +150,7 @@ public class Battle {
             ArrayList<Unit> unitsA = parties.get(indexA);
             ArrayList<Unit> unitsB = parties.get(indexB);
             // Unit unitA = unitsA.get(0);
-            // // get the second unit of the part
+            // get the second unit of the part
             // Unit unitB = unitsB.get(0);
             Unit unitA = findLargest(unitsA);
             Unit unitB = findSmallest(unitsB);

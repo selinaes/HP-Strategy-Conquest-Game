@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="384.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team16.controller.ChatRoomController">
+   <children>
+      <ListView fx:id="content" layoutX="13.0" layoutY="45.0" prefHeight="296.0" prefWidth="356.0" />
+      <Label layoutX="14.0" layoutY="12.0" text="Chat Room" textFill="MIDNIGHTBLUE" underline="true">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
+      <TextField fx:id="input" layoutX="13.0" layoutY="356.0" prefHeight="27.0" prefWidth="281.0" />
+      <Button fx:id="send" layoutX="307.0" layoutY="356.0" mnemonicParsing="false" onAction="#sendClick" prefHeight="27.0" prefWidth="62.0" text="Send" />
+   </children>
+</AnchorPane>

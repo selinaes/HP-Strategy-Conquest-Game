@@ -22,6 +22,7 @@ public class Game {
     private MessageGenerator messageGenerator;
     private final HashMap<String, Supplier<HashMap<String, List<Territory>>>> mapCreateFns;
     private String mapName;
+    private ChatServer chatServer;
 
     /**
      * Constructor for Server class that takes in a serverSocket
@@ -45,6 +46,7 @@ public class Game {
         this.mapCreateFns = new HashMap<>();
         setupMapCreateFns();
         this.mapName = mapName;
+        this.chatServer = new ChatServer(this.numPlayer);
     }
 
     /**
@@ -69,17 +71,18 @@ public class Game {
      * @param int          numClients: the number of clients
      */
     public void gameFlow(Conn clientConn, int numClients) {
+
         Player p = doPlacementPhase(clientConn, numClients);
         synchronized (this) {
             this.readyPlayer = 0;
         }
+        chatServer.setUp();
         while (findWinner() == null) {
             if (!players.contains(p)) {
                 return; // player exit
             }
             p.getConn().send("Game continues");
             doActionPhase(p);
-
         }
         Player winner = findWinner();
         // notify this player of winner!
@@ -200,6 +203,7 @@ public class Game {
      */
     public void addPlayer(Player p) {
         players.add(p);
+        chatServer.addPlayer(p);
     }
 
     /**
@@ -458,7 +462,8 @@ public class Game {
         // perform action, invalid reprompt
         boolean done = false;
         while (!done) {
-            if (action.equals("m") || action.equals("a") || action.equals("r") || action.equals("u")) {
+            if (action.equals("m") || action.equals("a") || action.equals("r") || action.equals("u")
+                    || action.equals("l")) { // l for alliance
                 if (doOneAction(p, action) == false) {
                     // doAction(p);
                     return doAction(p);
@@ -535,6 +540,18 @@ public class Game {
         return upgradeOrder;
     }
 
+    public Order makeAllianceOrder(Player p) {
+        p.getConn().send("Please choose your ally");
+        String allyname = p.getConn().recv(); // ally
+        Player ally = checkNameReturnPlayer(allyname, currentMap);
+        if (ally == null) {
+            p.getConn().send("Invalid Player Name");
+            return null;
+        }
+        Order order = new AllianceOrder(p, ally);
+        return order;
+    }
+
     /**
      * make research order
      * 
@@ -561,6 +578,8 @@ public class Game {
             order = makeResearchOrder(p);
         } else if (actionName.equals("u")) {
             order = makeUpgradeOrder(p);
+        } else if (actionName.equals("l")) {
+            order = makeAllianceOrder(p);
         }
         if (order == null) {
             return false;
@@ -568,6 +587,10 @@ public class Game {
         String tryAction = order.tryAction();
         if (tryAction == null) { // valid
             p.getConn().send("Valid");
+            HashMap<String, ArrayList<HashMap<String, String>>> to_send = messageGenerator.formMap(players);
+            messageGenerator.sendMap(p, to_send);
+        } else if (tryAction == "Waiting for Alliance") {
+            p.getConn().send(tryAction);
             HashMap<String, ArrayList<HashMap<String, String>>> to_send = messageGenerator.formMap(players);
             messageGenerator.sendMap(p, to_send);
         }
@@ -595,6 +618,15 @@ public class Game {
                 if (territory_name.equals(territory.getName())) {
                     return territory;
                 }
+            }
+        }
+        return null;
+    }
+
+    public Player checkNameReturnPlayer(String color, GameMap map) {
+        for (String playercolor : map.getMap().keySet()) {
+            if (playercolor.equals(color)) {
+                return map.getMap().get(playercolor).get(0).getOwner();
             }
         }
         return null;

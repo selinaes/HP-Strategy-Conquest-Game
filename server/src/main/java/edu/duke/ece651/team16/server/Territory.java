@@ -136,6 +136,31 @@ public class Territory {
   }
 
   /**
+   * Move ally units to their nearest territory
+   * 
+   * @return units
+   */
+  public void moveAllyUnitsHome() {
+    Territory minDistanceTerritory = getMinDistanceTerritory();
+    ArrayList<Unit> result = new ArrayList<>();
+    for (Unit u : units) {
+      if (u.getOwner() == owner.getAlly() && u.getAlive() == true) {
+        result.add(u);
+        this.units.remove(u);
+      }
+    }
+    // move result to the min distance territory of ally
+    if (result.size() == 0) {
+      return;
+    }
+    if (minDistanceTerritory == null) {
+      return;
+    } else {
+      minDistanceTerritory.tryAddUnits(result);
+    }
+  }
+
+  /**
    * Add units to the territory in the placement
    * The input unit's owner name is ensured to be the same as territory's owner
    * name
@@ -341,5 +366,34 @@ public class Territory {
       }
     }
     return result;
+  }
+
+  /**
+   * return the territory which is the min distance from this territory
+   * which is the parameter's player's territory
+   * territory using bfs
+   * 
+   * @param player p
+   */
+  public Territory getMinDistanceTerritory() {
+    Queue<Territory> q = new LinkedList<>();
+    HashSet<Territory> visited = new HashSet<>();
+    q.add(this);
+    visited.add(this);
+    while (!q.isEmpty()) {
+      Territory t = q.poll();
+      if (t.getOwner().equals(owner.getAlly())) {
+        return t;
+      }
+      for (Territory neighbor : t.getNeighbors()) {
+        if (!visited.contains(neighbor)) {
+          // generate random number from 0 to 1
+          int random = (int) (Math.random() * 2);
+          q.add(neighbor);
+          visited.add(neighbor);
+        }
+      }
+    }
+    return null;
   }
 }
