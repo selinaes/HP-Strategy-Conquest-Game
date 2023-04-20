@@ -130,6 +130,7 @@ public class Game {
             if (readyPlayer == numPlayer) {
                 to_send_log = worldwar();
                 for (Player player : players) {
+                    player.resetAllSwitches(); // reset all last turn special ability switch
                     messageGenerator.sendLog(player, to_send_log);
                 }
                 this.gameState = "warEnd";
@@ -549,8 +550,8 @@ public class Game {
     }
 
     public Order makeSpecialOrder(Player p){
-        p.getConn().send("Please send over the special option number");
-        String option = p.getConn().recv(); // a number, e.g. 1
+        p.getConn().send("Please send over the special option");
+        String option = p.getConn().recv(); // an option description
         Order order = new SpecialOrder(p, option);
         return order;
     }

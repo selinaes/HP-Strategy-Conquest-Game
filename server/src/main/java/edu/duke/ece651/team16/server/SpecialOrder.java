@@ -9,7 +9,7 @@ public class SpecialOrder implements Order {
     protected String option;
 
     /**
-     * Constructor for MoveOrder
+     * Constructor for SpecialOrder
      * 
      * @param player the player
      */
@@ -25,9 +25,9 @@ public class SpecialOrder implements Order {
      */
     @Override
     public String tryAction() {
-        if (option.equals("1")) {
+        if (option.equals("Double Resource Production")) {
             player.setDoubleResourceSwitch(true);
-        } else if (option.equals("2")) {
+        } else if (option.equals("Two Units Generation")) {
             player.setMoreUnitSwitch(true);
         } else if (option.equals("3")) {
             player.setDisregardAdjacencySwitch(true);

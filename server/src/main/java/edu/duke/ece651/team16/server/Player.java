@@ -199,16 +199,31 @@ public class Player {
     }
 
     /**
-     * Generate new Units on each territory each round
+     * Generate new Units on each territory each round. If special skill is on, generate
+     * 2 units on each territory
      */
     public void generateNewUnit() {
-        for (Territory t : Territories) {
-            Unit newUnit = new AdvancedUnit(this, t, false, numUnits++);
-            ArrayList<Unit> newGenerated = new ArrayList<>();
-            newGenerated.add(newUnit);
-            t.tryAddUnits(newGenerated);// territory add unit
-            this.units.add(newUnit);// player's all units + 1 * num(territroy)
+        if (this.moreUnitSwitch) {
+            for (Territory t : Territories) {
+                Unit newUnit = new AdvancedUnit(this, t, false, numUnits++);
+                ArrayList<Unit> newGenerated = new ArrayList<>();
+                newGenerated.add(newUnit);
+                t.tryAddUnits(newGenerated);// territory add unit
+                this.units.add(newUnit);// player's all units + 1 * num(territroy)
+            }
+        } else {
+            for (Territory t : Territories) {
+                Unit newUnit1 = new AdvancedUnit(this, t, false, numUnits++);
+                Unit newUnit2 = new AdvancedUnit(this, t, false, numUnits++);
+                ArrayList<Unit> newGenerated = new ArrayList<>();
+                newGenerated.add(newUnit1);
+                newGenerated.add(newUnit2);
+                t.tryAddUnits(newGenerated);// territory add unit
+                this.units.add(newUnit1);// player's all units + 1 * num(territroy)
+                this.units.add(newUnit2);// player's all units + 1 * num(territroy)
+            }
         }
+        
     }
 
     /**

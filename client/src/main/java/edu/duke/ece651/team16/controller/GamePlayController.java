@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import java.net.URL;
 import java.net.Socket;
@@ -327,11 +328,24 @@ public class GamePlayController {
             Button btn = (Button) source;
             myOrder.clear();
             myOrder.add("s"); // add special order
-            // roll dice, 1-6
-            // add option to order
-            myOrder.add("1");
+            // roll dice, 1: double resource, 2: two unit 3: disregard adjacency 4: dice advantage
+            Random rand = new Random();
+            int num = rand.nextInt(2) + 1; // 1, 2
+            String option = "";
+            switch (num) {
+                case 1:
+                    option = "Double Resource Production";
+                    break;
+                case 2:
+                    option = "Two Units Generation";
+                    break;
+                default:
+                    break;
+            }
             PopupBox popup = new PopupBox(territoryRoot);
-            popup.displayText("Special Ability", "You used special ability - Double Resource Production - for this turn!");
+            popup.displayText("Special Ability", "You used special ability - "+ option +" - for this turn!");
+            // add option to order
+            myOrder.add(option);
             performAction(myOrder);
             // disable after one use, per turn
             btn.setDisable(true);
@@ -665,7 +679,7 @@ public class GamePlayController {
      * 
      * @param myOrder the order to be performed
      */
-    private void performAction(ArrayList<String> myOrder) throws IOException {
+    private void  performAction(ArrayList<String> myOrder) throws IOException {
         String problem = client.playerOneAction(myOrder);
         if (!problem.equals("Valid")) {// display an alert if it's not valid
             alert.showAlert("Invalid Action", problem);
