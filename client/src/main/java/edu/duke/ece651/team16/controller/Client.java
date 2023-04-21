@@ -213,7 +213,6 @@ public class Client {
             }
             // research
             prompt = recvMsg(); // Valid, or respective error message, from serverside "tryAction" result
-            System.out.println(prompt); // for debugging
             return prompt;
         } catch (EOFException e) {
             out.println(e.getMessage());
