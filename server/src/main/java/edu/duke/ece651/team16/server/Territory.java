@@ -1,9 +1,7 @@
 package edu.duke.ece651.team16.server;
 
-import java.util.List;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class Territory {
   private String name;

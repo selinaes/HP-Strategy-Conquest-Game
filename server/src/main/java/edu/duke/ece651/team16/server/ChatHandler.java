@@ -11,7 +11,7 @@ public class ChatHandler extends Thread {
 
     public void run() {
         while (true) {
-            String str = connector.receive();
+            String str = connector.recv();
             chatServer.sendToAll(str);
         }
     }

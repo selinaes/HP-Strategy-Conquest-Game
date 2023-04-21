@@ -76,7 +76,7 @@ public class Game {
         synchronized (this) {
             this.readyPlayer = 0;
         }
-        chatServer.setUp();
+        // chatServer.setUp();
         while (findWinner() == null) {
             if (!players.contains(p)) {
                 return; // player exit

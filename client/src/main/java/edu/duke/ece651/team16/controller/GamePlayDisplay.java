@@ -101,6 +101,34 @@ public class GamePlayDisplay {
     }
 
     /**
+     * This is a dialog box for alliance
+     * 
+     * @return the user response
+     */
+    public ArrayList<String> setAllianceInfo() {
+        // create the text input fields, level, intiial, amount
+        TextField textField1 = new TextField();
+
+        // create the dialog and set the content
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().remove(ButtonType.CANCEL);
+        dialog.setTitle("Make Allicance");
+        dialog.getDialogPane()
+                .setContent(
+                        new VBox(10, new Label("Enter Player Color You Want to Form an Allicance With: "), textField1));
+        // show the dialog and wait for the user response
+        Optional<String> result = dialog.showAndWait();
+        // check if the user clicked OK and retrieve the input values
+        ArrayList<String> res = new ArrayList<>();
+        if (result.isPresent()) {
+            res.add(textField1.getText());
+            System.out.println(textField1.getText());
+        }
+        return res;
+    }
+
+    /**
      * This is a dialog box for move and attack units
      * 
      * @return the user response

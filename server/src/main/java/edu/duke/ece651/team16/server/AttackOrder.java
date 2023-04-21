@@ -45,12 +45,12 @@ public class AttackOrder implements Order {
         if (attackProblem == null) {
             if (player.equals(player.getAlly())) { // if attacks ally
                 // return ally units in owners territory to nearest ally territory
-                Arraylist<Territory> myterritory = player.getTerritories();
+                List<Territory> myterritory = player.getTerritories();
                 for (Territory mt : myterritory) {
                     mt.moveAllyUnitsHome();
                 }
                 // return owner units in ally territory to nearest owner territory
-                Arraylist<Territory> allyterritory = player.getAlly().getTerritories();
+                List<Territory> allyterritory = player.getAlly().getTerritories();
                 for (Territory at : allyterritory) {
                     at.moveAllyUnitsHome();
                 }

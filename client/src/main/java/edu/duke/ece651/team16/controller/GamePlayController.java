@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.Arrays;
 
 public class GamePlayController {
+    // @FXML
+    // private AnchorPane chatRoom;
     @FXML
     private AnchorPane territoryRoot;
     @FXML
@@ -373,6 +375,26 @@ public class GamePlayController {
         }
     }
 
+    @FXML
+    public void onAllianceButton(ActionEvent ae) throws Exception {
+        Object source = ae.getSource();
+        if (source instanceof Button) {
+            Button btn = (Button) source;
+            if (btn.getText().equals("Alliance")) {
+                setButtonsDisabled(true, finish, move, research, attack, move);
+                btn.setText("Cancel");
+                myOrder.clear();
+                myOrder.add("l"); // add alliance order
+                onAlliancePlayer();
+            } else { // cancel
+                setButtonsDisabled(false, finish, move, research, attack, move);
+                btn.setText("Alliance");
+                myOrder.clear();
+                playerStatus = Status.DEFAULT;
+            }
+        }
+    }
+
     /*
      * This method is called when an Upgrade button is clicked.
      * 
@@ -424,6 +446,25 @@ public class GamePlayController {
     /* set a list of buttons disables to true or false */
     private void setButtonsDisabled(boolean disabled, Button... buttons) {
         Arrays.asList(buttons).forEach(btn -> btn.setDisable(disabled));
+    }
+
+    /*
+     * This method is called when player is selecting the num of units to
+     * upgrade
+     * and the initial level and amount to update
+     *
+     */
+    @FXML
+    private void onAlliancePlayer() {
+        String alliancePlayer = "";
+        while (true) {
+            ArrayList<String> res = gamePlayDisplay.setAllianceInfo();
+            alliancePlayer = res.get(0);
+            if (alliancePlayer != null) {
+                break;
+
+            }
+        }
     }
 
     /*

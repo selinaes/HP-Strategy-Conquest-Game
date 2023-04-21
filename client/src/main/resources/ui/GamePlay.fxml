@@ -13,7 +13,10 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="territoryRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="1280.0" stylesheets="@/ui/styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team16.controller.GamePlayController">
+<AnchorPane fx:id="territoryRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
+   prefHeight="780.0" prefWidth="1280.0" stylesheets="@/ui/styles.css" xmlns="http://javafx.com/javafx/19" 
+   xmlns:fx="http://javafx.com/fxml/1" 
+   fx:controller="edu.duke.ece651.team16.controller.GamePlayController">
    <children>
       <ScrollPane prefHeight="781.0" prefWidth="1283.0">
         <content>
@@ -35,7 +38,12 @@
       </ScrollPane>
       <ToolBar fx:id="toolBar" layoutX="640.0" layoutY="14.0" prefHeight="81.0" prefWidth="609.0" styleClass="tool-bar">
         <items>
-          <Button fx:id="rule" mnemonicParsing="false" prefHeight="70.0" prefWidth="124.0" text="Game Rule">
+            <Button fx:id="rule" mnemonicParsing="false" prefHeight="70.0" prefWidth="124.0" text="Game Rule">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="alliance" mnemonicParsing="false" onAction="#onAllianceButton" prefHeight="70.0" prefWidth="124.0" text="Alliance">
                <font>
                   <Font size="18.0" />
                </font>
@@ -127,5 +135,6 @@
       </ImageView>
       <Button fx:id="watchUpdate" layoutX="500.0" layoutY="165.0" onAction="#onWatchGameInfo"  styleClass="button-able" text="Follow Game"/>
       <Button fx:id="exitGame" layoutX="555.0" layoutY="17.0" mnemonicParsing="false" onAction="#onExitButton" styleClass="button-able" text="Exit"/>
+      <!-- <fx:include layoutY="395.0" source="ChatRoom.fxml" /> -->
    </children>
 </AnchorPane>

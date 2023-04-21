@@ -42,12 +42,17 @@ public class ChatServer {
      * start the chat server
      */
     public void setUp() {
-        for (int i = 0; i < playerNum; i++) {
-            Conn curCommunicator = new Conn(chatServerSock.accept());
-            communicators.add(curCommunicator);
-            ChatHandler curHandler = new ChatHandler(curCommunicator, this);
-            chatHandlers.add(curHandler);
-            curHandler.start();
+        for (int i = 0; i < 2; i++) {
+            try {
+                Conn curCommunicator = new Conn(chatServerSock.accept());
+                communicators.add(curCommunicator);
+                ChatHandler curHandler = new ChatHandler(curCommunicator, this);
+                chatHandlers.add(curHandler);
+                curHandler.start();
+            } catch (IOException e) {
+                System.out.println("Failed to create chatHandler!");
+            }
+
         }
     }
 

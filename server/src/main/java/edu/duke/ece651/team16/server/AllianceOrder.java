@@ -33,7 +33,7 @@ public class AllianceOrder implements Order {
             return null;
         } else {
             player.setPendingAlly(ally);
-            return "Waiting for Alliance";
+            result = "Waiting for Alliance";
         }
         return result;
     }
