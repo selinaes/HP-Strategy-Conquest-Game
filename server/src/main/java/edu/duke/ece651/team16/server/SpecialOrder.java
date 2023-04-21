@@ -26,8 +26,10 @@ public class SpecialOrder implements Order {
     @Override
     public String tryAction() {
         if (option.equals("Double Resource Production")) {
+            System.out.println("Double Resource Production for player: " + player.getColor());
             player.setDoubleResourceSwitch(true);
         } else if (option.equals("Two Units Generation")) {
+            System.out.println("Two Units Generation for player: " + player.getColor());
             player.setMoreUnitSwitch(true);
         } else if (option.equals("3")) {
             player.setDisregardAdjacencySwitch(true);
