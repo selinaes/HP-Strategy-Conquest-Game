@@ -33,7 +33,7 @@ public class SpecialOrder implements Order {
             player.setMoreUnitSwitch(true);
         } else if (option.equals("Disregard Adjacency")) {
             player.setDisregardAdjacencySwitch(true);
-        } else if (option.equals("4")) {
+        } else if (option.equals("Dice Advantage")) {
             player.setDiceAdvantageSwitch(true);
         }
         return null;
