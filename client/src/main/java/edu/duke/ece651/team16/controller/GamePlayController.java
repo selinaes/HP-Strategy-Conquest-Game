@@ -330,7 +330,7 @@ public class GamePlayController {
             myOrder.add("s"); // add special order
             // roll dice, 1: double resource, 2: two unit 3: disregard adjacency 4: dice advantage
             Random rand = new Random();
-            int num = rand.nextInt(2) + 1; // 1, 2
+            int num = rand.nextInt(3) + 1; // 1, 2, 3
             String option = "";
             switch (num) {
                 case 1:
@@ -338,6 +338,9 @@ public class GamePlayController {
                     break;
                 case 2:
                     option = "Two Units Generation";
+                    break;
+                case 3:
+                    option = "Disregard Adjacency";
                     break;
                 default:
                     break;

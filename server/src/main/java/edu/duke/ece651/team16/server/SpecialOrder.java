@@ -31,7 +31,7 @@ public class SpecialOrder implements Order {
         } else if (option.equals("Two Units Generation")) {
             System.out.println("Two Units Generation for player: " + player.getColor());
             player.setMoreUnitSwitch(true);
-        } else if (option.equals("3")) {
+        } else if (option.equals("Disregard Adjacency")) {
             player.setDisregardAdjacencySwitch(true);
         } else if (option.equals("4")) {
             player.setDiceAdvantageSwitch(true);

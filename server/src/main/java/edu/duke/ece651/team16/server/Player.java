@@ -77,6 +77,10 @@ public class Player {
         this.diceAdvantageSwitch = status;
     }
 
+    public boolean getDisregardAdjacencySwitch() {
+        return this.disregardAdjacencySwitch;
+    }
+
     public void resetAllSwitches(){
         this.doubleResourceSwitch = false;
         this.moreUnitSwitch = false;
