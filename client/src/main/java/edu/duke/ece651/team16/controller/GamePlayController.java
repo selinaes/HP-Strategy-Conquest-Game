@@ -94,11 +94,11 @@ public class GamePlayController {
         battleTime.setVisible(false); // image for acting battle is not visible
 
         // rule.setOnAction(event -> {
-        //     try {
-        //         showRule(event);
-        //     } catch (IOException e) {
-        //         e.printStackTrace();
-        //     }
+        // try {
+        // showRule(event);
+        // } catch (IOException e) {
+        // e.printStackTrace();
+        // }
         // });
         // enable user to zoom or drag map
         mapImage.setOnScroll(this::onZoom);
@@ -204,6 +204,15 @@ public class GamePlayController {
                 } else { // cannot upgrade, no unit
                     alert.showAlert("Alert", "This territory has 0 avaliable unit.");
                 }
+                break;
+            case BOMB_AT:
+                oneOrderContent += ", " + btn.getId(); // oneOrderContent= Nuclear Bomb, [T1] location
+                System.out.println("One Order Content: " + oneOrderContent);
+                myOrder.add(oneOrderContent);
+                performAction(myOrder);
+                oneOrderContent = "";
+                setMyTerritoryDisable(false);
+                playerStatus = Status.DEFAULT;
                 break;
             default:
                 break;
@@ -328,9 +337,10 @@ public class GamePlayController {
             Button btn = (Button) source;
             myOrder.clear();
             myOrder.add("s"); // add special order
-            // roll dice, 1: double resource, 2: two unit 3: disregard adjacency 4: dice advantage
+            // roll dice, 1: double resource, 2: two unit 3: disregard adjacency 4: dice
+            // advantage 5: nuclear bomb
             Random rand = new Random();
-            int num = rand.nextInt(4) + 1; // 1, 2, 3, 4
+            int num = rand.nextInt(5) + 1; // 1, 2, 3, 4， 5
             String option = "";
             switch (num) {
                 case 1:
@@ -345,14 +355,26 @@ public class GamePlayController {
                 case 4:
                     option = "Dice Advantage";
                     break;
+                case 5:
+                    option = "Nuclear Bomb";
+                    break;
                 default:
                     break;
             }
             PopupBox popup = new PopupBox(territoryRoot);
-            popup.displayText("Special Ability", "You used special ability - "+ option +" - for this turn!");
-            // add option to order
-            myOrder.add(option);
-            performAction(myOrder);
+            if (num != 5) {
+                popup.displayText("Special Ability", "You used special ability - " + option + " - for this turn!");
+                // add option to order
+                myOrder.add(option);
+                performAction(myOrder);
+            } else {
+                popup.displayText("Special Ability", "You used special ability - " + option
+                        + " - for this turn!\nPlease choose an enemy territory to bomb!");
+                oneOrderContent = option; // "Nuclear Bomb, T1"
+                setMyTerritoryDisable(true); // disable my territory, leave enemy territories
+                playerStatus = Status.BOMB_AT;
+            }
+
             // disable after one use, per turn
             btn.setDisable(true);
         }
@@ -685,7 +707,7 @@ public class GamePlayController {
      * 
      * @param myOrder the order to be performed
      */
-    private void  performAction(ArrayList<String> myOrder) throws IOException {
+    private void performAction(ArrayList<String> myOrder) throws IOException {
         String problem = client.playerOneAction(myOrder);
         if (!problem.equals("Valid")) {// display an alert if it's not valid
             alert.showAlert("Invalid Action", problem);

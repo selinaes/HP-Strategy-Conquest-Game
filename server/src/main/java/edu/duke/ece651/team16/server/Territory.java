@@ -14,6 +14,7 @@ public class Territory {
   private Battle battle;
   private int foodRate; // how much food to produce each round in this territory
   private int techRate; // how much tech to produce each round in this territory
+  private Player bomber;
 
   /**
    * constructs Territory class with name
@@ -88,6 +89,10 @@ public class Territory {
     return false;
   }
 
+  public Player getBomber(){
+    return bomber;
+  }
+
   /**
    * If there is a battle, add units to the battle to defend the territory
    */
@@ -105,18 +110,44 @@ public class Territory {
   public String doBattle() {
     defendHome();
     String prelog = battle.GameLog();
-    Player winner = battle.resolveBattle();
-    String gameLog = "Battle participants: " + prelog + "\nBattle Winner: " + winner.getColor() + "\n";
+    String gameLog;
+    if (bomber != null) {
+      gameLog = "Battle participants: " + prelog + "\n" + bomber.getColor() + " player used nuclear bomb. All units died.\n";
+      // bombing happens here if battle exist. bombing happens in Game.java if battle
+      // does not exist
+      this.bombing();
+    } else {
+      Player winner = battle.resolveBattle();
+      gameLog = "Battle participants: " + prelog + "\nBattle Winner: " + winner.getColor() + "\n";
+      List<Territory> to_add = new ArrayList<>();
+      to_add.add(this);
+      if (!winner.equals(this.owner)) {
+        this.owner.removeTerritory(this);
+        winner.addTerritories(to_add);
+      }
+      this.owner = winner;
+      this.units = battle.getParties().get(0);
+      battle.clearParty();
+    }
+    return gameLog;
+  }
+
+  public void bombing() {
+    // remove target from original owner's territory list
+    this.owner.removeTerritory(this);
+    // set target's owner to bomber
+    this.setOwner(bomber);
+    // add target to bomber's territory list
     List<Territory> to_add = new ArrayList<>();
     to_add.add(this);
-    if (!winner.equals(this.owner)) {
-      this.owner.removeTerritory(this);
-      winner.addTerritories(to_add);
-    }
-    this.owner = winner;
-    this.units = battle.getParties().get(0);
-    battle.clearParty();
-    return gameLog;
+    bomber.addTerritories(to_add);
+
+    // remove all units in the territory, if any
+    this.units.clear();
+    // remove all units in the battle, if any
+    this.battle.clearParty();
+    // set bomber to null, to indicate that the bombing is done
+    this.bomber = null;
   }
 
   /**
@@ -341,5 +372,14 @@ public class Territory {
       }
     }
     return result;
+  }
+
+  /**
+   * place bomb at this territory, will trigger in battle
+   * 
+   * @return units
+   */
+  public void placeBomb(Player bomber) {
+    this.bomber = bomber;
   }
 }

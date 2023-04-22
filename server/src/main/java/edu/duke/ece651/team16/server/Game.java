@@ -459,7 +459,8 @@ public class Game {
         // perform action, invalid reprompt
         boolean done = false;
         while (!done) {
-            if (action.equals("m") || action.equals("a") || action.equals("r") || action.equals("u") || action.equals("s")) {
+            if (action.equals("m") || action.equals("a") || action.equals("r") || action.equals("u")
+                    || action.equals("s")) {
                 if (doOneAction(p, action) == false) {
                     return doAction(p);
                 }
@@ -472,8 +473,6 @@ public class Game {
         }
         return done;
     }
-
-
 
     /**
      * ask the player to enter info for action: Territory from, Territory to, number
@@ -549,10 +548,21 @@ public class Game {
         return order;
     }
 
-    public Order makeSpecialOrder(Player p){
+    public Order makeSpecialOrder(Player p) {
         p.getConn().send("Please send over the special option");
-        String option = p.getConn().recv(); // an option description
-        Order order = new SpecialOrder(p, option);
+        String actionInput = p.getConn().recv(); // an option description, or "Nuclear Bomb, T1[Target]"
+        String[] input = actionInput.split(", ");
+        Order order;
+        if (input.length == 2) {
+            Territory target = checkNameReturnTerritory(input[1], currentMap);
+            if (target == null) {
+                p.getConn().send("Invalid Territory Name");
+                return null;
+            }
+            order = new SpecialOrder(p, input[0], target);
+        } else {
+            order = new SpecialOrder(p, input[0]);
+        }
         return order;
     }
 
@@ -570,7 +580,7 @@ public class Game {
             order = makeResearchOrder(p);
         } else if (actionName.equals("u")) {
             order = makeUpgradeOrder(p);
-        } else if (actionName.equals("s")){
+        } else if (actionName.equals("s")) {
             order = makeSpecialOrder(p);
         }
         if (order == null) {
@@ -623,8 +633,13 @@ public class Game {
                                                                                // ConcurrentModificationException
             for (Territory territory : territoriesCopy) {
                 if (territory.existsBattle()) {
-                    String battleLog = territory.doBattle();
+                    String battleLog = territory.doBattle(); // doBattle includes bombing
                     worldLog.put(territory.getName(), battleLog);
+                } else if (territory.getBomber() != null) {
+                    // only if no battle but bombed.
+                    territory.bombing();
+                    String bombLog = territory.getBomber().getColor() + " player nuclear bombed this region, all units destroyed";
+                    worldLog.put(territory.getName(), bombLog);
                 }
             }
         }
