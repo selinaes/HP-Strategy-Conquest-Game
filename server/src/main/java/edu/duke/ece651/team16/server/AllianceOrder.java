@@ -25,17 +25,19 @@ public class AllianceOrder implements Order {
         String result = checker.checkMyRule(player, ally);
         // if has pending ally, and pending ally is the same as player. form allicance
         // successfully
+        if (result != null)
+            return result;
         if (ally.getPendingAlly() != null && ally.getPendingAlly().getColor().equals(player.getColor())) {
             player.setPendingAlly(null);
             player.setAlly(ally);
             ally.setPendingAlly(null);
             ally.setAlly(player);
             return null;
-        } else {
-            player.setPendingAlly(ally);
-            result = "Waiting for Alliance";
         }
+        player.setPendingAlly(ally);
+        result = "Waiting for Alliance";
         return result;
+
     }
 
 }

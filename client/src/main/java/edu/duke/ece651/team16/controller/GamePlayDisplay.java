@@ -121,6 +121,7 @@ public class GamePlayDisplay {
         Optional<String> result = dialog.showAndWait();
         // check if the user clicked OK and retrieve the input values
         ArrayList<String> res = new ArrayList<>();
+        System.out.println("before if" + textField1.getText());
         if (result.isPresent()) {
             res.add(textField1.getText());
             System.out.println(textField1.getText());
@@ -185,6 +186,10 @@ public class GamePlayDisplay {
         String action = myOrder.get(0);
         if (action.equals("r")) {
             sb.append("Successful research.\n");
+            return sb.toString();
+        } else if (action.equals("l")) {
+            String ally = myOrder.get(1);
+            sb.append("Successful alliance with " + ally + ".\n");
             return sb.toString();
         }
         String oneOrderContent = myOrder.get(1);

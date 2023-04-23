@@ -129,7 +129,6 @@ public class Client {
         return false;
     }
 
-
     // set color
     public void setColor(String color) {
         this.color = color;
@@ -206,7 +205,8 @@ public class Client {
         }
         String prompt = recvMsg(); // "Please enter <Territor ......"
         try {
-            if (clientInput.get(0).equals("a") || clientInput.get(0).equals("m") || clientInput.get(0).equals("u")) {
+            if (clientInput.get(0).equals("a") || clientInput.get(0).equals("m") || clientInput.get(0).equals("u")
+                    || clientInput.get(0).equals("l")) {
                 sendResponse(clientInput.get(1));
             }
             // research

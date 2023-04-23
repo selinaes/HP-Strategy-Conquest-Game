@@ -380,19 +380,12 @@ public class GamePlayController {
         Object source = ae.getSource();
         if (source instanceof Button) {
             Button btn = (Button) source;
-            if (btn.getText().equals("Alliance")) {
-                setButtonsDisabled(true, finish, move, research, attack, move);
-                btn.setText("Cancel");
-                myOrder.clear();
-                myOrder.add("l"); // add alliance order
-                onAlliancePlayer();
-            } else { // cancel
-                setButtonsDisabled(false, finish, move, research, attack, move);
-                btn.setText("Alliance");
-                myOrder.clear();
-                playerStatus = Status.DEFAULT;
-            }
+            myOrder.clear();
+            myOrder.add("l"); // add alliance order
+            onAlliancePlayer();
+            performAction(myOrder);
         }
+
     }
 
     /*
@@ -461,8 +454,8 @@ public class GamePlayController {
             ArrayList<String> res = gamePlayDisplay.setAllianceInfo();
             alliancePlayer = res.get(0);
             if (alliancePlayer != null) {
+                myOrder.add(alliancePlayer);
                 break;
-
             }
         }
     }
@@ -689,7 +682,8 @@ public class GamePlayController {
         if (!problem.equals("Valid") && !problem.equals("Waiting for Alliance")) {// display an alert if it's not valid
             alert.showAlert("Invalid Action", problem);
         } else if (problem.equals("Waiting for Alliance")) {
-            String allianceProblem = "Already sent an alliance request, but waiting for the other player's response";
+            String allianceProblem = "Sent an alliance request, and waiting for the other player's response";
+            mapParser.setMap(client.recvMsg());
             alert.showAlert("Waiting for Alliance", allianceProblem);
         } else {// update the number of units in the selected territory and clear the order
             history.appendText(gamePlayDisplay.getActionInfo(myOrder));

@@ -5,7 +5,9 @@ public class AllianceRuleChecker {
     }
 
     public String checkMyRule(Player player, Player ally) {
-        if (player.getAlly() != null) {
+        if (player.getColor().equals(ally.getColor())) {
+            return "You can not choose yourself";
+        } else if (player.getAlly() != null) {
             return "You have already formed alliance";
         }
         return null;
