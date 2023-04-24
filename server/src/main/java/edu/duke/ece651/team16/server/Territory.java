@@ -87,7 +87,7 @@ public class Territory {
     return false;
   }
 
-  public Player getBomber(){
+  public Player getBomber() {
     return bomber;
   }
 
@@ -110,7 +110,8 @@ public class Territory {
     String prelog = battle.GameLog();
     String gameLog;
     if (bomber != null) {
-      gameLog = "Battle participants: " + prelog + "\n" + bomber.getColor() + " player used nuclear bomb. All units died.\n";
+      gameLog = "Battle participants: " + prelog + "\n" + bomber.getColor()
+          + " player used nuclear bomb. All units died.\n";
       // bombing happens here if battle exist. bombing happens in Game.java if battle
       // does not exist
       this.bombing();
@@ -406,7 +407,7 @@ public class Territory {
     this.bomber = bomber;
   }
 
-
+  /**
    * return the territory which is the min distance from this territory
    * which is the parameter's player's territory
    * territory using bfs
@@ -435,4 +436,3 @@ public class Territory {
     return null;
   }
 }
-

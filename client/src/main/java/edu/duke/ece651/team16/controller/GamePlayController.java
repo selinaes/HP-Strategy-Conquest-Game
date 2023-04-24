@@ -348,6 +348,7 @@ public class GamePlayController {
 
     @FXML
     public void onSpecialButton(ActionEvent ae) throws Exception {
+        // System.out.println("Special Button Clicked");
         Object source = ae.getSource();
         if (source instanceof Button) {
             Button btn = (Button) source;
@@ -377,6 +378,7 @@ public class GamePlayController {
                 default:
                     break;
             }
+            // System.out.println("Special Option: " + option);
             PopupBox popup = new PopupBox(territoryRoot);
             if (num != 5) {
                 popup.displayText("Special Ability", "You used special ability - " + option + " - for this turn!");
