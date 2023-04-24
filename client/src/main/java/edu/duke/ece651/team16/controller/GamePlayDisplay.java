@@ -101,6 +101,35 @@ public class GamePlayDisplay {
     }
 
     /**
+     * This is a dialog box for alliance
+     * 
+     * @return the user response
+     */
+    public ArrayList<String> setAllianceInfo() {
+        // create the text input fields, level, intiial, amount
+        TextField textField1 = new TextField();
+
+        // create the dialog and set the content
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setHeaderText(null);
+        dialog.getDialogPane().getButtonTypes().remove(ButtonType.CANCEL);
+        dialog.setTitle("Make Allicance");
+        dialog.getDialogPane()
+                .setContent(
+                        new VBox(10, new Label("Enter Player Color You Want to Form an Allicance With: "), textField1));
+        // show the dialog and wait for the user response
+        Optional<String> result = dialog.showAndWait();
+        // check if the user clicked OK and retrieve the input values
+        ArrayList<String> res = new ArrayList<>();
+        System.out.println("before if" + textField1.getText());
+        if (result.isPresent()) {
+            res.add(textField1.getText());
+            System.out.println(textField1.getText());
+        }
+        return res;
+    }
+
+    /**
      * This is a dialog box for move and attack units
      * 
      * @return the user response
@@ -157,6 +186,10 @@ public class GamePlayDisplay {
         String action = myOrder.get(0);
         if (action.equals("r")) {
             sb.append("Successful research.\n");
+            return sb.toString();
+        } else if (action.equals("l")) {
+            String ally = myOrder.get(1);
+            sb.append("Successful alliance with " + ally + ".\n");
             return sb.toString();
         }
         String oneOrderContent = myOrder.get(1);

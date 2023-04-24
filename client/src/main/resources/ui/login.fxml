@@ -12,50 +12,50 @@
 
 <AnchorPane fx:id="mainRoot" prefHeight="767.0" prefWidth="1243.0" stylesheets="@/ui/styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team16.controller.LoginController">
    <children>
-      <ImageView fitHeight="780.0" fitWidth="1280.0">
+      <ImageView fitHeight="780.0" fitWidth="1480.0">
          <image>
-            <Image url="@../img/battle.jpg" />
+            <Image url="@../img/backgrounds/login.png" />
          </image>
       </ImageView>
-      <ImageView layoutX="865.0" layoutY="102.0" rotate="11.3">
+      <ImageView fitHeight="532.0" fitWidth="692.0" layoutX="400.0" layoutY="115.0" opacity="0.5">
          <image>
-            <Image url="@../img/riskLogo.png" />
+            <Image url="@../img/backgrounds/white.jpg" />
          </image>
       </ImageView>
-      <ImageView opacity="0.8" fitHeight="532.0" fitWidth="692.0" layoutX="288.0" layoutY="152.0">
-         <image>
-            <Image url="@../img/backgrounds/rule.png" />
-         </image>
-      </ImageView>
-      <PasswordField fx:id="password" layoutX="583.0" layoutY="412.0" prefHeight="56.0" prefWidth="241.0" promptText="Password">
+      <PasswordField fx:id="password" layoutX="698.0" layoutY="403.0" prefHeight="51.0" prefWidth="229.0" promptText="Password">
          <font>
             <Font size="24.0" />
          </font>
       </PasswordField>
-      <Label layoutX="424.0" layoutY="424.0" text="Password:">
+      <Label layoutX="541.0" layoutY="414.0" styleClass="pass-text" text="Password" textFill="#4a5e5c">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="424.0" layoutY="322.0" text="Username:">
+      <Label layoutX="541.0" layoutY="322.0" styleClass="pass-text" text="Username" textFill="#4a5e5c">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <TextField fx:id="username" layoutX="583.0" layoutY="312.0" prefHeight="51.0" prefWidth="229.0" promptText="Username">
+      <TextField fx:id="username" layoutX="698.0" layoutY="311.0" prefHeight="51.0" prefWidth="229.0" promptText="Username">
          <font>
             <Font size="24.0" />
          </font>
       </TextField>
-      <Button fx:id="login" layoutX="545.0" layoutY="526.0" mnemonicParsing="false" onAction="#onLoginButton" text="Sign in/up">
+      <Button fx:id="login" layoutX="697.0" layoutY="509.0" mnemonicParsing="false" onAction="#onLoginButton" styleClass="button-login" text="Sign in/up">
          <font>
             <Font size="24.0" />
          </font>
       </Button>
-      <Text fill="#0902fa" layoutX="379.0" layoutY="226.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter your username and password to login. If you do not have an account, we will create account by what you enter." wrappingWidth="519.6173400878906">
+      <Text fill="#484643" layoutX="498.0" layoutY="232.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="hp-risk-game-text" text="Harry Potter Risk Game">
+      </Text>
+
+      <Text fill="#111111" layoutX="433.0" layoutY="608.0" strokeType="OUTSIDE" strokeWidth="0.0" text="*Please enter your username and password to login. If you do not have an account, we will create account by what you enter." wrappingWidth="623.6173400878906">
          <font>
-            <Font size="24.0" />
+            <Font size="12.0" />
          </font>
       </Text>
+
+
    </children>
 </AnchorPane>

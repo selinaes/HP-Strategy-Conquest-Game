@@ -21,6 +21,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
+import javafx.application.Platform;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -86,6 +88,11 @@ public class GamePlayController {
     private ArrayList<Integer> currTerritoryUnits = new ArrayList<>();
     private GamePlayDisplay gamePlayDisplay = new GamePlayDisplay();
 
+    private ChatRoomController chatRoomController;
+
+    @FXML
+    private VBox chatRoomContainer;
+
     @FXML
     public void initialize() {
         // at Assign Units Phase
@@ -108,6 +115,15 @@ public class GamePlayController {
 
     public void setColorText(String which) {
         color.setText("Color: " + which);
+    }
+
+    /**
+     * set chatRoomController
+     * 
+     * @param chatRoomController
+     */
+    public void setChatRoomController(ChatRoomController chatRoomController) {
+        this.chatRoomController = chatRoomController;
     }
 
     /**
@@ -437,6 +453,19 @@ public class GamePlayController {
         }
     }
 
+    @FXML
+    public void onAllianceButton(ActionEvent ae) throws Exception {
+        Object source = ae.getSource();
+        if (source instanceof Button) {
+            Button btn = (Button) source;
+            myOrder.clear();
+            myOrder.add("l"); // add alliance order
+            onAlliancePlayer();
+            performAction(myOrder);
+        }
+
+    }
+
     /*
      * This method is called when an Upgrade button is clicked.
      * 
@@ -488,6 +517,23 @@ public class GamePlayController {
     /* set a list of buttons disables to true or false */
     private void setButtonsDisabled(boolean disabled, Button... buttons) {
         Arrays.asList(buttons).forEach(btn -> btn.setDisable(disabled));
+    }
+
+    /**
+     * Display the box to let player enter the player name to alliance with
+     *
+     */
+    @FXML
+    private void onAlliancePlayer() {
+        String alliancePlayer = "";
+        while (true) {
+            ArrayList<String> res = gamePlayDisplay.setAllianceInfo();
+            alliancePlayer = res.get(0);
+            if (alliancePlayer != null) {
+                myOrder.add(alliancePlayer);
+                break;
+            }
+        }
     }
 
     /*
@@ -709,10 +755,17 @@ public class GamePlayController {
      */
     private void performAction(ArrayList<String> myOrder) throws IOException {
         String problem = client.playerOneAction(myOrder);
-        if (!problem.equals("Valid")) {// display an alert if it's not valid
+        if (!problem.equals("Valid") && !problem.equals("Waiting for Alliance")) {// display an alert if it's not valid
             alert.showAlert("Invalid Action", problem);
+        } else if (problem.equals("Waiting for Alliance")) {
+            String allianceProblem = "Sent an alliance request, and waiting for the other player's response";
+            mapParser.setMap(client.recvMsg());
+            alert.showAlert("Waiting for Alliance", allianceProblem);
         } else {// update the number of units in the selected territory and clear the order
-            history.appendText(gamePlayDisplay.getActionInfo(myOrder));
+            String msg = gamePlayDisplay.getActionInfo(myOrder);
+            System.out.println(msg);
+            chatRoomController.sendMsg("server:" + client.getColor() + " " + msg);
+            // history.appendText(gamePlayDisplay.getActionInfo(myOrder));
             mapParser.setMap(client.recvMsg());
         }
         myOrder.clear();

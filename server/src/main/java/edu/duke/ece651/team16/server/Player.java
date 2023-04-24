@@ -17,10 +17,15 @@ public class Player {
     private int techLevel;
     private boolean hasResearched;
     private int delayedTech;
+
     private boolean doubleResourceSwitch; // true for on, false for off
     private boolean moreUnitSwitch; // true for on, false for off
     private boolean disregardAdjacencySwitch; // true for on, false for off
     private boolean diceAdvantageSwitch; // true for on, false for off
+
+    private Player ally;
+    private Player pendingally;
+
 
     /**
      * Constructor of the player
@@ -51,6 +56,25 @@ public class Player {
         this.moreUnitSwitch = false;
         this.disregardAdjacencySwitch = false;
         this.diceAdvantageSwitch = false;
+
+        this.ally = null;
+        this.pendingally = null;
+    }
+
+    public void setAlly(Player ally) {
+        this.ally = ally;
+    }
+
+    public Player getAlly() {
+        return this.ally;
+    }
+
+    public void setPendingAlly(Player pendingally) {
+        this.pendingally = pendingally;
+    }
+
+    public Player getPendingAlly() {
+        return this.pendingally;
     }
 
     public void updateResearchRound(boolean status) {
@@ -314,6 +338,7 @@ public class Player {
 
     /**
      * display the player's food resource + tech resource
+     * 
      * @return the string
      */
     public String displayResourceLevel() {
@@ -358,4 +383,19 @@ public class Player {
     public int getDelayedTech() {
         return this.delayedTech;
     }
+
+    // /*
+    // * get ally's territory that distance is minimum
+    // */
+    // public Territory getAllyTerritoryMinDistance(Territory t) {
+    // Territory minDistanceTerritory = null;
+    // int min = INFINITY;
+    // for (Territory ally : t.getOwner().getTerritories()) {
+    // if (t.getDistanceTo(ally) < min) {
+    // min = t.getDistanceTo(ally);
+    // minDistanceTerritory = ally;
+    // }
+    // }
+    // return minDistanceTerritory;
+    // }
 }

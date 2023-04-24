@@ -28,6 +28,7 @@ import javafx.stage.Modality;
 import javafx.geometry.Pos;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.SplitPane;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -131,19 +132,25 @@ public class InitGamePlayController {
             }
         }
         try {
-            URL xmlResource = getClass().getResource("/ui/GamePlay.fxml");
-            FXMLLoader fxmlLoader = new FXMLLoader(xmlResource); // Create a new FXMLLoader
-            AnchorPane pane = fxmlLoader.load(); // Load the FXML file
+            FXMLLoader loaderStart = new FXMLLoader(getClass().getResource("/ui/ChatRoom.fxml"));
+            loaderStart.setControllerFactory(c -> {
+                return new ChatRoomController(client.getColor());
+            });
+            AnchorPane chatRoomPane = loaderStart.load();
 
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/GamePlay.fxml"));
+            AnchorPane gamePlayPane = fxmlLoader.load();
             GamePlayController gamePlayController = fxmlLoader.getController();
             gamePlayController.setClient(client);
             gamePlayController.setColorText(client.getColor());
             gamePlayController.setMapParser(mapParser);
             gamePlayController.setMyTerritory(myTerritory);
+            gamePlayController.setChatRoomController(loaderStart.getController());
 
-        
-            // Display the game play screen
-            territoryRoot.getChildren().setAll(pane);
+            SplitPane splitPane = new SplitPane(chatRoomPane, gamePlayPane);
+            splitPane.setDividerPositions(0.2); // set the initial position of the divider
+
+            territoryRoot.getChildren().setAll(splitPane);
         } catch (Exception e) {
             e.printStackTrace();
         }

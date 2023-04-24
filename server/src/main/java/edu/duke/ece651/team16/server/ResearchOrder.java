@@ -1,5 +1,6 @@
 
 package edu.duke.ece651.team16.server;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -9,7 +10,7 @@ public class ResearchOrder implements Order {
     public static HashMap<Integer, Integer> researchCostTable;
 
     /**
-     * Constructor for MoveOrder
+     * Constructor for ResearchOrdre
      * 
      * @param player the player
      */
