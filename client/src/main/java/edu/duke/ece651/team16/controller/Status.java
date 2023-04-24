@@ -13,5 +13,7 @@ public enum Status {
 
     UPGRADE_AT,
 
+    BOMB_AT,
+
     FINISH
 }

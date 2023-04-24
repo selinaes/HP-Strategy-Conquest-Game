@@ -53,8 +53,19 @@ public class Combat {
      * @return the winner of the combat
      */
     public Unit determineWin(Unit A, Unit B) {
-        int resA = rollDice() + A.getBonus();
-        int resB = rollDice() + B.getBonus();
+        int extraA = 0;
+        int extraB = 0;
+        // check whether the two owners have special ability extra bonus
+        if (A.getOwner().getDiceAdvantageSwitch()) {
+            extraA = 5;
+            System.out.println("Player " + A.getOwner().getColor() +" has extra bonus");
+        }
+        if (B.getOwner().getDiceAdvantageSwitch()) {
+            extraB = 5;
+            System.out.println("Player " + B.getOwner().getColor() +" has extra bonus");
+        }
+        int resA = rollDice() + A.getBonus() + extraA;
+        int resB = rollDice() + B.getBonus() + extraB;
         // Tied and both units are attackers
         if (resA == resB && A.getisAttacker() && B.getisAttacker()) {
             return null;

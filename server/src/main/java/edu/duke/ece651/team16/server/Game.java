@@ -139,6 +139,7 @@ public class Game {
             if (readyPlayer == numPlayer) {
                 to_send_log = worldwar();
                 for (Player player : players) {
+                    player.resetAllSwitches(); // reset all last turn special ability switch
                     messageGenerator.sendLog(player, to_send_log);
                 }
                 this.gameState = "warEnd";
@@ -469,9 +470,8 @@ public class Game {
         boolean done = false;
         while (!done) {
             if (action.equals("m") || action.equals("a") || action.equals("r") || action.equals("u")
-                    || action.equals("l")) { // l for alliance
+                    || action.equals("s") || action.equals("l")) {
                 if (doOneAction(p, action) == false) {
-                    // doAction(p);
                     return doAction(p);
                 }
             } else { // done
@@ -570,6 +570,24 @@ public class Game {
         return order;
     }
 
+    public Order makeSpecialOrder(Player p) {
+        p.getConn().send("Please send over the special option");
+        String actionInput = p.getConn().recv(); // an option description, or "Nuclear Bomb, T1[Target]"
+        String[] input = actionInput.split(", ");
+        Order order;
+        if (input.length == 2) {
+            Territory target = checkNameReturnTerritory(input[1], currentMap);
+            if (target == null) {
+                p.getConn().send("Invalid Territory Name");
+                return null;
+            }
+            order = new SpecialOrder(p, input[0], target);
+        } else {
+            order = new SpecialOrder(p, input[0]);
+        }
+        return order;
+    }
+
     /**
      * Do one move in the move phase
      * 
@@ -584,6 +602,8 @@ public class Game {
             order = makeResearchOrder(p);
         } else if (actionName.equals("u")) {
             order = makeUpgradeOrder(p);
+        } else if (actionName.equals("s")) {
+            order = makeSpecialOrder(p);
         } else if (actionName.equals("l")) {
             order = makeAllianceOrder(p);
         }
@@ -650,8 +670,13 @@ public class Game {
                                                                                // ConcurrentModificationException
             for (Territory territory : territoriesCopy) {
                 if (territory.existsBattle()) {
-                    String battleLog = territory.doBattle();
+                    String battleLog = territory.doBattle(); // doBattle includes bombing
                     worldLog.put(territory.getName(), battleLog);
+                } else if (territory.getBomber() != null) {
+                    // only if no battle but bombed.
+                    territory.bombing();
+                    String bombLog = territory.getBomber().getColor() + " player nuclear bombed this region, all units destroyed";
+                    worldLog.put(territory.getName(), bombLog);
                 }
             }
         }

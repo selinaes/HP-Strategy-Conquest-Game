@@ -40,7 +40,12 @@ public class AttackOrder implements Order {
      */
     @Override
     public String tryAction() {
-        OrderRuleChecker checker = new AttackInputRuleChecker(new AttackAdjacentRuleChecker(null));
+        OrderRuleChecker checker;
+        if (player.getDisregardAdjacencySwitch()){
+            checker = new AttackInputRuleChecker(null);
+        } else {
+            checker = new AttackInputRuleChecker(new AttackAdjacentRuleChecker(null));
+        }
         String attackProblem = checker.checkOrder(from, to, player, numUnits, gameMap, level);
         if (attackProblem == null) {
             if (player.equals(player.getAlly())) { // if attacks ally

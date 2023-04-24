@@ -39,7 +39,7 @@
       </ScrollPane>
       <ToolBar fx:id="toolBar" layoutX="640.0" layoutY="14.0" prefHeight="81.0" prefWidth="609.0" styleClass="tool-bar">
         <items>
-            <Button fx:id="rule" mnemonicParsing="false" prefHeight="70.0" prefWidth="124.0" text="Game Rule">
+            <Button fx:id="special" mnemonicParsing="false" onAction="#onSpecialButton" prefHeight="70.0" prefWidth="124.0" text="Game Rule">
                <font>
                   <Font size="18.0" />
                </font>

@@ -17,8 +17,15 @@ public class Player {
     private int techLevel;
     private boolean hasResearched;
     private int delayedTech;
+
+    private boolean doubleResourceSwitch; // true for on, false for off
+    private boolean moreUnitSwitch; // true for on, false for off
+    private boolean disregardAdjacencySwitch; // true for on, false for off
+    private boolean diceAdvantageSwitch; // true for on, false for off
+
     private Player ally;
     private Player pendingally;
+
 
     /**
      * Constructor of the player
@@ -43,6 +50,13 @@ public class Player {
         this.techResource = 0;
         this.techLevel = 1;
         this.hasResearched = false;
+
+        // switches for special abilities
+        this.doubleResourceSwitch = false;
+        this.moreUnitSwitch = false;
+        this.disregardAdjacencySwitch = false;
+        this.diceAdvantageSwitch = false;
+
         this.ally = null;
         this.pendingally = null;
     }
@@ -69,6 +83,37 @@ public class Player {
 
     public boolean getHasResearched() {
         return this.hasResearched;
+    }
+
+    public void setDoubleResourceSwitch(boolean status) {
+        this.doubleResourceSwitch = status;
+    }
+
+    public void setMoreUnitSwitch(boolean status) {
+        this.moreUnitSwitch = status;
+    }
+
+    public void setDisregardAdjacencySwitch(boolean status) {
+        this.disregardAdjacencySwitch = status;
+    }
+
+    public void setDiceAdvantageSwitch(boolean status) {
+        this.diceAdvantageSwitch = status;
+    }
+
+    public boolean getDisregardAdjacencySwitch() {
+        return this.disregardAdjacencySwitch;
+    }
+
+    public boolean getDiceAdvantageSwitch() {
+        return this.diceAdvantageSwitch;
+    }
+
+    public void resetAllSwitches(){
+        this.doubleResourceSwitch = false;
+        this.moreUnitSwitch = false;
+        this.disregardAdjacencySwitch = false;
+        this.diceAdvantageSwitch = false;
     }
 
     /**
@@ -186,16 +231,31 @@ public class Player {
     }
 
     /**
-     * Generate new Units on each territory each round
+     * Generate new Units on each territory each round. If special skill is on, generate
+     * 2 units on each territory
      */
     public void generateNewUnit() {
-        for (Territory t : Territories) {
-            Unit newUnit = new AdvancedUnit(this, t, false, numUnits++);
-            ArrayList<Unit> newGenerated = new ArrayList<>();
-            newGenerated.add(newUnit);
-            t.tryAddUnits(newGenerated);// territory add unit
-            this.units.add(newUnit);// player's all units + 1 * num(territroy)
+        if (this.moreUnitSwitch) {
+            for (Territory t : Territories) {
+                Unit newUnit1 = new AdvancedUnit(this, t, false, numUnits++);
+                Unit newUnit2 = new AdvancedUnit(this, t, false, numUnits++);
+                ArrayList<Unit> newGenerated = new ArrayList<>();
+                newGenerated.add(newUnit1);
+                newGenerated.add(newUnit2);
+                t.tryAddUnits(newGenerated);// territory add unit
+                this.units.add(newUnit1);// player's all units + 1 * num(territroy)
+                this.units.add(newUnit2);// player's all units + 1 * num(territroy)
+            }
+        } else {
+            for (Territory t : Territories) {
+                Unit newUnit = new AdvancedUnit(this, t, false, numUnits++);
+                ArrayList<Unit> newGenerated = new ArrayList<>();
+                newGenerated.add(newUnit);
+                t.tryAddUnits(newGenerated);// territory add unit
+                this.units.add(newUnit);// player's all units + 1 * num(territroy)
+            }
         }
+        
     }
 
     /**
@@ -260,11 +320,19 @@ public class Player {
 
     /**
      * add the player's food+tech resources per turn
+     * depend on special ability status, 2* or normal
      */
     public void newResourcePerTurn() {
-        for (int i = 0; i < Territories.size(); i++) {
-            this.foodResource += Territories.get(i).getFoodRate();
-            this.techResource += Territories.get(i).getTechRate();
+        if (this.doubleResourceSwitch) {
+            for (int i = 0; i < Territories.size(); i++) {
+                this.foodResource += Territories.get(i).getFoodRate()*2;
+                this.techResource += Territories.get(i).getTechRate()*2;
+            }
+        } else {
+            for (int i = 0; i < Territories.size(); i++) {
+                this.foodResource += Territories.get(i).getFoodRate();
+                this.techResource += Territories.get(i).getTechRate();
+            }
         }
     }
 

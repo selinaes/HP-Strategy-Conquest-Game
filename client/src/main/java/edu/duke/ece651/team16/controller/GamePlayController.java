@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import java.net.URL;
 import java.net.Socket;
@@ -40,8 +41,10 @@ public class GamePlayController {
     private AnchorPane territoryRoot;
     @FXML
     private ToolBar toolBar;
+    // @FXML
+    // private Button rule;
     @FXML
-    private Button rule;
+    private Button special;
     @FXML
     private Button units;
     @FXML
@@ -97,13 +100,13 @@ public class GamePlayController {
         watchUpdate.setVisible(false);
         battleTime.setVisible(false); // image for acting battle is not visible
 
-        rule.setOnAction(event -> {
-            try {
-                showRule(event);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        // rule.setOnAction(event -> {
+        // try {
+        // showRule(event);
+        // } catch (IOException e) {
+        // e.printStackTrace();
+        // }
+        // });
         // enable user to zoom or drag map
         mapImage.setOnScroll(this::onZoom);
         mapImage.setOnMouseDragged(this::onDrag);
@@ -218,6 +221,15 @@ public class GamePlayController {
                     alert.showAlert("Alert", "This territory has 0 avaliable unit.");
                 }
                 break;
+            case BOMB_AT:
+                oneOrderContent += ", " + btn.getId(); // oneOrderContent= Nuclear Bomb, [T1] location
+                System.out.println("One Order Content: " + oneOrderContent);
+                myOrder.add(oneOrderContent);
+                performAction(myOrder);
+                oneOrderContent = "";
+                setMyTerritoryDisable(false);
+                playerStatus = Status.DEFAULT;
+                break;
             default:
                 break;
         }
@@ -292,6 +304,8 @@ public class GamePlayController {
         // alert.displayImageAlert("New Round", "/img/texts/newround.png");
         PopupBox popup = new PopupBox(territoryRoot);
         popup.display("/img/texts/newround.png");
+        // set special buttons to enable
+        special.setDisable(false);
         try {
             history.appendText("====================New Round=======================\n");
             String msg = client.recvMsg();// receive war log
@@ -329,6 +343,56 @@ public class GamePlayController {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void onSpecialButton(ActionEvent ae) throws Exception {
+        Object source = ae.getSource();
+        if (source instanceof Button) {
+            Button btn = (Button) source;
+            myOrder.clear();
+            myOrder.add("s"); // add special order
+            // roll dice, 1: double resource, 2: two unit 3: disregard adjacency 4: dice
+            // advantage 5: nuclear bomb
+            Random rand = new Random();
+            int num = rand.nextInt(5) + 1; // 1, 2, 3, 4， 5
+            String option = "";
+            switch (num) {
+                case 1:
+                    option = "Double Resource Production";
+                    break;
+                case 2:
+                    option = "Two Units Generation";
+                    break;
+                case 3:
+                    option = "Disregard Adjacency";
+                    break;
+                case 4:
+                    option = "Dice Advantage";
+                    break;
+                case 5:
+                    option = "Nuclear Bomb";
+                    break;
+                default:
+                    break;
+            }
+            PopupBox popup = new PopupBox(territoryRoot);
+            if (num != 5) {
+                popup.displayText("Special Ability", "You used special ability - " + option + " - for this turn!");
+                // add option to order
+                myOrder.add(option);
+                performAction(myOrder);
+            } else {
+                popup.displayText("Special Ability", "You used special ability - " + option
+                        + " - for this turn!\nPlease choose an enemy territory to bomb!");
+                oneOrderContent = option; // "Nuclear Bomb, T1"
+                setMyTerritoryDisable(true); // disable my territory, leave enemy territories
+                playerStatus = Status.BOMB_AT;
+            }
+
+            // disable after one use, per turn
+            btn.setDisable(true);
         }
     }
 

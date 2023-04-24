@@ -205,6 +205,8 @@ public class GamePlayDisplay {
             sb.append("Upgrade at " + parts[0].trim() + " for number of " + parts[1].trim()
                     + " units. Upgrade from initial level of " + parts[2].trim() + " to level of " + finallevel
                     + ".\n");
+        } else if (action.equals("s")) {
+            sb.append("Triggered Special Ability " + parts[0].trim() + " for this round.\n");
         }
         return sb.toString();
     }
