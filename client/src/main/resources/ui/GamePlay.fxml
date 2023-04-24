@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane fx:id="territoryRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
    prefHeight="780.0" prefWidth="1280.0" stylesheets="@/ui/styles.css" xmlns="http://javafx.com/javafx/19" 
@@ -136,5 +137,6 @@
       <Button fx:id="watchUpdate" layoutX="500.0" layoutY="165.0" onAction="#onWatchGameInfo"  styleClass="button-able" text="Follow Game"/>
       <Button fx:id="exitGame" layoutX="555.0" layoutY="17.0" mnemonicParsing="false" onAction="#onExitButton" styleClass="button-able" text="Exit"/>
       <!-- <fx:include layoutY="395.0" source="ChatRoom.fxml" /> -->
+      <!-- <VBox fx:id="chatRoomContainer" layoutY="395.0" AnchorPane.rightAnchor="10" AnchorPane.bottomAnchor="10" /> -->
    </children>
 </AnchorPane>

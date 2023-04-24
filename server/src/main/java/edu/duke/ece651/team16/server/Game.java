@@ -46,7 +46,7 @@ public class Game {
         this.mapCreateFns = new HashMap<>();
         setupMapCreateFns();
         this.mapName = mapName;
-        this.chatServer = new ChatServer(this.numPlayer);
+        this.chatServer = new ChatServer();
     }
 
     /**
@@ -76,13 +76,14 @@ public class Game {
         synchronized (this) {
             this.readyPlayer = 0;
         }
-        // chatServer.setUp();
+        boolean firstTime = true;
         while (findWinner() == null) {
             if (!players.contains(p)) {
                 return; // player exit
             }
             p.getConn().send("Game continues");
-            doActionPhase(p);
+            doActionPhase(p, firstTime);
+            firstTime = false;
         }
         Player winner = findWinner();
         // notify this player of winner!
@@ -94,7 +95,7 @@ public class Game {
      * 
      * @return Player: the player who wants to watch
      */
-    public void doActionPhase(Player p) {
+    public void doActionPhase(Player p, boolean firstTime) {
         if (p.getisWatch()) {
             // send done
             p.getConn().send("watching");
@@ -113,6 +114,11 @@ public class Game {
             }
         } else {
             p.getConn().send("do nothing");
+            if (firstTime) {
+                System.out.println("Chat server is starting");
+                chatServer.setUp();
+                System.out.println("Chat server is ready");
+            }
             p.updateResearchRound(false);
             p.resetDelay();
             doAction(p);

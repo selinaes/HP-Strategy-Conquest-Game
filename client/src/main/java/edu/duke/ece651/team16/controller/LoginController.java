@@ -106,12 +106,12 @@ public class LoginController {
 
         mainRoot.getChildren().setAll(pane);
 
-        Platform.runLater(() -> {
-            // AlertBox alert = new AlertBox();
-            // alert.displayImageAlert("Welcome!", "/img/texts/welcome.png");// welcome
-            PopupBox popup = new PopupBox(mainRoot);
-            popup.display("/img/texts/welcome.png");
-        });
+        // Platform.runLater(() -> {
+        // // AlertBox alert = new AlertBox();
+        // // alert.displayImageAlert("Welcome!", "/img/texts/welcome.png");// welcome
+        // PopupBox popup = new PopupBox(mainRoot);
+        // popup.display("/img/texts/welcome.png");
+        // });
     }
 
     /**

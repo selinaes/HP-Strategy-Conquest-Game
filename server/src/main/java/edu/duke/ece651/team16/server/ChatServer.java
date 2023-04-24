@@ -20,15 +20,16 @@ public class ChatServer {
     private ArrayList<Conn> communicators;
     private int playerNum;
 
-    public ChatServer(int Num) {
+    public ChatServer() {
         try {
             this.chatServerSock = new ServerSocket(4321);
         } catch (IOException e) {
-            System.out.println("Failed to crete chatServerSocket!");
+            System.out.println("Failed to create chatServerSocket!");
         }
         this.players = new ArrayList<Player>();
-        this.chatHandlers = new ArrayList<>(Num);
-        this.playerNum = Num;
+        this.chatHandlers = new ArrayList<ChatHandler>();
+        this.communicators = new ArrayList<Conn>();
+        this.playerNum = 0;
     }
 
     /**
@@ -36,23 +37,23 @@ public class ChatServer {
      */
     public void addPlayer(Player p) {
         players.add(p);
+        playerNum++;
     }
 
     /**
      * start the chat server
      */
     public void setUp() {
-        for (int i = 0; i < 2; i++) {
-            try {
-                Conn curCommunicator = new Conn(chatServerSock.accept());
-                communicators.add(curCommunicator);
-                ChatHandler curHandler = new ChatHandler(curCommunicator, this);
-                chatHandlers.add(curHandler);
-                curHandler.start();
-            } catch (IOException e) {
-                System.out.println("Failed to create chatHandler!");
-            }
-
+        try {
+            System.out.println("ChatServer: waiting for new player...");
+            Conn curCommunicator = new Conn(chatServerSock.accept());
+            communicators.add(curCommunicator);
+            ChatHandler curHandler = new ChatHandler(curCommunicator, this);
+            chatHandlers.add(curHandler);
+            curHandler.start();
+            System.out.println("ChatServer: new player joined!");
+        } catch (IOException e) {
+            System.out.println("Failed to accept new player!");
         }
     }
 
@@ -60,8 +61,9 @@ public class ChatServer {
      * send a message to all players
      */
     public synchronized void sendToAll(String message) {
-        for (Player p : players) {
-            p.getConn().send(message);
+        for (Conn c : communicators) {
+            c.send(message);
+            System.out.println("ChatServer: send message: " + message);
         }
     }
 }

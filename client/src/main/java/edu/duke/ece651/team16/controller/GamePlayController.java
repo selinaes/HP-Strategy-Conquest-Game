@@ -21,6 +21,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
+import javafx.application.Platform;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,8 +36,6 @@ import java.util.HashMap;
 import java.util.Arrays;
 
 public class GamePlayController {
-    // @FXML
-    // private AnchorPane chatRoom;
     @FXML
     private AnchorPane territoryRoot;
     @FXML
@@ -85,6 +85,11 @@ public class GamePlayController {
     private ArrayList<Integer> currTerritoryUnits = new ArrayList<>();
     private GamePlayDisplay gamePlayDisplay = new GamePlayDisplay();
 
+    private ChatRoomController chatRoomController;
+
+    @FXML
+    private VBox chatRoomContainer;
+
     @FXML
     public void initialize() {
         // at Assign Units Phase
@@ -107,6 +112,15 @@ public class GamePlayController {
 
     public void setColorText(String which) {
         color.setText("Color: " + which);
+    }
+
+    /**
+     * set chatRoomController
+     * 
+     * @param chatRoomController
+     */
+    public void setChatRoomController(ChatRoomController chatRoomController) {
+        this.chatRoomController = chatRoomController;
     }
 
     /**
@@ -441,10 +455,8 @@ public class GamePlayController {
         Arrays.asList(buttons).forEach(btn -> btn.setDisable(disabled));
     }
 
-    /*
-     * This method is called when player is selecting the num of units to
-     * upgrade
-     * and the initial level and amount to update
+    /**
+     * Display the box to let player enter the player name to alliance with
      *
      */
     @FXML
@@ -686,7 +698,10 @@ public class GamePlayController {
             mapParser.setMap(client.recvMsg());
             alert.showAlert("Waiting for Alliance", allianceProblem);
         } else {// update the number of units in the selected territory and clear the order
-            history.appendText(gamePlayDisplay.getActionInfo(myOrder));
+            String msg = gamePlayDisplay.getActionInfo(myOrder);
+            System.out.println(msg);
+            chatRoomController.sendMsg("server:" + client.getColor() + " " + msg);
+            // history.appendText(gamePlayDisplay.getActionInfo(myOrder));
             mapParser.setMap(client.recvMsg());
         }
         myOrder.clear();
