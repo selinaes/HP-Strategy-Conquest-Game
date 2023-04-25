@@ -30,7 +30,7 @@ public class AttackInputRuleChecker extends OrderRuleChecker {
         }
         if (from.getAliveUnitsFor(player, level).size() < numUnits) {
             // check units alive & owner is player
-            return "You do not have enough alive units of this level in the from territory";
+            return "You do not have enough students of this level in the from territory";
         }
         return null;
     }

@@ -40,9 +40,9 @@ public class GamePlayController {
     @FXML
     private AnchorPane territoryRoot;
     @FXML
+    private AnchorPane HPmap;
+    @FXML
     private ToolBar toolBar;
-    // @FXML
-    // private Button rule;
     @FXML
     private Button special;
     @FXML
@@ -68,15 +68,12 @@ public class GamePlayController {
     @FXML
     private Button finish;
     @FXML
-    private GridPane territoryGrid;
-    @FXML
     public ImageView battleTime;
     @FXML
     public Label color;
 
     private Client client;
     private MapParser mapParser;
-    private double zoomFactor = 1.0;
     private Status playerStatus = Status.DEFAULT;
     private ArrayList<String> myOrder;
     private String oneOrderContent = "";
@@ -99,17 +96,6 @@ public class GamePlayController {
         exitGame.setVisible(false);
         watchUpdate.setVisible(false);
         battleTime.setVisible(false); // image for acting battle is not visible
-
-        // rule.setOnAction(event -> {
-        // try {
-        // showRule(event);
-        // } catch (IOException e) {
-        // e.printStackTrace();
-        // }
-        // });
-        // enable user to zoom or drag map
-        mapImage.setOnScroll(this::onZoom);
-        mapImage.setOnMouseDragged(this::onDrag);
         myOrder = new ArrayList<>();
     }
 
@@ -162,14 +148,14 @@ public class GamePlayController {
                     " for ActionEvent");
         }
         Button btn = (Button) source;
-        showTerritoryInfo(btn.getId());
-        HashMap<String, String> territoryInfo = mapParser.getTerritoryInfo(btn.getId());
+        showTerritoryInfo(btn.getText());
+        HashMap<String, String> territoryInfo = mapParser.getTerritoryInfo(btn.getText());
         int unitnum;
         switch (playerStatus) {
             case ATTACK_FROM:
                 unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"));
                 if (unitnum > 0) {// initiate attack
-                    oneOrderContent = btn.getId();
+                    oneOrderContent = btn.getText();
                     setEnemyTerritoryDisable(false);
                     setMyTerritoryDisable(true);
                     playerStatus = Status.ATTACK_TO;
@@ -179,7 +165,7 @@ public class GamePlayController {
                 }
                 break;
             case ATTACK_TO:
-                oneOrderContent += ", " + btn.getId() + ", ";
+                oneOrderContent += ", " + btn.getText() + ", ";
                 setMyTerritoryDisable(false);
                 playerStatus = Status.ATTACK_Units;
                 onAttackMoveUnits();
@@ -189,7 +175,7 @@ public class GamePlayController {
             case MOVE_FROM:
                 unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"));
                 if (unitnum > 0) {// initiate move
-                    oneOrderContent = btn.getId(); // oneOrderContent=[T1]
+                    oneOrderContent = btn.getText(); // oneOrderContent=[T1]
                     playerStatus = Status.MOVE_TO;
                     currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"));
                 } else {
@@ -197,7 +183,7 @@ public class GamePlayController {
                 }
                 break;
             case MOVE_TO:
-                oneOrderContent += ", " + btn.getId() + ", "; // oneOrderContent=[T1, T2, ]
+                oneOrderContent += ", " + btn.getText() + ", "; // oneOrderContent=[T1, T2, ]
                 setEnemyTerritoryDisable(false);
                 playerStatus = Status.MOVE_Units;
                 onAttackMoveUnits();// oneOrderContent=[T1, T2, level, units]
@@ -207,7 +193,8 @@ public class GamePlayController {
             case UPGRADE_AT:
                 unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"));
                 if (unitnum > 0) { // can upgrade
-                    oneOrderContent = btn.getId(); // oneOrderContent= [T1] source, unitNum, initialLevel, upgradeAmount
+                    oneOrderContent = btn.getText(); // oneOrderContent= [T1] source, unitNum, initialLevel,
+                                                     // upgradeAmount
                     System.out.println("One Order Content: " + oneOrderContent);
                     setMyTerritoryDisable(false);
                     currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"));
@@ -222,7 +209,7 @@ public class GamePlayController {
                 }
                 break;
             case BOMB_AT:
-                oneOrderContent += ", " + btn.getId(); // oneOrderContent= Nuclear Bomb, [T1] location
+                oneOrderContent += ", " + btn.getText(); // oneOrderContent= Nuclear Bomb, [T1] location
                 System.out.println("One Order Content: " + oneOrderContent);
                 myOrder.add(oneOrderContent);
                 performAction(myOrder);
@@ -364,7 +351,7 @@ public class GamePlayController {
                     option = "Double Resource Production";
                     break;
                 case 2:
-                    option = "Two Units Generation";
+                    option = "Two Students Generation";
                     break;
                 case 3:
                     option = "Disregard Adjacency";
@@ -619,10 +606,10 @@ public class GamePlayController {
      * @param isDisabled
      */
     private void setEnemyTerritoryDisable(boolean isDisabled) {
-        for (Node node : territoryGrid.getChildren()) {
+        for (Node node : HPmap.getChildren()) {
             if (node instanceof Button) {
                 Button btn = (Button) node;
-                if (!myTerritory.containsKey(btn.getId())) {
+                if (!myTerritory.containsKey(btn.getText())) {
                     btn.setDisable(isDisabled);
                     String styleToRemove = isDisabled ? "button-able" : "button-unable";
                     String styleToAdd = isDisabled ? "button-unable" : "button-able";
@@ -639,10 +626,10 @@ public class GamePlayController {
      * @param isDisabled
      */
     private void setMyTerritoryDisable(boolean isDisabled) {
-        for (Node node : territoryGrid.getChildren()) {
+        for (Node node : HPmap.getChildren()) {
             if (node instanceof Button) {
                 Button btn = (Button) node;
-                if (myTerritory.containsKey(btn.getId())) {
+                if (myTerritory.containsKey(btn.getText())) {
                     btn.setDisable(isDisabled);
                     String styleToRemove = isDisabled ? "button-able" : "button-unable";
                     String styleToAdd = isDisabled ? "button-unable" : "button-able";
@@ -650,24 +637,6 @@ public class GamePlayController {
                     btn.getStyleClass().add(styleToAdd);
                 }
             }
-        }
-    }
-
-    /**
-     * Click "Rule", show rule
-     * 
-     * @param event
-     */
-    public void showRule(ActionEvent event) throws IOException {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/GameRule.fxml"));
-            AnchorPane rulePane = fxmlLoader.load();
-            Scene ruleScene = new Scene(rulePane, 800, 600);
-            Stage ruleStage = new Stage();
-            ruleStage.setScene(ruleScene);
-            ruleStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -720,33 +689,6 @@ public class GamePlayController {
                     e.printStackTrace();
                 }
             }
-        }
-    }
-
-    /**
-     * Function to handle the zoom event
-     * 
-     * @param event
-     */
-    private void onZoom(ScrollEvent event) {
-        zoomFactor *= event.getDeltaY() > 0 ? 1.1 : 1 / 1.1;
-        zoomFactor = Math.min(Math.max(zoomFactor, 1.0), 2.0);
-        mapImage.setScaleX(zoomFactor);
-        mapImage.setScaleY(zoomFactor);
-        event.consume();
-    }
-
-    /**
-     * Function to handle the drag event
-     * 
-     * @param event
-     */
-    private void onDrag(MouseEvent event) {
-        if (zoomFactor >= 1.0) {
-            double deltaX = event.getX() - mapImage.getFitWidth() / 2.0;
-            double deltaY = event.getY() - mapImage.getFitHeight() / 2.0;
-            mapImage.setTranslateX(mapImage.getTranslateX() + deltaX);
-            mapImage.setTranslateY(mapImage.getTranslateY() + deltaY);
         }
     }
 

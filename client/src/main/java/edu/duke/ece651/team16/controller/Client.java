@@ -176,7 +176,7 @@ public class Client {
     public void playerAssignUnit(String input) throws IOException {
         String prompt = recvMsg();
         if (prompt.equals("finished stage")) {
-            out.println("Finished Placement. Please wait for other players to place units.");
+            out.println("Finished Placement. Please wait for other players to place their students.");
             return;
         }
         try {

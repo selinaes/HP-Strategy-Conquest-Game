@@ -55,7 +55,6 @@ public class InitGamePlayController {
 
     private Client client;
     private MapParser mapParser;
-    private double zoomFactor = 1.0;
     private AlertBox alert = new AlertBox();
 
     private LinkedHashMap<String, String> myTerritory;
@@ -74,9 +73,6 @@ public class InitGamePlayController {
                 e.printStackTrace();
             }
         });
-        // enable user to zoom or drag map
-        mapImage.setOnScroll(this::onZoom);
-        mapImage.setOnMouseDragged(this::onDrag);
     }
 
     public void setClient(Client client) {
@@ -153,23 +149,6 @@ public class InitGamePlayController {
             territoryRoot.getChildren().setAll(splitPane);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    private void onZoom(ScrollEvent event) {
-        zoomFactor *= event.getDeltaY() > 0 ? 1.1 : 1 / 1.1;
-        zoomFactor = Math.min(Math.max(zoomFactor, 1.0), 2.0);
-        mapImage.setScaleX(zoomFactor);
-        mapImage.setScaleY(zoomFactor);
-        event.consume();
-    }
-
-    private void onDrag(MouseEvent event) {
-        if (zoomFactor >= 1.0) {
-            double deltaX = event.getX() - mapImage.getFitWidth() / 2.0;
-            double deltaY = event.getY() - mapImage.getFitHeight() / 2.0;
-            mapImage.setTranslateX(mapImage.getTranslateX() + deltaX);
-            mapImage.setTranslateY(mapImage.getTranslateY() + deltaY);
         }
     }
 

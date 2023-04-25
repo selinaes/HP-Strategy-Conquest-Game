@@ -122,7 +122,7 @@ public class Server {
             String roomID = conn.recv();
             // new game
             if (!gameList.containsKey(roomID)) {
-                gameList.put(roomID, new Game(24, "Duke"));
+                gameList.put(roomID, new Game(24, "HP"));
                 gameClients.put(roomID, 1);
                 conn.send("Room created.");
                 gameList.get(roomID).gameFlow(conn, 1);

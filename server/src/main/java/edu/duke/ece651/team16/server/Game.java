@@ -57,6 +57,7 @@ public class Game {
         mapCreateFns.put("Test3", () -> currentMap.createTest3Map());
         mapCreateFns.put("Basic", () -> currentMap.createBasicMap());
         mapCreateFns.put("Duke", () -> currentMap.createDukeMap());
+        mapCreateFns.put("HP", () -> currentMap.createHPMap());
     }
 
     // getter for status
@@ -675,7 +676,8 @@ public class Game {
                 } else if (territory.getBomber() != null) {
                     // only if no battle but bombed.
                     territory.bombing();
-                    String bombLog = territory.getBomber().getColor() + " player nuclear bombed this region, all units destroyed";
+                    String bombLog = territory.getBomber().getColor()
+                            + " player nuclear bombed this region, all units destroyed";
                     worldLog.put(territory.getName(), bombLog);
                 }
             }

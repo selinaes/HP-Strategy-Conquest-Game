@@ -19,7 +19,8 @@ public class GamePlayDisplay {
      * @return The formatted units information
      */
     public String parseUnitsInfo(String unitsInfo) {
-        String[] unitName = { "Freshman", "Sophomore", "Junior", "Senior", "Graduate", "PhD", "Professor" };
+        String[] unitName = { "First-year", "Second-year", "Third-Year", "Fourth-year", "Fifth-year", "Sixth-year",
+                "Seventh-year" };
         String[] unitsInfoArray = unitsInfo.split(",");
         StringBuilder unitsInfoString = new StringBuilder();
         for (int i = 0; i < 6; i++) {
@@ -168,7 +169,7 @@ public class GamePlayDisplay {
         StringBuilder sb = new StringBuilder();
         sb.append("==================== " + terrirtoryName + " =======================\n");
         sb.append("Player " + territoryInfo.get("Player") + "'s \n");
-        sb.append("Units: " + parseUnitsInfo(territoryInfo.get("Unit")) + "\n");
+        sb.append("Students: " + parseUnitsInfo(territoryInfo.get("Unit")) + "\n");
         sb.append("Neighbors: " + territoryInfo.get("Neighbors") + "\n");
         sb.append("Rate: " + territoryInfo.get("Rate") + "\n");
         sb.append("Resource: " + territoryInfo.get("Resource") + "\n");

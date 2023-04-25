@@ -22,7 +22,7 @@ public class AdvancedUnit extends BasicUnit {
         super(owner, where, isAttacker, id);
         this.bonus = 0;
         this.level = 0;
-        this.name = "freshman";
+        this.name = "First-year";
         upgradeName = new HashMap<Integer, String>();
         levelBonusTable = new HashMap<Integer, Integer>();
         initializeBonusTable();
@@ -34,13 +34,13 @@ public class AdvancedUnit extends BasicUnit {
      */
     private void initializeNameTable() {
         // level, name
-        upgradeName.put(0, "Freshman");
-        upgradeName.put(1, "Sophomore");
-        upgradeName.put(2, "Junior");
-        upgradeName.put(3, "Senior");
-        upgradeName.put(4, "Graduate");
-        upgradeName.put(5, "PhD");
-        upgradeName.put(6, "Professor");
+        upgradeName.put(0, "First-Year");
+        upgradeName.put(1, "Second-Year");
+        upgradeName.put(2, "Third-Year");
+        upgradeName.put(3, "Fourth-Year");
+        upgradeName.put(4, "Fifth-Year");
+        upgradeName.put(5, "Six-Year");
+        upgradeName.put(6, "Seventh-year");
     }
 
     /*

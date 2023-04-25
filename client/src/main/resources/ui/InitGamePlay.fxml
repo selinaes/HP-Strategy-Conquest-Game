@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.shape.Line?>
 
 <AnchorPane fx:id="territoryRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="1280.0" stylesheets="@/ui/styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team16.controller.InitGamePlayController">
    <children>
@@ -18,16 +19,39 @@
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <ImageView fitHeight="812.0" fitWidth="1337.0">
+                  <ImageView fx:id="mapImage" fitHeight="780.0" fitWidth="1300.0" preserveRatio="true">
                      <image>
-                        <Image url="@../img/backgrounds/map.png" />
+                        <Image url="@../img/territory/HPmap/map.jpeg" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="mapImage" fitHeight="793.0" fitWidth="1445.0" preserveRatio="true">
-                     <image>
-                        <Image url="@../img/territory/dukeMap/dukeMapWithName.png" />
-                     </image>
-                  </ImageView>
+                  <Line fx:id="willowToHall" endX="644.8285522460938" endY="522.3887329101562" fill="#f8f408" layoutX="10.0" layoutY="10.0" opacity="0.5" startX="308.2499694824219" startY="489.0000305175781" stroke="#1b1a1a" strokeWidth="5.0" />
+                  <Line fx:id="willowToLibrary" endX="595.5341186523438" endY="284.1788635253906" layoutX="20.0" layoutY="20.0" opacity="0.5" startX="308.3826904296875" startY="480.6509094238281" strokeWidth="5.0" />
+                  <Line fx:id="lakeToOffice" endX="723.0645751953125" endY="97.35403442382812" layoutX="30.0" layoutY="30.0" opacity="0.5" startX="355.81298828125" startY="203.14666748046875" strokeWidth="5.0" />
+                  <Line fx:id="officeToRequirement" endX="784.0968017578125" endY="203.1466827392578" layoutX="40.0" layoutY="40.0" opacity="0.5" startX="723.6438598632812" startY="96.42196655273438" strokeWidth="5.0" />
+                  <Line fx:id="requirementToPitch" endX="784.0968017578125" endY="203.1466827392578" layoutX="50.0" layoutY="50.0" opacity="0.5" startX="949.4102783203125" startY="260.2241516113281" strokeWidth="5.0" />
+                  <Line fx:id="pitchToTower" endX="1095.07666015625" endY="227.5543212890625" layoutX="60.0" layoutY="60.0" opacity="0.5" startX="937.8989868164062" startY="247.20150756835938" strokeWidth="5.0" />
+                  <Line fx:id="pitchToWing" endX="871.97998046875" endY="370.1979675292969" layoutX="70.0" layoutY="70.0" opacity="0.5" startX="937.8989868164062" startY="247.20150756835938" strokeWidth="5.0" />
+                  <Line fx:id="wingToTower" endX="828.6280517578125" endY="371.9999694824219" layoutX="80.0" layoutY="80.0" opacity="0.5" startX="1102.2803955078125" startY="210.57696533203125" strokeWidth="5.0" />
+                  <Line fx:id="wingToForest" endX="860.3408203125" endY="350.9050598144531" layoutX="90.0" layoutY="90.0" opacity="0.5" startX="1234.3448486328125" startY="563.2945556640625" strokeWidth="5.0" />
+                  <Line fx:id="wingToPotions" endX="835.7500610351562" endY="339.0" layoutX="100.0" layoutY="100.0" opacity="0.5" startX="666.66650390625" startY="566.896484375" strokeWidth="5.0" />
+                  <Line fx:id="secretToPotions" endX="614.0538940429688" endY="343.5607604980469" layoutX="110.0" layoutY="110.0" opacity="0.5" startX="655.1551513671875" startY="566.9999389648438" strokeWidth="5.0" />
+                  <Line fx:id="hallToSecret" endX="611.198974609375" endY="334.6041259765625" layoutX="120.0" layoutY="120.0" opacity="0.5" startX="552.9644165039062" startY="413.9000244140625" strokeWidth="5.0" />
+                  <Line fx:id="libraryToSecret" endX="601.198974609375" endY="324.6041259765625" layoutX="130.0" layoutY="130.0" opacity="0.5" startX="491.57940673828125" startY="168.13357543945312" strokeWidth="5.0" />
+                  <Line fx:id="secretToRequirement" endX="596.401123046875" endY="306.0" layoutX="129.0" layoutY="135.0" opacity="0.5" startX="678.5" startY="125.99996948242188" strokeWidth="5.0" />
+                  <Line fx:id="willowToLake" endX="383.0" endY="235.0" opacity="0.5" startX="318.2499694824219" startY="498.9999694824219" strokeWidth="5.0" />
+                  <Line fx:id="towerToForest" endX="606.079345703125" endY="334.2789611816406" layoutX="572.0" layoutY="-37.0" opacity="0.5" startX="727.33251953125" startY="671.0931396484375" strokeWidth="5.0" />
+                  <Button fx:id="willow" layoutX="260.0" layoutY="486.0" mnemonicParsing="false" text="Whomping Willow" />
+                  <Button fx:id="lake" layoutX="345.0" layoutY="222.0" mnemonicParsing="false" text="Black Lake" />
+                  <Button fx:id="library" layoutX="562.0" layoutY="286.0" mnemonicParsing="false" text="Hogwarts Library" />
+                  <Button fx:id="secret" layoutX="656.0" layoutY="441.0" mnemonicParsing="false" text="Chamber of Secret" />
+                  <Button fx:id="hall" layoutX="631.0" layoutY="520.0" mnemonicParsing="false" text="Great Hall" />
+                  <Button fx:id="potion" layoutX="695.0" layoutY="651.0" mnemonicParsing="false" text="Potions Classroom" />
+                  <Button fx:id="hospital" layoutX="889.0" layoutY="426.0" mnemonicParsing="false" text="Hospital Wing" />
+                  <Button fx:id="pitch" layoutX="933.0" layoutY="296.0" mnemonicParsing="false" text="Quidditch Pitch" />
+                  <Button fx:id="tower" layoutX="1110.0" layoutY="270.0" mnemonicParsing="false" text="Astronomy Tower" />
+                  <Button fx:id="forest" layoutX="1265.0" layoutY="637.0" mnemonicParsing="false" text="Forbidden Forest" />
+                  <Button fx:id="office" layoutX="702.0" layoutY="120.0" mnemonicParsing="false" text="Headmaster's Office" />
+                  <Button fx:id="requirement" layoutX="740.0" layoutY="235.0" mnemonicParsing="false" text="Room of Requirement" />
                </children>
             </AnchorPane>
         </content>

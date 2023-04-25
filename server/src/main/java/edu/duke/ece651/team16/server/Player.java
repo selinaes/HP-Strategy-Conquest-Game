@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Player {
-
     private List<Territory> Territories;
     private ArrayList<Unit> units;
     private String color;
@@ -25,7 +24,6 @@ public class Player {
 
     private Player ally;
     private Player pendingally;
-
 
     /**
      * Constructor of the player
@@ -109,7 +107,7 @@ public class Player {
         return this.diceAdvantageSwitch;
     }
 
-    public void resetAllSwitches(){
+    public void resetAllSwitches() {
         this.doubleResourceSwitch = false;
         this.moreUnitSwitch = false;
         this.disregardAdjacencySwitch = false;
@@ -231,7 +229,8 @@ public class Player {
     }
 
     /**
-     * Generate new Units on each territory each round. If special skill is on, generate
+     * Generate new Units on each territory each round. If special skill is on,
+     * generate
      * 2 units on each territory
      */
     public void generateNewUnit() {
@@ -255,7 +254,7 @@ public class Player {
                 this.units.add(newUnit);// player's all units + 1 * num(territroy)
             }
         }
-        
+
     }
 
     /**
@@ -325,8 +324,8 @@ public class Player {
     public void newResourcePerTurn() {
         if (this.doubleResourceSwitch) {
             for (int i = 0; i < Territories.size(); i++) {
-                this.foodResource += Territories.get(i).getFoodRate()*2;
-                this.techResource += Territories.get(i).getTechRate()*2;
+                this.foodResource += Territories.get(i).getFoodRate() * 2;
+                this.techResource += Territories.get(i).getTechRate() * 2;
             }
         } else {
             for (int i = 0; i < Territories.size(); i++) {

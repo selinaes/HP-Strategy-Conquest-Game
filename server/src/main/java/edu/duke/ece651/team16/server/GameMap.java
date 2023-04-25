@@ -97,31 +97,6 @@ public class GameMap {
     Territory wallace = new Territory("wallace");
     Territory wilson = new Territory("wilson");
 
-    // Territory baldwin = new Territory("Baldwin Auditorium");
-    // Territory broadhead = new Territory("Broadhead Center");
-    // Territory brodie = new Territory("Brodie Recreational Center");
-    // Territory bryan = new Territory("Bryan Center");
-    // Territory cameron = new Territory("Cameron Indoor Stadium");
-    // Territory dukeChapel = new Territory("Duke Chapel");
-    // Territory dukeForest = new Territory("Duke Forest");
-    // Territory dukeGarden = new Territory("Duke Garden");
-    // Territory dukeHospital = new Territory("Duke Hospital");
-    // Territory dukeLemur = new Territory("Duke Lemur Center");
-    // Territory dukeLaw = new Territory("Duke University School of Law");
-    // Territory fitzpatrick = new Territory("Fitzpatrick Center");
-    // Territory jbDuke = new Territory("JB Duke Hotel");
-    // Territory levine = new Territory("Levine Science Research Center");
-    // Territory nasher = new Territory("Nasher Museum of Art");
-    // Territory penn = new Territory("Penn Pavilion");
-    // Territory perkins = new Territory("Perkins Library");
-    // Territory scienceGarage = new Territory("Science Garage");
-    // Territory smith = new Territory("Smith Warehouse");
-    // Territory studentWellness = new Territory("Student Wellness Center");
-    // Territory fuqua = new Territory("The Fuqua School of Business");
-    // Territory bookStore = new Territory("University Book Store");
-    // Territory wallace = new Territory("Wallace Wade Stadium");
-    // Territory wilson = new Territory("Wilson Recreation Center");
-
     baldwin.setNeighbors(Arrays.asList(brodie, smith, dukeChapel));
     baldwin.setDistance(Arrays.asList(brodie, smith, dukeChapel), Arrays.asList(5, 5, 5));
     brodie.setNeighbors(Arrays.asList(smith));
@@ -172,6 +147,53 @@ public class GameMap {
     }
     setMap(dukemap);
     return dukemap;
+  }
+
+  public HashMap<String, List<Territory>> createHPMap() {
+    ArrayList<Territory> totalTerritory = new ArrayList<Territory>();
+    Territory headmaster = new Territory("Headmaster's Office");
+    Territory lake = new Territory("Black Lake");
+    Territory willow = new Territory("Whomping Willow");
+    Territory hospital = new Territory("Hospital Wing");
+    Territory quidditch = new Territory("Quidditch Pitch");
+    Territory forest = new Territory("Forbidden Forest");
+    Territory requirement = new Territory("Room of Requirement");
+    Territory library = new Territory("Hogwarts Library");
+    Territory astronomy = new Territory("Astronomy Tower");
+    Territory hall = new Territory("Great Hall");
+    Territory classroom = new Territory("Potions Classroom");
+    Territory chamber = new Territory("Chamber of Secret");
+
+    headmaster.setNeighbors(Arrays.asList(lake, requirement));
+    headmaster.setDistance(Arrays.asList(lake, requirement), Arrays.asList(5, 5));
+    willow.setNeighbors(Arrays.asList(lake, hall, library));
+    willow.setDistance(Arrays.asList(lake, hall, library), Arrays.asList(5, 5, 5));
+    hospital.setNeighbors(Arrays.asList(quidditch, astronomy, forest, classroom));
+    hospital.setDistance(Arrays.asList(quidditch, astronomy, forest, classroom), Arrays.asList(5, 5, 5, 5));
+    astronomy.setNeighbors(Arrays.asList(forest, quidditch));
+    astronomy.setDistance(Arrays.asList(forest, quidditch), Arrays.asList(5, 5));
+    chamber.setNeighbors(Arrays.asList(library, requirement, hall, classroom));
+    chamber.setDistance(Arrays.asList(library, requirement, hall, classroom), Arrays.asList(5, 5, 5, 5));
+    quidditch.setNeighbors(Arrays.asList(requirement));
+    quidditch.setDistance(Arrays.asList(requirement), Arrays.asList(5));
+    totalTerritory.addAll(Arrays.asList(headmaster, lake, willow, hospital, quidditch, forest, requirement, library,
+        astronomy, hall, classroom, chamber));
+    HashMap<String, List<Territory>> HPmap = new HashMap<>();
+    int numTerritories;
+    if (numPlayer < 1 || numPlayer > 12) {
+      numTerritories = -1;
+    } else {
+      numTerritories = 12 / numPlayer;
+    }
+    if (numTerritories != -1) {
+      List<String> colors = Arrays.asList("red", "blue", "yellow", "green").subList(0, numPlayer);
+      for (int i = 0; i < numPlayer; i++) {
+        List<Territory> territories = totalTerritory.subList(i * numTerritories, (i + 1) * numTerritories);
+        HPmap.put(colors.get(i), new ArrayList<>(territories));
+      }
+    }
+    setMap(HPmap);
+    return HPmap;
   }
 
   /**

@@ -156,8 +156,8 @@ public class ChooseGroupController {
                     // 24.");
 
                     PopupBox popup = new PopupBox(chooseGroupRoot);
-                    popup.displayText("Please assign your initial units.",
-                            "Please assign your initial units. The sum of units assigned can not exceed 24.");
+                    popup.displayText("Assign initial students.",
+                            "Please assign your initial First-year students. The sum of students can not exceed 24.");
                 });
             } catch (Exception e) {
                 e.printStackTrace();

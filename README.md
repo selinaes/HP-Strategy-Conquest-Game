@@ -148,7 +148,7 @@ flowchart LR
 The duke map is initialized with 24 territories. This game supports 2-4 players. For 2 players, each player will have 12 territories, and can choose from colors: red, blue. For 3 players, each player will have 8 territories, and can choose from colors: red, blue, yellow. For 4 players, each player will have 6 territories, and can choose from colors: red, blue, yellow, green. For each pair of adjacent territories, the distance between them is 5.
 
 ### Unit initialization
-The player each has 24 Freshman units(level 0) at the start of the game to assign to their territories. There is a total of 7 level of units: Freshman(level 0), Sophomore(level 1), Junior(level 2), Senior(level 3), Master(level 4), phD(level 5), Professor(level 6). Each territory will generate 1 Freshman unit(level 0) at the beginning of a new turn.
+The player each has 24 First-year students(level 0) at the start of the game to assign to their territories. There is a total of 7 level of students: First-year(level 0), Second-year(level 1), Third-year(level 2), Fourth-year(level 3), Fifth-year(level 4), Sixth-year(level 5), Seventh-year(level 6). Each territory will generate 1 First-year student(level 0) at the beginning of a new turn.
 
 ### Resource and Tech Level initialization
 Each territory produces 5 food resources and 5 tech resources per turn. Each player starts with a tech level 1, and can upgrade per turn till tech level 6.
