@@ -41,11 +41,31 @@ public class ChooseGroupController {
     private ImageView yellow;
 
     @FXML
+    private ImageView green_C;
+
+    @FXML
+    private ImageView red_C;
+
+    @FXML
+    private ImageView blue_C;
+
+    @FXML
+    private ImageView yellow_C;
+
+    @FXML
     public void initialize() {
         setImageViewProperties(green);
         setImageViewProperties(red);
         setImageViewProperties(blue);
         setImageViewProperties(yellow);
+        green_C.setVisible(false);
+        red_C.setVisible(false);
+        blue_C.setVisible(false);
+        yellow_C.setVisible(false);
+        setImageViewProperties(green_C);
+        setImageViewProperties(red_C);
+        setImageViewProperties(blue_C);
+        setImageViewProperties(yellow_C);
     }
 
     /**
@@ -72,16 +92,23 @@ public class ChooseGroupController {
      * @param imageView
      */
     private void setImageViewProperties(ImageView imageView) {
-        imageView.setFitWidth(150);
-        imageView.setFitHeight(300);
 
         imageView.setOnMouseEntered(event -> {
-            imageView.setFitWidth(200);
-            imageView.setFitHeight(400);
+            if (imageView.getId().equals("green")) {
+                green_C.setVisible(true);
+            } else if (imageView.getId().equals("red")) {
+                red_C.setVisible(true);
+            } else if (imageView.getId().equals("blue")) {
+                blue_C.setVisible(true);
+            } else if (imageView.getId().equals("yellow")) {
+                yellow_C.setVisible(true);
+            }
         });
         imageView.setOnMouseExited(event -> {
-            imageView.setFitWidth(200);
-            imageView.setFitHeight(300);
+            green_C.setVisible(false);
+            red_C.setVisible(false);
+            blue_C.setVisible(false);
+            yellow_C.setVisible(false);
         });
     }
 

@@ -23,36 +23,34 @@
             <Image url="@../img/backgrounds/white.jpg" />
          </image>
       </ImageView>
-      <Label layoutX="191.0" layoutY="260.0" text="Room ID:" textFill="#083983">
+      <Label layoutX="347.0" layoutY="259.0" styleClass="room-text" text="Room ID" textFill="#463b38">
          <font>
             <Font name="System Bold" size="36.0" />
          </font>
       </Label>
-      <Button fx:id="joinRoom" layoutX="223.0" layoutY="567.0" mnemonicParsing="false" onAction="#joinRoom" styleClass="button-unable" text="Join Room">
+      <Button fx:id="joinRoom" layoutX="629.0" layoutY="512.0" mnemonicParsing="false" onAction="#joinRoom" prefHeight="68.0" prefWidth="264.0" styleClass="button-room" text="Join Room">
          <font>
             <Font size="36.0" />
          </font>
       </Button>
-      <Button fx:id="back" layoutX="1045.0" layoutY="567.0" mnemonicParsing="false" onAction="#backRoom" styleClass="button-able" text="Back">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Button>
-      <TextField fx:id="roomIDField" layoutX="341.0" layoutY="261.0" prefHeight="45.0" prefWidth="232.0" promptText="Enter your Room ID">
+      <TextField fx:id="roomIDField" layoutX="649.0" layoutY="247.0" prefHeight="68.0" prefWidth="251.0" promptText="Enter your Room ID" styleClass="pass-text">
          <font>
             <Font size="24.0" />
          </font>
       </TextField>
-      <ChoiceBox fx:id="chooseNum" layoutX="863.0" layoutY="394.0" prefWidth="150.0" />
-      <Label fx:id="prompt" layoutX="185.0" layoutY="380.0" text="First player should choose player number:" textFill="#083983">
+      <ChoiceBox fx:id="chooseNum" layoutX="649.0" layoutY="374.0" prefHeight="68.0" prefWidth="251.0" />
+      <Label fx:id="prompt" layoutX="300.0" layoutY="386.0" styleClass="room-text" text="Player Number" textFill="#463b38">
          <font>
             <Font name="System Bold" size="36.0" />
          </font>
       </Label>
-      <Button fx:id="searchRoom" layoutX="640.0" layoutY="261.0" mnemonicParsing="false" onAction="#searchRoom" styleClass="button-able" text="Search Room">
+      <Button fx:id="searchRoom" layoutX="989.0" layoutY="244.0" mnemonicParsing="false" onAction="#searchRoom" prefHeight="68.0" prefWidth="264.0" styleClass="button-room" text="Search Room">
          <font>
             <Font size="36.0" />
          </font>
       </Button>
+      <Label layoutX="201.0" layoutY="675.0" text="* First player entering the room can choose the number of players in this game" />
+      <Label text="Label" />
+      <Label layoutX="588.0" layoutY="110.0" prefHeight="45.0" prefWidth="425.0" styleClass="house-text" text="Join Room" textFill="#463b38" />
    </children>
 </AnchorPane>

@@ -195,7 +195,9 @@ public class Client {
      */
     public String playerOneAction(ArrayList<String> clientInput) throws IOException {
         recvMsg();// String choices = view.displayEntry(recvMsg()); old version
+        System.out.println("after recvMsg");
         sendResponse(clientInput.get(0)); // send order (a or m)
+        System.out.println("after sendResponse");
         if (clientInput.get(0).equals("d")) {
             String msg = recvMsg();
             if (msg.equals("finished stage")) {
@@ -205,21 +207,17 @@ public class Client {
         }
         String prompt = recvMsg(); // "Please enter <Territor ......"
         try {
-            // attack, move, upgrade, special
-            if (clientInput.get(0).equals("a") || clientInput.get(0).equals("m") ||
-                    clientInput.get(0).equals("u") || clientInput.get(0).equals("s")
-                    || clientInput.get(0).equals("l")) {
-                if (clientInput.get(0).equals("a") || clientInput.get(0).equals("m") || clientInput.get(0).equals("u")
-                        || clientInput.get(0).equals("l")) {
-                    sendResponse(clientInput.get(1));
-                }
-                // research
-                prompt = recvMsg(); // Valid, or respective error message, from serverside "tryAction" result
-                return prompt;
+            if (clientInput.get(0).equals("a") || clientInput.get(0).equals("m") || clientInput.get(0).equals("u")
+                    || clientInput.get(0).equals("l") || clientInput.get(0).equals("s")) {
+                sendResponse(clientInput.get(1));
             }
+            // research
+            prompt = recvMsg(); // Valid, or respective error message, from serverside "tryAction" result
+            return prompt;
         } catch (EOFException e) {
             out.println(e.getMessage());
         }
+
         return "Invalid";
     }
 

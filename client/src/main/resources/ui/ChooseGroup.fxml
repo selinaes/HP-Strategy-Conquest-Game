@@ -1,40 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="chooseGroupRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="1280.0" stylesheets="@/ui/styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team16.controller.ChooseGroupController">
+<AnchorPane fx:id="chooseGroupRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="1488.0" stylesheets="@/ui/styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team16.controller.ChooseGroupController">
    <children>
-      <ImageView fitHeight="787.0" fitWidth="1288.0" layoutX="-4.0" layoutY="-2.0">
+      <ImageView fitHeight="806.0" fitWidth="1503.0" layoutY="-13.0">
          <image>
-            <Image url="@../img/backgrounds/waitingRoom.jpeg" />
+            <Image url="@../img/backgrounds/choosegroup.jpeg" />
          </image>
       </ImageView>
-      <ImageView fitHeight="126.0" fitWidth="968.0" layoutX="162.0" layoutY="19.0">
+      <ImageView fx:id="green" layoutX="1065.0" layoutY="161.0" onMouseClicked="#onImageClicked" userData="green">
          <image>
-            <Image url="@../img/texts/choosePlayer.png" />
+            <Image url="@../img/greenHPback.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="green" layoutX="982.0" layoutY="253.0" onMouseClicked="#onImageClicked" userData="green">
+      <ImageView fx:id="red" layoutX="183.0" layoutY="155.0" onMouseClicked="#onImageClicked" userData="red">
          <image>
-            <Image url="@../img/green.png" />
+            <Image url="@../img/redHPback.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="red" layoutX="122.0" layoutY="245.0" onMouseClicked="#onImageClicked" userData="red">
+      <ImageView fx:id="blue" layoutX="472.0" layoutY="161.0" onMouseClicked="#onImageClicked" userData="blue">
+         <image>
+            <Image url="@../img/blueHPback.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="yellow" layoutX="771.0" layoutY="161.0" onMouseClicked="#onImageClicked" userData="yellow">
+         <image>
+            <Image url="@../img/yellowHPback.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="red_C" fitHeight="201.0" fitWidth="200.0" layoutX="206.0" layoutY="402.0">
          <image>
             <Image url="@../img/red.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="blue" layoutX="384.0" layoutY="245.0" onMouseClicked="#onImageClicked" userData="blue">
+      <ImageView fx:id="blue_C" fitHeight="199.0" fitWidth="192.0" layoutX="498.0" layoutY="399.0">
          <image>
             <Image url="@../img/blue.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="yellow" layoutX="696.0" layoutY="245.0" onMouseClicked="#onImageClicked" userData="yellow">
+      <ImageView fx:id="yellow_C" fitHeight="199.0" fitWidth="205.0" layoutX="793.0" layoutY="403.0">
          <image>
             <Image url="@../img/yellow.png" />
          </image>
       </ImageView>
+      <ImageView fx:id="green_C" fitHeight="203.0" fitWidth="205.0" layoutX="1093.0" layoutY="399.0">
+         <image>
+            <Image url="@../img/green.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="253.0" fitWidth="1168.0" layoutX="141.0" layoutY="396.0" pickOnBounds="true" preserveRatio="true" />
+      <Label layoutX="499.0" layoutY="54.0" prefHeight="58.0" prefWidth="738.0" styleClass="house-text" text="House Sorting" textFill="#221914" />
    </children>
 </AnchorPane>

@@ -6,22 +6,19 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane fx:id="waitingRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" 
-fx:controller="edu.duke.ece651.team16.controller.WaitingRoomController"
-stylesheets="@/ui/styles.css">
+<AnchorPane fx:id="waitingRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="1280.0" stylesheets="@/ui/styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team16.controller.WaitingRoomController">
    <children>
-      <ImageView fitHeight="783.0" fitWidth="1288.0">
+      <ImageView fitHeight="783.0" fitWidth="1488.0">
          <image>
             <Image url="@../img/backgrounds/waitingRoom.jpeg" />
          </image>
       </ImageView>
-      <ImageView fitHeight="118.0" fitWidth="1002.0" layoutX="157.0" layoutY="38.0">
+      <ImageView fitHeight="118.0" fitWidth="1002.0" layoutX="285.0" layoutY="68.0">
          <image>
             <Image url="@../img/texts/waitPlayers.png" />
          </image>
       </ImageView>
-      <Button fx:id="nextWaiting" layoutX="446.0" layoutY="637.0" mnemonicParsing="false" prefHeight="84.0" prefWidth="363.0" text="Next" onAction="#nextWaiting" styleClass="button-able">
+      <Button fx:id="nextWaiting" layoutX="582.0" layoutY="563.0" mnemonicParsing="false" onAction="#nextWaiting" prefHeight="84.0" prefWidth="363.0" styleClass="button-waiting" text="Next">
          <font>
             <Font size="36.0" />
          </font>
