@@ -66,4 +66,19 @@ public class ChatServer {
             System.out.println("ChatServer: send message: " + message);
         }
     }
+
+    /**
+     * send a message to certain player
+     */
+    public synchronized void sendToOne(String message, String name) {
+        int i = 0;
+        for (Conn c : communicators) {
+            if (players.get(i).getColor().equals(name)) {
+                c.send(message);
+                System.out.println("ChatServer: send message: " + message);
+                break;
+            }
+            i++;
+        }
+    }
 }

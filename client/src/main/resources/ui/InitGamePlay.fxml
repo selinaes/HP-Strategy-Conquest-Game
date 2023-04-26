@@ -69,7 +69,7 @@
             <RowConstraints />
         </rowConstraints>
          <children>
-            <Button fx:id="assignUnits" mnemonicParsing="false" styleClass="expandable, button-able" text="Commit" GridPane.rowIndex="1" />
+            <Button fx:id="assignUnits" mnemonicParsing="false" styleClass="expandable" text="Commit" GridPane.rowIndex="1" />
             <Label text="sum" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>

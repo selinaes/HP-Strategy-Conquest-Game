@@ -13,6 +13,11 @@ public class ChatHandler extends Thread {
         while (true) {
             String str = connector.recv();
             System.out.println("recieve: " + str);
+            String[] arr = str.toString().split(":");
+            if(arr[0].equals("quit")) {
+                chatServer.remove(connector);
+                break;
+            }
             chatServer.sendToAll(str);
         }
     }

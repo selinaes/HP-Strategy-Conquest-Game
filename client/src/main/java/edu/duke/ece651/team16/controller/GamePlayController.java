@@ -76,8 +76,6 @@ public class GamePlayController {
     public ImageView battleTime;
     @FXML
     public Label color;
-    @FXML
-    public Pane willowPane;
 
     private Client client;
     private MapParser mapParser;
@@ -104,7 +102,6 @@ public class GamePlayController {
         exitGame.setVisible(false);
         watchUpdate.setVisible(false);
         battleTime.setVisible(false); // image for acting battle is not visible
-        willowPane.setVisible(false);
         myOrder = new ArrayList<>();
         initNeighborLines();
         Platform.runLater(() -> {
@@ -117,6 +114,9 @@ public class GamePlayController {
                     btn.getStyleClass().remove("button-territory");
                     btn.getStyleClass().add(style);
                     showNeighborLine(btn);
+                } else if (node instanceof Pane) {
+                    Pane p = (Pane) node;
+                    p.setVisible(false);
                 }
             }
         });
@@ -509,6 +509,9 @@ public class GamePlayController {
             myOrder.add("l"); // add alliance order
             onAlliancePlayer();
             performAction(myOrder);
+            String msg = gamePlayDisplay.getActionInfo(myOrder);
+            System.out.println(msg);
+            chatRoomController.sendMsg("server:" + client.getColor() + " " + msg);
         }
 
     }
@@ -670,8 +673,8 @@ public class GamePlayController {
                 Button btn = (Button) node;
                 if (!myTerritory.containsKey(btn.getText())) {
                     btn.setDisable(isDisabled);
-                    String styleToRemove = isDisabled ? "button-able" : "button-unable";
-                    String styleToAdd = isDisabled ? "button-unable" : "button-able";
+                    String styleToRemove = isDisabled ? "button-able" : "button-territory";
+                    String styleToAdd = isDisabled ? "button-territory" : "button-able";
                     btn.getStyleClass().remove(styleToRemove);
                     btn.getStyleClass().add(styleToAdd);
                 }
@@ -765,10 +768,9 @@ public class GamePlayController {
             mapParser.setMap(client.recvMsg());
             alert.showAlert("Waiting for Alliance", allianceProblem);
         } else {// update the number of units in the selected territory and clear the order
-            String msg = gamePlayDisplay.getActionInfo(myOrder);
-            System.out.println(msg);
-            chatRoomController.sendMsg("server:" + client.getColor() + " " + msg);
-            // history.appendText(gamePlayDisplay.getActionInfo(myOrder));
+            if (myOrder.get(0) != "l") {
+                history.appendText(gamePlayDisplay.getActionInfo(myOrder));
+            }
             mapParser.setMap(client.recvMsg());
         }
         myOrder.clear();
@@ -800,11 +802,15 @@ public class GamePlayController {
                         l.getStyleClass().remove(styleToRemove);
                         l.getStyleClass().add(styleToAdd);
                     }
-                    willowPane.setVisible(true);
-                    TextArea textArea = (TextArea) willowPane.getChildren().get(0); // get the TextArea
-                    HashMap<String, String> willow_map = mapParser.getTerritoryInfo("Whomping Willow");
-                    textArea.setText(gamePlayDisplay.getTerritoryInfo("Whomping Willow", willow_map)); // add text to
-                                                                                                       // the TextArea
+                } else if (node instanceof Pane) {
+                    Pane p = (Pane) node;
+                    String panename = btn.getId() + "Pane";
+                    if (p.getId().equals(panename)) {
+                        p.setVisible(true);
+                        TextArea textArea = (TextArea) p.getChildren().get(0); // get the TextArea
+                        HashMap<String, String> panemap = mapParser.getTerritoryInfo(btn.getText());
+                        textArea.setText(gamePlayDisplay.getTerritoryInfo(btn.getText(), panemap));
+                    }
                 }
             }
         });
@@ -816,7 +822,12 @@ public class GamePlayController {
                         l.getStyleClass().remove(styleToAdd);
                         l.getStyleClass().add(styleToRemove);
                     }
-                    willowPane.setVisible(false);
+                } else if (node instanceof Pane) {
+                    Pane p = (Pane) node;
+                    String panename = btn.getId() + "Pane";
+                    if (p.getId().equals(panename)) {
+                        p.setVisible(false);
+                    }
                 }
             }
         });
