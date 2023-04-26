@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.application.Platform;
+import org.testfx.util.WaitForAsyncUtils;
 
 @ExtendWith(ApplicationExtension.class)
 public class StartGameControllerTest {
@@ -43,6 +44,6 @@ public class StartGameControllerTest {
                 e.printStackTrace();
             }
         });
+        WaitForAsyncUtils.waitForFxEvents();
     }
-
 }
