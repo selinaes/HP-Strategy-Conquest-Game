@@ -15,16 +15,20 @@ import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.net.Socket;
 
-import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.testfx.framework.junit5.ApplicationTest;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
+import org.testfx.api.FxRobot;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-public class WaitingRoomControllerTest extends ApplicationTest {
+@ExtendWith(ApplicationExtension.class)
+public class WaitingRoomControllerTest {
   private WaitingRoomController waitingRoomController;
   private Client client;
 
@@ -67,7 +71,7 @@ public class WaitingRoomControllerTest extends ApplicationTest {
     socketReceiveField.set(client, mockReader);
   }
 
-  @Override
+  @Start
   public void start(Stage stage) throws Exception, IOException {
     FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/WaitingRoom.fxml"));
     AnchorPane anchorPane = loader.load();
@@ -80,9 +84,9 @@ public class WaitingRoomControllerTest extends ApplicationTest {
   }
 
   @Test
-  public void test_next() {
+  public void test_next(FxRobot robot) {
     waitForFxEvents();
-    clickOn("#nextWaiting");
+    robot.clickOn("#nextWaiting");
   }
 
 }
