@@ -29,6 +29,7 @@ import javafx.geometry.Pos;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.SplitPane;
+import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 import java.util.ArrayList;

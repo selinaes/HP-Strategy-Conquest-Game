@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.application.Platform;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Line;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -86,6 +87,7 @@ public class GamePlayController {
     private GamePlayDisplay gamePlayDisplay = new GamePlayDisplay();
 
     private ChatRoomController chatRoomController;
+    private HashMap<String, ArrayList<String>> neighborLines = new HashMap<>();;
 
     @FXML
     private VBox chatRoomContainer;
@@ -97,6 +99,31 @@ public class GamePlayController {
         watchUpdate.setVisible(false);
         battleTime.setVisible(false); // image for acting battle is not visible
         myOrder = new ArrayList<>();
+        initNeighborLines();
+        for (Node node : HPmap.getChildren()) {
+            if (node instanceof Button) {
+                Button btn = (Button) node;
+                showNeighborLine(btn);
+            }
+        }
+    }
+
+    private void initNeighborLines() {
+        neighborLines.put("lake", new ArrayList<>(Arrays.asList("lakeToOffice", "willowToLake")));
+        neighborLines.put("willow", new ArrayList<>(Arrays.asList("willowToLake", "willowToHall", "willowToLibrary")));
+        neighborLines.put("library", new ArrayList<>(Arrays.asList("willowToLibrary", "libraryToSecret")));
+        neighborLines.put("office", new ArrayList<>(Arrays.asList("lakeToOffice", "officeToRequirement")));
+        neighborLines.put("hall", new ArrayList<>(Arrays.asList("willowToHall", "hallToSecret")));
+        neighborLines.put("secret", new ArrayList<>(
+                Arrays.asList("libraryToSecret", "hallToSecret", "secretToRequirement", "secretToPotions")));
+        neighborLines.put("potion", new ArrayList<>(Arrays.asList("secretToPotions", "wingToPotions")));
+        neighborLines.put("requirement",
+                new ArrayList<>(Arrays.asList("officeToRequirement", "requirementToPitch", "secretToRequirement")));
+        neighborLines.put("pitch", new ArrayList<>(Arrays.asList("pitchToTower", "pitchToWing", "requirementToPitch")));
+        neighborLines.put("hospital",
+                new ArrayList<>(Arrays.asList("pitchToWing", "wingToTower", "wingToForest", "wingToPotions")));
+        neighborLines.put("tower", new ArrayList<>(Arrays.asList("pitchToTower", "wingToTower", "towerToForest")));
+        neighborLines.put("forest", new ArrayList<>(Arrays.asList("towerToForest", "wingToForest")));
     }
 
     public void setColorText(String which) {
@@ -148,7 +175,7 @@ public class GamePlayController {
                     " for ActionEvent");
         }
         Button btn = (Button) source;
-        showTerritoryInfo(btn.getText());
+        // showTerritoryInfo(btn.getText());
         HashMap<String, String> territoryInfo = mapParser.getTerritoryInfo(btn.getText());
         int unitnum;
         switch (playerStatus) {
@@ -278,14 +305,13 @@ public class GamePlayController {
      */
     @FXML
     public void onFinishButton(ActionEvent ae) throws Exception {
+        battleTime.setVisible(true);
         // Clear the order list and set player status to FINISH
         myOrder.clear();
         playerStatus = Status.FINISH;
         myOrder.add("d");
         client.playerOneAction(myOrder);
-        battleTime.setVisible(true);
-        alert.displayImageAlert("Finished", "/img/texts/wait.png");
-        // popup.display("/img/texts/wait.png");
+        // alert.displayImageAlert("Finished", "/img/texts/wait.png");
         client.waitEveryoneDone();
         battleTime.setVisible(false);
         // alert.displayImageAlert("New Round", "/img/texts/newround.png");
@@ -597,7 +623,8 @@ public class GamePlayController {
     private void showTerritoryInfo(String terrirtoryName) {
         HashMap<String, String> territoryInfo = mapParser.getTerritoryInfo(terrirtoryName);
         System.out.println("TerritoryInfo" + territoryInfo);
-        textArea.appendText(gamePlayDisplay.getTerritoryInfo(terrirtoryName, territoryInfo));
+        // textArea.appendText(gamePlayDisplay.getTerritoryInfo(terrirtoryName,
+        // territoryInfo));
     }
 
     /**
@@ -726,5 +753,34 @@ public class GamePlayController {
         FXMLLoader fxmlLoader = new FXMLLoader(xmlResource); // Create a new FXMLLoader
         AnchorPane pane = fxmlLoader.load(); // Load the FXML file
         territoryRoot.getChildren().setAll(pane);
+    }
+
+    @FXML
+    private void showNeighborLine(Button btn) {
+        ArrayList<String> lines = neighborLines.get(btn.getId());
+        String styleToRemove = "default-line";
+        String styleToAdd = "highlight-line";
+        btn.setOnMouseEntered(event -> {
+            for (Node node : HPmap.getChildren()) {
+                if (node instanceof Line) {
+                    Line l = (Line) node;
+                    if (lines.contains(l.getId())) {
+                        l.getStyleClass().remove(styleToRemove);
+                        l.getStyleClass().add(styleToAdd);
+                    }
+                }
+            }
+        });
+        btn.setOnMouseExited(event -> {
+            for (Node node : HPmap.getChildren()) {
+                if (node instanceof Line) {
+                    Line l = (Line) node;
+                    if (lines.contains(l.getId())) {
+                        l.getStyleClass().remove(styleToAdd);
+                        l.getStyleClass().add(styleToRemove);
+                    }
+                }
+            }
+        });
     }
 }

@@ -112,6 +112,26 @@
         radial-gradient(center 50% 50%, radius 100%, #beaa93, #c7b4a2);
 }
 
+.button-territory {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0, 0, 0);
+    -fx-transition: all 0.2s ease;
+    -fx-font-family: 'Wizard World', sans-serif;
+    -fx-font-size: 1.0em;
+    -fx-background-radius: 10;
+}
+
+.default-line {
+    -fx-stroke: #4b492b;
+    -fx-stroke-width: 5;
+}
+
+.highlight-line {
+    -fx-stroke: #e3967f;
+    -fx-stroke-width: 5;
+}
+
 .button-able:hover {
     -fx-background-color:
         linear-gradient(from 0% 93% to 0% 100%, #1384a3 0%, #161290 100%),
