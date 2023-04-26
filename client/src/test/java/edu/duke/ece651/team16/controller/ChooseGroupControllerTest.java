@@ -24,8 +24,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-public class WaitingRoomControllerTest extends ApplicationTest {
-  private WaitingRoomController waitingRoomController;
+public class ChooseGroupControllerTest extends ApplicationTest {
+  private ChooseGroupController chooseGroupController;
   private Client client;
 
   private Socket makeSocket() throws IOException {
@@ -63,26 +63,40 @@ public class WaitingRoomControllerTest extends ApplicationTest {
     socketReceiveField.setAccessible(true);
     BufferedReader mockReader = mock(BufferedReader.class);
 
-    when(mockReader.readLine()).thenReturn("stage Complete").thenReturn("map");
+    when(mockReader.readLine()).thenReturn("prompt").thenReturn("unvalid").thenReturn("Valid");
     socketReceiveField.set(client, mockReader);
   }
 
   @Override
-  public void start(Stage stage) throws Exception, IOException {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/WaitingRoom.fxml"));
+  public void start(Stage stage) throws Exception {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/ChooseGroup.fxml"));
     AnchorPane anchorPane = loader.load();
-    waitingRoomController = loader.getController();
+    chooseGroupController = loader.getController();
     setClient();
-    waitingRoomController.setClient(client);
+    chooseGroupController.setClient(client);
+    String map = "{\"red\":[{\"TerritoryName\":\"baldwin\",\"Rate\":\"Food Rate:5, Tech Rate:5\",\"Neighbors\":\"(next to:brodie:5,smith:5,dukeChapel:5)\",\"Resource\":\"(Food:60 Tech:60 Tech Level:1)\",\"Unit\":\"0,0,0,0,0,0,0,\"}]}";
+    MapParser mapParser = new MapParser(map);
+    chooseGroupController.setMapParser(mapParser);
     Scene scene = new Scene(anchorPane);
     stage.setScene(scene);
     stage.show();
   }
 
   @Test
-  public void test_next() {
+  public void test_moveMouse() {
+    moveTo(771.0, 400.0);
     waitForFxEvents();
-    clickOn("#nextWaiting");
+    moveTo(183.0, 400.0);
+    waitForFxEvents();
+    moveTo(1200.0, 400.0);
+    moveTo(240.0, 400.0);
   }
 
+  @Test
+  public void test_chooseGroup() {
+    clickOn(1200.0, 300.0);
+    clickOn("OK");
+    clickOn(250.0, 300.0);
+    waitForFxEvents();
+  }
 }

@@ -6,22 +6,17 @@ import org.mockito.Mockito;
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.testfx.framework.junit5.ApplicationExtension;
-import org.testfx.framework.junit5.Start;
-import org.testfx.api.FxRobot;
+import org.testfx.framework.junit5.ApplicationTest;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.application.Platform;
-import org.testfx.util.WaitForAsyncUtils;
 
-@ExtendWith(ApplicationExtension.class)
-public class StartGameControllerTest {
+public class StartGameControllerTest extends ApplicationTest {
 
-    @Start
+    @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/StartGame.fxml"));
         AnchorPane anchorPane = fxmlLoader.load();
@@ -34,9 +29,9 @@ public class StartGameControllerTest {
     }
 
     @Test
-    public void testNewGameButton(FxRobot robot) throws Exception {
+    public void testNewGameButton() throws Exception {
         // Click on the "New Game" button
-        robot.clickOn("#newGame");
+        clickOn("#newGame");
         Platform.runLater(() -> {
             try {
                 start(new Stage());
@@ -44,6 +39,6 @@ public class StartGameControllerTest {
                 e.printStackTrace();
             }
         });
-        WaitForAsyncUtils.waitForFxEvents();
     }
+
 }

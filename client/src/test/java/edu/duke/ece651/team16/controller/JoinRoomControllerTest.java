@@ -13,21 +13,16 @@ import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.net.Socket;
 
-import org.mockito.Mockito;
-
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.testfx.framework.junit5.ApplicationExtension;
-import org.testfx.framework.junit5.Start;
-import org.testfx.api.FxRobot;
+import org.mockito.Mockito;
+import org.testfx.framework.junit5.ApplicationTest;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-@ExtendWith(ApplicationExtension.class)
-public class JoinRoomControllerTest {
+public class JoinRoomControllerTest extends ApplicationTest {
     private JoinRoomController joinRoomController;
     private Client client;
 
@@ -70,7 +65,7 @@ public class JoinRoomControllerTest {
         socketReceiveField.set(client, mockReader);
     }
 
-    @Start
+    @Override
     public void start(Stage stage) throws Exception, IOException {
         // Load the FXML file for the JoinRoomController UI
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/JoinGame.fxml"));
@@ -82,31 +77,31 @@ public class JoinRoomControllerTest {
     }
 
     @Test
-    public void testSearchRoom(FxRobot robot) throws IOException, Exception {
+    public void testSearchRoom() throws IOException, Exception {
         setClient("Room created.");
         joinRoomController.setClient(client);
-        robot.clickOn("#roomIDField").clickOn().write("123");
-        robot.clickOn("#searchRoom");
-        robot.clickOn("#joinRoom");
-        robot.clickOn("Close");
-        robot.clickOn("#chooseNum").clickOn("2");
-        robot.clickOn("#joinRoom");
+        clickOn("#roomIDField").clickOn().write("123");
+        clickOn("#searchRoom");
+        clickOn("#joinRoom");
+        clickOn("Close");
+        clickOn("#chooseNum").clickOn("2");
+        clickOn("#joinRoom");
     }
 
     @Test
-    public void testSearchRoom2(FxRobot robot) throws IOException, Exception {
+    public void testSearchRoom2() throws IOException, Exception {
         setClient("Room joined.");
         joinRoomController.setClient(client);
-        robot.clickOn("#roomIDField").write("123");
-        robot.clickOn("#searchRoom");
-        robot.clickOn("#joinRoom");
+        clickOn("#roomIDField").write("123");
+        clickOn("#searchRoom");
+        clickOn("#joinRoom");
     }
 
     @Test
-    public void testSearchRoom3(FxRobot robot) throws IOException, Exception {
+    public void testSearchRoom3() throws IOException, Exception {
         setClient("exceed");
         joinRoomController.setClient(client);
-        robot.clickOn("#roomIDField").write("123");
-        robot.clickOn("#searchRoom");
+        clickOn("#roomIDField").write("123");
+        clickOn("#searchRoom");
     }
 }
