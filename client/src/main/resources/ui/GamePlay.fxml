@@ -8,8 +8,10 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
+
 
 <AnchorPane fx:id="territoryRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="775.0" prefWidth="1189.0" stylesheets="@/ui/styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team16.controller.GamePlayController">
    <children>
@@ -38,18 +40,18 @@
                   <Line fx:id="secretToRequirement" endX="596.401123046875" endY="306.0" layoutX="-83.0" layoutY="139.0" opacity="0.5" startX="678.5" startY="125.99996948242188" styleClass="default-line" />
                   <Line fx:id="willowToLake" endX="383.0" endY="235.0" layoutX="-212.0" layoutY="4.0" opacity="0.5" startX="318.2499694824219" startY="498.9999694824219" styleClass="default-line" />
                   <Line fx:id="towerToForest" endX="606.079345703125" endY="334.2789611816406" layoutX="360.0" layoutY="-33.0" opacity="0.5" startX="747.805908203125" startY="689.6971435546875" styleClass="default-line" />
-                  <Button fx:id="willow" layoutX="48.0" layoutY="490.0" mnemonicParsing="false" onAction="#onTerritoryButton" text="Whomping Willow" styleClass="button-territory"/>
-                  <Button fx:id="lake" layoutX="133.0" layoutY="226.0" mnemonicParsing="false" onAction="#onTerritoryButton" text="Black Lake" styleClass="button-territory"/>
-                  <Button fx:id="library" layoutX="350.0" layoutY="290.0" mnemonicParsing="false" onAction="#onTerritoryButton" text="Hogwarts Library" styleClass="button-territory"/>
-                  <Button fx:id="secret" layoutX="444.0" layoutY="445.0" mnemonicParsing="false" onAction="#onTerritoryButton" text="Chamber of Secret" styleClass="button-territory"/>
-                  <Button fx:id="hall" layoutX="419.0" layoutY="524.0" mnemonicParsing="false" onAction="#onTerritoryButton" text="Great Hall" styleClass="button-territory"/>
-                  <Button fx:id="potion" layoutX="483.0" layoutY="655.0" mnemonicParsing="false" onAction="#onTerritoryButton" text="Potions Classroom" styleClass="button-territory"/>
-                  <Button fx:id="hospital" layoutX="677.0" layoutY="430.0" mnemonicParsing="false" onAction="#onTerritoryButton" text="Hospital Wing" styleClass="button-territory"/>
-                  <Button fx:id="pitch" layoutX="721.0" layoutY="300.0" mnemonicParsing="false" onAction="#onTerritoryButton" text="Quidditch Pitch" styleClass="button-territory"/>
-                  <Button fx:id="tower" layoutX="898.0" layoutY="274.0" mnemonicParsing="false" onAction="#onTerritoryButton" text="Astronomy Tower" styleClass="button-territory"/>
-                  <Button fx:id="forest" layoutX="1048.0" layoutY="658.0" mnemonicParsing="false" onAction="#onTerritoryButton" text="Forbidden Forest" styleClass="button-territory"/>
-                  <Button fx:id="office" layoutX="490.0" layoutY="124.0" mnemonicParsing="false" onAction="#onTerritoryButton" text="Headmaster's Office" styleClass="button-territory"/>
-                  <Button fx:id="requirement" layoutX="528.0" layoutY="239.0" mnemonicParsing="false" onAction="#onTerritoryButton" text="Room of Requirement" styleClass="button-territory"/>
+                  <Button fx:id="willow" layoutX="48.0" layoutY="490.0" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="button-territory" text="Whomping Willow" />
+                  <Button fx:id="lake" layoutX="133.0" layoutY="226.0" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="button-territory" text="Black Lake" />
+                  <Button fx:id="library" layoutX="350.0" layoutY="290.0" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="button-territory" text="Hogwarts Library" />
+                  <Button fx:id="secret" layoutX="444.0" layoutY="445.0" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="button-territory" text="Chamber of Secret" />
+                  <Button fx:id="hall" layoutX="419.0" layoutY="524.0" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="button-territory" text="Great Hall" />
+                  <Button fx:id="potion" layoutX="483.0" layoutY="655.0" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="button-territory" text="Potions Classroom" />
+                  <Button fx:id="hospital" layoutX="677.0" layoutY="430.0" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="button-territory" text="Hospital Wing" />
+                  <Button fx:id="pitch" layoutX="721.0" layoutY="300.0" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="button-territory" text="Quidditch Pitch" />
+                  <Button fx:id="tower" layoutX="898.0" layoutY="274.0" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="button-territory" text="Astronomy Tower" />
+                  <Button fx:id="forest" layoutX="1048.0" layoutY="658.0" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="button-territory" text="Forbidden Forest" />
+                  <Button fx:id="office" layoutX="490.0" layoutY="124.0" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="button-territory" text="Headmaster's Office" />
+                  <Button fx:id="requirement" layoutX="528.0" layoutY="239.0" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="button-territory" text="Room of Requirement" />
                   <ScrollPane fx:id="scrollPane_TerritoryInfo" layoutX="2.0" layoutY="620.0" opacity="0.63" prefHeight="167.0" prefWidth="387.0">
                      <content>
                       <TextArea fx:id="history" minHeight="0.0" minWidth="0.0" prefHeight="171.0" prefWidth="390.0" />
@@ -60,6 +62,11 @@
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
+                  <Pane fx:id="willowPane" layoutX="20.0" layoutY="210.0" opacity="0.7" prefHeight="280.0" prefWidth="300.0">
+                     <children>
+                        <TextArea prefHeight="280.0" prefWidth="300.0" styleClass="text-area1" />
+                     </children>
+                  </Pane>
                   <ToolBar fx:id="toolBar" layoutX="464.0" layoutY="7.0" prefHeight="86.0" prefWidth="732.0" styleClass="tool-bar">
                     <items>
                         <Button fx:id="special" mnemonicParsing="false" onAction="#onSpecialButton" prefHeight="70.0" prefWidth="95.0" text="Special">

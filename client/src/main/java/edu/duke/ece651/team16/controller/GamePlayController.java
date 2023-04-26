@@ -24,6 +24,10 @@ import javafx.event.ActionEvent;
 import javafx.application.Platform;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,6 +76,8 @@ public class GamePlayController {
     public ImageView battleTime;
     @FXML
     public Label color;
+    @FXML
+    public Pane willowPane;
 
     private Client client;
     private MapParser mapParser;
@@ -98,14 +104,23 @@ public class GamePlayController {
         exitGame.setVisible(false);
         watchUpdate.setVisible(false);
         battleTime.setVisible(false); // image for acting battle is not visible
+        willowPane.setVisible(false);
         myOrder = new ArrayList<>();
         initNeighborLines();
-        for (Node node : HPmap.getChildren()) {
-            if (node instanceof Button) {
-                Button btn = (Button) node;
-                showNeighborLine(btn);
+        Platform.runLater(() -> {
+            for (Node node : HPmap.getChildren()) {
+                if (node instanceof Button) {
+                    Button btn = (Button) node;
+                    String currentTer = btn.getText();
+                    String currentColor = mapParser.getTerritoryInfo(currentTer).get("Player");
+                    String style = "button-" + currentColor;
+                    btn.getStyleClass().remove("button-territory");
+                    btn.getStyleClass().add(style);
+                    showNeighborLine(btn);
+                }
             }
-        }
+        });
+
     }
 
     private void initNeighborLines() {
@@ -155,6 +170,11 @@ public class GamePlayController {
      */
     public void setMyTerritory(LinkedHashMap<String, String> t) {
         this.myTerritory = t;
+    }
+
+    public void changeImage(String imageUrl) {
+        Image newImage = new Image(imageUrl);
+        mapImage.setImage(newImage);
     }
 
     /**
@@ -311,7 +331,10 @@ public class GamePlayController {
         playerStatus = Status.FINISH;
         myOrder.add("d");
         client.playerOneAction(myOrder);
-        // alert.displayImageAlert("Finished", "/img/texts/wait.png");
+        // PopupBox popup1 = new PopupBox(territoryRoot);
+        // popup1.display("/img/texts/wait.png");
+        // changeImage("/img/backgrounds/waiting4.png");
+        alert.displayImageAlert("Finished", "/img/texts/wait.png");
         client.waitEveryoneDone();
         battleTime.setVisible(false);
         // alert.displayImageAlert("New Round", "/img/texts/newround.png");
@@ -352,7 +375,16 @@ public class GamePlayController {
 
                     exitGame.setVisible(true);
                 }
-
+                for (Node node : HPmap.getChildren()) {
+                    if (node instanceof Button) {
+                        Button btn = (Button) node;
+                        String currentTer = btn.getText();
+                        String currentColor = mapParser.getTerritoryInfo(currentTer).get("Player");
+                        String style = "-fx-background-color: " + currentColor;
+                        btn.setStyle(style);
+                        showNeighborLine(btn);
+                    }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -768,6 +800,11 @@ public class GamePlayController {
                         l.getStyleClass().remove(styleToRemove);
                         l.getStyleClass().add(styleToAdd);
                     }
+                    willowPane.setVisible(true);
+                    TextArea textArea = (TextArea) willowPane.getChildren().get(0); // get the TextArea
+                    HashMap<String, String> willow_map = mapParser.getTerritoryInfo("Whomping Willow");
+                    textArea.setText(gamePlayDisplay.getTerritoryInfo("Whomping Willow", willow_map)); // add text to
+                                                                                                       // the TextArea
                 }
             }
         });
@@ -779,6 +816,7 @@ public class GamePlayController {
                         l.getStyleClass().remove(styleToAdd);
                         l.getStyleClass().add(styleToRemove);
                     }
+                    willowPane.setVisible(false);
                 }
             }
         });

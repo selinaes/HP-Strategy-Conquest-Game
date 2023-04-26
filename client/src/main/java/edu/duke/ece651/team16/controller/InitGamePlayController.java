@@ -30,6 +30,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.HBox;
+import javafx.application.Platform;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,6 +46,8 @@ import java.util.Arrays;
 public class InitGamePlayController {
     @FXML
     private AnchorPane territoryRoot;
+    @FXML
+    private AnchorPane HPmap;
     @FXML
     private GridPane assignUnits_GridPane;
     @FXML
@@ -72,6 +75,18 @@ public class InitGamePlayController {
                 onInitAssignUnits(event);
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        });
+        Platform.runLater(() -> {
+            for (Node node : HPmap.getChildren()) {
+                if (node instanceof Button) {
+                    Button btn = (Button) node;
+                    String currentTer = btn.getText();
+                    String currentColor = mapParser.getTerritoryInfo(currentTer).get("Player");
+                    String style = "button-" + currentColor;
+                    btn.getStyleClass().remove("button-territory");
+                    btn.getStyleClass().add(style);
+                }
             }
         });
     }

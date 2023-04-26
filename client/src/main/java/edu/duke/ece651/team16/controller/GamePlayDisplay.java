@@ -24,7 +24,7 @@ public class GamePlayDisplay {
         String[] unitsInfoArray = unitsInfo.split(",");
         StringBuilder unitsInfoString = new StringBuilder();
         for (int i = 0; i < 6; i++) {
-            unitsInfoString.append(unitName[i] + ": " + unitsInfoArray[i] + ", ");
+            unitsInfoString.append(unitName[i] + ": " + unitsInfoArray[i] + "\n");
         }
         unitsInfoString.append(unitName[6] + ": " + unitsInfoArray[6]);
         return unitsInfoString.toString();
@@ -167,12 +167,9 @@ public class GamePlayDisplay {
      */
     public String getTerritoryInfo(String terrirtoryName, HashMap<String, String> territoryInfo) {
         StringBuilder sb = new StringBuilder();
-        sb.append("==================== " + terrirtoryName + " =======================\n");
-        sb.append("Player " + territoryInfo.get("Player") + "'s \n");
-        sb.append("Students: " + parseUnitsInfo(territoryInfo.get("Unit")) + "\n");
-        sb.append("Neighbors: " + territoryInfo.get("Neighbors") + "\n");
-        sb.append("Rate: " + territoryInfo.get("Rate") + "\n");
-        sb.append("Resource: " + territoryInfo.get("Resource") + "\n");
+        sb.append("Students:\n" + parseUnitsInfo(territoryInfo.get("Unit")) + "\n\n");
+        sb.append("Rate:\n " + territoryInfo.get("Rate") + "\n\n");
+        sb.append("Resource:\n " + territoryInfo.get("Resource") + "\n");
         return sb.toString();
     }
 

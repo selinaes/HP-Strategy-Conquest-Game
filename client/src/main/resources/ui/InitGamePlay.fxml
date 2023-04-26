@@ -15,7 +15,7 @@
    <children>
       <ScrollPane layoutY="-1.0" prefHeight="782.0" prefWidth="1444.0">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+          <AnchorPane fx:id="HPmap" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
                <children>
                   <ImageView fx:id="mapImage" fitHeight="822.0" fitWidth="1213.0" layoutX="230.0" layoutY="-10.0" preserveRatio="true">
                      <image>

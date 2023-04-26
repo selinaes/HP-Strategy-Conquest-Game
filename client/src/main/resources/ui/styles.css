@@ -113,8 +113,48 @@
 }
 
 .button-territory {
-    -fx-background-color: white;
-    -fx-text-fill: black;
+    -fx-background-color: grey;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0, 0, 0);
+    -fx-transition: all 0.2s ease;
+    -fx-font-family: 'Wizard World', sans-serif;
+    -fx-font-size: 1.0em;
+    -fx-background-radius: 10;
+}
+
+.button-red {
+    -fx-background-color: rgb(255, 168, 158);
+    -fx-text-fill: #a27c51;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0, 0, 0);
+    -fx-transition: all 0.2s ease;
+    -fx-font-family: 'Wizard World', sans-serif;
+    -fx-font-size: 1.0em;
+    -fx-background-radius: 10;
+}
+
+.button-blue {
+    -fx-background-color: rgb(175, 206, 252);
+    -fx-text-fill: #a27c51;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0, 0, 0);
+    -fx-transition: all 0.2s ease;
+    -fx-font-family: 'Wizard World', sans-serif;
+    -fx-font-size: 1.0em;
+    -fx-background-radius: 10;
+}
+
+.button-green {
+    -fx-background-color: rgb(173, 214, 173);
+    -fx-text-fill: #a27c51;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0, 0, 0);
+    -fx-transition: all 0.2s ease;
+    -fx-font-family: 'Wizard World', sans-serif;
+    -fx-font-size: 1.0em;
+    -fx-background-radius: 10;
+}
+
+.button-yellow {
+    -fx-background-color: rgb(253, 240, 189);
+    -fx-text-fill: #a27c51;
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0, 0, 0);
     -fx-transition: all 0.2s ease;
     -fx-font-family: 'Wizard World', sans-serif;
@@ -123,14 +163,25 @@
 }
 
 .default-line {
-    -fx-stroke: #4b492b;
+    -fx-stroke: #805c33;
     -fx-stroke-width: 5;
+    -fx-opacity: 0.8;
 }
 
-.highlight-line {
-    -fx-stroke: #e3967f;
+/* .highlight-line {
+    -fx-stroke: #f1c157;
     -fx-stroke-width: 5;
+    -fx-opacity: 0.8;
+} */
+
+.highlight-line {
+    -fx-stroke: linear-gradient(to left, #a27c51, #f76c5d);
+    -fx-stroke-width: 5;
+    -fx-opacity: 0.8;
+    -fx-stroke-dash-array: 20 10;
+    -fx-stroke-dash-offset: 0;
 }
+
 
 .button-able:hover {
     -fx-background-color:
@@ -282,4 +333,24 @@
     /* Button background color when selected */
     -fx-text-fill: white;
     /* Button text color when selected */
+}
+
+.text-area1 {
+    -fx-background-color: #d7b580;
+    -fx-background-insets: 0;
+    -fx-border-color: #7f715f;
+    -fx-border-width: 3px;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+    -fx-font-family: "Wizard World", sans-serif;
+    -fx-text-fill: #73532e;
+}
+
+.text-area1:focused {
+    -fx-border-color: #1e90ff;
+}
+
+.pane1 {
+    -fx-background-color: #4303f5;
 }
