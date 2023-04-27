@@ -41,14 +41,15 @@ public class AttackOrder implements Order {
     @Override
     public String tryAction() {
         OrderRuleChecker checker;
-        if (player.getDisregardAdjacencySwitch()){
+        if (player.getDisregardAdjacencySwitch()) {
             checker = new AttackInputRuleChecker(null);
         } else {
             checker = new AttackInputRuleChecker(new AttackAdjacentRuleChecker(null));
         }
         String attackProblem = checker.checkOrder(from, to, player, numUnits, gameMap, level);
         if (attackProblem == null) {
-            if (player.equals(player.getAlly())) { // if attacks ally
+            Player attacked = to.getOwner();
+            if (attacked.getColor().equals(player.getAlly().getColor())) { // if attacks ally
                 // return ally units in owners territory to nearest ally territory
                 List<Territory> myterritory = player.getTerritories();
                 for (Territory mt : myterritory) {
@@ -59,8 +60,9 @@ public class AttackOrder implements Order {
                 for (Territory at : allyterritory) {
                     at.moveAllyUnitsHome();
                 }
-                player.setAlly(null);
                 player.getAlly().setAlly(null);
+                player.setAlly(null);
+
             }
             int cost = attackCost();
             if (cost > player.getFoodResource()) {

@@ -85,7 +85,7 @@ public class GamePlayController {
     private ArrayList<String> myOrder;
     private String oneOrderContent = "";
     private AlertBox alert = new AlertBox();
-
+    private boolean usedSpecialOneRound = false;
     private LinkedHashMap<String, String> myTerritory;
     private int maxUnits = 24;
 
@@ -120,6 +120,9 @@ public class GamePlayController {
                     Pane p = (Pane) node;
                     p.setVisible(false);
                 }
+            }
+            if (!mapParser.checkAllowedNumAlly()) {
+                alliance.setDisable(true);
             }
         });
 
@@ -344,6 +347,7 @@ public class GamePlayController {
         popup.display("/img/texts/newround.png");
         // set special buttons to enable
         special.setDisable(false);
+        usedSpecialOneRound = false;
         try {
             history.appendText("====================New Round=======================\n");
             String msg = client.recvMsg();// receive war log
@@ -351,6 +355,9 @@ public class GamePlayController {
             history.appendText(view.displayLog(msg));
             msg = client.recvMsg();// receive map
             mapParser.setMap(msg);
+            if (!mapParser.checkAllowedNumAlly()) {
+                alliance.setDisable(true);
+            }
             setupMapParser();
             msg = client.recvMsg(); // receive "Game continous or Winner"
             if (msg.equals("Game continues")) {
@@ -442,6 +449,7 @@ public class GamePlayController {
 
             // disable after one use, per turn
             btn.setDisable(true);
+            usedSpecialOneRound = true;
         }
     }
 
@@ -568,7 +576,17 @@ public class GamePlayController {
 
     /* set a list of buttons disables to true or false */
     private void setButtonsDisabled(boolean disabled, Button... buttons) {
-        Arrays.asList(buttons).forEach(btn -> btn.setDisable(disabled));
+        Arrays.asList(buttons).forEach(btn -> {
+            if (!(btn.equals(alliance)) && !(btn.equals(special))) {
+                btn.setDisable(disabled);
+            } else if (btn.equals(alliance) && mapParser.checkAllowedNumAlly()) {
+                btn.setDisable(disabled);
+            } else if (btn.equals(special) && !usedSpecialOneRound) {
+                btn.setDisable(disabled);
+            }
+        });
+
+        // Arrays.asList(buttons).forEach(btn -> btn.setDisable(disabled));
     }
 
     /**

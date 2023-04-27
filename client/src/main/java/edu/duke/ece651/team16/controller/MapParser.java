@@ -146,4 +146,19 @@ public class MapParser {
             }
         }
     }
+
+    public boolean checkAllowedNumAlly() {
+        if (myMap.size() <= 2) {
+            return false;
+        }
+        int numAlivePlayers = 0;
+        for (Map.Entry<String, ArrayList<HashMap<String, String>>> entry : myMap.entrySet()) {
+            String playername = entry.getKey();
+            ArrayList<HashMap<String, String>> playerAsset = entry.getValue();
+            if (playerAsset.size() > 0) {
+                numAlivePlayers++;
+            }
+        }
+        return numAlivePlayers > 2;
+    }
 }

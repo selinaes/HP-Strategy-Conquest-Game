@@ -38,6 +38,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 
+import edu.duke.ece651.team16.controller.MapParser;
+
 import java.net.URL;
 import java.net.Socket;
 import java.util.HashMap;
@@ -160,7 +162,6 @@ public class InitGamePlayController {
             gamePlayController.setMapParser(mapParser);
             gamePlayController.setMyTerritory(myTerritory);
             gamePlayController.setChatRoomController(loaderStart.getController());
-
             SplitPane splitPane = new SplitPane(chatRoomPane, gamePlayPane);
             splitPane.setDividerPositions(0.2); // set the initial position of the divider
 
