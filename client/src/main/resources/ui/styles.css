@@ -312,7 +312,40 @@
 .text-area-history {
     -fx-background-color: #d7b580;
     -fx-border-color: #7f715f;
-    -fx-font-size: 14px;
+    -fx-font-size: 5px;
     -fx-font-family: "Wizard World", sans-serif;
     -fx-text-fill: #322515;
+}
+
+.spinner {
+    -fx-background-color: #f0f0f0;
+    -fx-padding: 2px;
+    -fx-border-radius: 10px;
+}
+
+.spinner .increment-arrow-button,
+.spinner .decrement-arrow-button {
+	-fx-background-color: #d7b580;
+}
+
+.spinner .text-field {
+    -fx-background-color: #f0f0f0;  
+    -fx-text-fill: #322515;
+    -fx-font-size: 14px;
+    -fx-background-radius: 5;
+    -fx-font-family: "Wizard World", sans-serif;
+    -fx-pref-width: 70;
+    -fx-opacity: 0.8;
+}
+
+.spinner .increment-arrow,
+.spinner .decrement-arrow {
+    -fx-background-color: #7f715f;
+    -fx-background-insets: 0;
+    -fx-padding: 5px;
+}
+
+.spinner .increment-arrow-button:hover,
+.spinner .decrement-arrow-button:hover {
+    -fx-background-color: #a27c51;
 }

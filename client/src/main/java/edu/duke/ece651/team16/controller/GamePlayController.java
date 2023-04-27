@@ -377,15 +377,15 @@ public class GamePlayController {
 
                     exitGame.setVisible(true);
                 }
-                for (Node node : HPmap.getChildren()) {
-                    if (node instanceof Button) {
-                        Button btn = (Button) node;
-                        String currentTer = btn.getText();
-                        String currentColor = mapParser.getTerritoryInfo(currentTer).get("Player");
-                        String style = "-fx-background-color: " + currentColor;
-                        btn.setStyle(style);
-                        showNeighborLine(btn);
-                    }
+            }
+            for (Node node : HPmap.getChildren()) {
+                if (node instanceof Button) {
+                    Button btn = (Button) node;
+                    String currentTer = btn.getText();
+                    String currentColor = mapParser.getTerritoryInfo(currentTer).get("Player");
+                    String style = "button-" + currentColor;
+                    btn.getStyleClass().setAll(style);
+                    showNeighborLine(btn);
                 }
             }
         } catch (IOException e) {
@@ -511,9 +511,6 @@ public class GamePlayController {
             myOrder.add("l"); // add alliance order
             onAlliancePlayer();
             performAction(myOrder);
-            String msg = gamePlayDisplay.getActionInfo(myOrder);
-            System.out.println(msg);
-            chatRoomController.sendMsg("server:" + client.getColor() + " " + msg);
         }
 
     }
@@ -778,6 +775,12 @@ public class GamePlayController {
         } else {// update the number of units in the selected territory and clear the order
             if (myOrder.get(0) != "l") {
                 history.appendText(gamePlayDisplay.getActionInfo(myOrder));
+            }
+            else{
+                String msg = gamePlayDisplay.getActionInfo(myOrder);
+                String sendString = client.getColor() + ": " + msg + ":All";
+                System.out.println("want to send: " + sendString);
+                chatRoomController.sendMsg(sendString);
             }
             mapParser.setMap(client.recvMsg());
         }
