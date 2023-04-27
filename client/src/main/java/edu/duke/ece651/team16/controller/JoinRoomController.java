@@ -115,15 +115,4 @@ public class JoinRoomController {
             e.printStackTrace();
         }
     }
-
-    /**
-     * disconnnected from the game
-     */
-    @FXML
-    public void onExitButton(ActionEvent ae) throws Exception {
-        URL xmlResource = getClass().getResource("/ui/StartGame.fxml");
-        FXMLLoader fxmlLoader = new FXMLLoader(xmlResource); // Create a new FXMLLoader
-        AnchorPane pane = fxmlLoader.load(); // Load the FXML file
-        mainRoot.getChildren().setAll(pane);
-    }
 }

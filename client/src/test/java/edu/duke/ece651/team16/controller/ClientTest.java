@@ -326,6 +326,7 @@ public class ClientTest {
     client.playerOneAction(clientInput2);
     ArrayList<String> clientInput3 = new ArrayList<>();
     clientInput3.add("s");
+    clientInput3.add("s");
     client.playerOneAction(clientInput3);
   }
 

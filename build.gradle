@@ -20,10 +20,14 @@ subprojects{
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+    // tasks.withType(JavaExec) {
+    //     jvmArgs = ['-Xmx4g']
+    // }
     dependencies {
         // Use JUnit Jupiter for testing.
         testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
         testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
         testImplementation 'org.junit.platform:junit-platform-launcher:1.6.2'
         // This dependency is used by the application.
         implementation 'com.google.guava:guava:30.1.1-jre'
@@ -50,11 +54,12 @@ subprojects{
             showStandardStreams = true
             exceptionFormat = 'full'
         }
-        
     }
     test {
         // Use junit platform for unit tests
         useJUnitPlatform()
+        // systemProperty "testfx.headless", "true"
+        // systemProperty "testfx.robot", "glass"
     }
 
 }

@@ -1,43 +1,107 @@
-// package edu.duke.ece651.team16.controller;
+package edu.duke.ece651.team16.controller;
 
-// import org.junit.jupiter.api.Test;
-// import javafx.application.Platform;
-// import org.testfx.api.FxRobot;
-// import org.testfx.framework.junit5.Start;
-// import org.testfx.framework.junit5.ApplicationTest;
-// import org.testfx.framework.junit5.Stop;
-// import static org.testfx.api.FxAssert.verifyThat;
-// import static org.testfx.matcher.control.TextMatchers.hasText;
-// import static org.mockito.Mockito.*;
-// import javafx.fxml.FXMLLoader;
-// import javafx.scene.Parent;
-// import javafx.scene.Scene;
-// import javafx.stage.Stage;
-// import javafx.scene.layout.AnchorPane;
+import static org.mockito.Mockito.*;
 
-// public class JoinRoomControllerTest extends ApplicationTest {
-// private JoinRoomController joinRoomController;
-// private Client client;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.lang.reflect.Field;
+import java.net.Socket;
 
-// @Override
-// public void start(Stage stage) throws Exception {
-// // Load the FXML file for the JoinRoomController UI
-// FXMLLoader loader = new
-// FXMLLoader(getClass().getResource("/ui/JoinGame.fxml"));
-// AnchorPane anchorPane = loader.load();
-// joinRoomController = loader.getController();
-// client = mock(Client.class);
-// joinRoomController.setClient(client);
-// Scene scene = new Scene(anchorPane);
-// stage.setScene(scene);
-// stage.show();
-// }
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.testfx.framework.junit5.ApplicationTest;
 
-// @Test
-// public void testSearchRoom() {
-// Platform.runLater(() -> {
-// clickOn("#roomIDField").clickOn().write("123");
-// clickOn("#searchRoom");
-// });
-// }
-// }
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
+
+public class JoinRoomControllerTest extends ApplicationTest {
+    private JoinRoomController joinRoomController;
+    private Client client;
+
+    private Socket makeSocket() throws IOException {
+        Socket mockSocket = Mockito.mock(Socket.class);
+        InputStream mockInputStream = Mockito.mock(InputStream.class);
+        OutputStream mockOutputStream = Mockito.mock(OutputStream.class);
+        Mockito.when(mockSocket.getInputStream()).thenReturn(mockInputStream);
+        Mockito.when(mockSocket.getOutputStream()).thenReturn(mockOutputStream);
+        return mockSocket;
+    }
+
+    private BufferedReader makeMockSocketReader(Socket mockSocket) throws IOException {
+        return new BufferedReader(new InputStreamReader(mockSocket.getInputStream()));
+    }
+
+    private PrintWriter makeMockSocketSend(Socket mockSocket) throws IOException {
+        return new PrintWriter(mockSocket.getOutputStream(), true);
+    }
+
+    private PrintStream makeOut() {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        PrintStream out = new PrintStream(byteArrayOutputStream);
+        return out;
+    }
+
+    private void setClient(String ret) throws IOException, Exception {
+        Socket mSocket = makeSocket();
+        BufferedReader socketReceive = makeMockSocketReader(mSocket);
+        PrintWriter socketSend = makeMockSocketSend(mSocket);
+        BufferedReader inputSource = mock(BufferedReader.class);
+        PrintStream out = makeOut();
+
+        client = new Client(inputSource, out, socketReceive, socketSend);
+        Field socketReceiveField = client.getClass().getDeclaredField("socketReceive");
+        socketReceiveField.setAccessible(true);
+        BufferedReader mockReader = mock(BufferedReader.class);
+
+        when(mockReader.readLine()).thenReturn(ret);
+        socketReceiveField.set(client, mockReader);
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception, IOException {
+        // Load the FXML file for the JoinRoomController UI
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/JoinGame.fxml"));
+        AnchorPane anchorPane = loader.load();
+        joinRoomController = loader.getController();
+        Scene scene = new Scene(anchorPane);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @Test
+    public void testSearchRoom() throws IOException, Exception {
+        setClient("Room created.");
+        joinRoomController.setClient(client);
+        clickOn("#roomIDField").clickOn().write("123");
+        clickOn("#searchRoom");
+        clickOn("#joinRoom");
+        clickOn("Close");
+        clickOn("#chooseNum").clickOn("2");
+        clickOn("#joinRoom");
+    }
+
+    @Test
+    public void testSearchRoom2() throws IOException, Exception {
+        setClient("Room joined.");
+        joinRoomController.setClient(client);
+        clickOn("#roomIDField").write("123");
+        clickOn("#searchRoom");
+        clickOn("#joinRoom");
+    }
+
+    @Test
+    public void testSearchRoom3() throws IOException, Exception {
+        setClient("exceed");
+        joinRoomController.setClient(client);
+        clickOn("#roomIDField").write("123");
+        clickOn("#searchRoom");
+    }
+}
