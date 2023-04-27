@@ -187,7 +187,7 @@ public class GamePlayDisplay {
             return sb.toString();
         } else if (action.equals("l")) {
             String ally = myOrder.get(1);
-            sb.append("Successful alliance with " + ally + ".\n");
+            sb.append("Successful alliance with " + ally + ".");
             return sb.toString();
         }
         String oneOrderContent = myOrder.get(1);

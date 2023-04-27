@@ -81,8 +81,8 @@ public class InitGamePlayController {
                 if (node instanceof HBox) {
                     HBox hbox = (HBox) node;
                     for (Node node2 : hbox.getChildren()) {
-                        if (node instanceof Button) {
-                            Button btn = (Button) node;
+                        if (node2 instanceof Button) {
+                            Button btn = (Button) node2;
                             String currentTer = btn.getText();
                             String currentColor = mapParser.getTerritoryInfo(currentTer).get("Player");
                             String style = "button-" + currentColor;
@@ -260,21 +260,20 @@ public class InitGamePlayController {
                 // add the unit number to myTerritory
                 if (spinner.getValue() != null) {
                     myTerritory.put(btn.getText(), String.valueOf(spinner.getValue()));
+                    System.out.println("put "+String.valueOf(spinner.getValue())+" in myterritory");
                 }
             }
         }
 
-        int i = 0;
         try {
             for (String key : myTerritory.keySet()) {
                 // server set that we can not input 0 as unit number
                 if (!myTerritory.get(key).equals("0")) {
                     client.playerAssignUnit(key);
-                    client.playerAssignUnit(myTerritory.get(i));
+                    client.playerAssignUnit(myTerritory.get(key));
                     System.out.println(
-                            "Assign " + myTerritory.get(i) + " in " + key);
+                            "Assign " + myTerritory.get(key) + " in " + key);
                 }
-                i++;
             }
             client.playerAssignUnit("done");
         } catch (IOException e) {

@@ -109,7 +109,7 @@ public class ChatRoomController {
         msg.setFont(Font.font("Verdana", 14));
 
         if (comesFrom == 1) {
-            msg.setStyle("-fx-background-color: lightskyblue; -fx-background-radius: 15; -fx-text-fill: #000;");
+            msg.setStyle("-fx-background-color: #d7b580; -fx-background-radius: 15; -fx-text-fill: #000;");
             Other.getChildren().addAll(msg);
             Other.setAlignment(Pos.CENTER_RIGHT);
             Other.setMargin(msg, new Insets(5, 10, 5, 50));
@@ -119,7 +119,7 @@ public class ChatRoomController {
             Other.setAlignment(Pos.CENTER_LEFT);
             Other.setMargin(msg, new Insets(5, 50, 5, 10));
         } else if (comesFrom == 0) {
-            msg.setStyle("-fx-background-color: red; -fx-background-radius: 15; -fx-text-fill: #FFF;");
+            msg.setStyle("-fx-background-color: #fc8e44; -fx-background-radius: 15; -fx-text-fill: #FFF;");
             Other.getChildren().addAll(msg);
             Other.setAlignment(Pos.CENTER_LEFT);
             Other.setMargin(msg, new Insets(5, 50, 5, 10));

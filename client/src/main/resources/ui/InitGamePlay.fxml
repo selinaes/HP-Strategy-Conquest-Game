@@ -41,73 +41,73 @@
                   <Line fx:id="secretToRequirement" endX="596.401123046875" endY="306.0" layoutX="129.0" layoutY="135.0" opacity="0.5" startX="678.5" startY="125.99996948242188" strokeWidth="5.0" />
                   <Line fx:id="willowToLake" endX="383.0" endY="235.0" opacity="0.5" startX="318.2499694824219" startY="498.9999694824219" strokeWidth="5.0" />
                   <Line fx:id="towerToForest" endX="606.079345703125" endY="334.2789611816406" layoutX="572.0" layoutY="-37.0" opacity="0.5" startX="727.33251953125" startY="671.0931396484375" strokeWidth="5.0" />
-                  <HBox layoutX="247.0" layoutY="480.0">
+                  <HBox layoutX="247.0" layoutY="480.0" spacing = "10">
                      <children>
                         <Button fx:id="willow" mnemonicParsing="false" text="Whomping Willow" />
                         <Spinner />
                      </children>
                   </HBox>
-                  <HBox layoutX="283.0" layoutY="221.0">
+                  <HBox layoutX="283.0" layoutY="221.0" spacing = "10">
                      <children>
                         <Button fx:id="lake" mnemonicParsing="false" text="Black Lake" />
                         <Spinner />
                      </children>
                   </HBox>
-                  <HBox layoutX="482.0" layoutY="295.0">
+                  <HBox layoutX="482.0" layoutY="295.0" spacing = "10">
                      <children>
                         <Button fx:id="library" mnemonicParsing="false" text="Hogwarts Library" />
                         <Spinner />
                      </children>
                   </HBox>
-                  <HBox layoutX="528.0" layoutY="426.0">
+                  <HBox layoutX="528.0" layoutY="426.0" spacing = "10">
                      <children>
                         <Button fx:id="secret" mnemonicParsing="false" text="Chamber of Secret" />
                         <Spinner />
                      </children>
                   </HBox>
-                  <HBox layoutX="574.0" layoutY="523.0">
+                  <HBox layoutX="574.0" layoutY="523.0" spacing = "10">
                      <children>
                         <Button fx:id="hall" mnemonicParsing="false" text="Great Hall" />
                         <Spinner />
                      </children>
                   </HBox>
-                  <HBox layoutX="643.0" layoutY="657.0">
+                  <HBox layoutX="643.0" layoutY="657.0" spacing = "10">
                      <children>
                         <Button fx:id="potion" mnemonicParsing="false" text="Potions Classroom" />
                         <Spinner />
                      </children>
                   </HBox>
-                  <HBox layoutX="833.0" layoutY="426.0">
+                  <HBox layoutX="833.0" layoutY="426.0" spacing = "10">
                      <children>
                         <Button fx:id="hospital" mnemonicParsing="false" text="Hospital Wing" />
                         <Spinner />
                      </children>
                   </HBox>
-                  <HBox layoutX="902.0" layoutY="301.0">
+                  <HBox layoutX="902.0" layoutY="301.0" spacing = "10">
                      <children>
                         <Button fx:id="pitch" mnemonicParsing="false" text="Quidditch Pitch" />
                         <Spinner />
                      </children>
                   </HBox>
-                  <HBox layoutX="1043.0" layoutY="270.0">
+                  <HBox layoutX="1043.0" layoutY="270.0" spacing = "10">
                      <children>
                         <Button fx:id="tower" mnemonicParsing="false" text="Astronomy Tower" />
                         <Spinner />
                      </children>
                   </HBox>
-                  <HBox layoutX="1117.0" layoutY="625.0">
+                  <HBox layoutX="1117.0" layoutY="625.0" spacing = "10">
                      <children>
                         <Button fx:id="forest" mnemonicParsing="false" text="Forbidden Forest" />
                         <Spinner />
                      </children>
                   </HBox>
-                  <HBox layoutX="600.0" layoutY="109.0">
+                  <HBox layoutX="600.0" layoutY="109.0" spacing = "10">
                      <children>
                         <Button fx:id="office" mnemonicParsing="false" text="Headmaster's Office" />
                         <Spinner />
                      </children>
                   </HBox>
-                  <HBox layoutX="677.0" layoutY="237.0">
+                  <HBox layoutX="677.0" layoutY="237.0" spacing = "10">
                      <children>
                         <Button fx:id="requirement" mnemonicParsing="false" text="Room of Requirement" />
                         <Spinner />
