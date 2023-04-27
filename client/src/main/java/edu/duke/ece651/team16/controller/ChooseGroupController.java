@@ -145,6 +145,7 @@ public class ChooseGroupController {
                 mapParser.setPlayer(text);
                 client.setColor(text);
                 initgamePlayController.setinitMapParser(mapParser);
+                initgamePlayController.initSpinner();
                 // Display the game play screen
                 chooseGroupRoot.getChildren().setAll(pane);
 

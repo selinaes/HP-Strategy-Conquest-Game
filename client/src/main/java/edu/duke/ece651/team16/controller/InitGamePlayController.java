@@ -49,8 +49,6 @@ public class InitGamePlayController {
     @FXML
     private AnchorPane HPmap;
     @FXML
-    private GridPane assignUnits_GridPane;
-    @FXML
     private Button assignUnits;
     @FXML
     private ImageView mapImage;
@@ -69,7 +67,6 @@ public class InitGamePlayController {
 
     @FXML
     public void initialize() {
-        blackBackground.setVisible(true);
         assignUnits.setOnAction(event -> {
             try {
                 onInitAssignUnits(event);
@@ -79,13 +76,18 @@ public class InitGamePlayController {
         });
         Platform.runLater(() -> {
             for (Node node : HPmap.getChildren()) {
-                if (node instanceof Button) {
-                    Button btn = (Button) node;
-                    String currentTer = btn.getText();
-                    String currentColor = mapParser.getTerritoryInfo(currentTer).get("Player");
-                    String style = "button-" + currentColor;
-                    btn.getStyleClass().remove("button-territory");
-                    btn.getStyleClass().add(style);
+                if (node instanceof HBox) {
+                    HBox hbox = (HBox) node;
+                    for (Node node2 : hbox.getChildren()) {
+                        if (node instanceof Button) {
+                            Button btn = (Button) node;
+                            String currentTer = btn.getText();
+                            String currentColor = mapParser.getTerritoryInfo(currentTer).get("Player");
+                            String style = "button-" + currentColor;
+                            btn.getStyleClass().remove("button-territory");
+                            btn.getStyleClass().add(style);
+                        }
+                    }
                 }
             }
         });
@@ -103,7 +105,7 @@ public class InitGamePlayController {
     public void setinitMapParser(MapParser mapParser) throws IOException {
         this.mapParser = mapParser;
         List<String> territory = mapParser.getMyInitTerritory();
-        updateAssignUnitsGridRow(territory);
+        // updateAssignUnitsGridRow(territory);
         myTerritory = new LinkedHashMap<String, String>();
         for (String t : territory) {
             System.out.println("My territory: " + t);
@@ -169,48 +171,79 @@ public class InitGamePlayController {
     }
 
     /**
-     * update AssignUnits GridRow for different number of players with
-     * different number of territories
-     * 
-     * @param territory
+     * according myTerritory, make all spinner of HBox in the enemy territory
+     * invisible
      */
-    private void updateAssignUnitsGridRow(List<String> territory) {
-        int numTerritories = territory.size();
-        // Check if number of rows in gridpane is less than number of territories
-        if (assignUnits_GridPane.getRowConstraints().size() < numTerritories) {
-            // Add required number of rows to gridpane
-            for (int i = 0; i < numTerritories; i++) {
-                assignUnits_GridPane.getRowConstraints().add(i, new RowConstraints(10.0, 30.0, 10.0));
+    public void initSpinner() {
+        for (Node node : HPmap.getChildren()) {
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                for (Node node2 : hbox.getChildren()) {
+                    Node btn = hbox.getChildren().get(0);
+                    Node spinner = hbox.getChildren().get(1);
+                    String currentTer = ((Button) btn).getText();
+                    if (!myTerritory.containsKey(currentTer)) {
+                        spinner.setVisible(false);
+                    } else {
+                        // set null to be 0
+                        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(
+                                0, maxUnits, 0);
+
+                        ((Spinner<Integer>) spinner).setValueFactory(valueFactory);
+                    }
+                }
             }
         }
-        for (int i = 0; i < numTerritories; i++) {
-            // Set the row index for each node
-            Spinner spinner = new Spinner();
-            spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, maxUnits, 0));
-            assignUnits_GridPane.add(spinner, 1, i);
-            TextField textField = new TextField();
-            textField.setText(territory.get(i)); // Set text of textfield
-            assignUnits_GridPane.add(textField, 0, i);
-        }
-        // Update the row index of the commit button
-        Button commitButton = (Button) assignUnits_GridPane.lookup("#assignUnits");
-        GridPane.setRowIndex(commitButton, numTerritories);
-
-        // assignUnits_GridPane.autosize();
-        assignUnits_GridPane.setHgap(10);
-        assignUnits_GridPane.setVgap(18);
     }
+
+    // /**
+    // * update AssignUnits GridRow for different number of players with
+    // * different number of territories
+    // *
+    // * @param territory
+    // */
+    // private void updateAssignUnitsGridRow(List<String> territory) {
+    // int numTerritories = territory.size();
+    // // Check if number of rows in gridpane is less than number of territories
+    // if (assignUnits_GridPane.getRowConstraints().size() < numTerritories) {
+    // // Add required number of rows to gridpane
+    // for (int i = 0; i < numTerritories; i++) {
+    // assignUnits_GridPane.getRowConstraints().add(i, new RowConstraints(10.0,
+    // 30.0, 10.0));
+    // }
+    // }
+    // for (int i = 0; i < numTerritories; i++) {
+    // // Set the row index for each node
+    // Spinner spinner = new Spinner();
+    // spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0,
+    // maxUnits, 0));
+    // assignUnits_GridPane.add(spinner, 1, i);
+    // TextField textField = new TextField();
+    // textField.setText(territory.get(i)); // Set text of textfield
+    // assignUnits_GridPane.add(textField, 0, i);
+    // }
+    // // Update the row index of the commit button
+    // Button commitButton = (Button) assignUnits_GridPane.lookup("#assignUnits");
+    // GridPane.setRowIndex(commitButton, numTerritories);
+
+    // // assignUnits_GridPane.autosize();
+    // assignUnits_GridPane.setHgap(10);
+    // assignUnits_GridPane.setVgap(18);
+    // }
 
     private int getSpinnerSum() {
         int sum = 0;
-        for (Node node : assignUnits_GridPane.getChildren()) {
-            // Check if the child is a Spinner
-            if (node instanceof Spinner) {
-                Spinner spinner = (Spinner) node;
-                // Get the current value of the spinner
-                if (spinner.getValue() != null) {
-                    int value = (int) spinner.getValue();
-                    sum += value;
+        for (Node node : HPmap.getChildren()) {
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                for (Node node2 : hbox.getChildren()) {
+                    if (node2 instanceof Spinner) {
+                        Spinner spinner = (Spinner) node2;
+                        if (spinner.getValue() != null) {
+                            int value = (int) spinner.getValue();
+                            sum += value;
+                        }
+                    }
                 }
             }
         }
@@ -218,28 +251,27 @@ public class InitGamePlayController {
     }
 
     private void assignUnits() {
-        ArrayList<String> unit = new ArrayList<>();
-        for (Node node : assignUnits_GridPane.getChildren()) {
-            // Check if the child is a Spinner
-            if (node instanceof Spinner) {
-                Spinner spinner = (Spinner) node;
-                // Get the current value of the spinner
+        for (Node node : HPmap.getChildren()) {
+            if (node instanceof HBox) {
+                HBox hbox = (HBox) node;
+                Button btn = (Button) hbox.getChildren().get(0);
+                Spinner spinner = (Spinner) hbox.getChildren().get(1);
+                // add the unit number to myTerritory
                 if (spinner.getValue() != null) {
-                    int value = (int) spinner.getValue();
-                    unit.add(String.valueOf(value));
+                    myTerritory.put(btn.getText(), String.valueOf(spinner.getValue()));
                 }
             }
         }
+
         int i = 0;
         try {
             for (String key : myTerritory.keySet()) {
-                myTerritory.put(key, unit.get(i));
                 // server set that we can not input 0 as unit number
-                if (!unit.get(i).equals("0")) {
+                if (!myTerritory.get(key).equals("0")) {
                     client.playerAssignUnit(key);
-                    client.playerAssignUnit(unit.get(i));
+                    client.playerAssignUnit(myTerritory.get(i));
                     System.out.println(
-                            "Assign " + unit.get(i) + " in " + key);
+                            "Assign " + myTerritory.get(i) + " in " + key);
                 }
                 i++;
             }

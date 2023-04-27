@@ -69,13 +69,9 @@ public class JoinRoomController {
             chooseNum.setVisible(true);
             prompt.setVisible(true);
             joinRoom.setDisable(false);
-            joinRoom.getStyleClass().remove("button-unable");
-            joinRoom.getStyleClass().add("button-room");
             searchRoom.setDisable(true);
         } else if (res.equals("Room joined.")) {
             joinRoom.setDisable(false);
-            joinRoom.getStyleClass().remove("button-unable");
-            joinRoom.getStyleClass().add("button-room");
             searchRoom.setDisable(true);
         } else {// "Room exceeded player number, game already started"
             // alert

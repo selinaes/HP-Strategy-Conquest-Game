@@ -52,9 +52,9 @@ public class MovePathRuleChecker extends OrderRuleChecker {
         for (Territory neighbor : neighbors) {
             // System.out.println(player.getColor());
             if (!visited.contains(neighbor)) {
-                if (neighbor.getOwner().getColor() == player.getColor()
-                        || neighbor.getOwner().getColor() == player
-                                .getAlly().getColor()) {
+                if (neighbor.getOwner().getColor().equals(player.getColor())
+                        || (player.getAlly() != null
+                                && neighbor.getOwner().getColor().equals(player.getAlly().getColor()))) {
                     visited.add(neighbor);
                     boolean found = dfs(neighbor, destination, player, gameMap, visited);
                     if (found) {

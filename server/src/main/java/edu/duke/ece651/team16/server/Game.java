@@ -9,6 +9,7 @@ import java.util.function.Supplier;
 public class Game {
     private final Object lock = new Object();
     protected List<Player> players;
+    private int numalivePlayers;
     private int numPlayer;
     private List<String> colors;
     private GameMap currentMap;
@@ -31,6 +32,7 @@ public class Game {
      */
     public Game(int unitsPerPlayer, String mapName) {
         this.numPlayer = 4;
+        this.numalivePlayers = 4;
         this.players = new ArrayList<Player>();
         this.currentMap = new GameMap(numPlayer);
         currentMap.createBasicMap();
@@ -102,6 +104,9 @@ public class Game {
             p.getConn().send("watching");
             notifyAllPlayers(p.getConn(), "worldWar");
         } else if (p.checkLose()) {
+            synchronized (this) {
+                --numalivePlayers;
+            }
             p.getConn().send("Choose watch");
             if (ifChooseWatch(p.getConn()).equals("e")) {
                 synchronized (this) {
@@ -119,6 +124,7 @@ public class Game {
                 System.out.println("Chat server is starting");
                 chatServer.setUp();
                 System.out.println("Chat server is ready");
+                chatServer.sendWelcome();
             }
             p.updateResearchRound(false);
             p.resetDelay();

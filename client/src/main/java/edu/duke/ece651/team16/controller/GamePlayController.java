@@ -61,6 +61,8 @@ public class GamePlayController {
     @FXML
     private Button upgrade;
     @FXML
+    private Button alliance;
+    @FXML
     public Button watchUpdate;
     @FXML
     public Button exitGame;
@@ -216,7 +218,7 @@ public class GamePlayController {
                 setMyTerritoryDisable(false);
                 playerStatus = Status.ATTACK_Units;
                 onAttackMoveUnits();
-                setButtonsDisabled(false, finish, research, move, upgrade);
+                setButtonsDisabled(false, finish, research, move, upgrade, alliance, special);
                 playerStatus = Status.DEFAULT;
                 break;
             case MOVE_FROM:
@@ -234,7 +236,7 @@ public class GamePlayController {
                 setEnemyTerritoryDisable(false);
                 playerStatus = Status.MOVE_Units;
                 onAttackMoveUnits();// oneOrderContent=[T1, T2, level, units]
-                setButtonsDisabled(false, finish, research, attack, upgrade);
+                setButtonsDisabled(false, finish, research, attack, upgrade, alliance, special);
                 playerStatus = Status.DEFAULT;
                 break;
             case UPGRADE_AT:
@@ -248,7 +250,7 @@ public class GamePlayController {
                     System.out.println("Before onUpgradeUnits");
                     onUpgradeUnits();
                     System.out.println("After onUpgradeUnits");
-                    setButtonsDisabled(false, finish, research, attack, move);
+                    setButtonsDisabled(false, finish, research, attack, move, alliance, special);
                     playerStatus = Status.DEFAULT;
                     setEnemyTerritoryDisable(false);
                 } else { // cannot upgrade, no unit
@@ -455,14 +457,14 @@ public class GamePlayController {
         if (source instanceof Button) {
             Button btn = (Button) source;
             if (btn.getText().equals("Attack")) {
-                setButtonsDisabled(true, finish, research, move, upgrade);
+                setButtonsDisabled(true, finish, research, move, upgrade, alliance, special);
                 btn.setText("Cancel");
                 myOrder.clear();
                 playerStatus = Status.ATTACK_FROM;
                 myOrder.add("a");// add attack order
                 setEnemyTerritoryDisable(true);
             } else {
-                setButtonsDisabled(false, finish, research, move, upgrade);
+                setButtonsDisabled(false, finish, research, move, upgrade, alliance, special);
                 btn.setText("Attack");
                 myOrder.clear();
                 playerStatus = Status.DEFAULT;
@@ -484,14 +486,14 @@ public class GamePlayController {
         if (source instanceof Button) {
             Button btn = (Button) source;
             if (btn.getText().equals("Move")) {
-                setButtonsDisabled(true, finish, research, attack, upgrade);
+                setButtonsDisabled(true, finish, research, attack, upgrade, alliance, special);
                 btn.setText("Cancel");
                 myOrder.clear();
                 playerStatus = Status.MOVE_FROM;
                 myOrder.add("m");// add attack order
                 setEnemyTerritoryDisable(true);
             } else { // cancel
-                setButtonsDisabled(false, finish, research, attack, upgrade);
+                setButtonsDisabled(false, finish, research, attack, upgrade, alliance, special);
                 btn.setText("Move");
                 myOrder.clear();
                 playerStatus = Status.DEFAULT;
@@ -529,14 +531,14 @@ public class GamePlayController {
         if (source instanceof Button) {
             Button btn = (Button) source;
             if (btn.getText().equals("Upgrade")) {
-                setButtonsDisabled(true, finish, research, attack, move);
+                setButtonsDisabled(true, finish, research, attack, move, alliance, special);
                 btn.setText("Cancel");
                 myOrder.clear();
                 myOrder.add("u"); // add upgrade order
                 playerStatus = Status.UPGRADE_AT;
                 setEnemyTerritoryDisable(true);
             } else { // cancel
-                setButtonsDisabled(false, finish, research, attack, move);
+                setButtonsDisabled(false, finish, research, attack, move, alliance, special);
                 btn.setText("Upgrade");
                 myOrder.clear();
                 playerStatus = Status.DEFAULT;
@@ -673,8 +675,11 @@ public class GamePlayController {
                 Button btn = (Button) node;
                 if (!myTerritory.containsKey(btn.getText())) {
                     btn.setDisable(isDisabled);
-                    String styleToRemove = isDisabled ? "button-able" : "button-territory";
-                    String styleToAdd = isDisabled ? "button-territory" : "button-able";
+                    String currentTer = btn.getText();
+                    String currentColor = mapParser.getTerritoryInfo(currentTer).get("Player");
+                    String style = "button-" + currentColor;
+                    String styleToRemove = isDisabled ? style : "button-territory";
+                    String styleToAdd = isDisabled ? "button-territory" : style;
                     btn.getStyleClass().remove(styleToRemove);
                     btn.getStyleClass().add(styleToAdd);
                 }
@@ -693,8 +698,11 @@ public class GamePlayController {
                 Button btn = (Button) node;
                 if (myTerritory.containsKey(btn.getText())) {
                     btn.setDisable(isDisabled);
-                    String styleToRemove = isDisabled ? "button-able" : "button-unable";
-                    String styleToAdd = isDisabled ? "button-unable" : "button-able";
+                    String currentTer = btn.getText();
+                    String currentColor = mapParser.getTerritoryInfo(currentTer).get("Player");
+                    String style = "button-" + currentColor;
+                    String styleToRemove = isDisabled ? style : "button-territory";
+                    String styleToAdd = isDisabled ? "button-territory" : style;
                     btn.getStyleClass().remove(styleToRemove);
                     btn.getStyleClass().add(styleToAdd);
                 }

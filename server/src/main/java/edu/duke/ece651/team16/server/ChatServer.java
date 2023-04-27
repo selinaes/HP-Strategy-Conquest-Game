@@ -58,6 +58,18 @@ public class ChatServer {
     }
 
     /**
+     * send the first weclome message to all the player
+     * alse send the player list to all the player
+     */
+    public void sendWelcome() {
+        String playerListString = "playerlist:";
+        for (Player p : players) {
+            playerListString += p.getColor() + " ";
+        }
+        sendToAll(playerListString);
+    }
+
+    /**
      * send a message to all players
      */
     public synchronized void sendToAll(String message) {
@@ -70,13 +82,15 @@ public class ChatServer {
     /**
      * send a message to certain player
      */
-    public synchronized void sendToOne(String message, String name) {
+    public synchronized void sendToOne(String message, String name, String from) {
         int i = 0;
         for (Conn c : communicators) {
             if (players.get(i).getColor().equals(name)) {
-                c.send(message);
+                c.send(from + ": " + message + "(Private message)");
                 System.out.println("ChatServer: send message: " + message);
-                break;
+            } else if (players.get(i).getColor().equals(from)) {
+                c.send(from + ": " + message + "(Private message)");
+                System.out.println("ChatServer: send message: " + message);
             }
             i++;
         }

@@ -14,11 +14,11 @@ public class ChatHandler extends Thread {
             String str = connector.recv();
             System.out.println("recieve: " + str);
             String[] arr = str.toString().split(":");
-            if(arr[0].equals("quit")) {
-                chatServer.remove(connector);
-                break;
+            if (arr[2].equals("All")) {
+                chatServer.sendToAll(arr[0] + ": " + arr[1]);
+            } else {
+                chatServer.sendToOne(arr[1], arr[2], arr[0]);
             }
-            chatServer.sendToAll(str);
         }
     }
 }

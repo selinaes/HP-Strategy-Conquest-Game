@@ -1,7 +1,6 @@
 @import url('https://fonts.cdnfonts.com/css/parry-hotter');
 @import url('https://fonts.cdnfonts.com/css/wizard-world');
 
-
 .hp-risk-game-text {
     /* -fx-font-family: 'Harry Potter', sans-serif; */
     -fx-font-family: 'Parry Hotter', sans-serif;
@@ -14,6 +13,11 @@
 .pass-text {
     -fx-font-family: 'Wizard World', sans-serif;
     -fx-font-size: 2.0em;
+}
+
+.history-text {
+    -fx-font-family: 'Wizard World', sans-serif;
+    -fx-font-size: 1.5em;
 }
 
 .room-text {
@@ -29,20 +33,6 @@
 .expandable {
     -fx-max-width: infinity;
     -fx-max-height: infinity;
-}
-
-.button-able {
-    -fx-padding: 8 15 15 15;
-    -fx-background-insets: 0, 0 0 5 0, 0 0 6 0, 0 0 7 0;
-    -fx-background-radius: 8;
-    -fx-background-color:
-        linear-gradient(from 0% 93% to 0% 100%, #1384a3 0%, #161290 100%),
-        #249d77,
-        #3ad89b,
-        radial-gradient(center 50% 50%, radius 100%, #3ad89b, #2cc555);
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 4, 0, 0, 1);
-    -fx-font-weight: bold;
-    -fx-font-size: 1.1em;
 }
 
 .button-login {
@@ -122,6 +112,13 @@
     -fx-background-radius: 10;
 }
 
+.button-territory:hover {
+    -fx-background-color: linear-gradient(from 0% 93% to 0% 100%, #c2a06d 0%, #b0915f 100%),
+        #d7b580,
+        linear-gradient(to bottom, #dbba86, #d7b580),
+        radial-gradient(center 50% 50%, radius 100%, #cca775, #d7b580);
+}
+
 .button-red {
     -fx-background-color: rgb(255, 168, 158);
     -fx-text-fill: #a27c51;
@@ -130,6 +127,13 @@
     -fx-font-family: 'Wizard World', sans-serif;
     -fx-font-size: 1.0em;
     -fx-background-radius: 10;
+}
+
+.button-red:hover {
+    -fx-background-color: linear-gradient(from 0% 93% to 0% 100%, rgb(255, 149, 138) 0%, rgb(255, 130, 118) 100%),
+        rgb(255, 168, 158),
+        linear-gradient(to bottom, rgb(255, 173, 163), rgb(255, 168, 158)),
+        radial-gradient(center 50% 50%, radius 100%, rgb(255, 159, 148), rgb(255, 168, 158));
 }
 
 .button-blue {
@@ -142,6 +146,13 @@
     -fx-background-radius: 10;
 }
 
+.button-blue:hover {
+    -fx-background-color: linear-gradient(from 0% 93% to 0% 100%, rgb(154, 192, 248) 0%, rgb(133, 178, 244) 100%),
+        rgb(175, 206, 252),
+        linear-gradient(to bottom, rgb(179, 211, 254), rgb(175, 206, 252)),
+        radial-gradient(center 50% 50%, radius 100%, rgb(164, 199, 250), rgb(175, 206, 252));
+}
+
 .button-green {
     -fx-background-color: rgb(173, 214, 173);
     -fx-text-fill: #a27c51;
@@ -150,6 +161,13 @@
     -fx-font-family: 'Wizard World', sans-serif;
     -fx-font-size: 1.0em;
     -fx-background-radius: 10;
+}
+
+.button-green:hover {
+    -fx-background-color: linear-gradient(from 0% 93% to 0% 100%, rgb(153, 204, 153) 0%, rgb(133, 194, 133) 100%),
+        rgb(173, 214, 173),
+        linear-gradient(to bottom, rgb(177, 218, 177), rgb(173, 214, 173)),
+        radial-gradient(center 50% 50%, radius 100%, rgb(163, 208, 163), rgb(173, 214, 173));
 }
 
 .button-yellow {
@@ -162,12 +180,18 @@
     -fx-background-radius: 10;
 }
 
+.button-yellow:hover {
+    -fx-background-color: linear-gradient(from 0% 93% to 0% 100%, rgb(251, 229, 168) 0%, rgb(249, 218, 147) 100%),
+        rgb(253, 240, 189),
+        linear-gradient(to bottom, rgb(255, 242, 196), rgb(253, 240, 189)),
+        radial-gradient(center 50% 50%, radius 100%, rgb(253, 236, 182), rgb(253, 240, 189));
+}
+
 .default-line {
     -fx-stroke: #805c33;
     -fx-stroke-width: 5;
     -fx-opacity: 0.8;
 }
-
 
 .highlight-line {
     -fx-stroke: linear-gradient(to left, #a27c51, #f76c5d);
@@ -175,89 +199,6 @@
     -fx-opacity: 0.9;
     -fx-stroke-dash-array: 20 10;
     -fx-stroke-dash-offset: 0;
-}
-
-
-.button-able:hover {
-    -fx-background-color:
-        linear-gradient(from 0% 93% to 0% 100%, #1384a3 0%, #161290 100%),
-        #249d77,
-        #3ad89b,
-        radial-gradient(center 50% 50%, radius 100%, #c2ea4b, #2cc555);
-}
-
-.button-able:pressed {
-    -fx-padding: 10 15 13 15;
-    -fx-background-insets: 2 0 0 0, 2 0 3 0, 2 0 4 0, 2 0 5 0;
-}
-
-.button-able Text {
-    -fx-fill: white;
-    -fx-effect: dropshadow(gaussian, #a3008b, 0, 0, 0, 2);
-}
-
-.button-unable {
-    -fx-padding: 8 15 15 15;
-    -fx-background-insets: 0, 0 0 5 0, 0 0 6 0, 0 0 7 0;
-    -fx-background-radius: 8;
-    -fx-background-color:
-        linear-gradient(from 0% 93% to 0% 100%, #bdade8 0%, #8280ad 100%),
-        #81b8a7,
-        #93cdb7,
-        radial-gradient(center 50% 50%, radius 100%, #98d0ba, #c2dea5);
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 4, 0, 0, 1);
-    -fx-font-weight: bold;
-    -fx-font-size: 1.1em;
-}
-
-.button-unable:hover {
-    -fx-background-color:
-        linear-gradient(from 0% 93% to 0% 100%, #1384a34a 0%, #16129047 100%),
-        #249d7744,
-        #3ad89b38,
-        radial-gradient(center 50% 50%, radius 100%, #c2ea4b54, #2cc55566);
-}
-
-.button-unable:pressed {
-    -fx-padding: 10 15 13 15;
-    -fx-background-insets: 2 0 0 0, 2 0 3 0, 2 0 4 0, 2 0 5 0;
-}
-
-.button-unable Text {
-    -fx-fill: white;
-    -fx-effect: dropshadow(gaussian, #f34f09, 0, 0, 0, 2);
-}
-
-.button-finish {
-    -fx-padding: 8 15 15 15;
-    -fx-background-insets: 0, 0 0 5 0, 0 0 6 0, 0 0 7 0;
-    -fx-background-radius: 8;
-    -fx-background-color:
-        linear-gradient(from 0% 93% to 0% 100%, #ec6ce4 0%, #11e77f 100%),
-        #1cedf0,
-        #1af4a0,
-        radial-gradient(center 50% 50%, radius 100%, #20ec9b, #83f608);
-    -fx-effect: dropshadow(gaussian, rgba(144, 239, 117, 0.75), 4, 0, 0, 1);
-    -fx-font-weight: bold;
-    -fx-font-size: 1.1em;
-}
-
-.button-finish:hover {
-    -fx-background-color:
-        linear-gradient(from 0% 93% to 0% 100%, #5acae9ee 0%, #e36060e9 100%),
-        #249d77f1,
-        #3ad89bed,
-        radial-gradient(center 50% 50%, radius 100%, #c2ea4bed, #2cc555ee);
-}
-
-.button-finish:pressed {
-    -fx-padding: 10 15 13 15;
-    -fx-background-insets: 2 0 0 0, 2 0 3 0, 2 0 4 0, 2 0 5 0;
-}
-
-.button-finish Text {
-    -fx-fill: white;
-    -fx-effect: dropshadow(gaussian, #f34f09, 0, 0, 0, 2);
 }
 
 .choice-box {
@@ -291,9 +232,40 @@
     -fx-font-size: 2em;
 }
 
+.choice-box2 {
+    -fx-background-color: #bdada3;
+    -fx-mark-color: #b6544f;
+}
+
+.choice-box2>.label {
+    -fx-text-fill: rgb(17, 17, 17);
+    -fx-font-family: 'Wizard World', sans-serif;
+    -fx-font-size: 1em;
+}
+
+.choice-box2 .context-menu {
+    -fx-background-color: #bdada3;
+}
+
+.choice-box2 .menu-item:focused {
+    -fx-background-color: #948177;
+}
+
+.choice-box2 .menu-item>.label {
+    -fx-text-fill: #463b38;
+    -fx-font-family: 'Wizard World', sans-serif;
+    -fx-font-size: 1em;
+}
+
+.choice-box2 .menu-item:focused>.label {
+    -fx-text-fill: black;
+    -fx-font-family: 'Wizard World', sans-serif;
+    -fx-font-size: 1em;
+}
+
 /* Toolbar style */
 .tool-bar {
-    -fx-background-color: #2c3e50;
+    -fx-background-color: #73532e;
     /* Background color */
     -fx-padding: 5 10 5 10;
     /* Top, Right, Bottom, Left padding */
@@ -301,33 +273,28 @@
 
 /* Toolbar button style */
 .tool-bar .button {
-    -fx-background-color: #ecf0f1;
-    /* Button background color */
-    -fx-text-fill: #2c3e50;
-    /* Button text color */
+    -fx-background-color: #fdefd7;
+    -fx-text-fill: #322515;
     -fx-border-radius: 3;
-    /* Button border radius */
     -fx-padding: 5 10 5 10;
-    /* Top, Right, Bottom, Left padding */
     -fx-font-weight: bold;
-    /* Button font weight */
+    -fx-font-size: 1.2em;
+    -fx-font-family: 'Wizard World', sans-serif;
 }
 
 /* Toolbar button hover/focus style */
 .tool-bar .button:hover,
 .tool-bar .button:focused {
-    -fx-background-color: #3498db;
-    /* Button background color on hover/focus */
-    -fx-text-fill: white;
-    /* Button text color on hover/focus */
+    -fx-background-color: #d7b580;
+    -fx-text-fill: #322515;
+    -fx-font-size: 1.2em;
 }
 
 /* Toolbar button selected style */
 .tool-bar .button:selected {
-    -fx-background-color: #2980b9;
-    /* Button background color when selected */
-    -fx-text-fill: white;
-    /* Button text color when selected */
+    -fx-background-color: #d7b580;
+    -fx-text-fill: #322515;
+    -fx-font-size: 1.2em;
 }
 
 .text-area1 {
@@ -342,10 +309,10 @@
     -fx-text-fill: #73532e;
 }
 
-.text-area1:focused {
-    -fx-border-color: #1e90ff;
-}
-
-.pane1 {
-    -fx-background-color: #4303f5;
+.text-area-history {
+    -fx-background-color: #d7b580;
+    -fx-border-color: #7f715f;
+    -fx-font-size: 14px;
+    -fx-font-family: "Wizard World", sans-serif;
+    -fx-text-fill: #322515;
 }

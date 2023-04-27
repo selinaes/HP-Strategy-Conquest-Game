@@ -7,18 +7,18 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
-public class Conn {
+public class ConnClient {
     private Socket clientsocket;
     private BufferedReader in;
     private PrintWriter out;
 
     /**
-     * Constructor for Server side Conn => will send/recv messages to/from
+     * Constructor for Server side ConnClient => will send/recv messages to/from
      * client
      * 
      * @param socket: the "accepted" client socket representing the client side
      */
-    public Conn(Socket clientsocket) {
+    public ConnClient(Socket clientsocket) {
         try {
             this.clientsocket = clientsocket;
             this.in = new BufferedReader(new InputStreamReader(clientsocket.getInputStream()));
