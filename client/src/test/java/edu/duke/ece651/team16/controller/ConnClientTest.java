@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class ConnTest {
+public class ConnClientTest {
 
   private Socket makeMockSocket() throws IOException {
     Socket mockSocket = mock(Socket.class);
@@ -39,7 +39,7 @@ public class ConnTest {
     Socket mockSocket = makeMockSocket();
 
     // Create a mock Connection
-    Conn conn = new Conn(mockSocket);
+    ConnClient conn = new ConnClient(mockSocket);
 
     // Create a mock PrintWriter
     PrintWriter mockPrintWriter = mock(PrintWriter.class);
@@ -59,7 +59,7 @@ public class ConnTest {
     // Verify that the mock PrintWriter was called with the input message
     verify(mockPrintWriter).println(msg);
 
-    Conn Connection2 = new Conn(mockSocket);
+    ConnClient Connection2 = new ConnClient(mockSocket);
     Field field2 = Connection2.getClass().getDeclaredField("out");
     field2.setAccessible(true);
     field2.set(Connection2, null);
@@ -84,7 +84,7 @@ public class ConnTest {
     Socket mockSocket = makeMockSocket();
     BufferedReader mockReader = makeBufferedReader("test message");
 
-    Conn connection = new Conn(mockSocket);
+    ConnClient connection = new ConnClient(mockSocket);
     Field inField = connection.getClass().getDeclaredField("in");
     inField.setAccessible(true);
     inField.set(connection, mockReader);
@@ -99,7 +99,7 @@ public class ConnTest {
     Socket mockSocket = makeMockSocket();
     BufferedReader mockReader = makeBufferedReader("test message");
 
-    Conn connection = new Conn(mockSocket);
+    ConnClient connection = new ConnClient(mockSocket);
     Field inField = connection.getClass().getDeclaredField("in");
     inField.setAccessible(true);
     inField.set(connection, mockReader);
@@ -109,7 +109,7 @@ public class ConnTest {
     connection.close();
 
     BufferedReader mockReader2 = mock(BufferedReader.class);
-    Conn connection2 = new Conn(mockSocket);
+    ConnClient connection2 = new ConnClient(mockSocket);
     Field field2 = connection2.getClass().getDeclaredField("in");
     field2.setAccessible(true);
     field2.set(connection2, mockReader2);
@@ -126,7 +126,7 @@ public class ConnTest {
 
     doThrow(new IOException()).when(mockSocket).close();
 
-    Conn connection = new Conn(mockSocket);
+    ConnClient connection = new ConnClient(mockSocket);
     connection.close();
   }
 
@@ -138,7 +138,7 @@ public class ConnTest {
     when(mockSocket.getInputStream()).thenThrow(new IOException()).thenReturn(mockInputStream);
     when(mockSocket.getOutputStream()).thenReturn(mockOutputStream);
 
-    Conn connection = new Conn(mockSocket);
+    ConnClient connection = new ConnClient(mockSocket);
     connection.close();
   }
 
