@@ -49,7 +49,8 @@ public class AttackOrder implements Order {
         String attackProblem = checker.checkOrder(from, to, player, numUnits, gameMap, level);
         if (attackProblem == null) {
             Player attacked = to.getOwner();
-            if (attacked.getColor().equals(player.getAlly().getColor())) { // if attacks ally
+            if (player.getAlly() != null && attacked.getColor().equals(player.getAlly().getColor())) { // if attacks
+                                                                                                       // ally
                 // return ally units in owners territory to nearest ally territory
                 List<Territory> myterritory = player.getTerritories();
                 for (Territory mt : myterritory) {

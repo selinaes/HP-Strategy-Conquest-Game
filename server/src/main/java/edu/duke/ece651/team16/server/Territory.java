@@ -174,7 +174,7 @@ public class Territory {
     Territory minDistanceTerritory = getMinDistanceTerritory();
     ArrayList<Unit> result = new ArrayList<>();
     for (Unit u : units) {
-      if (u.getOwner() == owner.getAlly() && u.getAlive() == true) {
+      if (u.getOwner().getColor().equals(owner.getAlly().getColor()) && u.getAlive() == true) {
         result.add(u);
         this.units.remove(u);
       }

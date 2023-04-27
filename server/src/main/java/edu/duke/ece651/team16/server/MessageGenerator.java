@@ -124,6 +124,10 @@ public class MessageGenerator {
     public HashMap<String, ArrayList<HashMap<String, String>>> formMap(List<Player> players) {
         HashMap<String, ArrayList<HashMap<String, String>>> map = new HashMap<String, ArrayList<HashMap<String, String>>>();
         for (Player p : players) {
+            String allyinfo = "";
+            if (p.getAlly() != null) {
+                allyinfo += p.getAlly().getColor();
+            }
             ArrayList<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
             for (Territory t : p.getTerritories()) {
                 HashMap<String, String> entryMap = new HashMap<String, String>();
@@ -133,6 +137,7 @@ public class MessageGenerator {
                 entryMap.put("Unit", t.getUnitsString());
                 entryMap.put("Rate", t.territoryInfo());
                 entryMap.put("Resource", p.displayResourceLevel());
+                entryMap.put("Ally", allyinfo);
                 list.add(entryMap);
             }
             map.put(p.getColor(), list);

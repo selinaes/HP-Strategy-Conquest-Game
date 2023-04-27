@@ -312,7 +312,7 @@
 .text-area-history {
     -fx-background-color: #d7b580;
     -fx-border-color: #7f715f;
-    -fx-font-size: 5px;
+    -fx-font-size: 15px;
     -fx-font-family: "Wizard World", sans-serif;
     -fx-text-fill: #322515;
 }
@@ -325,11 +325,11 @@
 
 .spinner .increment-arrow-button,
 .spinner .decrement-arrow-button {
-	-fx-background-color: #d7b580;
+    -fx-background-color: #d7b580;
 }
 
 .spinner .text-field {
-    -fx-background-color: #f0f0f0;  
+    -fx-background-color: #f0f0f0;
     -fx-text-fill: #322515;
     -fx-font-size: 14px;
     -fx-background-radius: 5;

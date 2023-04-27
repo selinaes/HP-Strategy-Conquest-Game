@@ -22,10 +22,11 @@ public class AttackInputRuleChecker extends OrderRuleChecker {
      */
     @Override
     public String checkMyRule(Territory from, Territory to, Player player, int numUnits, GameMap map, int level) {
-        if (from.getOwner() != player && from.getOwner().getAlly() != player) {
+        if (!from.getOwner().getColor().equals(player.getColor())
+                && (player.getAlly() != null && !from.getOwner().getColor().equals(player.getAlly().getColor()))) {
             return "You do not own the from territory";
         }
-        if (to.getOwner() == player) {
+        if (to.getOwner().getColor().equals(player.getColor())) {
             return "You can not attack your own territory";
         }
         if (from.getAliveUnitsFor(player, level).size() < numUnits) {

@@ -25,8 +25,9 @@ public class Battle {
         boolean placed = false;
         for (int i = 0; i < parties.size(); ++i) {
             if (parties.get(i).get(0).getOwner().equals(units.get(0).getOwner())
-                    || parties.get(i).get(0).getOwner().getAlly()
-                            .equals(units.get(0).getOwner())) {
+                    || (parties.get(i).get(0).getOwner().getAlly() != null
+                            && parties.get(i).get(0).getOwner().getAlly().getColor()
+                                    .equals(units.get(0).getOwner().getColor()))) {
                 parties.get(i).addAll(units);
                 // parties.set(i, temp);
                 placed = true;

@@ -86,6 +86,7 @@ public class MapParser {
                     ans.put("Neighbors", asset.get("Neighbors"));
                     ans.put("Rate", asset.get("Rate"));
                     ans.put("Resource", asset.get("Resource"));
+                    ans.put("Ally", asset.get("Ally"));
                 }
             }
         }
@@ -102,6 +103,21 @@ public class MapParser {
         for (Map.Entry<String, ArrayList<HashMap<String, String>>> entry : myMap.entrySet()) {
             String playername = entry.getKey();
             if (playername.equals(player)) {
+                ArrayList<HashMap<String, String>> playerAsset = entry.getValue();
+                for (HashMap<String, String> asset : playerAsset) {
+                    String territory = asset.get("TerritoryName");
+                    ans.add(territory);
+                }
+            }
+        }
+        return ans;
+    }
+
+    public List<String> getAllyTerritory(String ally) {
+        List<String> ans = new ArrayList<>();
+        for (Map.Entry<String, ArrayList<HashMap<String, String>>> entry : myMap.entrySet()) {
+            String playername = entry.getKey();
+            if (playername.equals(ally)) {
                 ArrayList<HashMap<String, String>> playerAsset = entry.getValue();
                 for (HashMap<String, String> asset : playerAsset) {
                     String territory = asset.get("TerritoryName");
@@ -160,5 +176,19 @@ public class MapParser {
             }
         }
         return numAlivePlayers > 2;
+    }
+
+    public String findAlly() {
+        for (Map.Entry<String, ArrayList<HashMap<String, String>>> entry : myMap.entrySet()) {
+            String color = entry.getKey();
+            if (color.equals(player)) {
+                ArrayList<HashMap<String, String>> playerAsset = entry.getValue();
+                for (HashMap<String, String> asset : playerAsset) {
+                    if (!asset.get("Ally").equals(""))
+                        return asset.get("Ally");
+                }
+            }
+        }
+        return "";
     }
 }

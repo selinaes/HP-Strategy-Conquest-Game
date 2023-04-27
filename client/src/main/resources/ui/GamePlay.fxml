@@ -101,7 +101,7 @@
                         <Button fx:id="finish" mnemonicParsing="false" onAction="#onFinishButton" prefHeight="70.0" prefWidth="95.0" text="Finish" />
                     </items>
                   </ToolBar>
-                  <Button fx:id="exitGame" layoutX="328.0" layoutY="739.0" mnemonicParsing="false" onAction="#onExitButton" styleClass="button-territory" text="Exit" />
+                  
                   <Label layoutX="21.0" layoutY="556.0" prefHeight="26.0" prefWidth="173.0" styleClass="history-text" text="Game History" />
                   <Pane fx:id="lakePane" layoutX="30.0" layoutY="255.0" opacity="0.7" prefHeight="280.0" prefWidth="300.0">
                      <children>
@@ -167,6 +167,7 @@
             <Image url="@../img/backgrounds/waiting4.png" />
          </image>
       </ImageView>
+      <Button fx:id="exitGame" layoutX="328.0" layoutY="739.0" mnemonicParsing="false" onAction="#onExitButton" styleClass="button-territory" text="Exit" />
       <Button fx:id="watchUpdate" layoutX="200.0" layoutY="740.0" onAction="#onWatchGameInfo" styleClass="button-territory" text="Follow Game" />
       <!-- <fx:include layoutY="395.0" source="ChatRoom.fxml" /> -->
       <!-- <VBox fx:id="chatRoomContainer" layoutY="395.0" AnchorPane.rightAnchor="10" AnchorPane.bottomAnchor="10" /> -->

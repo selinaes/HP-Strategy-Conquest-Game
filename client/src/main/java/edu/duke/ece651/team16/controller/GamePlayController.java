@@ -391,7 +391,12 @@ public class GamePlayController {
                     String currentTer = btn.getText();
                     String currentColor = mapParser.getTerritoryInfo(currentTer).get("Player");
                     String style = "button-" + currentColor;
-                    btn.getStyleClass().setAll(style);
+                    String style2 = btn.getStyleClass().toString();
+                    String[] originStyle = style2.split(" ");
+                    System.out.println(btn.getStyleClass().toString());// button button-blue
+                    System.out.println(originStyle[1]);
+                    btn.getStyleClass().remove(originStyle[1]);
+                    btn.getStyleClass().add(style);
                     showNeighborLine(btn);
                 }
             }
@@ -471,13 +476,14 @@ public class GamePlayController {
                 playerStatus = Status.ATTACK_FROM;
                 myOrder.add("a");// add attack order
                 setEnemyTerritoryDisable(true);
+                setAllyTerritoryDisable(false);
             } else {
                 setButtonsDisabled(false, finish, research, move, upgrade, alliance, special);
                 btn.setText("Attack");
                 myOrder.clear();
                 playerStatus = Status.DEFAULT;
-                setEnemyTerritoryDisable(false);
                 setMyTerritoryDisable(false);
+                setEnemyTerritoryDisable(false);
             }
         }
     }
@@ -500,6 +506,7 @@ public class GamePlayController {
                 playerStatus = Status.MOVE_FROM;
                 myOrder.add("m");// add attack order
                 setEnemyTerritoryDisable(true);
+                setAllyTerritoryDisable(false);
             } else { // cancel
                 setButtonsDisabled(false, finish, research, attack, upgrade, alliance, special);
                 btn.setText("Move");
@@ -726,6 +733,33 @@ public class GamePlayController {
     }
 
     /**
+     * set ally territory button disable or not
+     * 
+     * @param isDisabled
+     */
+    private void setAllyTerritoryDisable(boolean isDisabled) {
+        String ally = mapParser.findAlly();
+        if (ally.equals("")) {
+            return;
+        }
+        for (Node node : HPmap.getChildren()) {
+            if (node instanceof Button) {
+                Button btn = (Button) node;
+                if (mapParser.getAllyTerritory(ally).contains(btn.getText())) {
+                    btn.setDisable(isDisabled);
+                    String currentTer = btn.getText();
+                    String currentColor = mapParser.getTerritoryInfo(currentTer).get("Player");
+                    String style = "button-" + currentColor;
+                    String styleToRemove = isDisabled ? style : "button-territory";
+                    String styleToAdd = isDisabled ? "button-territory" : style;
+                    btn.getStyleClass().remove(styleToRemove);
+                    btn.getStyleClass().add(styleToAdd);
+                }
+            }
+        }
+    }
+
+    /**
      * set client
      * 
      * @param client
@@ -793,8 +827,7 @@ public class GamePlayController {
         } else {// update the number of units in the selected territory and clear the order
             if (myOrder.get(0) != "l") {
                 history.appendText(gamePlayDisplay.getActionInfo(myOrder));
-            }
-            else{
+            } else {
                 String msg = gamePlayDisplay.getActionInfo(myOrder);
                 String sendString = client.getColor() + ": " + msg + ":All";
                 System.out.println("want to send: " + sendString);
