@@ -24,20 +24,20 @@
                      </image>
                   </ImageView>
                   <Line fx:id="willowToHall" endX="644.8285522460938" endY="522.3887329101562" fill="#f8f408" layoutX="-202.0" layoutY="14.0" opacity="0.5" startX="308.2499694824219" startY="489.0000305175781" styleClass="default-line" />
-                  <Line fx:id="willowToLibrary" endX="595.5341186523438" endY="284.1788635253906" layoutX="-192.0" layoutY="24.0" opacity="0.5" startX="308.3826904296875" startY="480.6509094238281" styleClass="default-line" />
-                  <Line fx:id="lakeToOffice" endX="723.0645751953125" endY="97.35403442382812" layoutX="-182.0" layoutY="34.0" opacity="0.5" startX="355.81298828125" startY="203.14666748046875" styleClass="default-line" />
-                  <Line fx:id="officeToRequirement" endX="784.0968017578125" endY="203.1466827392578" layoutX="-172.0" layoutY="44.0" opacity="0.5" startX="723.6438598632812" startY="96.42196655273438" styleClass="default-line" />
-                  <Line fx:id="requirementToPitch" endX="784.0968017578125" endY="203.1466827392578" layoutX="-162.0" layoutY="54.0" opacity="0.5" startX="949.4102783203125" startY="260.2241516113281" styleClass="default-line" />
-                  <Line fx:id="pitchToTower" endX="1095.07666015625" endY="227.5543212890625" layoutX="-152.0" layoutY="64.0" opacity="0.5" startX="937.8989868164062" startY="247.20150756835938" styleClass="default-line" />
+                  <Line fx:id="willowToLibrary" endX="590.125732421875" endY="292.0" layoutX="-192.0" layoutY="24.0" opacity="0.5" startX="321.26239013671875" startY="466.0000305175781" styleClass="default-line" />
+                  <Line fx:id="lakeToOffice" endX="672.0" endY="103.0" layoutX="-182.0" layoutY="34.0" opacity="0.5" startX="391.0" startY="200.84413146972656" styleClass="default-line" />
+                  <Line fx:id="officeToRequirement" endX="779.7592163085938" endY="195.0" layoutX="-172.0" layoutY="44.0" opacity="0.5" startX="726.75" startY="106.0" styleClass="default-line" />
+                  <Line fx:id="requirementToPitch" endX="786.3968505859375" endY="211.0" layoutX="-162.0" layoutY="54.0" opacity="0.5" startX="933.5" startY="246.0" styleClass="default-line" />
+                  <Line fx:id="pitchToTower" endX="1050.0" endY="227.41192626953125" layoutX="-152.0" layoutY="64.0" opacity="0.5" startX="974.0" startY="249.0" styleClass="default-line" />
                   <Line fx:id="pitchToWing" endX="871.97998046875" endY="370.1979675292969" layoutX="-142.0" layoutY="74.0" opacity="0.5" startX="937.8989868164062" startY="247.20150756835938" styleClass="default-line" />
-                  <Line fx:id="wingToTower" endX="828.6280517578125" endY="371.9999694824219" layoutX="-132.0" layoutY="84.0" opacity="0.5" startX="1102.2803955078125" startY="210.57696533203125" styleClass="default-line" />
-                  <Line fx:id="wingToForest" endX="860.3408203125" endY="350.9050598144531" layoutX="-122.0" layoutY="94.0" opacity="0.5" startX="1204.887451171875" startY="564.0" styleClass="default-line" />
-                  <Line fx:id="wingToPotions" endX="835.7500610351562" endY="339.0" layoutX="-112.0" layoutY="104.0" opacity="0.5" startX="666.66650390625" startY="566.896484375" styleClass="default-line" />
-                  <Line fx:id="secretToPotions" endX="614.0538940429688" endY="343.5607604980469" layoutX="-102.0" layoutY="114.0" opacity="0.5" startX="655.1551513671875" startY="566.9999389648438" styleClass="default-line" />
-                  <Line fx:id="hallToSecret" endX="611.198974609375" endY="334.6041259765625" layoutX="-92.0" layoutY="124.0" opacity="0.5" startX="552.9644165039062" startY="413.9000244140625" styleClass="default-line" />
-                  <Line fx:id="libraryToSecret" endX="601.198974609375" endY="324.6041259765625" layoutX="-82.0" layoutY="134.0" opacity="0.5" startX="491.57940673828125" startY="168.13357543945312" styleClass="default-line" />
+                  <Line fx:id="wingToTower" endX="882.1769409179688" endY="346.0" layoutX="-132.0" layoutY="84.0" opacity="0.5" startX="1087.0" startY="216.0" styleClass="default-line" />
+                  <Line fx:id="wingToForest" endX="856.2048950195312" endY="362.0" layoutX="-122.0" layoutY="94.0" opacity="0.5" startX="1204.887451171875" startY="564.0" styleClass="default-line" />
+                  <Line fx:id="wingToPotions" endX="828.2362670898438" endY="352.0" layoutX="-112.0" layoutY="104.0" opacity="0.5" startX="666.66650390625" startY="566.896484375" styleClass="default-line" />
+                  <Line fx:id="secretToPotions" endX="615.9232788085938" endY="357.0" layoutX="-102.0" layoutY="114.0" opacity="0.5" startX="648.532958984375" startY="541.0" styleClass="default-line" />
+                  <Line fx:id="hallToSecret" endX="593.2786865234375" endY="347.0978088378906" layoutX="-92.0" layoutY="124.0" opacity="0.5" startX="552.6829833984375" startY="400.0" styleClass="default-line" />
+                  <Line fx:id="libraryToSecret" endX="585.75" endY="311.0" layoutX="-82.0" layoutY="134.0" opacity="0.5" startX="503.4183349609375" startY="182.0" styleClass="default-line" />
                   <Line fx:id="secretToRequirement" endX="596.401123046875" endY="306.0" layoutX="-83.0" layoutY="139.0" opacity="0.5" startX="678.5" startY="125.99996948242188" styleClass="default-line" />
-                  <Line fx:id="willowToLake" endX="383.0" endY="235.0" layoutX="-212.0" layoutY="4.0" opacity="0.5" startX="318.2499694824219" startY="498.9999694824219" styleClass="default-line" />
+                  <Line fx:id="willowToLake" endX="380.527099609375" endY="252.14022827148438" layoutX="-212.0" layoutY="4.0" opacity="0.5" startX="318.25" startY="486.0000305175781" styleClass="default-line" />
                   <Line fx:id="towerToForest" endX="606.079345703125" endY="334.2789611816406" layoutX="360.0" layoutY="-33.0" opacity="0.5" startX="747.805908203125" startY="689.6971435546875" styleClass="default-line" />
                   <Button fx:id="willow" layoutX="48.0" layoutY="490.0" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="button-territory" text="Whomping Willow" />
                   <Button fx:id="lake" layoutX="133.0" layoutY="226.0" mnemonicParsing="false" onAction="#onTerritoryButton" styleClass="button-territory" text="Black Lake" />

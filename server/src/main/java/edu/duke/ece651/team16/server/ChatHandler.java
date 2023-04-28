@@ -15,6 +15,7 @@ public class ChatHandler extends Thread {
             System.out.println("recieve: " + str);
             String[] arr = str.toString().split(":");
             if (arr[2].equals("All")) {
+                System.out.println("send to all:" + arr[0] + ": " + arr[1]);
                 chatServer.sendToAll(arr[0] + ": " + arr[1]);
             } else {
                 chatServer.sendToOne(arr[1], arr[2], arr[0]);

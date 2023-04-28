@@ -1,6 +1,6 @@
 package edu.duke.ece651.team16.controller;
 
-public enum Status {
+public enum MyStatus {
     DEFAULT,
 
     MOVE_FROM,

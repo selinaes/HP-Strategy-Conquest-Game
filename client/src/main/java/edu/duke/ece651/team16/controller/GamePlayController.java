@@ -81,7 +81,7 @@ public class GamePlayController {
 
     private Client client;
     private MapParser mapParser;
-    private Status playerStatus = Status.DEFAULT;
+    private MyStatus playerStatus = MyStatus.DEFAULT;
     private ArrayList<String> myOrder;
     private String oneOrderContent = "";
     private AlertBox alert = new AlertBox();
@@ -205,13 +205,13 @@ public class GamePlayController {
         int unitnum;
         switch (playerStatus) {
             case ATTACK_FROM:
-                unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"));
+                unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"), client.getColor());
                 if (unitnum > 0) {// initiate attack
                     oneOrderContent = btn.getText();
                     setEnemyTerritoryDisable(false);
                     setMyTerritoryDisable(true);
-                    playerStatus = Status.ATTACK_TO;
-                    currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"));
+                    playerStatus = MyStatus.ATTACK_TO;
+                    currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"), client.getColor());
                 } else {
                     alert.showAlert("Alert", "This territory has 0 avaliable unit.");
                 }
@@ -219,17 +219,17 @@ public class GamePlayController {
             case ATTACK_TO:
                 oneOrderContent += ", " + btn.getText() + ", ";
                 setMyTerritoryDisable(false);
-                playerStatus = Status.ATTACK_Units;
+                playerStatus = MyStatus.ATTACK_Units;
                 onAttackMoveUnits();
                 setButtonsDisabled(false, finish, research, move, upgrade, alliance, special);
-                playerStatus = Status.DEFAULT;
+                playerStatus = MyStatus.DEFAULT;
                 break;
             case MOVE_FROM:
-                unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"));
+                unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"), client.getColor());
                 if (unitnum > 0) {// initiate move
                     oneOrderContent = btn.getText(); // oneOrderContent=[T1]
-                    playerStatus = Status.MOVE_TO;
-                    currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"));
+                    playerStatus = MyStatus.MOVE_TO;
+                    currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"), client.getColor());
                 } else {
                     alert.showAlert("Alert", "This territory has 0 avaliable unit.");
                 }
@@ -237,24 +237,24 @@ public class GamePlayController {
             case MOVE_TO:
                 oneOrderContent += ", " + btn.getText() + ", "; // oneOrderContent=[T1, T2, ]
                 setEnemyTerritoryDisable(false);
-                playerStatus = Status.MOVE_Units;
+                playerStatus = MyStatus.MOVE_Units;
                 onAttackMoveUnits();// oneOrderContent=[T1, T2, level, units]
                 setButtonsDisabled(false, finish, research, attack, upgrade, alliance, special);
-                playerStatus = Status.DEFAULT;
+                playerStatus = MyStatus.DEFAULT;
                 break;
             case UPGRADE_AT:
-                unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"));
+                unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"), client.getColor());
                 if (unitnum > 0) { // can upgrade
                     oneOrderContent = btn.getText(); // oneOrderContent= [T1] source, unitNum, initialLevel,
                                                      // upgradeAmount
                     System.out.println("One Order Content: " + oneOrderContent);
                     setMyTerritoryDisable(false);
-                    currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"));
+                    currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"), client.getColor());
                     System.out.println("Before onUpgradeUnits");
                     onUpgradeUnits();
                     System.out.println("After onUpgradeUnits");
                     setButtonsDisabled(false, finish, research, attack, move, alliance, special);
-                    playerStatus = Status.DEFAULT;
+                    playerStatus = MyStatus.DEFAULT;
                     setEnemyTerritoryDisable(false);
                 } else { // cannot upgrade, no unit
                     alert.showAlert("Alert", "This territory has 0 avaliable unit.");
@@ -267,7 +267,7 @@ public class GamePlayController {
                 performAction(myOrder);
                 oneOrderContent = "";
                 setMyTerritoryDisable(false);
-                playerStatus = Status.DEFAULT;
+                playerStatus = MyStatus.DEFAULT;
                 break;
             default:
                 break;
@@ -333,7 +333,7 @@ public class GamePlayController {
         battleTime.setVisible(true);
         // Clear the order list and set player status to FINISH
         myOrder.clear();
-        playerStatus = Status.FINISH;
+        playerStatus = MyStatus.FINISH;
         myOrder.add("d");
         client.playerOneAction(myOrder);
         // PopupBox popup1 = new PopupBox(territoryRoot);
@@ -449,7 +449,7 @@ public class GamePlayController {
                         + " - for this turn!\nPlease choose an enemy territory to bomb!");
                 oneOrderContent = option; // "Nuclear Bomb, T1"
                 setMyTerritoryDisable(true); // disable my territory, leave enemy territories
-                playerStatus = Status.BOMB_AT;
+                playerStatus = MyStatus.BOMB_AT;
             }
 
             // disable after one use, per turn
@@ -473,7 +473,7 @@ public class GamePlayController {
                 setButtonsDisabled(true, finish, research, move, upgrade, alliance, special);
                 btn.setText("Cancel");
                 myOrder.clear();
-                playerStatus = Status.ATTACK_FROM;
+                playerStatus = MyStatus.ATTACK_FROM;
                 myOrder.add("a");// add attack order
                 setEnemyTerritoryDisable(true);
                 setAllyTerritoryDisable(false);
@@ -481,7 +481,7 @@ public class GamePlayController {
                 setButtonsDisabled(false, finish, research, move, upgrade, alliance, special);
                 btn.setText("Attack");
                 myOrder.clear();
-                playerStatus = Status.DEFAULT;
+                playerStatus = MyStatus.DEFAULT;
                 setMyTerritoryDisable(false);
                 setEnemyTerritoryDisable(false);
             }
@@ -503,7 +503,7 @@ public class GamePlayController {
                 setButtonsDisabled(true, finish, research, attack, upgrade, alliance, special);
                 btn.setText("Cancel");
                 myOrder.clear();
-                playerStatus = Status.MOVE_FROM;
+                playerStatus = MyStatus.MOVE_FROM;
                 myOrder.add("m");// add attack order
                 setEnemyTerritoryDisable(true);
                 setAllyTerritoryDisable(false);
@@ -511,7 +511,7 @@ public class GamePlayController {
                 setButtonsDisabled(false, finish, research, attack, upgrade, alliance, special);
                 btn.setText("Move");
                 myOrder.clear();
-                playerStatus = Status.DEFAULT;
+                playerStatus = MyStatus.DEFAULT;
                 setEnemyTerritoryDisable(false);
             }
         }
@@ -547,13 +547,13 @@ public class GamePlayController {
                 btn.setText("Cancel");
                 myOrder.clear();
                 myOrder.add("u"); // add upgrade order
-                playerStatus = Status.UPGRADE_AT;
+                playerStatus = MyStatus.UPGRADE_AT;
                 setEnemyTerritoryDisable(true);
             } else { // cancel
                 setButtonsDisabled(false, finish, research, attack, move, alliance, special);
                 btn.setText("Upgrade");
                 myOrder.clear();
-                playerStatus = Status.DEFAULT;
+                playerStatus = MyStatus.DEFAULT;
                 setEnemyTerritoryDisable(false);
             }
         }

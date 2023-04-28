@@ -241,8 +241,19 @@ public class Territory {
    */
   public String getUnitsString() {
     StringBuilder result = new StringBuilder();
+    result.append(owner.getColor() + ":");
     for (int i = 0; i < 7; i++) {
-      result.append(String.valueOf(this.getUnitsByLevel(i).size()) + ",");
+      String u = String.valueOf(this.getUnitsByLevelnPlayer(i, owner).size());
+      result.append(u + ",");
+    }
+    result.append(";");
+    if (owner.getAlly() != null) {
+      result.append(owner.getAlly().getColor() + ":");
+      for (int i = 0; i < 7; i++) {
+        String u = String.valueOf(this.getUnitsByLevelnPlayer(i, owner.getAlly()).size());
+        result.append(u + ",");
+      }
+
     }
     return result.toString();
   }
@@ -392,6 +403,21 @@ public class Territory {
     ArrayList<Unit> result = new ArrayList<>();
     for (Unit u : this.units) {
       if (u.getLevel() == level) {
+        result.add(u);
+      }
+    }
+    return result;
+  }
+
+  /**
+   * get units by level and player
+   * 
+   * @return units
+   */
+  public ArrayList<Unit> getUnitsByLevelnPlayer(int level, Player player) {
+    ArrayList<Unit> result = new ArrayList<>();
+    for (Unit u : this.units) {
+      if (u.getLevel() == level && player.getColor().equals(u.getOwner().getColor())) {
         result.add(u);
       }
     }

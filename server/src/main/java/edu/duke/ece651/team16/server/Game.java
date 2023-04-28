@@ -523,7 +523,7 @@ public class Game {
             Order order = new MoveOrder(fromTerritory, toTerritory, num, p, currentMap, level);
             return order;
         }
-        return (new AttackOrder(fromTerritory, toTerritory, num, p, currentMap, level));
+        return (new AttackOrder(fromTerritory, toTerritory, num, p, currentMap, level, chatServer));
 
     }
 

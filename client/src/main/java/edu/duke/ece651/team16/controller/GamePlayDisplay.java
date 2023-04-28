@@ -21,26 +21,45 @@ public class GamePlayDisplay {
     public String parseUnitsInfo(String unitsInfo) {
         String[] unitName = { "First-year", "Second-year", "Third-Year", "Fourth-year", "Fifth-year", "Sixth-year",
                 "Seventh-year" };
-        String[] unitsInfoArray = unitsInfo.split(",");
+        String[] unitsInfoArray = unitsInfo.split(";"); // [0]: red:1,1,1,1,1,1,1, [1]: blue:1,1,1,1,1,1,1,
+        String[] myUnitsInfoArray = unitsInfoArray[0].split(":")[1].split(","); // [0]: 1 [1]: 1 [2]: 1 [3]: 1 ...
         StringBuilder unitsInfoString = new StringBuilder();
-        for (int i = 0; i < 6; i++) {
-            unitsInfoString.append(unitName[i] + ": " + unitsInfoArray[i] + "\n");
+        for (int i = 0; i < 7; i++) {
+            if (unitsInfoArray.length > 1) {
+                String[] allyUnitsInfoArray = unitsInfoArray[1].split(":")[1].split(",");
+                unitsInfoString.append(
+                        unitName[i] + ": " + myUnitsInfoArray[i] + "(your), " + allyUnitsInfoArray[i] + "("
+                                + unitsInfo.split(";")[1].split(":")[0] + ")" + "\n");
+            } else {
+                unitsInfoString.append(unitName[i] + ": " + myUnitsInfoArray[i] + "\n");
+            }
         }
-        unitsInfoString.append(unitName[6] + ": " + unitsInfoArray[6]);
         return unitsInfoString.toString();
     }
 
     /**
      * This is a private method used to get the total number of units
      * 
+     * red:1,1,1,1,1,1,1,;blue:1,1,1,1,1,1,1,
+     * or
+     * red:1,1,1,1,1,1,1,;
+     * 
      * @param unitsInfo The units information in a string
      * @return The total number of units
      */
-    public int getUnitNum(String unitsInfo) {
+    public int getUnitNum(String unitsInfo, String color) {
         int sum = 0;
-        String[] unitsInfoArray = unitsInfo.split(",");
-        for (int i = 0; i < 7; i++) {
-            sum += Integer.parseInt(unitsInfoArray[i]);
+        String[] allUnits = unitsInfo.split(";");
+        String[] myUnits = allUnits[0].split(":")[1].split(",");
+        if (allUnits[0].split(":")[0].equals(color)) { // color is owner
+            for (int i = 0; i < 7; i++) {
+                sum += Integer.parseInt(myUnits[i]);
+            }
+        } else { // color is ally
+            String[] allyUnits = allUnits[1].split(":")[1].split(",");
+            for (int i = 0; i < 7; i++) {
+                sum += Integer.parseInt(allyUnits[i]);
+            }
         }
         return sum;
     }
@@ -51,13 +70,17 @@ public class GamePlayDisplay {
      * @param unitsInfo The units information in a string
      * @return The formatted units information in an array
      */
-    public ArrayList<Integer> getUnitNumArray(String unitsInfo) {
-        ArrayList<Integer> unitNumArray = new ArrayList<>();
-        String[] unitsInfoArray = unitsInfo.split(",");
-        for (int i = 0; i < 7; i++) {
-            unitNumArray.add(Integer.parseInt(unitsInfoArray[i]));
+    public ArrayList<Integer> getUnitNumArray(String unitsInfo, String color) {
+        System.out.println("getUnitNumArray: " + unitsInfo);
+        ArrayList<Integer> res = new ArrayList<>();
+        String[] allUnits = unitsInfo.split(";");
+        String[] myUnits = allUnits[0].split(":")[1].split(",");
+        if (allUnits[0].split(":")[0].equals(color)) { // color is owner
+            for (int i = 0; i < 7; i++) {
+                res.add(Integer.parseInt(myUnits[i]));
+            }
         }
-        return unitNumArray;
+        return res;
     }
 
     /**
