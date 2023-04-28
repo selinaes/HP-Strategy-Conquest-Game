@@ -681,9 +681,9 @@ public class Game {
                     worldLog.put(territory.getName(), battleLog);
                 } else if (territory.getBomber() != null) {
                     // only if no battle but bombed.
+                    String bomber = territory.getBomber().getColor();
                     territory.bombing();
-                    String bombLog = territory.getBomber().getColor()
-                            + " player nuclear bombed this region, all units destroyed";
+                    String bombLog = bomber + " player nuclear bombed this region, all units destroyed";
                     worldLog.put(territory.getName(), bombLog);
                 }
             }
