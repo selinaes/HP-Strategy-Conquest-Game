@@ -134,9 +134,9 @@ public class InitGamePlayController {
         if (sum > maxUnits) {
             alert.showAlert("Invalid input", "Total units assigned exceeds the maximum allowed");
         } else {
-            assignUnits();
             PopupBox popup = new PopupBox(territoryRoot);
             popup.display("/img/texts/wait.png");
+            assignUnits();
             // alert.displayImageAlert("Done!", "/img/texts/wait.png");
             try {
                 client.waitEveryoneDone();

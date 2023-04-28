@@ -167,6 +167,11 @@
             <Image url="@../img/backgrounds/waiting4.png" />
          </image>
       </ImageView>
+      <Button fx:id="endWait" layoutX="582.0" layoutY="563.0" mnemonicParsing="false" onAction="#onNext" prefHeight="84.0" prefWidth="363.0" styleClass="button-waiting" text="Next">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Button>
       <Button fx:id="exitGame" layoutX="328.0" layoutY="739.0" mnemonicParsing="false" onAction="#onExitButton" styleClass="button-territory" text="Exit" />
       <Button fx:id="watchUpdate" layoutX="200.0" layoutY="740.0" onAction="#onWatchGameInfo" styleClass="button-territory" text="Follow Game" />
       <!-- <fx:include layoutY="395.0" source="ChatRoom.fxml" /> -->
