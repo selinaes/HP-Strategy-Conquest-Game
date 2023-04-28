@@ -82,6 +82,8 @@ public class GamePlayController {
     public ImageView battleTime;
     @FXML
     public Label color;
+    @FXML
+    public Label prompt;
 
     private Client client;
     private MapParser mapParser;
@@ -109,6 +111,7 @@ public class GamePlayController {
         watchUpdate.setVisible(false);
         battleTime.setVisible(false); // image for acting battle is not visible
         endWait.setVisible(false);
+        prompt.setVisible(false);
         myOrder = new ArrayList<>();
         initNeighborLines();
         Platform.runLater(() -> {
@@ -153,6 +156,11 @@ public class GamePlayController {
 
     public void setColorText(String which) {
         color.setText("Color: " + which);
+    }
+
+    public void setPromptText(String content) {
+        prompt.setVisible(true);
+        prompt.setText(content);
     }
 
     /**
@@ -216,12 +224,14 @@ public class GamePlayController {
                     setEnemyTerritoryDisable(false);
                     setMyTerritoryDisable(true);
                     playerStatus = Status.ATTACK_TO;
+                    setPromptText("Select an enemy territory to attack");
                     currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"));
                 } else {
                     alert.showAlert("Alert", "This territory has 0 avaliable unit.");
                 }
                 break;
             case ATTACK_TO:
+                prompt.setVisible(false);
                 oneOrderContent += ", " + btn.getText() + ", ";
                 setMyTerritoryDisable(false);
                 playerStatus = Status.ATTACK_Units;
@@ -234,12 +244,14 @@ public class GamePlayController {
                 if (unitnum > 0) {// initiate move
                     oneOrderContent = btn.getText(); // oneOrderContent=[T1]
                     playerStatus = Status.MOVE_TO;
+                    setPromptText("Select a territory to move to");
                     currTerritoryUnits = gamePlayDisplay.getUnitNumArray(territoryInfo.get("Unit"));
                 } else {
                     alert.showAlert("Alert", "This territory has 0 avaliable unit.");
                 }
                 break;
             case MOVE_TO:
+                prompt.setVisible(false);
                 oneOrderContent += ", " + btn.getText() + ", "; // oneOrderContent=[T1, T2, ]
                 setEnemyTerritoryDisable(false);
                 playerStatus = Status.MOVE_Units;
@@ -248,6 +260,7 @@ public class GamePlayController {
                 playerStatus = Status.DEFAULT;
                 break;
             case UPGRADE_AT:
+                prompt.setVisible(false);
                 unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"));
                 if (unitnum > 0) { // can upgrade
                     oneOrderContent = btn.getText(); // oneOrderContent= [T1] source, unitNum, initialLevel,
@@ -266,6 +279,7 @@ public class GamePlayController {
                 }
                 break;
             case BOMB_AT:
+                prompt.setVisible(false);
                 oneOrderContent += ", " + btn.getText(); // oneOrderContent= Nuclear Bomb, [T1] location
                 System.out.println("One Order Content: " + oneOrderContent);
                 myOrder.add(oneOrderContent);
@@ -428,7 +442,7 @@ public class GamePlayController {
             myOrder.clear();
             myOrder.add("s"); // add special order
             // roll dice, 1: double resource, 2: two unit 3: disregard adjacency 4: dice
-            // advantage 5: nuclear bomb
+            // advantage 5: nuclear bomb / Fiendfyre
             Random rand = new Random();
             int num = rand.nextInt(5) + 1; // 1, 2, 3, 4， 5
             String option = "";
@@ -446,7 +460,7 @@ public class GamePlayController {
                     option = "Dice Advantage";
                     break;
                 case 5:
-                    option = "Nuclear Bomb";
+                    option = "Fiendfyre";
                     break;
                 default:
                     break;
@@ -460,10 +474,11 @@ public class GamePlayController {
                 performAction(myOrder);
             } else {
                 popup.displayText("Special Ability", "You used special ability - " + option
-                        + " - for this turn!\nPlease choose an enemy territory to bomb!");
-                oneOrderContent = option; // "Nuclear Bomb, T1"
+                        + " - for this turn!\nPlease choose an enemy territory to use Fiendfyre!");
+                oneOrderContent = option; // "Fiendfyre, T1"
                 setMyTerritoryDisable(true); // disable my territory, leave enemy territories
                 playerStatus = Status.BOMB_AT;
+                setPromptText("Select a region to use Fiendfyre");
             }
 
             // disable after one use, per turn
@@ -491,6 +506,7 @@ public class GamePlayController {
                 myOrder.add("a");// add attack order
                 setEnemyTerritoryDisable(true);
                 setAllyTerritoryDisable(false);
+                setPromptText("Choose a territory to attack from");
             } else {
                 setButtonsDisabled(false, finish, research, move, upgrade, alliance, special);
                 btn.setText("Attack");
@@ -521,6 +537,7 @@ public class GamePlayController {
                 myOrder.add("m");// add attack order
                 setEnemyTerritoryDisable(true);
                 setAllyTerritoryDisable(false);
+                setPromptText("Choose a territory to move from");
             } else { // cancel
                 setButtonsDisabled(false, finish, research, attack, upgrade, alliance, special);
                 btn.setText("Move");
@@ -562,6 +579,7 @@ public class GamePlayController {
                 myOrder.clear();
                 myOrder.add("u"); // add upgrade order
                 playerStatus = Status.UPGRADE_AT;
+                setPromptText("Choose a territory to upgrade at");
                 setEnemyTerritoryDisable(true);
             } else { // cancel
                 setButtonsDisabled(false, finish, research, attack, move, alliance, special);

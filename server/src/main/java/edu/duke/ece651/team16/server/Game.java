@@ -579,7 +579,7 @@ public class Game {
 
     public Order makeSpecialOrder(Player p) {
         p.getConn().send("Please send over the special option");
-        String actionInput = p.getConn().recv(); // an option description, or "Nuclear Bomb, T1[Target]"
+        String actionInput = p.getConn().recv(); // an option description, or "Fiendfyre, T1[Target]"
         String[] input = actionInput.split(", ");
         Order order;
         if (input.length == 2) {
@@ -683,7 +683,7 @@ public class Game {
                     // only if no battle but bombed.
                     String bomber = territory.getBomber().getColor();
                     territory.bombing();
-                    String bombLog = bomber + " player nuclear bombed this region, all units destroyed";
+                    String bombLog = bomber + " player used Fiendfyre on this region, all units destroyed";
                     worldLog.put(territory.getName(), bombLog);
                 }
             }

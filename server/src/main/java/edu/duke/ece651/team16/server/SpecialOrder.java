@@ -20,7 +20,7 @@ public class SpecialOrder implements Order {
     }
 
     /**
-     * Constructor for SpecialOrder with nuclear bomb target
+     * Constructor for SpecialOrder with Fiendfyre target
      * 
      * @param player the player
      */
@@ -47,10 +47,10 @@ public class SpecialOrder implements Order {
             player.setDisregardAdjacencySwitch(true);
         } else if (option.equals("Dice Advantage")) {
             player.setDiceAdvantageSwitch(true);
-        } else if (option.equals("Nuclear Bomb")) {
+        } else if (option.equals("Fiendfyre")) {
             // check that the target is an enemy territory
             if (target.getOwner() == player) {
-                return "You can not bomb your own territory";
+                return "You can not Fiendfyre your own territory";
             }
             // then place bomb at the target (will perform bomb when battling)
             target.placeBomb(player);
