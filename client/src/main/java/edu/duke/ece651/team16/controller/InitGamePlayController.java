@@ -56,6 +56,10 @@ public class InitGamePlayController {
     private ImageView mapImage;
     @FXML
     private ImageView blackBackground;
+    @FXML
+    public Label color;
+    @FXML
+    public Label room;
 
     private Client client;
     private MapParser mapParser;
@@ -94,6 +98,15 @@ public class InitGamePlayController {
             }
         });
     }
+
+    public void setColorText(String which) {
+        color.setText("Color: " + which);
+    }
+
+    public void setRoomText(String number) {
+        room.setText("Room: " + number);
+    }
+
 
     public void setClient(Client client) {
         this.client = client;
@@ -134,9 +147,9 @@ public class InitGamePlayController {
         if (sum > maxUnits) {
             alert.showAlert("Invalid input", "Total units assigned exceeds the maximum allowed");
         } else {
-            assignUnits();
             PopupBox popup = new PopupBox(territoryRoot);
             popup.display("/img/texts/wait.png");
+            assignUnits();
             // alert.displayImageAlert("Done!", "/img/texts/wait.png");
             try {
                 client.waitEveryoneDone();
@@ -159,6 +172,7 @@ public class InitGamePlayController {
             GamePlayController gamePlayController = fxmlLoader.getController();
             gamePlayController.setClient(client);
             gamePlayController.setColorText(client.getColor());
+            gamePlayController.setRoomText(client.getRoom());
             gamePlayController.setMapParser(mapParser);
             gamePlayController.setMyTerritory(myTerritory);
             gamePlayController.setChatRoomController(loaderStart.getController());

@@ -56,6 +56,11 @@
                       <TextArea fx:id="history" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="400.0" styleClass="text-area-history" />
                      </content>
                   </ScrollPane>
+                  <Label fx:id="room" layoutX="106.0" layoutY="35.0" styleClass="pass-text" text="Room: ?" textFill="#000000" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
                   <Label fx:id="color" layoutX="106.0" layoutY="67.0" styleClass="pass-text" text="My Color: ?" textFill="#000000" wrapText="true">
                      <font>
                         <Font name="System Bold" size="20.0" />
@@ -158,6 +163,11 @@
                         <TextArea prefHeight="280.0" prefWidth="300.0" styleClass="text-area1" />
                      </children>
                   </Pane>
+                  <Label fx:id="prompt" layoutX="650.0" layoutY="90.0" styleClass="pass-text" text="prompt" textFill="#000000" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
         </content>
@@ -167,6 +177,11 @@
             <Image url="@../img/backgrounds/waiting4.png" />
          </image>
       </ImageView>
+      <Button fx:id="endWait" layoutX="582.0" layoutY="563.0" mnemonicParsing="false" onAction="#onNext" prefHeight="84.0" prefWidth="363.0" styleClass="button-waiting" text="Next">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Button>
       <Button fx:id="exitGame" layoutX="328.0" layoutY="739.0" mnemonicParsing="false" onAction="#onExitButton" styleClass="button-territory" text="Exit" />
       <Button fx:id="watchUpdate" layoutX="200.0" layoutY="740.0" onAction="#onWatchGameInfo" styleClass="button-territory" text="Follow Game" />
       <!-- <fx:include layoutY="395.0" source="ChatRoom.fxml" /> -->

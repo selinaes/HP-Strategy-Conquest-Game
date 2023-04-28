@@ -142,6 +142,8 @@ public class ChooseGroupController {
 
                 InitGamePlayController initgamePlayController = fxmlLoader.getController();
                 initgamePlayController.setClient(client);
+                initgamePlayController.setColorText(client.getColor());
+                initgamePlayController.setRoomText(client.getRoom());
                 mapParser.setPlayer(text);
                 client.setColor(text);
                 initgamePlayController.setinitMapParser(mapParser);

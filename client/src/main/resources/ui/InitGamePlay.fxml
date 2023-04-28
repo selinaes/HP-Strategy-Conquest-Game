@@ -115,6 +115,16 @@
                         <Spinner />
                      </children>
                   </HBox>
+                  <Label fx:id="room" layoutX="283.0" layoutY="35.0" styleClass="pass-text" text="Room: ?" textFill="#000000" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="color" layoutX="283.0" layoutY="67.0" styleClass="pass-text" text="My Color: ?" textFill="#000000" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
                   <Button fx:id="assignUnits" layoutX="70.0" layoutY="146.0" mnemonicParsing="false" styleClass="button-room" text="Commit" textAlignment="CENTER" />
                   <Label layoutX="29.0" layoutY="40.0" prefHeight="80.0" prefWidth="142.0" styleClass="room-text" text="Assign Students" textAlignment="CENTER" wrapText="true">
                      <font>

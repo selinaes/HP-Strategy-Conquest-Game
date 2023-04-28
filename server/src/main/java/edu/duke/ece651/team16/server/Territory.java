@@ -111,7 +111,7 @@ public class Territory {
     String gameLog;
     if (bomber != null) {
       gameLog = "Battle participants: " + prelog + "\n" + bomber.getColor()
-          + " player used nuclear bomb. All units died.\n";
+          + " player used Fiendfyre. All units died.\n";
       // bombing happens here if battle exist. bombing happens in Game.java if battle
       // does not exist
       this.bombing();
