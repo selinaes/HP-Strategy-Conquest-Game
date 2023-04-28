@@ -52,10 +52,12 @@ public class GamePlayDisplay {
         int sum = 0;
         String[] allUnits = unitsInfo.split(";"); // red:1,1,1,1,1,1,1,
         String[] myUnits = allUnits[0].split(":")[1].split(",");
-        System.out.println("color: " + color);
-        System.out.println("allUnits[0].split(\":\")[0]: " + allUnits[0].split(":")[0]);
-        System.out.println("myUnits: " + myUnits[0] + " " + myUnits[1] + " " + myUnits[2] + " " + myUnits[3] + " "
-                + myUnits[4] + " " + myUnits[5] + " " + myUnits[6]);
+        // System.out.println("color: " + color);
+        // System.out.println("allUnits[0].split(\":\")[0]: " +
+        // allUnits[0].split(":")[0]);
+        // System.out.println("myUnits: " + myUnits[0] + " " + myUnits[1] + " " +
+        // myUnits[2] + " " + myUnits[3] + " "
+        // + myUnits[4] + " " + myUnits[5] + " " + myUnits[6]);
         if (allUnits[0].split(":")[0].equals(color)) { // color is owner
             for (int i = 0; i < 7; i++) {
                 sum += Integer.parseInt(myUnits[i]);
@@ -76,7 +78,7 @@ public class GamePlayDisplay {
      * @return The formatted units information in an array
      */
     public ArrayList<Integer> getUnitNumArray(String unitsInfo, String color) {
-        System.out.println("getUnitNumArray: " + unitsInfo);
+        // System.out.println("getUnitNumArray: " + unitsInfo);
         ArrayList<Integer> res = new ArrayList<>();
         String[] allUnits = unitsInfo.split(";");
         String[] myUnits = allUnits[0].split(":")[1].split(",");

@@ -118,6 +118,11 @@ public class Game {
                 p.setWatch();
                 notifyAllPlayers(p.getConn(), "worldWar");
             }
+            if (numalivePlayers == 2) {
+                for (Player curplayer : players) {
+                    curplayer.setAlly(null);
+                }
+            }
         } else {
             p.getConn().send("do nothing");
             if (firstTime) {

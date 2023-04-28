@@ -88,6 +88,8 @@ public class ChatServer {
             if (players.get(i).getColor().equals(name)) {
                 c.send(from + ": " + message + "(Private message)");
                 System.out.println("ChatServer: send message: " + message);
+            } else if (from.equals("map")) {
+                c.send("map:" + message);
             } else if (players.get(i).getColor().equals(from)) {
                 c.send(from + ": " + message + "(Private message)");
                 System.out.println("ChatServer: send message: " + message);

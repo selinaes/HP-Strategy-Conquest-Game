@@ -27,6 +27,7 @@ import java.io.PrintStream;
 import javafx.scene.control.ChoiceBox;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
 public class ChatRoomController {
     private ConnClient connector;
@@ -44,6 +45,11 @@ public class ChatRoomController {
     @FXML
     private Label chatRoomName;
     private List<String> playerList;
+    private GamePlayController gamePlayController;
+
+    public void setGamePlayController(GamePlayController gamePlayController) {
+        this.gamePlayController = gamePlayController;
+    }
 
     private class ChatHelper extends Thread {
         public void run() {
@@ -52,12 +58,17 @@ public class ChatRoomController {
                 final StringBuilder str = new StringBuilder(connector.recv());
                 System.out.println("recieve: " + str);
                 String[] arr = str.toString().split(":");
-                if (arr[0].equals("server")) {
+                String[] result = new String[3];
+                result[0] = arr[0];
+                result[1] = String.join(":", Arrays.copyOfRange(arr, 1, arr.length));
+                if (result[0].equals("server")) {
                     Platform.runLater(() -> DisplayContent(str.toString(), 0));
-                } else if (arr[0].equals(name)) {
+                } else if (result[0].equals(name)) {
                     Platform.runLater(() -> DisplayContent(str.toString(), 1));
-                } else if (arr[0].equals("playerlist")) {
-                    Platform.runLater(() -> DisplayContent(arr[1], 2));
+                } else if (result[0].equals("playerlist")) {
+                    Platform.runLater(() -> DisplayContent(result[1], 2));
+                } else if (result[0].equals("map")) {
+                    gamePlayController.setMapFromChatRoom(result[1]);
                 } else { // other player's msg
                     Platform.runLater(() -> DisplayContent(str.toString(), 3));
                 }

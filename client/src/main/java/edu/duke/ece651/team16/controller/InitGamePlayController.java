@@ -107,7 +107,6 @@ public class InitGamePlayController {
         room.setText("Room: " + number);
     }
 
-
     public void setClient(Client client) {
         this.client = client;
     }
@@ -166,6 +165,7 @@ public class InitGamePlayController {
                 return new ChatRoomController(client.getColor());
             });
             AnchorPane chatRoomPane = loaderStart.load();
+            ChatRoomController chatRoomController = loaderStart.getController();
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ui/GamePlay.fxml"));
             AnchorPane gamePlayPane = fxmlLoader.load();
@@ -176,6 +176,7 @@ public class InitGamePlayController {
             gamePlayController.setMapParser(mapParser);
             gamePlayController.setMyTerritory(myTerritory);
             gamePlayController.setChatRoomController(loaderStart.getController());
+            chatRoomController.setGamePlayController(gamePlayController);
             SplitPane splitPane = new SplitPane(chatRoomPane, gamePlayPane);
             splitPane.setDividerPositions(0.2); // set the initial position of the divider
 
@@ -274,7 +275,7 @@ public class InitGamePlayController {
                 // add the unit number to myTerritory
                 if (spinner.getValue() != null) {
                     myTerritory.put(btn.getText(), String.valueOf(spinner.getValue()));
-                    System.out.println("put "+String.valueOf(spinner.getValue())+" in myterritory");
+                    System.out.println("put " + String.valueOf(spinner.getValue()) + " in myterritory");
                 }
             }
         }

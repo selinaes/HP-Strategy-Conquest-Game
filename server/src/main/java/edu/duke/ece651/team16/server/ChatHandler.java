@@ -1,5 +1,7 @@
 package edu.duke.ece651.team16.server;
 
+import java.util.Arrays;
+
 public class ChatHandler extends Thread {
     private Conn connector;
     private ChatServer chatServer;
@@ -12,13 +14,16 @@ public class ChatHandler extends Thread {
     public void run() {
         while (true) {
             String str = connector.recv();
-            System.out.println("recieve: " + str);
             String[] arr = str.toString().split(":");
-            if (arr[2].equals("All")) {
-                System.out.println("send to all:" + arr[0] + ": " + arr[1]);
-                chatServer.sendToAll(arr[0] + ": " + arr[1]);
+            String[] result = new String[3];
+            result[0] = arr[0];
+            result[1] = String.join(":", Arrays.copyOfRange(arr, 1, arr.length - 1));
+            result[2] = arr[arr.length - 1];
+            if (result[2].equals("All")) {
+                System.out.println("send to all:" + result[0] + ": " + result[1]);
+                chatServer.sendToAll(result[0] + ": " + result[1]);
             } else {
-                chatServer.sendToOne(arr[1], arr[2], arr[0]);
+                chatServer.sendToOne(result[1], result[2], result[0]);
             }
         }
     }

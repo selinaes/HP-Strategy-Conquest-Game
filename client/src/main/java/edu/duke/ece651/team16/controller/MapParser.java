@@ -90,7 +90,6 @@ public class MapParser {
                 }
             }
         }
-        System.out.println("Territory Info is: " + ans);
         return ans;
     }
 

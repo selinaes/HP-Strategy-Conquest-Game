@@ -170,6 +170,14 @@ public class GamePlayController {
     }
 
     /**
+     * "red Successful alliance with blue."
+     */
+    public void setMapFromChatRoom(String map) {
+        this.mapParser.setMap(map);
+        System.out.println("receive ally from chatRoom");
+    }
+
+    /**
      * set chatRoomController
      * 
      * @param chatRoomController
@@ -724,8 +732,6 @@ public class GamePlayController {
     private void showTerritoryInfo(String terrirtoryName) {
         HashMap<String, String> territoryInfo = mapParser.getTerritoryInfo(terrirtoryName);
         System.out.println("TerritoryInfo" + territoryInfo);
-        // textArea.appendText(gamePlayDisplay.getTerritoryInfo(terrirtoryName,
-        // territoryInfo));
     }
 
     /**
@@ -875,7 +881,11 @@ public class GamePlayController {
                 System.out.println("want to send: " + sendString);
                 chatRoomController.sendMsg(sendString);
             }
-            mapParser.setMap(client.recvMsg());
+            String mapTmp = client.recvMsg(); // receive the updated map
+            mapParser.setMap(mapTmp);
+            // ensure it is not null
+            String allianceTo = mapParser.findAlly();
+            chatRoomController.sendMsg("map:" + mapTmp + ":" + allianceTo); // send the updated map to the alliance
         }
         myOrder.clear();
     }
