@@ -56,6 +56,11 @@
                       <TextArea fx:id="history" minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="400.0" styleClass="text-area-history" />
                      </content>
                   </ScrollPane>
+                  <Label fx:id="room" layoutX="106.0" layoutY="35.0" styleClass="pass-text" text="Room: ?" textFill="#000000" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
                   <Label fx:id="color" layoutX="106.0" layoutY="67.0" styleClass="pass-text" text="My Color: ?" textFill="#000000" wrapText="true">
                      <font>
                         <Font name="System Bold" size="20.0" />

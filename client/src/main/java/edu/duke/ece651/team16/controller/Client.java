@@ -20,6 +20,7 @@ public class Client {
     private PrintWriter socketSend;
     private Views view;
     private String color;
+    private String room;
 
     // system input and output
     final PrintStream out;
@@ -45,6 +46,7 @@ public class Client {
         this.ifExit = false;
         this.clientSocket = null;
         this.color = null;
+        this.room = null;
     }
 
     /**
@@ -134,6 +136,10 @@ public class Client {
         this.color = color;
     }
 
+    public void setRoomID(String room){
+        this.room = room;
+    }
+
     /**
      * Get player color
      * 
@@ -141,6 +147,10 @@ public class Client {
      */
     public String getColor() {
         return this.color;
+    }
+
+    public String getRoom(){
+        return this.room;
     }
 
     /**

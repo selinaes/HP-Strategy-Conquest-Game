@@ -70,9 +70,11 @@ public class JoinRoomController {
             prompt.setVisible(true);
             joinRoom.setDisable(false);
             searchRoom.setDisable(true);
+            client.setRoomID(roomID);
         } else if (res.equals("Room joined.")) {
             joinRoom.setDisable(false);
             searchRoom.setDisable(true);
+            client.setRoomID(roomID);
         } else {// "Room exceeded player number, game already started"
             // alert
             alert.displayImageAlert("Fail to join room", "/img/texts/capacity.png");

@@ -84,6 +84,8 @@ public class GamePlayController {
     public Label color;
     @FXML
     public Label prompt;
+    @FXML
+    public Label room;
 
     private Client client;
     private MapParser mapParser;
@@ -161,6 +163,10 @@ public class GamePlayController {
     public void setPromptText(String content) {
         prompt.setVisible(true);
         prompt.setText(content);
+    }
+
+    public void setRoomText(String number) {
+        room.setText("Room: " + number);
     }
 
     /**

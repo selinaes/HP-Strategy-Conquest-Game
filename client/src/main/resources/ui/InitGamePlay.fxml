@@ -113,6 +113,16 @@
                         <Spinner />
                      </children>
                   </HBox>
+                  <Label fx:id="room" layoutX="283.0" layoutY="35.0" styleClass="pass-text" text="Room: ?" textFill="#000000" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="color" layoutX="283.0" layoutY="67.0" styleClass="pass-text" text="My Color: ?" textFill="#000000" wrapText="true">
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
         </content>
