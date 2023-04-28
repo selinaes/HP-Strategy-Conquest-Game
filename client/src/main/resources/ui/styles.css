@@ -102,6 +102,23 @@
         radial-gradient(center 50% 50%, radius 100%, #beaa93, #c7b4a2);
 }
 
+.button-next {
+    -fx-background-color: #bbc6cc;
+    -fx-text-fill: #49657b;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0, 0, 0);
+    -fx-transition: all 0.2s ease;
+    -fx-font-family: 'Wizard World', sans-serif;
+    -fx-font-size: 3.0em;
+    -fx-background-radius: 5;
+}
+
+.button-next:hover {
+    -fx-background-color: linear-gradient(from 0% 93% to 0% 100%, #a6b9c0 0%, #92abc5 100%),
+        #bbc6cc,
+        linear-gradient(to bottom, #bfd0d6, #bbc6cc),
+        radial-gradient(center 50% 50%, radius 100%, #b2c2c8, #bbc6cc);
+}
+
 .button-territory {
     -fx-background-color: #d7b580;
     -fx-text-fill: #73532e;

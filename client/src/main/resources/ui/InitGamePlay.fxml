@@ -125,11 +125,16 @@
                         <Font name="System Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Button fx:id="assignUnits" layoutX="70.0" layoutY="146.0" mnemonicParsing="false" styleClass="button-room" text="Commit" textAlignment="CENTER" />
-                  <Label layoutX="29.0" layoutY="40.0" prefHeight="80.0" prefWidth="142.0" styleClass="room-text" text="Assign Students" textAlignment="CENTER" wrapText="true">
+                  <Button fx:id="assignUnits" layoutX="38.0" layoutY="146.0" mnemonicParsing="false" styleClass="button-room" text="Commit" textAlignment="CENTER" />
+                  <Label layoutX="29.0" layoutY="27.0" prefHeight="55.0" prefWidth="364.0" styleClass="room-text" text="Assign" textAlignment="CENTER" wrapText="true">
                      <font>
-                        <Font size="33.0" />
+                        <Font size="16.0" />
                      </font></Label>
+                  <Label layoutX="29.0" layoutY="73.0" prefHeight="55.0" prefWidth="358.0" styleClass="room-text" text="Students" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
                </children>
             </AnchorPane>
         </content>

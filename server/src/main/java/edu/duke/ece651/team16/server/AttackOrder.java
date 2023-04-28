@@ -56,7 +56,7 @@ public class AttackOrder implements Order {
             if (player.getAlly() != null && attacked.getColor().equals(player.getAlly().getColor())) { // if attacks
                                                                                                        // ally
                 // send message to all players that break alliance
-                String msg = "server:" + player.getColor() + " has broken alliance with " + attacked.getColor();
+                String msg = "server: " + player.getColor() + " has broken alliance with " + attacked.getColor() + ".";
                 System.out.println(msg);
                 chatServer.sendToAll(msg);
                 // return ally units in owners territory to nearest ally territory

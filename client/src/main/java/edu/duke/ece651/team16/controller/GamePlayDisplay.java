@@ -28,7 +28,8 @@ public class GamePlayDisplay {
             if (unitsInfoArray.length > 1) {
                 String[] allyUnitsInfoArray = unitsInfoArray[1].split(":")[1].split(",");
                 unitsInfoString.append(
-                        unitName[i] + ": " + myUnitsInfoArray[i] + "(your), " + allyUnitsInfoArray[i] + "("
+                        unitName[i] + ": " + myUnitsInfoArray[i] + "(" + unitsInfo.split(";")[0].split(":")[0] + "), "
+                                + allyUnitsInfoArray[i] + "("
                                 + unitsInfo.split(";")[1].split(":")[0] + ")" + "\n");
             } else {
                 unitsInfoString.append(unitName[i] + ": " + myUnitsInfoArray[i] + "\n");
@@ -49,8 +50,12 @@ public class GamePlayDisplay {
      */
     public int getUnitNum(String unitsInfo, String color) {
         int sum = 0;
-        String[] allUnits = unitsInfo.split(";");
+        String[] allUnits = unitsInfo.split(";"); // red:1,1,1,1,1,1,1,
         String[] myUnits = allUnits[0].split(":")[1].split(",");
+        System.out.println("color: " + color);
+        System.out.println("allUnits[0].split(\":\")[0]: " + allUnits[0].split(":")[0]);
+        System.out.println("myUnits: " + myUnits[0] + " " + myUnits[1] + " " + myUnits[2] + " " + myUnits[3] + " "
+                + myUnits[4] + " " + myUnits[5] + " " + myUnits[6]);
         if (allUnits[0].split(":")[0].equals(color)) { // color is owner
             for (int i = 0; i < 7; i++) {
                 sum += Integer.parseInt(myUnits[i]);
@@ -78,6 +83,11 @@ public class GamePlayDisplay {
         if (allUnits[0].split(":")[0].equals(color)) { // color is owner
             for (int i = 0; i < 7; i++) {
                 res.add(Integer.parseInt(myUnits[i]));
+            }
+        } else { // color is ally
+            String[] allyUnits = allUnits[1].split(":")[1].split(",");
+            for (int i = 0; i < 7; i++) {
+                res.add(Integer.parseInt(allyUnits[i]));
             }
         }
         return res;
@@ -190,7 +200,7 @@ public class GamePlayDisplay {
      */
     public String getTerritoryInfo(String terrirtoryName, HashMap<String, String> territoryInfo) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Students:\n" + parseUnitsInfo(territoryInfo.get("Unit")) + "\n\n");
+        sb.append("Students:\n" + parseUnitsInfo(territoryInfo.get("Unit")) + "\n");
         sb.append("Rate:\n " + territoryInfo.get("Rate") + "\n\n");
         sb.append("Resource:\n " + territoryInfo.get("Resource") + "\n");
         return sb.toString();

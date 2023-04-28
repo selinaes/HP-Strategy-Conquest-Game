@@ -26,7 +26,8 @@ public class MoveInputRuleChecker extends OrderRuleChecker {
                         && !from.getOwner().getAlly().getColor().equals(player.getColor()))) {
             return "You do not own the from territory";
         }
-        if (to.getOwner() != player && to.getOwner().getAlly() != player) {
+        if (!to.getOwner().getColor().equals(player.getColor())
+                && (to.getOwner().getAlly() != null && !to.getOwner().getAlly().getColor().equals(player.getColor()))) {
             return "You do not own the to territory";
         }
         if (from.getAliveUnitsFor(player, level).size() < numUnits) {

@@ -177,7 +177,7 @@
             <Image url="@../img/backgrounds/waiting4.png" />
          </image>
       </ImageView>
-      <Button fx:id="endWait" layoutX="582.0" layoutY="563.0" mnemonicParsing="false" onAction="#onNext" prefHeight="84.0" prefWidth="363.0" styleClass="button-waiting" text="Next">
+      <Button fx:id="endWait" layoutX="450.0" layoutY="563.0" mnemonicParsing="false" onAction="#onNext" prefHeight="84.0" prefWidth="363.0" styleClass="button-next" text="Next">
          <font>
             <Font size="36.0" />
          </font>

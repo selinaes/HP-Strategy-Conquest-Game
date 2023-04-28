@@ -225,6 +225,7 @@ public class GamePlayController {
         switch (playerStatus) {
             case ATTACK_FROM:
                 unitnum = gamePlayDisplay.getUnitNum(territoryInfo.get("Unit"), client.getColor());
+                System.out.println("unitnum: " + unitnum);
                 if (unitnum > 0) {// initiate attack
                     oneOrderContent = btn.getText();
                     setEnemyTerritoryDisable(false);
@@ -405,8 +406,6 @@ public class GamePlayController {
                     String style = "button-" + currentColor;
                     String style2 = btn.getStyleClass().toString();
                     String[] originStyle = style2.split(" ");
-                    System.out.println(btn.getStyleClass().toString());// button button-blue
-                    System.out.println(originStyle[1]);
                     btn.getStyleClass().remove(originStyle[1]);
                     btn.getStyleClass().add(style);
                     showNeighborLine(btn);
@@ -514,6 +513,7 @@ public class GamePlayController {
                 setAllyTerritoryDisable(false);
                 setPromptText("Choose a territory to attack from");
             } else {
+                prompt.setVisible(false);
                 setButtonsDisabled(false, finish, research, move, upgrade, alliance, special);
                 btn.setText("Attack");
                 myOrder.clear();
@@ -545,6 +545,7 @@ public class GamePlayController {
                 setAllyTerritoryDisable(false);
                 setPromptText("Choose a territory to move from");
             } else { // cancel
+                prompt.setVisible(false);
                 setButtonsDisabled(false, finish, research, attack, upgrade, alliance, special);
                 btn.setText("Move");
                 myOrder.clear();
@@ -588,6 +589,7 @@ public class GamePlayController {
                 setPromptText("Choose a territory to upgrade at");
                 setEnemyTerritoryDisable(true);
             } else { // cancel
+                prompt.setVisible(false);
                 setButtonsDisabled(false, finish, research, attack, move, alliance, special);
                 btn.setText("Upgrade");
                 myOrder.clear();
@@ -664,6 +666,8 @@ public class GamePlayController {
                 numUnits = Integer.parseInt(res.get(0));
                 initialLevel = Integer.parseInt(res.get(1));
                 upgradeAmount = Integer.parseInt(res.get(2));
+                System.out.println("initialLevel:" + initialLevel);
+                System.out.println(currTerritoryUnits);
                 if (numUnits > 0 && numUnits <= currTerritoryUnits.get(initialLevel)) {
                     break;
                 }
@@ -867,7 +871,7 @@ public class GamePlayController {
                 history.appendText(gamePlayDisplay.getActionInfo(myOrder));
             } else {
                 String msg = gamePlayDisplay.getActionInfo(myOrder);
-                String sendString = client.getColor() + ": " + msg + ":All";
+                String sendString = "server:" + client.getColor() + " " + msg + ":All";
                 System.out.println("want to send: " + sendString);
                 chatRoomController.sendMsg(sendString);
             }
