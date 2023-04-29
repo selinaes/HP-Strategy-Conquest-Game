@@ -18,10 +18,13 @@ public class AttackInputRuleCheckerTest {
     Territories.add(t2);
     Conn connection = mock(Conn.class);
     Player p1 = new Player("red", connection, Territories, 1);
+    Player p2 = new Player("blue", connection, new ArrayList<Territory>(), 1);
+    t1.setOwner(p2);
     Unit u = new AdvancedUnit(p1, t1, false, 1);
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
     GameMap map = new GameMap(1);
     AttackInputRuleChecker checker = new AttackInputRuleChecker(null);
+    // from t1, to t2, player p1, numUnits 1 
     assertEquals("You do not own the from territory", checker.checkMyRule(t1, t2, p1, 1, map, 0));
   }
 
@@ -51,11 +54,14 @@ public class AttackInputRuleCheckerTest {
     Territories.add(t1);
     Conn connection = mock(Conn.class);
     Player p1 = new Player("red", connection, Territories, 1);
+    Player p2 = new Player("blue", connection, Territories, 1);
+    t1.setOwner(p1);
+    t2.setOwner(p2);
     Unit u = new AdvancedUnit(p1, t1, false, 1);
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
     GameMap map = new GameMap(1);
     AttackInputRuleChecker checker = new AttackInputRuleChecker(null);
-    assertEquals("You do not have enough alive units of this level in the from territory",
+    assertEquals("You do not have enough students of this level in the from territory",
         checker.checkMyRule(t1, t2, p1, 5, map, 0));
   }
 
@@ -68,6 +74,9 @@ public class AttackInputRuleCheckerTest {
     Territories.add(t1);
     Conn connection = mock(Conn.class);
     Player p1 = new Player("red", connection, Territories, 1);
+    Player p2 = new Player("blue", connection, Territories, 1);
+    t1.setOwner(p1);
+    t2.setOwner(p2);
     Unit u = new AdvancedUnit(p1, t1, false, 1);
     t1.tryAddUnits(new ArrayList<Unit>(Arrays.asList(u)));
     GameMap map = new GameMap(1);

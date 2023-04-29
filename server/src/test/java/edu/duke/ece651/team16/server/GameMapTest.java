@@ -35,11 +35,15 @@ public class GameMapTest {
         // assertEquals(e1.get("red"), m1.createBasicMap().get("red"));
         // assertEquals(e1.get("blue"), m1.createBasicMap().get("blue"));
         m1.createDukeMap();
+        m1.createDukeMap();
         GameMap m2 = new GameMap(-1);
         m2.createDukeMap();
+        m2.createHPMap();
         GameMap m3 = new GameMap(3);
+        m3.createHPMap();
         m3.createDukeMap();
         GameMap m4 = new GameMap(4);
+        m4.createHPMap();
         m4.createDukeMap();
     }
 

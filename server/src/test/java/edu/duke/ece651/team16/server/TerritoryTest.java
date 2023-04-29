@@ -176,15 +176,15 @@ public class TerritoryTest {
     // player.addTerritories(territory);
     Unit unit = new AdvancedUnit(player, null, true, 1);
     territory.tryAddUnits(new ArrayList<Unit>(Arrays.asList(unit)));
-    assertEquals("1,0,0,0,0,0,0,", territory.getUnitsString());
+    assertEquals("red:1,0,0,0,0,0,0,;", territory.getUnitsString());
 
     Unit unit2 = new AdvancedUnit(player, null, false, 2);
     territory.tryAddUnits(new ArrayList<Unit>(Arrays.asList(unit2)));
-    assertEquals("2,0,0,0,0,0,0,", territory.getUnitsString());
+    assertEquals("red:2,0,0,0,0,0,0,;", territory.getUnitsString());
 
     Unit unit3 = new AdvancedUnit(player, null, false, 3);
     territory.tryAddUnits(new ArrayList<Unit>(Arrays.asList(unit3)));
-    assertEquals("3,0,0,0,0,0,0,", territory.getUnitsString());
+    assertEquals("red:3,0,0,0,0,0,0,;", territory.getUnitsString());
   }
 
 

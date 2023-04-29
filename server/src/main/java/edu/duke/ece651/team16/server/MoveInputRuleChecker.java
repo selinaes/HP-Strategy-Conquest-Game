@@ -22,12 +22,12 @@ public class MoveInputRuleChecker extends OrderRuleChecker {
     @Override
     public String checkMyRule(Territory from, Territory to, Player player, int numUnits, GameMap map, int level) {
         if (!from.getOwner().getColor().equals(player.getColor())
-                && (from.getOwner().getAlly() != null
-                        && !from.getOwner().getAlly().getColor().equals(player.getColor()))) {
+                && !(from.getOwner().getAlly() != null
+                        && from.getOwner().getAlly().getColor().equals(player.getColor()))) {
             return "You do not own the from territory";
         }
         if (!to.getOwner().getColor().equals(player.getColor())
-                && (to.getOwner().getAlly() != null && !to.getOwner().getAlly().getColor().equals(player.getColor()))) {
+                && !(to.getOwner().getAlly() != null && to.getOwner().getAlly().getColor().equals(player.getColor()))) {
             return "You do not own the to territory";
         }
         if (from.getAliveUnitsFor(player, level).size() < numUnits) {

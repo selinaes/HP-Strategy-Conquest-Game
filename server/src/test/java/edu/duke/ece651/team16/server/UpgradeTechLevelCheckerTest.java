@@ -25,7 +25,7 @@ public class UpgradeTechLevelCheckerTest {
         t2.setOwner(p1);
         p1.newResourcePerTurn();
         UpgradeOrder uo = new UpgradeOrder(p1, t1, 1, 0, 2);
-        assertEquals("You do not have enough tech level to upgrade desired level amount for these units",
+        assertEquals("You do not have enough tech level to upgrade desired level amount for these students",
                 uo.tryAction());
     }
 

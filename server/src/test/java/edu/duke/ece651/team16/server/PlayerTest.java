@@ -1,6 +1,8 @@
 package edu.duke.ece651.team16.server;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.beans.Transient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.net.Socket;
@@ -91,7 +93,7 @@ public class PlayerTest {
     assertEquals("You do not own this territory", p.placeUnitsSameTerritory("B",
         2));
     assertEquals(2, p.unplacedUnits());
-    assertEquals("The amount of units you want to place is greater than the number of unplaced units",
+    assertEquals("The amount of students you want to place is greater than the number of unplaced units",
         p.placeUnitsSameTerritory("A", 3));
     assertEquals(2, p.unplacedUnits());
 
@@ -162,6 +164,15 @@ public class PlayerTest {
     player.updateTechLevel();
     player.resetDelay();
 
+  }
+
+  @Test
+  public void testAlly(){
+    Player p1 = mock(Player.class);
+    Player p2 = mock(Player.class);
+    p1.setAlly(p2);
+    p1.setPendingAlly(p2);
+    p2.getPendingAlly();
   }
 
 }

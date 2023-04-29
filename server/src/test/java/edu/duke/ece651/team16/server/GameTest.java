@@ -426,7 +426,7 @@ public class GameTest {
         // Verify that the Player object has the expected number of units in the
         // Territory object
         // Territory territory = player.getTerritoryByName("Territory 1");
-        assertEquals("3,0,0,0,0,0,0,", t1.getUnitsString());
+        assertEquals("Player 1:3,0,0,0,0,0,0,;", t1.getUnitsString());
     }
 
     @Test

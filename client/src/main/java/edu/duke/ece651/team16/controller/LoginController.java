@@ -23,6 +23,11 @@ import java.io.EOFException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
+import javafx.util.Duration;
+import javafx.event.EventHandler;
+
 public class LoginController {
     @FXML
     private AnchorPane mainRoot;
@@ -32,8 +37,22 @@ public class LoginController {
     private PasswordField password;
     @FXML
     private Button login;
+    @FXML
+    private Label timerLabel;
+    @FXML
+    private ImageView backgroundImageView;
 
     private Client client;
+
+    private String[] imagePaths = {
+        "../img/backgrounds/login.png",
+        "../img/backgrounds/map.png",
+        "../img/backgrounds/rule.png"
+    };
+
+    private int currentImageIndex = 0;
+    private int remainingTime = 10;
+    private Timeline timeline;
 
     /**
      * Function to initialize the login page
@@ -43,6 +62,7 @@ public class LoginController {
     @FXML
     public void initialize() throws Exception {
         createClient();
+        startBackgroundImageSwitch();
     }
 
     /**
@@ -141,5 +161,22 @@ public class LoginController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void startBackgroundImageSwitch() {
+        EventHandler<ActionEvent> imageSwitchHandler = event -> {
+            remainingTime--;
+            timerLabel.setText(remainingTime + "s");
+
+            if (remainingTime <= 0) {
+                remainingTime = 10;
+                currentImageIndex = (currentImageIndex + 1) % imagePaths.length;
+                backgroundImageView.setImage(new Image(imagePaths[currentImageIndex]));
+            }
+        };
+
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1), imageSwitchHandler));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
     }
 }

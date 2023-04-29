@@ -54,8 +54,8 @@ public class MessageGeneratorTest {
 
     // create the expected result
     HashMap<String, ArrayList<HashMap<String, String>>> expectedMap = new HashMap<>();
-    ArrayList<HashMap<String, String>> player1List = new ArrayList<>();
-    HashMap<String, String> t1Map = new HashMap<>();
+      ArrayList<HashMap<String, String>> player1List = new ArrayList<>();
+      HashMap<String, String> t1Map = new HashMap<>();
     t1Map.put("TerritoryName", "Territory1");
     t1Map.put("Neighbors", "(next to: Territory2, Territory3)");
     t1Map.put("Unit", null);
@@ -91,6 +91,11 @@ public class MessageGeneratorTest {
     // game.formInitialMap();
     // compare the expected and actual results
     // assertEquals(expectedMap, actualMap);
+    Player player3 = mock(Player.class);
+    when(player3.getColor()).thenReturn("blue");
+    when(player3.getAlly()).thenReturn(player2);
+    players.add(player3);
+    HashMap<String, ArrayList<HashMap<String, String>>> allianceMap = game.formMap(players);
   }
 
   @Test
