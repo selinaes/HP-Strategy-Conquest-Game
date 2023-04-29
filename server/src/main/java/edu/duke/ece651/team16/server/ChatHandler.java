@@ -23,6 +23,7 @@ public class ChatHandler extends Thread {
                 System.out.println("send to all:" + result[0] + ": " + result[1]);
                 chatServer.sendToAll(result[0] + ": " + result[1]);
             } else {
+                System.out.println("send to one:" + result[0] + ": " + result[1] + ": " + result[2]);
                 chatServer.sendToOne(result[1], result[2], result[0]);
             }
         }

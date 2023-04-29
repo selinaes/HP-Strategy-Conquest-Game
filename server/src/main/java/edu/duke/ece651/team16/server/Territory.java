@@ -173,10 +173,19 @@ public class Territory {
   public void moveAllyUnitsHome() {
     Territory minDistanceTerritory = getMinDistanceTerritory();
     ArrayList<Unit> result = new ArrayList<>();
-    for (Unit u : units) {
+    // for (Unit u : units) {
+    // if (u.getOwner().getColor().equals(owner.getAlly().getColor()) &&
+    // u.getAlive() == true) {
+    // result.add(u);
+    // this.units.remove(u);
+    // }
+    // }
+    Iterator<Unit> unitIterator = units.iterator();
+    while (unitIterator.hasNext()) {
+      Unit u = unitIterator.next();
       if (u.getOwner().getColor().equals(owner.getAlly().getColor()) && u.getAlive() == true) {
         result.add(u);
-        this.units.remove(u);
+        unitIterator.remove();
       }
     }
     // move result to the min distance territory of ally

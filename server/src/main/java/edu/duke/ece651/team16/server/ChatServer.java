@@ -40,6 +40,10 @@ public class ChatServer {
         playerNum++;
     }
 
+    public int getPlayerListSize() {
+        return players.size();
+    }
+
     /**
      * start the chat server
      */
