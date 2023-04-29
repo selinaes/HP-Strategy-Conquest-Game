@@ -167,12 +167,74 @@ public class PlayerTest {
   }
 
   @Test
-  public void testAlly(){
+  public void testAlly() {
     Player p1 = mock(Player.class);
     Player p2 = mock(Player.class);
     p1.setAlly(p2);
     p1.setPendingAlly(p2);
     p2.getPendingAlly();
+  }
+
+  @Test
+  public void testSetters() {
+    Conn c1 = mock(Conn.class);
+    List<Territory> list = new ArrayList<Territory>();
+    Territory territory = new Territory("A");
+    list.add(territory);
+    Player player = new Player("blue", c1, list, 3);
+    player.setDoubleResourceSwitch(true);
+    player.setMoreUnitSwitch(true);
+    player.setDisregardAdjacencySwitch(true);
+    player.setDiceAdvantageSwitch(true);
+    assertEquals(player.getDiceAdvantageSwitch(), true);
+    player.resetAllSwitches();
+
+  }
+
+  @Test
+  public void testGenerateUnit2() {
+    Conn c1 = mock(Conn.class);
+    List<Territory> list = new ArrayList<Territory>();
+    Territory territory = new Territory("A");
+    list.add(territory);
+    Player player = new Player("blue", c1, list, 3);
+    int amount = 2;
+    ArrayList<Unit> unplacedUnits = player.findNextUnplacedUnits(amount);
+    assertEquals(amount, unplacedUnits.size());
+
+    for (Unit u : unplacedUnits) {
+      assertNull(u.getwhere());
+    }
+    player.placeUnitsSameTerritory("A", 2);
+
+    ArrayList<Unit> unplacedUnits1 = player.findNextUnplacedUnits(1);
+    assertEquals(1, unplacedUnits1.size());
+    player.setMoreUnitSwitch(true);
+    player.generateNewUnit();
+
+  }
+
+  @Test
+  public void testnewResource2() {
+    Conn c1 = mock(Conn.class);
+    List<Territory> list = new ArrayList<Territory>();
+    Territory territory = new Territory("A");
+    list.add(territory);
+    Player player = new Player("blue", c1, list, 3);
+    int amount = 2;
+    ArrayList<Unit> unplacedUnits = player.findNextUnplacedUnits(amount);
+    assertEquals(amount, unplacedUnits.size());
+
+    for (Unit u : unplacedUnits) {
+      assertNull(u.getwhere());
+    }
+    player.placeUnitsSameTerritory("A", 2);
+
+    ArrayList<Unit> unplacedUnits1 = player.findNextUnplacedUnits(1);
+    assertEquals(1, unplacedUnits1.size());
+    player.getDelayedTech();
+    player.setDoubleResourceSwitch(true);
+    player.newResourcePerTurn();
   }
 
 }
