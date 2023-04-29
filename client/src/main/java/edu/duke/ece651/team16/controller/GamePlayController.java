@@ -101,7 +101,7 @@ public class GamePlayController {
     private GamePlayDisplay gamePlayDisplay = new GamePlayDisplay();
 
     private ChatRoomController chatRoomController;
-    private HashMap<String, ArrayList<String>> neighborLines = new HashMap<>();;
+    private HashMap<String, ArrayList<String>> neighborLines = new HashMap<>();
 
     @FXML
     private VBox chatRoomContainer;
@@ -875,6 +875,10 @@ public class GamePlayController {
         } else {// update the number of units in the selected territory and clear the order
             if (myOrder.get(0) != "l") {
                 history.appendText(gamePlayDisplay.getActionInfo(myOrder));
+                String mapTmp = client.recvMsg(); // receive the updated map
+                mapParser.setMap(mapTmp);
+                myOrder.clear();
+                return;
             } else {
                 String msg = gamePlayDisplay.getActionInfo(myOrder);
                 String sendString = "server:" + client.getColor() + " " + msg + ":All";
