@@ -106,6 +106,7 @@ java {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 }
+// test
 tasks.register("resolveDependencies") {
     dependsOn project('server').getTasksByName('resolveDependencies',false)
     dependsOn project('client').getTasksByName('resolveDependencies',false)
