@@ -58,8 +58,11 @@ subprojects{
     test {
         // Use junit platform for unit tests
         useJUnitPlatform()
-        // systemProperty "testfx.headless", "true"
-        // systemProperty "testfx.robot", "glass"
+        systemProperty "testfx.headless", "true"
+        systemProperty "testfx.robot", "glass"
+        systemProperty "java.awt.headless", "true"
+        systemProperty "headless.geometry", "2560x1600-64"
+
     }
 
 }

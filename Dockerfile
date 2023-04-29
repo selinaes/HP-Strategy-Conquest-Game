@@ -7,19 +7,22 @@ USER root
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get -yq dist-upgrade \
   && apt-get install -yq --no-install-recommends \
-     curl \
-     wget \
-     bzip2 \
-     sudo \
-     locales \
-     ca-certificates \
-     git \
-     unzip \
-     openjdk-17-jdk-headless \
-     emacs-nox
+  curl \
+  wget \
+  bzip2 \
+  sudo \
+  locales \
+  ca-certificates \
+  git \
+  unzip \
+  openjdk-17-jdk-headless \
+  emacs-nox \
+  libpango1.0-dev\
+  libgl1-mesa-glx
+
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
-    locale-gen
+  locale-gen
 
 ARG LOCAL_USER_ID=1001
 ENV USER_ID ${LOCAL_USER_ID}

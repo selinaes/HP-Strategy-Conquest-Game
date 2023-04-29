@@ -81,6 +81,7 @@ public class LoginController {
     @FXML
     public void onLoginButton(ActionEvent ae) throws Exception {
         String user = username.getText();
+        System.out.println("username is: " + user);
         String pass = password.getText();
         if (user.isEmpty() || pass.isEmpty()) {
             AlertBox alert = new AlertBox();

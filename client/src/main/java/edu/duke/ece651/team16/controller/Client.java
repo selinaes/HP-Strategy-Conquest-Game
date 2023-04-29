@@ -215,6 +215,7 @@ public class Client {
             if (msg.equals("finished stage")) {
                 out.println("Finished 1 Turn of orders. Please wait for other players to issue orders.");
             }
+            System.out.println("Finish finished stage");
             return "Valid";
         }
         String prompt = recvMsg(); // "Please enter <Territor ......"

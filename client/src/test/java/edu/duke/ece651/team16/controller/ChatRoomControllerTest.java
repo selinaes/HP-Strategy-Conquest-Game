@@ -16,7 +16,10 @@ import java.net.ServerSocket;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.testfx.framework.junit5.ApplicationTest;
+import org.testfx.api.FxRobot;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -24,11 +27,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
-public class ChatRoomControllerTest extends ApplicationTest {
+@ExtendWith(ApplicationExtension.class)
+public class ChatRoomControllerTest {
     private ChatRoomController controller;
     ConnClient connClient;
 
-    @Override
+    @Start
     public void start(Stage stage) throws Exception {
         new Thread(() -> {
             try {
@@ -54,15 +58,15 @@ public class ChatRoomControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void test_() throws IOException {
+    public void test_(FxRobot robot) throws IOException {
         connClient.send("server:hello");
         connClient.send("red:hello");
         connClient.send("playerlist:red blue");
         connClient.send("map:hello");
         connClient.send("blue:hello");
-        clickOn("#input").write("hello");
-        clickOn("#toWho").clickOn("blue");
-        clickOn("#send");
+        robot.clickOn("#input").write("hello");
+        robot.clickOn("#toWho").clickOn("blue");
+        robot.clickOn("#send");
         controller.sendMsg("hello");
     }
 

@@ -13,22 +13,29 @@ import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.net.Socket;
 import java.net.ServerSocket;
+import javafx.scene.Node;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.testfx.framework.junit5.ApplicationTest;
+import org.testfx.api.FxRobot;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
+import org.junit.jupiter.api.extension.ExtendWith;
+import javafx.scene.control.Button;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import java.net.URL;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
-public class LoginControllerTest extends ApplicationTest {
+@ExtendWith(ApplicationExtension.class)
+public class LoginControllerTest {
     ConnClient connClient;
 
-    @Override
+    @Start
     public void start(Stage stage) throws Exception {
         new Thread(() -> {
             try {
@@ -54,20 +61,13 @@ public class LoginControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void test_() {
+    public void test_(FxRobot robot) {
         waitForFxEvents();
-        clickOn("#username").write("test");
-        clickOn("#login");
+        Node textField1 = robot.lookup(".text-field").nth(0).query(); // locate the first
+        Node textField2 = robot.lookup(".text-field").nth(1).query(); // locate the second
+        robot.clickOn(textField1).clickOn().write("test");
+        robot.clickOn("#login");
         waitForFxEvents();
-        clickOn("OK");
-        clickOn("#username").write("test");
-        clickOn("#password").write("test");
-        clickOn("#login");
-        waitForFxEvents();
-        clickOn("OK");
-        clickOn("#username").write("test");
-        clickOn("#password").write("test");
-        clickOn("#login");
     }
 
 }

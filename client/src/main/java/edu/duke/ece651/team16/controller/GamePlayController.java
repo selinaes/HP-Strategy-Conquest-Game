@@ -234,6 +234,7 @@ public class GamePlayController {
                     " for ActionEvent");
         }
         Button btn = (Button) source;
+        System.out.println(btn.getText());
         // showTerritoryInfo(btn.getText());
         HashMap<String, String> territoryInfo = mapParser.getTerritoryInfo(btn.getText());
         int unitnum;
@@ -367,6 +368,7 @@ public class GamePlayController {
     public void onNext(ActionEvent ae) throws Exception {
         // changeImage("/img/backgrounds/waiting4.png");
         // alert.displayImageAlert("Finished", "/img/texts/wait.png");
+        System.out.println("Next");
         client.waitEveryoneDone();
         battleTime.setVisible(false);
         endWait.setVisible(false);
@@ -597,6 +599,7 @@ public class GamePlayController {
         Object source = ae.getSource();
         if (source instanceof Button) {
             Button btn = (Button) source;
+            System.out.println(btn.getText());
             if (btn.getText().equals("Upgrade")) {
                 setButtonsDisabled(true, finish, research, attack, move, alliance, special);
                 btn.setText("Cancel");

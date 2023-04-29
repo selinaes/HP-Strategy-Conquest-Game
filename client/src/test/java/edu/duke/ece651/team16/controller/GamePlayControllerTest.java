@@ -19,7 +19,10 @@ import java.util.List;
 import java.util.LinkedHashMap;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.testfx.framework.junit5.ApplicationTest;
+import org.testfx.api.FxRobot;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -29,7 +32,8 @@ import javafx.scene.Node;
 import javafx.application.Platform;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
-public class GamePlayControllerTest extends ApplicationTest {
+@ExtendWith(ApplicationExtension.class)
+public class GamePlayControllerTest {
 
     private GamePlayController controller;
     private Client client;
@@ -113,7 +117,7 @@ public class GamePlayControllerTest extends ApplicationTest {
         socketReceiveField.set(client, mockReader);
     }
 
-    @Override
+    @Start
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/GamePlay.fxml"));
         AnchorPane root = loader.load();
@@ -139,137 +143,137 @@ public class GamePlayControllerTest extends ApplicationTest {
     }
 
     @Test
-    public void test() throws IOException, Exception {
+    public void test(FxRobot robot) throws IOException, Exception {
         waitForFxEvents();
-        clickOn("#move").clickOn().clickOn();
-        clickOn("#office");
-        clickOn("#lake");
+        robot.clickOn("#move").clickOn().clickOn();
+        robot.clickOn("#office");
+        robot.clickOn("#lake");
         waitForFxEvents();
-        Node textField1 = lookup(".text-field").nth(0).query(); // locate the first
-        Node textField2 = lookup(".text-field").nth(1).query(); // locate the second
-        clickOn(textField1).write("0"); // enter the level value
-        clickOn(textField2).write("1"); // enter the number value
-        clickOn("OK");
+        Node textField1 = robot.lookup(".text-field").nth(0).query(); // locate the first
+        Node textField2 = robot.lookup(".text-field").nth(1).query(); // locate the second
+        robot.clickOn(textField1).write("0"); // enter the level value
+        robot.clickOn(textField2).write("1"); // enter the number value
+        robot.clickOn("OK");
         waitForFxEvents();
-        clickOn("#attack").clickOn().clickOn();
-        clickOn("#willow");
-        clickOn("#library");
-        Node textField3 = lookup(".text-field").nth(0).query(); // locate the first
-        Node textField4 = lookup(".text-field").nth(1).query(); // locate the second
-        clickOn(textField3).write("0"); // enter the level value
-        clickOn(textField4).write("1"); // enter the number value
-        clickOn("OK");
+        robot.clickOn("#attack").clickOn().clickOn();
+        robot.clickOn("#willow");
+        robot.clickOn("#library");
+        Node textField3 = robot.lookup(".text-field").nth(0).query(); // locate the first
+        Node textField4 = robot.lookup(".text-field").nth(1).query(); // locate the second
+        robot.clickOn(textField3).write("0"); // enter the level value
+        robot.clickOn(textField4).write("1"); // enter the number value
+        robot.clickOn("OK");
         waitForFxEvents();
-        clickOn("#finish");
+        robot.clickOn("#finish");
         waitForFxEvents();
-        clickOn(500.0, 500.0);
-        clickOn("#endWait");
+        // robot.clickOn(500.0, 500.0);
+        robot.clickOn("#endWait").clickOn();
         waitForFxEvents();
 
-        clickOn("#upgrade").clickOn().clickOn().clickOn();
-        clickOn("#library");
-        Node textField5 = lookup(".text-field").nth(0).query();
-        Node textField6 = lookup(".text-field").nth(1).query();
-        Node textField7 = lookup(".text-field").nth(2).query();
-        clickOn(textField5).write("1"); // enter the level value
-        clickOn(textField6).write("0"); // enter the number value
-        clickOn(textField7).write("1"); // enter the number value
-        clickOn("OK");
-        // clickOn("#research");
+        robot.clickOn("#upgrade").clickOn().clickOn().clickOn();
+        waitForFxEvents();
+        robot.clickOn("#library");
+        waitForFxEvents();
+        Node textField5 = robot.lookup(".text-field").nth(0).query();
+        Node textField6 = robot.lookup(".text-field").nth(1).query();
+        Node textField7 = robot.lookup(".text-field").nth(2).query();
+        robot.clickOn(textField5).write("1"); // enter the level value
+        robot.clickOn(textField6).write("0"); // enter the number value
+        robot.clickOn(textField7).write("1"); // enter the number value
+        robot.clickOn("OK");
         waitForFxEvents();
 
         // special: 3 2 5 1 4
-        clickOn("#special");
+        robot.clickOn("#special");
         waitForFxEvents();
-        clickOn("#finish").clickOn();
+        robot.clickOn("#finish").clickOn();
         waitForFxEvents();
-        clickOn(500.0, 500.0);
-        clickOn("#endWait");
-        waitForFxEvents();
-
-        clickOn(500.0, 500.0);
-        waitForFxEvents();
-        clickOn("#special");
-        clickOn(500.0, 500.0);
-        clickOn(500.0, 500.0);
-        waitForFxEvents();
-        clickOn("#finish");
-        waitForFxEvents();
-        clickOn(500.0, 500.0);
-        clickOn("#endWait");
+        // robot.clickOn(500.0, 500.0);
+        robot.clickOn("#endWait").clickOn();
         waitForFxEvents();
 
-        clickOn(500.0, 500.0);
+        robot.clickOn(500.0, 500.0);
         waitForFxEvents();
-        clickOn("#special").clickOn();
-        clickOn("#hall");
-        clickOn(500.0, 500.0);
-        clickOn(500.0, 500.0);
+        robot.clickOn("#special");
+        robot.clickOn(500.0, 500.0);
+        robot.clickOn(500.0, 500.0);
         waitForFxEvents();
-        clickOn("#finish");
+        robot.clickOn("#finish");
         waitForFxEvents();
-        clickOn(500.0, 500.0);
-        clickOn("#endWait");
-        waitForFxEvents();
-
-        clickOn(500.0, 500.0);
-        waitForFxEvents();
-        clickOn("#special");
-        clickOn(500.0, 500.0);
-        clickOn(500.0, 500.0);
-        waitForFxEvents();
-        clickOn("#finish");
-        waitForFxEvents();
-        clickOn(500.0, 500.0);
-        clickOn("#endWait");
+        // robot.clickOn(500.0, 500.0);
+        robot.clickOn("#endWait").clickOn();
         waitForFxEvents();
 
-        clickOn(500.0, 500.0);
+        robot.clickOn(500.0, 500.0);
         waitForFxEvents();
-        clickOn("#special");
-        clickOn(500.0, 500.0);
-        clickOn(500.0, 500.0);
+        robot.clickOn("#special").clickOn();
+        robot.clickOn("#hall");
+        robot.clickOn(500.0, 500.0);
+        robot.clickOn(500.0, 500.0);
         waitForFxEvents();
-        clickOn("#finish");
+        robot.clickOn("#finish");
         waitForFxEvents();
-        clickOn(500.0, 500.0);
-        clickOn("#endWait");
-        waitForFxEvents();
-
-        clickOn("#research").clickOn();
-        waitForFxEvents();
-        clickOn("#alliance");
-        Node textField8 = lookup(".text-field").nth(0).query();
-        clickOn(textField8).write("blue"); // enter the level value
-        clickOn("OK");
-        waitForFxEvents();
-        clickOn("OK");
-        waitForFxEvents();
-        clickOn("#finish");
-        waitForFxEvents();
-        clickOn(500.0, 500.0);
-        clickOn("#endWait");
+        // robot.clickOn(500.0, 500.0);
+        robot.clickOn("#endWait").clickOn();
         waitForFxEvents();
 
-        clickOn(500.0, 500.0);
-        clickOn("#move").clickOn();
+        robot.clickOn(500.0, 500.0);
         waitForFxEvents();
-        clickOn("#alliance");
-        Node textField9 = lookup(".text-field").nth(0).query();
-        clickOn(textField9).write("blue"); // enter the level value
-        clickOn("OK");
+        robot.clickOn("#special");
+        robot.clickOn(500.0, 500.0);
+        robot.clickOn(500.0, 500.0);
         waitForFxEvents();
-        clickOn("#finish");
+        robot.clickOn("#finish");
         waitForFxEvents();
-        clickOn(500.0, 500.0);
-        clickOn("#endWait");
+        // robot.clickOn(500.0, 500.0);
+        robot.clickOn("#endWait").clickOn();
         waitForFxEvents();
 
-        clickOn(500.0, 500.0);
+        robot.clickOn(500.0, 500.0);
         waitForFxEvents();
-        clickOn("Watch");
+        robot.clickOn("#special");
+        robot.clickOn(500.0, 500.0);
+        robot.clickOn(500.0, 500.0);
         waitForFxEvents();
-        clickOn("#watchUpdate").clickOn();
+        robot.clickOn("#finish");
+        waitForFxEvents();
+        // robot.clickOn(500.0, 500.0);
+        robot.clickOn("#endWait").clickOn();
+        waitForFxEvents();
+
+        robot.clickOn("#research").clickOn();
+        waitForFxEvents();
+        robot.clickOn("#alliance");
+        Node textField8 = robot.lookup(".text-field").nth(0).query();
+        robot.clickOn(textField8).write("blue"); // enter the level value
+        robot.clickOn("OK");
+        waitForFxEvents();
+        robot.clickOn("OK");
+        waitForFxEvents();
+        robot.clickOn("#finish");
+        waitForFxEvents();
+        // robot.clickOn(500.0, 500.0);
+        robot.clickOn("#endWait").clickOn();
+        waitForFxEvents();
+
+        robot.clickOn("#move").clickOn().clickOn();
+        waitForFxEvents();
+        robot.clickOn("#alliance");
+        Node textField9 = robot.lookup(".text-field").nth(0).query();
+        robot.clickOn(textField9).write("blue"); // enter the level value
+        robot.clickOn("OK");
+        waitForFxEvents();
+        robot.clickOn("#finish");
+        waitForFxEvents();
+        // robot.clickOn(500.0, 500.0);
+        robot.clickOn("#endWait").clickOn();
+        waitForFxEvents();
+
+        robot.clickOn(500.0, 500.0);
+        waitForFxEvents();
+        robot.clickOn("Watch");
+        waitForFxEvents();
+        robot.clickOn("#watchUpdate").clickOn();
         waitForFxEvents();
     }
 }
