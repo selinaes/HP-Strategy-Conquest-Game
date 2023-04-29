@@ -136,7 +136,7 @@ public class Client {
         this.color = color;
     }
 
-    public void setRoomID(String room){
+    public void setRoomID(String room) {
         this.room = room;
     }
 
@@ -149,7 +149,7 @@ public class Client {
         return this.color;
     }
 
-    public String getRoom(){
+    public String getRoom() {
         return this.room;
     }
 
@@ -208,8 +208,10 @@ public class Client {
         System.out.println("after recvMsg");
         sendResponse(clientInput.get(0)); // send order (a or m)
         System.out.println("after sendResponse");
+        System.out.println(clientInput);
         if (clientInput.get(0).equals("d")) {
             String msg = recvMsg();
+            System.out.println(msg);
             if (msg.equals("finished stage")) {
                 out.println("Finished 1 Turn of orders. Please wait for other players to issue orders.");
             }

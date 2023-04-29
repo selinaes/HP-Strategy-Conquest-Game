@@ -22,52 +22,48 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import java.net.URL;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
-public class LoginControllerTest extends ApplicationTest {
+public class ChatRoomControllerTest extends ApplicationTest {
+    private ChatRoomController controller;
     ConnClient connClient;
 
     @Override
     public void start(Stage stage) throws Exception {
         new Thread(() -> {
             try {
-                ServerSocket socket = new ServerSocket(1651);
+                ServerSocket socket = new ServerSocket(4321);
                 Socket clientSocket = socket.accept();
                 connClient = new ConnClient(clientSocket);
-                connClient.send("hello");
-                connClient.send("error");
-                connClient.send("Login successful.");
-                connClient.send("startgame");
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }).start();
-
-        URL xmlResource = getClass().getResource("/ui/login.fxml");
-        AnchorPane gp = FXMLLoader.load(xmlResource);
-        // LoginController loginGameController = fxmlLoader.getController();
-        Scene scene = new Scene(gp);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/ui/ChatRoom.fxml"));
+        loader.setControllerFactory(c -> {
+            return new ChatRoomController("red");
+        });
+        AnchorPane chatRoomPane = loader.load();
+        controller = loader.getController();
+        controller.setGamePlayController(mock(GamePlayController.class));
+        Scene scene = new Scene(chatRoomPane);
         stage.setScene(scene);
         stage.show();
 
     }
 
     @Test
-    public void test_() {
-        waitForFxEvents();
-        clickOn("#username").write("test");
-        clickOn("#login");
-        waitForFxEvents();
-        clickOn("OK");
-        clickOn("#username").write("test");
-        clickOn("#password").write("test");
-        clickOn("#login");
-        waitForFxEvents();
-        clickOn("OK");
-        clickOn("#username").write("test");
-        clickOn("#password").write("test");
-        clickOn("#login");
+    public void test_() throws IOException {
+        connClient.send("server:hello");
+        connClient.send("red:hello");
+        connClient.send("playerlist:red blue");
+        connClient.send("map:hello");
+        connClient.send("blue:hello");
+        clickOn("#input").write("hello");
+        clickOn("#toWho").clickOn("blue");
+        clickOn("#send");
+        controller.sendMsg("hello");
     }
 
 }
