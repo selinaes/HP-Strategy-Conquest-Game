@@ -127,7 +127,7 @@ public class InitGamePlayController {
         }
     }
 
-    private void setMapParser() {
+    public void setMapParser() {
         List<String> territory = mapParser.getMyTerritory();
         myTerritory = new LinkedHashMap<String, String>();
         for (String t : territory) {
@@ -152,7 +152,9 @@ public class InitGamePlayController {
             // alert.displayImageAlert("Done!", "/img/texts/wait.png");
             try {
                 client.waitEveryoneDone();
-                mapParser.setMap(client.recvMsg());
+                String msg = client.recvMsg();
+                System.out.println("msg is " + msg);
+                mapParser.setMap(msg);
                 client.recvMsg(); // receive "Game continous or Winner"
                 client.recvMsg(); // receive "watching" "Choose watch" "do nothing"
             } catch (IOException e) {

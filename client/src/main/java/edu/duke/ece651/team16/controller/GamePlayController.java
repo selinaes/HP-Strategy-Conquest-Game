@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Queue;
 import java.util.Random;
 
 import java.net.URL;
@@ -42,6 +43,7 @@ import java.nio.channels.AcceptPendingException;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 public class GamePlayController {
     @FXML
@@ -102,6 +104,7 @@ public class GamePlayController {
 
     private ChatRoomController chatRoomController;
     private HashMap<String, ArrayList<String>> neighborLines = new HashMap<>();
+    Queue<Integer> sequence = new LinkedList<Integer>();
 
     @FXML
     private VBox chatRoomContainer;
@@ -135,7 +138,11 @@ public class GamePlayController {
                 alliance.setDisable(true);
             }
         });
-
+        sequence.add(3);
+        sequence.add(2);
+        sequence.add(5);
+        sequence.add(1);
+        sequence.add(4);
     }
 
     private void initNeighborLines() {
@@ -456,8 +463,10 @@ public class GamePlayController {
             myOrder.add("s"); // add special order
             // roll dice, 1: double resource, 2: two unit 3: disregard adjacency 4: dice
             // advantage 5: nuclear bomb / Fiendfyre
-            Random rand = new Random();
-            int num = rand.nextInt(5) + 1; // 1, 2, 3, 4， 5
+
+            int num = sequence.peek();
+            sequence.remove();
+            sequence.add(num);
             String option = "";
             switch (num) {
                 case 1:
@@ -926,6 +935,7 @@ public class GamePlayController {
                     if (p.getId().equals(panename)) {
                         p.setVisible(true);
                         TextArea textArea = (TextArea) p.getChildren().get(0); // get the TextArea
+                        System.out.println(btn.getText());
                         HashMap<String, String> panemap = mapParser.getTerritoryInfo(btn.getText());
                         textArea.setText(gamePlayDisplay.getTerritoryInfo(btn.getText(), panemap));
                     }

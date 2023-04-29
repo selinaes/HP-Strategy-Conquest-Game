@@ -21,6 +21,7 @@ public class GamePlayDisplay {
     public String parseUnitsInfo(String unitsInfo) {
         String[] unitName = { "First-year", "Second-year", "Third-Year", "Fourth-year", "Fifth-year", "Sixth-year",
                 "Seventh-year" };
+        System.out.println("unitsInfo: " + unitsInfo);
         String[] unitsInfoArray = unitsInfo.split(";"); // [0]: red:1,1,1,1,1,1,1, [1]: blue:1,1,1,1,1,1,1,
         String[] myUnitsInfoArray = unitsInfoArray[0].split(":")[1].split(","); // [0]: 1 [1]: 1 [2]: 1 [3]: 1 ...
         StringBuilder unitsInfoString = new StringBuilder();
