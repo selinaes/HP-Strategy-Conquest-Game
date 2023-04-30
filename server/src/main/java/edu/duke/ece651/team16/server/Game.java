@@ -566,7 +566,7 @@ public class Game {
     public Order makeAllianceOrder(Player p) {
         p.getConn().send("Please choose your ally");
         String allyname = p.getConn().recv(); // ally
-        Player ally = checkNameReturnPlayer(allyname, currentMap);
+        Player ally = checkNameReturnPlayer(allyname);
         if (ally == null) {
             p.getConn().send("Invalid Player Name");
             return null;
@@ -666,10 +666,10 @@ public class Game {
         return null;
     }
 
-    public Player checkNameReturnPlayer(String color, GameMap map) {
-        for (String playercolor : map.getMap().keySet()) {
-            if (playercolor.equals(color)) {
-                return map.getMap().get(playercolor).get(0).getOwner();
+    public Player checkNameReturnPlayer(String color) {
+        for (Player playercolor: players) {
+            if (playercolor.getColor().equals(color)) {
+                return playercolor;
             }
         }
         return null;
