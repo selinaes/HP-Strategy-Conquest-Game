@@ -374,7 +374,7 @@ public class GamePlayController {
         endWait.setVisible(false);
         // alert.displayImageAlert("New Round", "/img/texts/newround.png");
         PopupBox popup = new PopupBox(territoryRoot);
-        popup.display("/img/texts/newround.png");
+
         // set special buttons to enable
         special.setDisable(false);
         usedSpecialOneRound = false;
@@ -398,11 +398,13 @@ public class GamePlayController {
             } else {
                 if (msg.equals(client.getColor())) { // if winner is self
                     // alert.displayImageAlert("Game Finish", "/img/texts/youwin.png");
-                    popup.display("/img/texts/youwin.png");
                     Socket clientSocket = client.getClientSocket();
                     clientSocket.close();
 
-                    exitGame.setVisible(true);
+                    URL xmlResource = getClass().getResource("/ui/Winner.fxml");
+                    FXMLLoader fxmlLoader = new FXMLLoader(xmlResource); // Create a new FXMLLoader
+                    AnchorPane pane = fxmlLoader.load(); // Load the FXML file
+                    territoryRoot.getChildren().setAll(pane);
                 } else {
                     history.appendText("Winner is " + msg + "!");
                     // alert.displayImageAlert("Game Finish", "/img/texts/youlose.png");
@@ -423,7 +425,7 @@ public class GamePlayController {
                     String style = "button-" + currentColor;
                     String style2 = btn.getStyleClass().toString();
                     String[] originStyle = style2.split(" ");
-                    for(String s: originStyle){
+                    for (String s : originStyle) {
                         btn.getStyleClass().remove(s);
                     }
                     // btn.getStyleClass().remove(originStyle[1]);
@@ -496,7 +498,7 @@ public class GamePlayController {
             PopupBox popup = new PopupBox(territoryRoot);
             if (num != 5) {
                 String content = "You used special ability - " + option + " - for this turn!";
-                if (num == 3){
+                if (num == 3) {
                     content = "You triggered special ability - Disapparition - for this turn!\nYou can attack/move disregarding adjacency, costing only shortest distance!";
                 }
                 popup.displayText("Special Ability", content);

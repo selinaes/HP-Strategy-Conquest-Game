@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="winnerRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="780.0" prefWidth="1280.0" stylesheets="@/ui/styles.css" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.duke.ece651.team16.controller.WinnerController">
+   <children>
+      <ImageView fitHeight="783.0" fitWidth="1488.0">
+         <image>
+            <Image url="@../img/backgrounds/winner.jpeg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="118.0" fitWidth="1002.0" layoutX="285.0" layoutY="68.0">
+         <image>
+            <Image url="@../img/texts/win.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="exit" layoutX="582.0" layoutY="563.0" mnemonicParsing="false" onAction="#onExit" prefHeight="84.0" prefWidth="363.0" styleClass="button-waiting" text="Exit Game">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
