@@ -60,8 +60,8 @@ public class App extends Application {
     mediaPlayer = new MediaPlayer(sound);
     mediaPlayer.setAutoPlay(true);
     mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-    mediaPlayer.setStartTime(javafx.util.Duration.seconds(0));
-    mediaPlayer.setStopTime(javafx.util.Duration.seconds(84));
+    // mediaPlayer.setStartTime(javafx.util.Duration.seconds(0));
+    // mediaPlayer.setStopTime(javafx.util.Duration.seconds(84));
     mediaPlayer.play();
   }
 
