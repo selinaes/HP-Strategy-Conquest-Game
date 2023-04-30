@@ -222,6 +222,7 @@ public class Game {
      */
     public void addPlayer(Player p) {
         players.add(p);
+        System.out.println("Player " + p.getColor() + " is added");
         chatServer.addPlayer(p);
     }
 
