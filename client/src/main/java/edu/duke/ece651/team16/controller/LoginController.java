@@ -45,9 +45,9 @@ public class LoginController {
     private Client client;
 
     private String[] imagePaths = {
-        "../img/backgrounds/login.png",
-        "../img/backgrounds/map.png",
-        "../img/backgrounds/rule.png"
+            "../img/backgrounds/login.png",
+            "../img/backgrounds/map.png",
+            "../img/backgrounds/rule.png"
     };
 
     private int currentImageIndex = 0;
@@ -136,8 +136,8 @@ public class LoginController {
     private void createClient() throws Exception {
         try {
             int port = 1651;
-            String ip = "127.0.0.1";
-            // String ip = "vcm-33174.vm.duke.edu";
+            // String ip = "127.0.0.1";
+            String ip = "vcm-33174.vm.duke.edu";
             Socket clientSocket = null;
 
             clientSocket = new Socket(ip, port);
