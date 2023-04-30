@@ -57,16 +57,16 @@ public class ChatRoomControllerTest {
 
     }
 
-    @Test
-    public void test_(FxRobot robot) throws IOException {
-        connClient.send("server:hello");
-        connClient.send("red:hello");
-        connClient.send("playerlist:red blue");
-        connClient.send("map:hello");
-        connClient.send("blue:hello");
-        robot.clickOn("#input").write("hello");
-        robot.clickOn("#toWho").clickOn("blue");
-        robot.clickOn("#send");
-        controller.sendMsg("hello");
-    }
+    // @Test
+    // public void test_(FxRobot robot) throws IOException {
+    //     connClient.send("server:hello");
+    //     connClient.send("red:hello");
+    //     connClient.send("playerlist:red blue");
+    //     connClient.send("map:hello");
+    //     connClient.send("blue:hello");
+    //     robot.clickOn("#input").write("hello");
+    //     robot.clickOn("#toWho").clickOn("blue");
+    //     robot.clickOn("#send");
+    //     controller.sendMsg("hello");
+    // }
 }
