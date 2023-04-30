@@ -57,6 +57,7 @@ public class ChatServer {
                     playersCon.put(p, curCommunicator);
                 }
             }
+            communicators.add(curCommunicator);
             ChatHandler curHandler = new ChatHandler(curCommunicator, this);
             chatHandlers.add(curHandler);
             curHandler.start();
