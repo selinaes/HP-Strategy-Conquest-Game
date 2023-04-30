@@ -30,6 +30,7 @@ public class ChatServer {
         this.players = new ArrayList<Player>();
         this.chatHandlers = new ArrayList<ChatHandler>();
         this.communicators = new ArrayList<Conn>();
+        this.playersCon = new HashMap<Player, Conn>();
         this.playerNum = 0;
     }
 
