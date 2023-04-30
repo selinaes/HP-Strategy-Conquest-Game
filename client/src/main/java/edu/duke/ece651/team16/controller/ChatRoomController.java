@@ -117,6 +117,7 @@ public class ChatRoomController {
 
     public ChatRoomController(String color) {
         name = color;
+        chatHelper = new ChatHelper();
         try {
             int port = 4321;
             // String ip = "127.0.0.1";
@@ -124,7 +125,6 @@ public class ChatRoomController {
             System.out.println("Connecting to " + ip + " on port " + port);
             Socket chatSocket = new Socket(ip, port);
             connector = new ConnClient(chatSocket);
-            chatHelper = new ChatHelper();
         } catch (IOException e) {
             e.printStackTrace();
         }

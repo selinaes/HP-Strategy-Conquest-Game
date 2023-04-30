@@ -5,5 +5,6 @@ docker kill citest-651
 docker rm citest-651
 
 # now run the new one
-docker run -d --name citest-651 -p 1651:1651 -t citest ./gradlew run-server
+# docker run -d --name citest-651 -p 1651:1651 -t citest ./gradlew run-server
+docker run -d --name citest-651 -p 1651:1651 -p 4321:4321 -t citest ./gradlew run-server
 
