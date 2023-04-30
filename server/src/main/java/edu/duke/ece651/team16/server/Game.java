@@ -127,7 +127,7 @@ public class Game {
             p.getConn().send("do nothing");
             if (firstTime) {
                 System.out.println("Chat server is starting");
-                chatServer.setUp();
+                chatServer.setUp(p.getColor());
                 System.out.println("Chat server is ready");
                 chatServer.sendWelcome();
             }
