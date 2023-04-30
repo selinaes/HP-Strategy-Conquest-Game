@@ -423,8 +423,8 @@ public class GamePlayController {
                     String style = "button-" + currentColor;
                     String style2 = btn.getStyleClass().toString();
                     String[] originStyle = style2.split(" ");
-                    for(String style: originStyle){
-                        btn.getStyleClass().remove(style);
+                    for(String s: originStyle){
+                        btn.getStyleClass().remove(s);
                     }
                     // btn.getStyleClass().remove(originStyle[1]);
                     btn.getStyleClass().add(style);
