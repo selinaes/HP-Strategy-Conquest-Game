@@ -40,7 +40,7 @@ public class SpecialOrder implements Order {
         if (option.equals("Double Resource Production")) {
             System.out.println("Double Resource Production for player: " + player.getColor());
             player.setDoubleResourceSwitch(true);
-        } else if (option.equals("Two Units Generation")) {
+        } else if (option.equals("Two Students Generation")) {
             System.out.println("Two Units Generation for player: " + player.getColor());
             player.setMoreUnitSwitch(true);
         } else if (option.equals("Disregard Adjacency")) {
