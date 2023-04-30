@@ -22,7 +22,7 @@ import org.mockito.Mockito;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.Start;
 import org.junit.jupiter.api.extension.ExtendWith;
-
+import org.testfx.framework.junit5.ApplicationExtension;
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(ApplicationExtension.class)
