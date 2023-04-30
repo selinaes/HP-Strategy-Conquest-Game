@@ -424,7 +424,9 @@ public class GamePlayController {
                     String style2 = btn.getStyleClass().toString();
                     String[] originStyle = style2.split(" ");
                     for(String s: originStyle){
-                        btn.getStyleClass().remove(s);
+                        if(s.contains("button-")){
+                            btn.getStyleClass().remove(s);
+                        }
                     }
                     // btn.getStyleClass().remove(originStyle[1]);
                     btn.getStyleClass().add(style);
