@@ -1,6 +1,5 @@
 package edu.duke.ece651.team16.server;
 
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -123,6 +122,11 @@ public class Game {
                     curplayer.setAlly(null);
                 }
             }
+            else if(p.getAlly()!=null){
+                p.getAlly().setAlly(null);
+                p.setAlly(null);
+            }
+
         } else {
             p.getConn().send("do nothing");
             if (firstTime) {

@@ -423,7 +423,10 @@ public class GamePlayController {
                     String style = "button-" + currentColor;
                     String style2 = btn.getStyleClass().toString();
                     String[] originStyle = style2.split(" ");
-                    btn.getStyleClass().remove(originStyle[1]);
+                    for(String style: originStyle){
+                        btn.getStyleClass().remove(style);
+                    }
+                    // btn.getStyleClass().remove(originStyle[1]);
                     btn.getStyleClass().add(style);
                     showNeighborLine(btn);
                 }
@@ -492,7 +495,11 @@ public class GamePlayController {
             // System.out.println("Special Option: " + option);
             PopupBox popup = new PopupBox(territoryRoot);
             if (num != 5) {
-                popup.displayText("Special Ability", "You used special ability - " + option + " - for this turn!");
+                String content = "You used special ability - " + option + " - for this turn!";
+                if (num == 3){
+                    content = "You triggered special ability - Disapparition - for this turn!\nYou can attack/move disregarding adjacency, costing only shortest distance!";
+                }
+                popup.displayText("Special Ability", content);
                 // add option to order
                 myOrder.add(option);
                 performAction(myOrder);

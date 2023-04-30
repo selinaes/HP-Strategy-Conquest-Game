@@ -81,7 +81,7 @@ public class ChatRoomController {
         Label msg = new Label(text);
         msg.setPadding(new Insets(10, 15, 10, 15));
         msg.setWrapText(true);
-        msg.setFont(Font.font("Verdana", 14));
+        msg.setFont(Font.font("Microsoft YaHei", 14));
 
         if (comesFrom == 1) {
             msg.setStyle("-fx-background-color: #d7b580; -fx-background-radius: 15; -fx-text-fill: #000;");

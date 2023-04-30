@@ -57,9 +57,8 @@ public class MoveOrder implements Order {
             if (moveProblem != null)
                 return moveProblem;
             // otherwise, calculate the real distance
-            distance = pathchecker.dijkstraAlgorithm(from, to, gameMap);
+            distance = MovePathRuleChecker.dijkstraAlgorithm(from, to, gameMap);
         }
-
         int cost = moveCost(distance);
         if (player.getFoodResource() < cost)
             return "Not enough food resource. Need " + cost + " food resources, but only have "

@@ -12,19 +12,16 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.net.Socket;
-import java.net.ServerSocket;
-
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.testfx.api.FxRobot;
-import org.testfx.framework.junit5.ApplicationExtension;
-import org.testfx.framework.junit5.Start;
-import org.junit.jupiter.api.extension.ExtendWith;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.testfx.api.FxRobot;
+import org.testfx.framework.junit5.Start;
+
+
 import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 
 @ExtendWith(ApplicationExtension.class)
