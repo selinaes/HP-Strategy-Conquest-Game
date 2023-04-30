@@ -60,17 +60,18 @@ public class ChatRoomController {
                 String[] arr = str.toString().split(":");
                 String[] result = new String[3];
                 result[0] = arr[0];
-                result[1] = String.join(":", Arrays.copyOfRange(arr, 1, arr.length));
+                result[1] = String.join(":", Arrays.copyOfRange(arr, 1, arr.length - 1));
+                result[2] = arr[arr.length - 1];
                 if (result[0].equals("server")) {
                     Platform.runLater(() -> DisplayContent(str.toString(), 0));
-                } else if (result[0].equals(name)) {
-                    Platform.runLater(() -> DisplayContent(str.toString(), 1));
                 } else if (result[0].equals("playerlist")) {
                     Platform.runLater(() -> DisplayContent(result[1], 2));
                 } else if (result[0].equals("map")) {
                     gamePlayController.setMapFromChatRoom(result[1]);
-                } else { // other player's msg
-                    Platform.runLater(() -> DisplayContent(str.toString(), 3));
+                } else if(result[2].equals(name)){ // other player's msg
+                    Platform.runLater(() -> DisplayContent(result[0] + ": " + result[1], 3));
+                } else if (result[2].equals("All")) {
+                    Platform.runLater(() -> DisplayContent(result[0] + ": " + result[1], 1));
                 }
             }
         }
@@ -137,6 +138,18 @@ public class ChatRoomController {
 
     @FXML
     public void sendClick() throws IOException {
+        String mytext = input.getText()+". :"+toWho.getValue() + "(private)";
+        HBox Other = new HBox();
+        Label msg = new Label(mytext);
+        msg.setPadding(new Insets(10, 15, 10, 15));
+        msg.setWrapText(true);
+        msg.setFont(Font.font("Microsoft YaHei", 14));
+        msg.setStyle("-fx-background-color: #d7b580; -fx-background-radius: 15; -fx-text-fill: #000;");
+        Other.getChildren().addAll(msg);
+        Other.setAlignment(Pos.CENTER_RIGHT);
+        Other.setMargin(msg, new Insets(5, 10, 5, 50));
+        content.getItems().add(Other);
+
         String text = name + ": " + input.getText() + ":" + toWho.getValue();
         System.out.println("send: " + text);
         connector.send(text);

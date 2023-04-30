@@ -19,7 +19,6 @@ public class ChatServer {
     private ArrayList<ChatHandler> chatHandlers;
     private ArrayList<Conn> communicators;
     private HashMap<Player, Conn> playersCon;
-    private int playerNum;
 
     public ChatServer() {
         try {
@@ -31,7 +30,6 @@ public class ChatServer {
         this.chatHandlers = new ArrayList<ChatHandler>();
         this.communicators = new ArrayList<Conn>();
         this.playersCon = new HashMap<Player, Conn>();
-        this.playerNum = 0;
     }
 
     /**
@@ -39,7 +37,6 @@ public class ChatServer {
      */
     public void addPlayer(Player p) {
         players.add(p);
-        playerNum++;
     }
 
     public int getPlayerListSize() {
@@ -61,6 +58,9 @@ public class ChatServer {
             communicators.add(curCommunicator);
             ChatHandler curHandler = new ChatHandler(curCommunicator, this);
             chatHandlers.add(curHandler);
+            // for(ChatHandler c: chatHandlers){
+            //     c.setChatServer(this);
+            // }
             curHandler.start();
             System.out.println("ChatServer: new player joined!");
         } catch (IOException e) {
@@ -77,7 +77,7 @@ public class ChatServer {
         for (Player p : players) {
             playerListString += p.getColor() + " ";
         }
-        sendToAll(playerListString);
+        sendToAll(playerListString + ":All");
     }
 
     /**
@@ -104,10 +104,6 @@ public class ChatServer {
                     System.out.println("ChatServer: send message to " + name + ": " + message);
                 }
             } 
-            if (p.getColor().equals(from)) {
-                playersCon.get(p).send(from + ": " + message + "(Private message)");
-                System.out.println("ChatServer: send message: " + message);
-            }
         }
     }
 }
