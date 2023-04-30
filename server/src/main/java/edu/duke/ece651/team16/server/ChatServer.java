@@ -94,13 +94,14 @@ public class ChatServer {
      * send a message to certain player
      */
     public synchronized void sendToOne(String message, String name, String from) {
+        System.out.println(from + " " + name);
         for(Player p: players){
             if(p.getColor().equals(name)){
                 if (from.equals("map")) {
                     playersCon.get(p).send("map:" + message);
                 }else{
                     playersCon.get(p).send(from + ": " + message + "(Private message)");
-                    System.out.println("ChatServer: send message: " + message);
+                    System.out.println("ChatServer: send message to " + name + ": " + message);
                 }
             } 
             if (p.getColor().equals(from)) {
