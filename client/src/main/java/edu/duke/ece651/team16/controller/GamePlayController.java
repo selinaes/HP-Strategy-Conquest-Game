@@ -871,7 +871,7 @@ public class GamePlayController {
                     client.playerChooseWatch("e");
                     Socket clientSocket = client.getClientSocket();
                     clientSocket.close();
-                    URL xmlResource = getClass().getResource("/ui/StartGame.fxml");
+                    URL xmlResource = getClass().getResource("/ui/login.fxml");
                     FXMLLoader fxmlLoader = new FXMLLoader(xmlResource); // Create a new FXMLLoader
                     AnchorPane pane = fxmlLoader.load(); // Load the FXML file
                     territoryRoot.getChildren().setAll(pane);

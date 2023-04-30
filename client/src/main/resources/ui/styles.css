@@ -85,6 +85,16 @@
         radial-gradient(center 50% 50%, radius 100%, #a14a44, #b6544f);
 }
 
+.button-win {
+    -fx-background-color: #d3a1a4;
+    -fx-text-fill: #5e4954;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0, 0, 0);
+    -fx-transition: all 0.2s ease;
+    -fx-font-family: 'Wizard World', sans-serif;
+    -fx-font-size: 3.0em;
+    -fx-background-radius: 5;
+}
+
 .button-waiting {
     -fx-background-color: #c7b4a2;
     -fx-text-fill: #9e540e;
