@@ -1,7 +1,7 @@
 # Risk_Game
 
-![pipeline](https://gitlab.oit.duke.edu/zf70/Risk_Game/badges/main/pipeline.svg)
-![coverage](https://gitlab.oit.duke.edu/zf70/Risk_Game/badges/main/coverage.svg?job=test)
+![pipeline](https://gitlab.oit.duke.edu/zf70/Risk_Game/badges/VM_Test/pipeline.svg)
+![coverage](https://gitlab.oit.duke.edu/zf70/Risk_Game/badges/VM_Test/coverage.svg?job=test)
 
 # Table of Contents
 - [Coverage](#Coverage)
