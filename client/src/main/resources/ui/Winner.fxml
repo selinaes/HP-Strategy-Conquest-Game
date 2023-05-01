@@ -13,12 +13,12 @@
             <Image url="@../img/backgrounds/winner.jpeg" />
          </image>
       </ImageView>
-      <ImageView fitHeight="138.0" fitWidth="491.0" layoutX="473.0" layoutY="80.0">
+      <ImageView fitHeight="138.0" fitWidth="491.0" layoutX="201.0" layoutY="152.0">
          <image>
             <Image url="@../img/texts/win.png" />
          </image>
       </ImageView>
-      <Button fx:id="exit" layoutX="546.0" layoutY="506.0" mnemonicParsing="false" onAction="#onExit" prefHeight="84.0" prefWidth="363.0" styleClass="button-win" text="Exit Game">
+      <Button fx:id="exit" layoutX="249.0" layoutY="478.0" mnemonicParsing="false" onAction="#onExit" prefHeight="84.0" prefWidth="363.0" styleClass="button-win" text="Exit Game">
          <font>
             <Font size="36.0" />
          </font>
