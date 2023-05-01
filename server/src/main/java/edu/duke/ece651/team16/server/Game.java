@@ -107,6 +107,15 @@ public class Game {
                 --numalivePlayers;
             }
             p.getConn().send("Choose watch");
+            if (numalivePlayers == 2) {
+                for (Player curplayer : players) {
+                    curplayer.setAlly(null);
+                }
+            }
+            if (p.getAlly()!=null){
+                p.getAlly().setAlly(null);
+                p.setAlly(null);
+            }
             if (ifChooseWatch(p.getConn()).equals("e")) {
                 synchronized (this) {
                     players.remove(p);
@@ -117,15 +126,7 @@ public class Game {
                 p.setWatch();
                 notifyAllPlayers(p.getConn(), "worldWar");
             }
-            if (numalivePlayers == 2) {
-                for (Player curplayer : players) {
-                    curplayer.setAlly(null);
-                }
-            }
-            else if(p.getAlly()!=null){
-                p.getAlly().setAlly(null);
-                p.setAlly(null);
-            }
+            
 
         } else {
             p.getConn().send("do nothing");
