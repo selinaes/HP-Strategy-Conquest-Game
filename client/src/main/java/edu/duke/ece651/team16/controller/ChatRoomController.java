@@ -70,7 +70,7 @@ public class ChatRoomController {
                     gamePlayController.setMapFromChatRoom(result[1]);
                 } else if(result[2].equals(name)){ // other player's msg
                     Platform.runLater(() -> DisplayContent(result[0] + ": " + result[1], 3));
-                } else if (result[2].equals("All")) {
+                } else if (result[2].equals("All") && !result[0].equals(name)) {
                     Platform.runLater(() -> DisplayContent(result[0] + ": " + result[1], 1));
                 }
             }
@@ -138,7 +138,12 @@ public class ChatRoomController {
 
     @FXML
     public void sendClick() throws IOException {
-        String mytext = input.getText()+". :"+toWho.getValue() + "(private)";
+        String mytext = "";
+        if (toWho.getValue().equals("All")) {
+            mytext = input.getText();
+        }else{
+            mytext = input.getText() + ":" + "(private message to " + toWho.getValue() + ")";
+        }
         HBox Other = new HBox();
         Label msg = new Label(mytext);
         msg.setPadding(new Insets(10, 15, 10, 15));
