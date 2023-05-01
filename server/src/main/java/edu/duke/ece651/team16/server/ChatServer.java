@@ -50,8 +50,8 @@ public class ChatServer {
         try {
             System.out.println("ChatServer: waiting for new player...");
             Conn curCommunicator = new Conn(chatServerSock.accept());
-            for(Player p: players){
-                if(p.getColor().equals(name)){
+            for (Player p : players) {
+                if (p.getColor().equals(name)) {
                     playersCon.put(p, curCommunicator);
                 }
             }
@@ -59,7 +59,7 @@ public class ChatServer {
             ChatHandler curHandler = new ChatHandler(curCommunicator, this);
             chatHandlers.add(curHandler);
             // for(ChatHandler c: chatHandlers){
-            //     c.setChatServer(this);
+            // c.setChatServer(this);
             // }
             curHandler.start();
             System.out.println("ChatServer: new player joined!");
@@ -90,20 +90,21 @@ public class ChatServer {
         }
     }
 
-    /**
-     * send a message to certain player
-     */
-    public synchronized void sendToOne(String message, String name, String from) {
-        System.out.println(from + " " + name);
-        for(Player p: players){
-            if(p.getColor().equals(name)){
-                if (from.equals("map")) {
-                    playersCon.get(p).send("map:" + message);
-                }else{
-                    playersCon.get(p).send(from + ": " + message + "(Private message)");
-                    System.out.println("ChatServer: send message to " + name + ": " + message);
-                }
-            } 
-        }
-    }
+    // /**
+    // * send a message to certain player
+    // */
+    // public synchronized void sendToOne(String message, String name, String from)
+    // {
+    // System.out.println(from + " " + name);
+    // for(Player p: players){
+    // if(p.getColor().equals(name)){
+    // if (from.equals("map")) {
+    // playersCon.get(p).send("map:" + message);
+    // }else{
+    // playersCon.get(p).send(from + ": " + message + "(Private message)");
+    // System.out.println("ChatServer: send message to " + name + ": " + message);
+    // }
+    // }
+    // }
+    // }
 }

@@ -68,53 +68,56 @@ public class ChatServerTest {
     chatServer.sendWelcome();
   }
 
-  @Test
-  public void testSendToOne() throws NoSuchFieldException, IllegalAccessException {
-    // Create mock Conn and Player objects
-    Conn conn1 = mock(Conn.class);
-    Conn conn2 = mock(Conn.class);
-    Player player1 = mock(Player.class);
-    Player player2 = mock(Player.class);
+  // @Test
+  // public void testSendToOne() throws NoSuchFieldException,
+  // IllegalAccessException {
+  // // Create mock Conn and Player objects
+  // Conn conn1 = mock(Conn.class);
+  // Conn conn2 = mock(Conn.class);
+  // Player player1 = mock(Player.class);
+  // Player player2 = mock(Player.class);
 
-    // Set up player colors
-    when(player1.getColor()).thenReturn("Red");
-    when(player2.getColor()).thenReturn("Blue");
+  // // Set up player colors
+  // when(player1.getColor()).thenReturn("Red");
+  // when(player2.getColor()).thenReturn("Blue");
 
-    // Create the ChatServer object
-    ChatServer chatServer = new ChatServer();
+  // // Create the ChatServer object
+  // ChatServer chatServer = new ChatServer();
 
-    // Get and set the private fields using reflection
-    Field communicatorsField = ChatServer.class.getDeclaredField("communicators");
-    communicatorsField.setAccessible(true);
-    ArrayList<Conn> communicators = new ArrayList<>();
-    communicators.add(conn1);
-    communicators.add(conn2);
-    communicatorsField.set(chatServer, communicators);
+  // // Get and set the private fields using reflection
+  // Field communicatorsField =
+  // ChatServer.class.getDeclaredField("communicators");
+  // communicatorsField.setAccessible(true);
+  // ArrayList<Conn> communicators = new ArrayList<>();
+  // communicators.add(conn1);
+  // communicators.add(conn2);
+  // communicatorsField.set(chatServer, communicators);
 
-    Field playersField = ChatServer.class.getDeclaredField("players");
-    playersField.setAccessible(true);
-    ArrayList<Player> players = new ArrayList<>();
-    players.add(player1);
-    players.add(player2);
-    playersField.set(chatServer, players);
+  // Field playersField = ChatServer.class.getDeclaredField("players");
+  // playersField.setAccessible(true);
+  // ArrayList<Player> players = new ArrayList<>();
+  // players.add(player1);
+  // players.add(player2);
+  // playersField.set(chatServer, players);
 
-    // Call the sendToOne() method
-    String message = "Hello, Red!";
-    String name = "Red";
-    String from = "Blue";
-    chatServer.sendToOne(message, name, from);
+  // // Call the sendToOne() method
+  // String message = "Hello, Red!";
+  // String name = "Red";
+  // String from = "Blue";
+  // chatServer.sendToOne(message, name, from);
 
-    String from1 = "map";
-    chatServer.sendToOne(message, name, from1);
+  // String from1 = "map";
+  // chatServer.sendToOne(message, name, from1);
 
-    String from2 = "Blue1";
-    chatServer.sendToOne(message, name, from2);
+  // String from2 = "Blue1";
+  // chatServer.sendToOne(message, name, from2);
 
-    // Verify that the send() method was called on the correct Conn object with the
-    // expected message
-    // verify(conn1).send(from + ": " + message + "(Private message)");
-    // verify(conn2, never()).send(from + ": " + message + "(Private message)");
-  }
+  // // Verify that the send() method was called on the correct Conn object with
+  // the
+  // // expected message
+  // // verify(conn1).send(from + ": " + message + "(Private message)");
+  // // verify(conn2, never()).send(from + ": " + message + "(Private message)");
+  // }
 
   @Test
   public void testSendToAll1() throws NoSuchFieldException, IllegalAccessException {

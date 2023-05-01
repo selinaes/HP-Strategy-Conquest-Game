@@ -68,7 +68,7 @@ public class ChatRoomController {
                     Platform.runLater(() -> DisplayContent(result[1], 2));
                 } else if (result[0].equals("map")) {
                     gamePlayController.setMapFromChatRoom(result[1]);
-                } else if(result[2].equals(name)){ // other player's msg
+                } else if (result[2].equals(name)) { // other player's msg
                     Platform.runLater(() -> DisplayContent(result[0] + ": " + result[1], 3));
                 } else if (result[2].equals("All") && !result[0].equals(name)) {
                     Platform.runLater(() -> DisplayContent(result[0] + ": " + result[1], 1));
@@ -121,8 +121,8 @@ public class ChatRoomController {
         chatHelper = new ChatHelper();
         try {
             int port = 4321;
-            // String ip = "127.0.0.1";
-            String ip = "vcm-33174.vm.duke.edu";
+            String ip = "127.0.0.1";
+            // String ip = "vcm-33174.vm.duke.edu";
             System.out.println("Connecting to " + ip + " on port " + port);
             Socket chatSocket = new Socket(ip, port);
             connector = new ConnClient(chatSocket);
@@ -141,7 +141,7 @@ public class ChatRoomController {
         String mytext = "";
         if (toWho.getValue().equals("All")) {
             mytext = input.getText();
-        }else{
+        } else {
             mytext = input.getText() + ":" + "(private message to " + toWho.getValue() + ")";
         }
         HBox Other = new HBox();
