@@ -352,7 +352,6 @@ public class GamePlayController {
                 // alert.displayImageAlert("Game Finish", "/img/texts/youlose.png");
                 PopupBox popup = new PopupBox(territoryRoot);
                 popup.display("/img/texts/youlose.png");
-
                 // close socket! Game ends
                 Socket clientSocket = client.getClientSocket();
                 clientSocket.close();

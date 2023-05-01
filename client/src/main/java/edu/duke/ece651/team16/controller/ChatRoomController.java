@@ -121,8 +121,8 @@ public class ChatRoomController {
         chatHelper = new ChatHelper();
         try {
             int port = 4321;
-            // String ip = "127.0.0.1";
-            String ip = "vcm-33174.vm.duke.edu";
+            String ip = "127.0.0.1";
+            // String ip = "vcm-33174.vm.duke.edu";
             System.out.println("Connecting to " + ip + " on port " + port);
             Socket chatSocket = new Socket(ip, port);
             connector = new ConnClient(chatSocket);
