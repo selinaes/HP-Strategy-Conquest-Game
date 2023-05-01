@@ -18,7 +18,7 @@ public class SpecialOrderTest {
     verify(player).setDoubleResourceSwitch(true);
 
     // Test "Two Units Generation" option
-    SpecialOrder twoUnitsOrder = new SpecialOrder(player, "Two Units Generation");
+    SpecialOrder twoUnitsOrder = new SpecialOrder(player, "Two Students Generation");
     assertNull(twoUnitsOrder.tryAction());
     verify(player).setMoreUnitSwitch(true);
 

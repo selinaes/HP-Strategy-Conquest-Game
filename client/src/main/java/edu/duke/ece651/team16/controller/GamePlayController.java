@@ -373,7 +373,7 @@ public class GamePlayController {
         endWait.setVisible(false);
         // alert.displayImageAlert("New Round", "/img/texts/newround.png");
         PopupBox popup = new PopupBox(territoryRoot);
-
+        popup.display("/img/texts/newround.png");
         // set special buttons to enable
         special.setDisable(false);
         usedSpecialOneRound = false;
@@ -425,7 +425,7 @@ public class GamePlayController {
                     String style2 = btn.getStyleClass().toString();
                     String[] originStyle = style2.split(" ");
                     for (String s : originStyle) {
-                        if(s.contains("button-")){
+                        if (s.contains("button-")) {
                             btn.getStyleClass().remove(s);
                         }
                     }

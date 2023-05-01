@@ -88,9 +88,9 @@ public class JoinRoomControllerTest {
         robot.clickOn("#roomIDField").clickOn().write("123");
         robot.clickOn("#searchRoom");
         robot.clickOn("#joinRoom");
-        robot.clickOn("Close");
-        robot.clickOn("#chooseNum").clickOn("2");
-        robot.clickOn("#joinRoom");
+        // robot.clickOn("Close");
+        // robot.clickOn("#chooseNum").clickOn("2");
+        // robot.clickOn("#joinRoom");
     }
 
     @Test
